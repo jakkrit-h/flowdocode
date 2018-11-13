@@ -6,7 +6,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css" />
-        <link rel="stylesheet" type="text/css" media="screen" href="css/main.scss" />
+        <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
+       
         <script src="js/jquery.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/vue.js"></script>
@@ -20,7 +21,17 @@
 
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown link
+          file
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item a" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          edit
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item a" href="#">Action</a>
@@ -31,12 +42,37 @@
     </ul>
   </div>
 </nav>
+<div class="container-fluid p-0 m-0 row">
+  <iframe src="chartbar.html" id="test" class="chartbar col-2"style="background:green;">
+   
+  </iframe>
+  <div class="sheet col-8 p-0 m-0"style="background:blue;">
+    fads
+  </div>
+  <div class="detailbar col-2 p-0 "style="background:red;">
+    <div class="solution"style="background:yellow;">
+      dsafdsafa
+    </div>
+    <div class="property"style="background:pink;">
+      fasdfsa
+    </div>
+  </div>
+</div>
 
    
 
  
 
     </body>
+    <script>
+    $(function(){
+      $("#test").on("load",function(){
+
+      });
+
+    });
+   
+    </script>
 </html>
 
 
