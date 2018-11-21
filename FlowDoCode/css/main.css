@@ -1,0 +1,146 @@
+.dropdown-toggle:after {
+  content: none;
+}
+
+iframe {
+  border: none;
+}
+
+body {
+  text-align: center;
+  margin: auto;
+}
+
+.start-end {
+  margin: auto;
+  height: 50px;
+  width: 100px;
+  background-color: #28a745;
+  border-radius: 50%;
+}
+
+.process {  
+  margin: auto;
+  height: 50px;
+  width: 100px;
+  background-color: #28a745;
+}
+
+.input-output {
+  margin: auto;
+  width: 100px;
+  height: 50px;
+  transform: skew(20deg);
+  -webkit-transform: skew(-20deg);
+  background: #28a745;
+}
+
+.manual-input{
+  margin: auto;
+  height: 50px;
+  width:0;
+  border-right: 120px solid #28a745;
+  border-top: 15px solid transparent;
+}
+
+.decision {
+  margin: auto;
+  height: 60px;
+  width: 60px;
+  background-color: #28a745; 
+  transform: rotate(45deg);
+}
+
+.circle {
+  margin: auto;
+  height: 50px;
+  width: 50px;
+  background-color: #28a745;
+  border-radius: 50%;
+}
+
+.base {
+  margin: auto;
+  background: #28a745;
+  display: inline-block;
+  height: 25px;
+  position: relative;
+  width: 50px;
+}
+.base:after {
+  margin: auto;
+  border-top: 15px solid #28a745;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  content: "";
+  left: 0;
+  position: absolute;
+  top: 25px;
+
+}
+
+.moniter {
+  width: 0;
+  height: 0;
+  border-top: 25px solid transparent;
+  border-right: 25px solid #28a745;
+  border-bottom: 25px solid transparent;
+  position: relative;
+}
+.moniter:after{
+  content: "";
+  position: absolute;
+  height: 50px;
+  width: 70px;
+  background-color:#28a745;
+  border-radius:0% 40% 40% 0% ;
+  top: -25px;
+  left:80px;
+}
+.moniter:before{
+  content: "";
+  position: absolute;
+  height: 50px;
+  width: 70px;
+  background-color:#28a745;
+  border-radius:0%;
+  top: -25px;
+  left:25px;
+}
+
+.duc {
+  margin: auto;
+  position: relative;
+  height: 60px;
+  width: 150px;
+  background: #28a745;
+}
+.duc:before {
+  margin: auto;
+  content: "";
+  display: block;
+  position: absolute;
+  border-radius: 100% 100% ;
+  width: 150px;
+  height: 100px;
+  background-color: white;
+  right: -30px;
+  top: 50px;
+}
+
+.duc:after {
+  margin: auto;
+  content: "";
+  display: block;
+  position: absolute;
+  border-radius: 180% 40%;
+  width: 90px;
+  height: 70px;
+  background-color: #28a745;
+  left: 0;
+  top: 0px;
+}
+
+
+
+/*# sourceMappingURL=main.css.map */
