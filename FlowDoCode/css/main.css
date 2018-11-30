@@ -9,6 +9,20 @@ iframe {
 body {
   text-align: center;
   margin: auto;
+  height: 100%;
+
+}
+#content{
+  
+  background-color: #000;
+  background-image: linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, .05) 25%,
+   rgba(255, 255, 255, .05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, .05) 75%,
+    rgba(255, 255, 255, .05) 76%, transparent 77%, transparent), 
+    linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, .05) 25%,
+     rgba(255, 255, 255, .05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, .05) 75%,
+      rgba(255, 255, 255, .05) 76%, transparent 77%, transparent);
+height:100%;
+background-size:50px 50px;
 }
 
 .start-end {
@@ -123,7 +137,7 @@ body {
   border-radius: 100% 100% ;
   width: 150px;
   height: 100px;
-  background-color: white;
+  background-color:#fff;
   right: -30px;
   top: 50px;
 }
@@ -141,6 +155,10 @@ body {
   top: 0px;
 }
 
-
+/* .fas{
+	background: -webkit-linear-gradient(right, #28a745,green);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+} */
 
 /*# sourceMappingURL=main.css.map */
