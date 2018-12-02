@@ -17,130 +17,196 @@ div.con-fixed {
   
   background-size:50px 50px;
   }
-  .shape{
+  .start-end,.process,.input-output,.manual-input,.decision,.circle,.base,.monitor,.duc{
       margin:auto;
-      
+      height: 50px;
+      width: 100px;
+      background: #fff;
+      border:2px solid #fff;
+      border-radius: 2px;
+      text-align: center;
+      outline-width: 0;      
+
   }
-  .start-end {
-    height: 50px;
-    width: 100px;
-    background-color: #28a745;
-    border-radius:500px;
+  .start-end{
+border-color: #FFC312;
   }
-  
-  .process {  
-    height: 50px;
-    width: 100px;
-    background-color: #28a745;
+  .process{
+    border-color: #C4E538;
   }
-  
-  .input-output {
-    width: 100px;
-    height: 50px;
-    transform: skew(20deg);
-    -webkit-transform: skew(-20deg);
-    background: #28a745;
+  .input-output{
+    border-color: #12CBC4;
   }
-  
   .manual-input{
-    height: 50px;
-    width:0;
-    border-right: 120px solid #28a745;
-    border-top: 15px solid transparent;
+border-color: #FDA7DF;
   }
-  
-  .decision {
-    height: 60px;
-    width: 60px;
-    background-color: #28a745; 
-    transform: rotate(45deg);
+  .decision{
+    border-color: #ED4C67;
+
   }
-  
-  .circle {
-    height: 50px;
-    width: 50px;
-    background-color: #28a745;
-    border-radius: 50%;
+  .circle{
+    border-color:#EE5A24;
+
   }
+  .base{
+    border-color:#009432;
+
+  }
+  .monitor{
+    border-color: #0652DD;
+
+  }
+  .duc{
+    border-color:#9980FA;
+
+  }
+  .start-end:focus{
+    box-shadow:0px 0px 20px #FFC312;
+  }
+  .process:focus{
+    box-shadow:0px 0px 20px #C4E538;
+  }
+  .input-output:focus{
+    box-shadow:5px 5px 20px#12CBC4;
+  }
+  .manual-input:focus{
+    box-shadow:5px 5px 20px#FDA7DF;
+  }
+  .decision:focus{
+    box-shadow:5px 5px 20px#ED4C67;
+  }
+  .circle:focus{
+    box-shadow:5px 5px 20px#EE5A24;
+  }
+  .base:focus{
+    box-shadow:5px 5px 20px#009432;
+  }
+  .monitor:focus{
+    box-shadow:5px 5px 20px#0652DD;
+  }
+  .duc:focus{
+    box-shadow:5px 5px 20px#9980FA;
+  }
+  // .start-end {
+  //   height: 50px;
+  //   width: 100px;
+  //   background-color: #28a745;
+  //   border-radius:500px;
+  // }
   
-  .base {
-    background: #28a745;
+  // .process {  
+  //   height: 50px;
+  //   width: 100px;
+  //   background-color: #28a745;
+  // }
+  
+  // .input-output {
+  //   width: 100px;
+  //   height: 50px;
+  //   transform: skew(20deg);
+  //   -webkit-transform: skew(-20deg);
+  //   background: #28a745;
+  // }
+  
+  // .manual-input{
+  //   height: 50px;
+  //   width:0;
+  //   border-right: 120px solid #28a745;
+  //   border-top: 15px solid transparent;
+  // }
+  
+  // .decision {
+  //   height: 60px;
+  //   width: 60px;
+  //   background-color: #28a745; 
+  //   transform: rotate(45deg);
+  // }
+  
+  // .circle {
+  //   height: 50px;
+  //   width: 50px;
+  //   background-color: #28a745;
+  //   border-radius: 50%;
+  // }
+  
+  // .base {
+  //   background: #28a745;
  
-    height: 25px;
-    position: relative;
-    width: 50px;
-  }
-  .base:after {
-    border-top: 15px solid #28a745;
-    border-left: 25px solid transparent;
-    border-right: 25px solid transparent;
-    content: "";
-    position: absolute;
-    top: 25px;
+  //   height: 25px;
+  //   position: relative;
+  //   width: 50px;
+  // }
+  // .base:after {
+  //   border-top: 15px solid #28a745;
+  //   border-left: 25px solid transparent;
+  //   border-right: 25px solid transparent;
+  //   content: "";
+  //   position: absolute;
+  //   top: 25px;
   
-  }
+  // }
   
-  .monitor {
-    width: 0;
-    height: 0;
-    border-top: 25px solid transparent;
-    border-right: 25px solid blue;
-    border-bottom: 25px solid transparent;
-    position: relative;
-    left:-60px;
-  }
-  .monitor:before{
-    content: "";
-    position: absolute;
-    height: 50px;
-    width: 70px;
-    background-color:#000;
-    border-radius:0%;
-    top: -25px;
-    left:25px;
-  }
-  .monitor:after{
-    content: "";
-    position: absolute;
-    height: 50px;
-    width: 70px;
-    background-color:red;
-    border-radius:0% 40% 40% 0% ;
-    top: -25px;
-    left:80px;
+  // .monitor {
+  //   width: 0;
+  //   height: 0;
+  //   border-top: 25px solid transparent;
+  //   border-right: 25px solid blue;
+  //   border-bottom: 25px solid transparent;
+  //   position: relative;
+  //   left:-60px;
+  // }
+  // .monitor:before{
+  //   content: "";
+  //   position: absolute;
+  //   height: 50px;
+  //   width: 70px;
+  //   background-color:#000;
+  //   border-radius:0%;
+  //   top: -25px;
+  //   left:25px;
+  // }
+  // .monitor:after{
+  //   content: "";
+  //   position: absolute;
+  //   height: 50px;
+  //   width: 70px;
+  //   background-color:red;
+  //   border-radius:0% 40% 40% 0% ;
+  //   top: -25px;
+  //   left:80px;
 
-  }
+  // }
 
   
-  .duc {
-    position: relative;
-    height: 60px;
-    width: 150px;
-    background: #28a745;
-  }
-  .duc:before {
-    content: "";
-    display: block;
-    position: absolute;
-    border-radius: 100% 100% ;
-    width: 150px;
-    height: 100px;
-    background-color:#fff;
-    right: -30px;
-    top: 50px;
-  }
+  // .duc {
+  //   position: relative;
+  //   height: 60px;
+  //   width: 150px;
+  //   background: #28a745;
+  // }
+  // .duc:before {
+  //   content: "";
+  //   display: block;
+  //   position: absolute;
+  //   border-radius: 100% 100% ;
+  //   width: 150px;
+  //   height: 100px;
+  //   background-color:#fff;
+  //   right: -30px;
+  //   top: 50px;
+  // }
   
-  .duc:after {
-    content: "";
-    display: block;
-    position: absolute;
-    border-radius: 180% 40%;
-    width: 90px;
-    height: 70px;
-    background-color: #28a745;
-    left: 0;
-    top: 0px;
-  }
+  // .duc:after {
+  //   content: "";
+  //   display: block;
+  //   position: absolute;
+  //   border-radius: 180% 40%;
+  //   width: 90px;
+  //   height: 70px;
+  //   background-color: #28a745;
+  //   left: 0;
+  //   top: 0px;
+  // }
   
   /* .fas{
       background: -webkit-linear-gradient(right, #28a745,green);

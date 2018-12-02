@@ -10,12 +10,9 @@
         <script src="js/jquery.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/vue.js"></script>
-<<<<<<< HEAD
-=======
-        <script src="js/fontawesome.min.js"></script>
         <script src="js/flowdocode.js"></script>
+        <script src="js/svg.js"></script>
         <script src="js/interact.js"></script>
->>>>>>> parent of aebb951... Revert "code dragable (lot trouble)"
 
 
     </head>
@@ -39,69 +36,67 @@
 
   
 </nav>
-<<<<<<< HEAD
-<div class="container">     
-  <div class="row">
-      <div class="col-sm-2">.col-sm-2
-          <br/><br/> 
-          <div class="start-end"></div><br/> 
-          <div class="process"></div> <br/>
-          <div class="input-output"></div> <br/> 
-          <div class="manual-input"></div> <br/>
-          <div class="decision"></div> <br/> 
-          <div class="duc"></div><br/>
-          <div class="moniter"></div><br/>
-          <div class="base"></div> <br/><br/>
-          <div class="circle"></div> <br/>
-      </div>
-      <div class="col-sm-8">.col-sm-8
-=======
-
->>>>>>> parent of aebb951... Revert "code dragable (lot trouble)"
 
       <div class="col-2 con-fixed h-100 pb-5" >
-              <div class="my-5 shape start-end" id="start-end"data-type="tools"draggable="true" ondragstart="drag(event)"></div>
-              <div class="my-5 shape process" id="process"data-type="tools"draggable="true" ondragstart="drag(event)"></div>
-              <div class="my-5 shape input-output"id="input-output"data-type="tools" draggable="true" ondragstart="drag(event)"></div>
-              <div class="my-5 shape manual-input"id="manual-input"data-type="tools" draggable="true" ondragstart="drag(event)"></div>
-              <div class="my-5 shape decision"id="decision"data-type="tools" draggable="true" ondragstart="drag(event)"></div>
-              <div class="my-5 shape duc"id="duc"data-type="tools" draggable="true" ondragstart="drag(event)"></div>
-              <div class="my-5 shape monitor"id="monitor"data-type="tools" draggable="true"ondragstart="drag(event)"></div>
-              <div class="my-5 shape base"id="base" data-type="tools"draggable="true"ondragstart="drag(event)"></div>
-              <div class="my-5 shape circle" data-type="tools"id="circle"draggable="true"ondragstart="drag(event)"></div> 
+              <div class="my-5  start-end" id="start-end"data-type="tools"draggable="true" ondragstart="drag(event)">start-end</div>
+              <div class="my-5  process" id="process"data-type="tools"draggable="true" ondragstart="drag(event)">process</div>
+              <div class="my-5  input-output"id="input-output"data-type="tools" draggable="true" ondragstart="drag(event)">input-output</div>
+              <div class="my-5  manual-input"id="manual-input"data-type="tools" draggable="true" ondragstart="drag(event)"> manual-input</div>
+              <div class="my-5  decision"id="decision"data-type="tools" draggable="true" ondragstart="drag(event)">decision</div>
+              <div class="my-5  duc"id="duc"data-type="tools" draggable="true" ondragstart="drag(event)">duc</div>
+              <div class="my-5  monitor"id="monitor"data-type="tools" draggable="true"ondragstart="drag(event)">monitor</div>
+              <div class="my-5  base"id="base" data-type="tools"draggable="true"ondragstart="drag(event)">base</div>
+              <div class="my-5  circle" data-type="tools"id="circle"draggable="true"ondragstart="drag(event)">circle</div> 
      
       </div>
-<<<<<<< HEAD
-      <div class="col-sm-2">.col-sm-2
-      </div>
-  </div>
-</div>
-   
-=======
       
       <div class="offset-2 col-8 py-5 con-fixed h-75" id="content"ondragover="allowDrop(event)"ondrop="drop(event)">
           
  
       </div>
-      <div class="col-8 con-fixed h-25 offset-2 fixed-bottom" style="background: red;">Console</div>                                          
+      <div class="col-8 con-fixed h-25 offset-2 fixed-bottom"id="console" style="background: #fff;">Console</div>                                          
   
       <div class="offset-10 col-2  con-fixed h-100" >
         <button>test</button>
       </div>
 
->>>>>>> parent of aebb951... Revert "code dragable (lot trouble)"
 
  
 
     </body>
     <script>
+$(document).on("mouseover",".shape",function(){
+  document.body.style.cursor="move";
+});  
+$(document).on("mouseleave",".shape",function(){
+  document.body.style.cursor="default";
+});  
+$(document).on("blur",".shape",function(){
+  $(this).prop("contenteditable",false);
+  document.body.style.cursor="default";
+});
+$(document).on("dblclick",".shape",function(){
+  $(this).prop("contenteditable",true);
+  document.body.style.cursor="text";
+
+});
+$("div").on("click",".shape",function(){
+  var obj=this;
+
+  $(document).keydown(function(ev){
+ 
+    if((ev.keyCode==8||ev.keyCode==46||ev.keyCode==110)&&obj.getAttribute("contenteditable")!="true"){
+      $(obj).remove();
+    }
+  
+  });
+
+});
 
     function allowDrop(ev) {
     ev.preventDefault();
 }
-$("button").click(function(){
-  console.log($("#content").html());
-});
+
 
 function drag(ev) {
 
@@ -119,9 +114,9 @@ function drop(ev) {
     var type = ev.dataTransfer.getData("text");
     if(type!=null){
      var index= $("#content").find("."+type+"").last().index();
-      var objClass=" shape-content text-truncate text-center resize-drag "+type;
+      var objClass=" shape text-truncate text-center resize-drag py-2 "+type;
       var objId=(type+index);
-      var objAttr=" contenteditable='true'";
+      var objAttr="";
       var str="<div class='"+objClass+"'id='"+objId+"' "+objAttr+" >"+(type+index)+"</div>"
       $("#content").append(str);
     }
