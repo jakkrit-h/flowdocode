@@ -1,33 +1,32 @@
-.dropdown-toggle:after {
-  content: none;
+div.con-fixed {
+  position: fixed;
+  overflow-y: scroll;
 }
 
-iframe {
-  border: none;
+#content {
+  background-color: transparent;
+  background-image: linear-gradient(0deg, transparent 24%, rgba(0, 0, 0, 0.08) 25%, rgba(0, 0, 0, 0.08) 26%, transparent 27%, transparent 74%, rgba(0, 0, 0, 0.08) 75%, rgba(0, 0, 0, 0.08) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0, 0, 0, 0.08) 25%, rgba(0, 0, 0, 0.08) 26%, transparent 27%, transparent 74%, rgba(0, 0, 0, 0.08) 75%, rgba(0, 0, 0, 0.08) 76%, transparent 77%, transparent);
+  background-size: 50px 50px;
 }
 
-body {
-  text-align: center;
+.shape {
   margin: auto;
 }
 
 .start-end {
-  margin: auto;
   height: 50px;
   width: 100px;
   background-color: #28a745;
-  border-radius: 50%;
+  border-radius: 500px;
 }
 
-.process {  
-  margin: auto;
+.process {
   height: 50px;
   width: 100px;
   background-color: #28a745;
 }
 
 .input-output {
-  margin: auto;
   width: 100px;
   height: 50px;
   transform: skew(20deg);
@@ -35,24 +34,21 @@ body {
   background: #28a745;
 }
 
-.manual-input{
-  margin: auto;
+.manual-input {
   height: 50px;
-  width:0;
+  width: 0;
   border-right: 120px solid #28a745;
   border-top: 15px solid transparent;
 }
 
 .decision {
-  margin: auto;
   height: 60px;
   width: 60px;
-  background-color: #28a745; 
+  background-color: #28a745;
   transform: rotate(45deg);
 }
 
 .circle {
-  margin: auto;
   height: 50px;
   width: 50px;
   background-color: #28a745;
@@ -60,76 +56,77 @@ body {
 }
 
 .base {
-  margin: auto;
   background: #28a745;
-  display: inline-block;
   height: 25px;
   position: relative;
   width: 50px;
 }
+
 .base:after {
-  margin: auto;
   border-top: 15px solid #28a745;
   border-left: 25px solid transparent;
   border-right: 25px solid transparent;
   content: "";
-  left: 0;
   position: absolute;
   top: 25px;
-
 }
 
-.moniter {
+.monitor {
   width: 0;
   height: 0;
   border-top: 25px solid transparent;
-  border-right: 25px solid #28a745;
+  border-right: 25px solid blue;
   border-bottom: 25px solid transparent;
   position: relative;
+  left: -60px;
 }
-.moniter:after{
+
+.monitor:before {
   content: "";
   position: absolute;
   height: 50px;
   width: 70px;
-  background-color:#28a745;
-  border-radius:0% 40% 40% 0% ;
+  background-color: #000;
+  border-radius: 0%;
   top: -25px;
-  left:80px;
+  left: 25px;
 }
-.moniter:before{
+
+.monitor:after {
   content: "";
   position: absolute;
   height: 50px;
   width: 70px;
-  background-color:#28a745;
-  border-radius:0%;
+  background-color: red;
+  border-radius: 0% 40% 40% 0%;
   top: -25px;
-  left:25px;
+  left: 80px;
 }
 
 .duc {
-  margin: auto;
   position: relative;
   height: 60px;
   width: 150px;
   background: #28a745;
 }
+
 .duc:before {
-  margin: auto;
   content: "";
   display: block;
   position: absolute;
-  border-radius: 100% 100% ;
+  border-radius: 100% 100%;
   width: 150px;
   height: 100px;
+<<<<<<< HEAD
   background-color: white;
+=======
+  background-color: #fff;
+>>>>>>> parent of aebb951... Revert "code dragable (lot trouble)"
   right: -30px;
   top: 50px;
 }
 
 .duc:after {
-  margin: auto;
   content: "";
   display: block;
   position: absolute;
@@ -141,6 +138,15 @@ body {
   top: 0px;
 }
 
+<<<<<<< HEAD
 
+=======
+/* .fas{
+    background: -webkit-linear-gradient(right, #28a745,green);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+} */
+/*# sourceMappingURL=main.css.map */
+>>>>>>> parent of aebb951... Revert "code dragable (lot trouble)"
 
 /*# sourceMappingURL=main.css.map */
