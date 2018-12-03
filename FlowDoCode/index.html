@@ -38,20 +38,21 @@
 </nav>
 
       <div class="col-2 con-fixed h-100 pb-5" >
-              <div class="my-5  start-end" id="start-end"data-type="tools"draggable="true" ondragstart="drag(event)">start-end</div>
-              <div class="my-5  process" id="process"data-type="tools"draggable="true" ondragstart="drag(event)">process</div>
-              <div class="my-5  input-output"id="input-output"data-type="tools" draggable="true" ondragstart="drag(event)">input-output</div>
-              <div class="my-5  manual-input"id="manual-input"data-type="tools" draggable="true" ondragstart="drag(event)"> manual-input</div>
-              <div class="my-5  decision"id="decision"data-type="tools" draggable="true" ondragstart="drag(event)">decision</div>
-              <div class="my-5  duc"id="duc"data-type="tools" draggable="true" ondragstart="drag(event)">duc</div>
-              <div class="my-5  monitor"id="monitor"data-type="tools" draggable="true"ondragstart="drag(event)">monitor</div>
-              <div class="my-5  base"id="base" data-type="tools"draggable="true"ondragstart="drag(event)">base</div>
-              <div class="my-5  circle" data-type="tools"id="circle"draggable="true"ondragstart="drag(event)">circle</div> 
+              <div class="my-5 py-2 start-end" id="start-end"data-type="tools"draggable="true" ondragstart="drag(event)">END</div>
+              <div class="my-5 py-2 process" id="process"data-type="tools"draggable="true" ondragstart="drag(event)">process</div>
+              <div class="my-5 py-2 input-output"id="input-output"data-type="tools" draggable="true" ondragstart="drag(event)">input-output</div>
+              <div class="my-5 py-2 manual-input"id="manual-input"data-type="tools" draggable="true" ondragstart="drag(event)"> manual-input</div>
+              <div class="my-5 py-2 decision"id="decision"data-type="tools" draggable="true" ondragstart="drag(event)">decision</div>
+              <div class="my-5 py-2 duc"id="duc"data-type="tools" draggable="true" ondragstart="drag(event)">duc</div>
+              <div class="my-5 py-2 monitor"id="monitor"data-type="tools" draggable="true"ondragstart="drag(event)">monitor</div>
+              <div class="my-5 py-2 base"id="base" data-type="tools"draggable="true"ondragstart="drag(event)">base</div>
+              <div class="my-5 py-2 circle" data-type="tools"id="circle"draggable="true"ondragstart="drag(event)">circle</div> 
      
       </div>
       
       <div class="offset-2 col-8 py-5 con-fixed h-75" id="content"ondragover="allowDrop(event)"ondrop="drop(event)">
-          
+        <div class="my-5 py-2  start-end draggable" id="start-end">START</div>
+
  
       </div>
       <div class="col-8 con-fixed h-25 offset-2 fixed-bottom"id="console" style="background: #fff;">Console</div>                                          
@@ -65,27 +66,38 @@
 
     </body>
     <script>
-$(document).on("mouseover",".shape",function(){
-  document.body.style.cursor="move";
-});  
-$(document).on("mouseleave",".shape",function(){
-  document.body.style.cursor="default";
-});  
+ 
+// $(document).on("mouseleave",".shape",function(){
+//   document.body.style.cursor="";
+// });  
 $(document).on("blur",".shape",function(){
-  $(this).prop("contenteditable",false);
-  document.body.style.cursor="default";
+  disContentEdit($(this));
+
 });
-$(document).on("dblclick",".shape",function(){
+function disContentEdit(obj){
+
+  $(obj).prop("contenteditable",false);
+  document.body.style.cursor="";
+}
+$("div").on("dblclick",".shape",function(){
+var obj=$(this);
   $(this).prop("contenteditable",true);
+  $(document).keydown(function(ev){
+
+  if(ev.keyCode==13){
+ disContentEdit(obj);
+  }
+
+  });
   document.body.style.cursor="text";
 
 });
 $("div").on("click",".shape",function(){
-  var obj=this;
+  var obj=$(this);
+
 
   $(document).keydown(function(ev){
- 
-    if((ev.keyCode==8||ev.keyCode==46||ev.keyCode==110)&&obj.getAttribute("contenteditable")!="true"){
+    if((ev.keyCode==8||ev.keyCode==46||ev.keyCode==110)&&(obj.prop("contenteditable")!="true")||obj.prop("id")=="end"){
       $(obj).remove();
     }
   
@@ -113,11 +125,26 @@ function drop(ev) {
   ev.preventDefault();
     var type = ev.dataTransfer.getData("text");
     if(type!=null){
-     var index= $("#content").find("."+type+"").last().index();
+     
+      if($("#content").find("."+type+"").last().index()==-1){
+        var index=0;
+      }else{
+        var str= $("#content").find("."+type+"").last().prop("id");
+        str=str.split("-");
+      
+         var index=str[str.length-1];
+         index++;
+      }
       var objClass=" shape text-truncate text-center resize-drag py-2 "+type;
-      var objId=(type+index);
+      var str=(type+"-"+index);
+      var objId=str;
       var objAttr="";
-      var str="<div class='"+objClass+"'id='"+objId+"' "+objAttr+" >"+(type+index)+"</div>"
+      if(type=="start-end"){
+        var str="<div class='py-2 shape start-end draggable'id='end'  >END</div>"
+
+      }else{
+        var str="<div class='"+objClass+"'id='"+objId+"' "+objAttr+" >"+str+"</div>"
+      }
       $("#content").append(str);
     }
    
@@ -173,6 +200,7 @@ interact('.draggable')
   // RESIZE
   interact('.resize-drag')
   .draggable({
+
     onmove: window.dragMoveListener,
     restrict: {
       restriction: 'parent',
@@ -180,8 +208,9 @@ interact('.draggable')
     },
   })
   .resizable({
+  
     // resize from all edges and corners
-    edges: { left: true, right: true, bottom: true, top: true },
+    edges: { left: true, right: true},
 
     // keep the edges inside the parent
     restrictEdges: {
@@ -215,6 +244,7 @@ interact('.draggable')
     target.setAttribute('data-x', x);
     target.setAttribute('data-y', y);
   });
+
     </script>
 </html>
 

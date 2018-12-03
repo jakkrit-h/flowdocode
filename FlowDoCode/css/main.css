@@ -20,6 +20,14 @@ div.con-fixed {
   outline-width: 0;
 }
 
+.shape {
+  width: max-content;
+  padding-left: 3%;
+  padding-right: 3%;
+  min-width: 100px;
+  max-width: 400px;
+}
+
 .start-end {
   border-color: #FFC312;
 }
@@ -65,31 +73,31 @@ div.con-fixed {
 }
 
 .input-output:focus {
-  box-shadow: 5px 5px 20px #12CBC4;
+  box-shadow: 0px 0px 20px #12CBC4;
 }
 
 .manual-input:focus {
-  box-shadow: 5px 5px 20px #FDA7DF;
+  box-shadow: 0px 0px 20px #FDA7DF;
 }
 
 .decision:focus {
-  box-shadow: 5px 5px 20px #ED4C67;
+  box-shadow: 0px 0px 20px #ED4C67;
 }
 
 .circle:focus {
-  box-shadow: 5px 5px 20px #EE5A24;
+  box-shadow: 0px 0px 20px #EE5A24;
 }
 
 .base:focus {
-  box-shadow: 5px 5px 20px #009432;
+  box-shadow: 0px 0px 20px #009432;
 }
 
 .monitor:focus {
-  box-shadow: 5px 5px 20px #0652DD;
+  box-shadow: 0px 0px 20px #0652DD;
 }
 
 .duc:focus {
-  box-shadow: 5px 5px 20px #9980FA;
+  box-shadow: 0px 0px 20px #9980FA;
 }
 
 /* .fas{
