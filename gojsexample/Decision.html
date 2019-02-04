@@ -2,7 +2,7 @@
 
 <html>
     <head>
-        <title>BASIC | FLOWDOCODE</title>
+        <title>DECISION | FLOWDOCODE</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" media="screen" href="../css/bootstrap.min.css" />
@@ -32,7 +32,6 @@
      
     </ul>
   </div>
- 
 
   
 </nav>
@@ -51,28 +50,25 @@
       </div>
       
       <div class="offset-2 col-8 py-5 con-fixed h-75" id="content"ondragover="allowDrop(event)"ondrop="drop(event)">
-        
-     
-        
         <div class="my-5 py-2  start-end draggable" id="start"data-next="process-0">START</div>
-        <div class=' shape text-truncate text-center resize-drag py-2 my-5 process'id='process-0' data-next="process-2" >i=6,j=5,k=0</div>     
+        <div class=' shape text-truncate text-center resize-drag py-2 my-5 process'id='process-0' data-next="decision-0" >i=6,j=5,k=0</div>     
         
+        <div class=' shape text-truncate text-center resize-drag py-2 my-5 decision'id='decision-0'data-next=""data-true="process-1"data-false="process-2"  >k>=1</div>    
+        <div class="row">
+            <div class="mx-auto">
+                <label >true</label>
+                <div class=' shape text-truncate text-center resize-drag py-2  process'id='process-1' data-next="monitor-0">k=i+j</div>
+            </div>
+            <div class="mx-auto">
+                <label>false</label>
+                <div class=' shape text-truncate text-center resize-drag py-2  process'id='process-2' data-next="monitor-0">k=i*j</div>
+            </div>
+            
+        </div>
         
-        <div class=' shape text-truncate text-center resize-drag py-2 my-5 process'id='process-2' data-next="monitor-0">k=i*j</div>
         <div class=' shape text-truncate text-center resize-drag py-2 my-5 monitor'id='monitor-0' data-next="end" >k</div>
         <div class="my-5 py-2  start-end draggable" id="end">END</div>
-        <svg  >
-            <defs>
-              <marker id="arrowhead" viewBox="0 0 10 10" refX="3" refY="5"
-                  markerWidth="6" markerHeight="6" orient="auto">
-                <path d="M 0 0 L 10 5 L 0 10 z" />
-              </marker>
-            </defs>
-            <g fill="none" stroke="black" stroke-width="2" marker-end="url(#arrowhead)">
-              <path id="arrowLeft"/>
-              <path id="arrowRight"/>
-            </g>
-          </svg>
+
  
       </div>
       <div class="col-8 con-fixed h-25 offset-2 fixed-bottom"id="console" style="background: #fff;">Console</div>                                          
@@ -86,19 +82,9 @@
 
     </body>
     <script>
-      
  $(function(){
-   drawConnector($("#start"),$("#process-0"));
- });
- function drawConnector(source,destination){
-  var positionS={
-    
   
-  }
-  var positionD={
-
-  }
- }
+ });
 // $(document).on("mouseleave",".shape",function(){
 //   document.body.style.cursor="";
 // });  
