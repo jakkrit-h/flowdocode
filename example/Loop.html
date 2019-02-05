@@ -53,9 +53,10 @@
         <div class="my-5 py-2  start-end draggable" id="start"data-next="process-0">START</div>
         <div class=' shape text-truncate text-center resize-drag py-2 my-5 process'id='process-0' data-next="decision-0" >i=1</div>     
         
-        <div class=' shape text-truncate text-center resize-drag py-2 my-5 decision'id='decision-0'data-next=""data-true="monitor-0"data-false="end"  >i<=10</div>    
-        <div class=' shape text-truncate text-center resize-drag py-2 my-5 monitor'id='monitor-0' data-next="process-1" >i</div>
-        <div class=' shape text-truncate text-center resize-drag py-2 my-5 process'id='process-1' data-next="decision-0">i++</div>
+        <div class=' shape text-truncate text-center resize-drag py-2 my-5 decision'id='decision-0'data-next=""data-true="process-1"data-false="end"  >i<=10</div>    
+        <div class=' shape text-truncate text-center resize-drag py-2 my-5 process'id='process-1' data-next="monitor-0">i++</div>
+        <div class=' shape text-truncate text-center resize-drag py-2 my-5 monitor'id='monitor-0' data-next="decision-0" >i</div>
+        
 
 
         <div class="my-5 py-2  start-end draggable" id="end">END</div>

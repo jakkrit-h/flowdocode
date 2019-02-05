@@ -52,7 +52,7 @@ body {
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js"></script>
 
-      <svg width="100%" height="100%" >
+      <svg  style="background:red;" >
         <defs>
           <marker id="arrowhead" viewBox="0 0 10 10" refX="3" refY="5"
               markerWidth="6" markerHeight="6" orient="auto">
@@ -60,12 +60,12 @@ body {
           </marker>
         </defs>
         <g fill="none" stroke="black" stroke-width="2" marker-end="url(#arrowhead)">
-          <path id="arrowLeft"/>
-          <path id="arrowRight"/>
+          <path id="arrow1"/>
+
         </g>
       </svg>
 
-      <div id="a">Div 1</div>
+      <div id="a">Div 1</div> 
       <div id="b">Div 2</div>
  
 
@@ -73,26 +73,20 @@ body {
     <script>
  var divA       = document.querySelector("#a");
 var divB       = document.querySelector("#b");
-var arrowLeft  = document.querySelector("#arrowLeft");
-var arrowRight = document.querySelector("#arrowRight");
+var arrowLeft  = document.querySelector("#arrow1");
+
 
 var drawConnector = function() {
   var posnALeft = {
-    x: divA.offsetLeft - 100,
-    y: divA.offsetTop  + divA.offsetHeight / 2
+    x: divA.offsetLeft+divA.offsetWidth/2,
+    y: divA.offsetTop  + divA.offsetHeight
   };
-  var posnARight = {
-    x: divA.offsetLeft + divA.offsetWidth + 80,
-    y: divA.offsetTop  + divA.offsetHeight / 2    
-  };
+
   var posnBLeft = {
-    x: divB.offsetLeft - 8,
-    y: divB.offsetTop  + divA.offsetHeight / 2
+    x: divB.offsetLeft+divB.offsetWidth/2,
+    y: divB.offsetTop-8
   };
-  var posnBRight = {
-    x: divB.offsetLeft + divB.offsetWidth + 8,
-    y: divB.offsetTop  + divA.offsetHeight / 2
-  };
+ 
   var dStrLeft =
       "M" +
       (posnALeft.x      ) + "," + (posnALeft.y) + " " +
@@ -101,14 +95,7 @@ var drawConnector = function() {
       (posnBLeft.x ) + "," + (posnBLeft.y) + " " +
       (posnBLeft.x      ) + "," + (posnBLeft.y);
   arrowLeft.setAttribute("d", dStrLeft);
-  var dStrRight =
-      "M" +
-      (posnBRight.x      ) + "," + (posnBRight.y) + " " +
-      "C" +
-      (posnBRight.x) + "," + (posnBRight.y) + " " +
-      (posnARight.x ) + "," + (posnARight.y) + " " +
-      (posnARight.x      ) + "," + (posnARight.y);
-  arrowRight.setAttribute("d", dStrRight);
+
 };
 
 $("#a, #b,svg").draggable({
