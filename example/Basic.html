@@ -17,18 +17,18 @@
 
     </head>
     <body>
-        <svg  >
+        <svg  style="background:red;" >
             <defs>
               <marker id="arrowhead" viewBox="0 0 10 10" refX="3" refY="5"
                   markerWidth="6" markerHeight="6" orient="auto">
                 <path d="M 0 0 L 10 5 L 0 10 z" />
               </marker>
             </defs>
-            <g fill="none" stroke="black" stroke-width="2" marker-end="url(#arrowhead)">
-              <path id="arrowstart-process-0"/>
-              
-             
-            </g>
+
+        <g id="con-arrow"fill="none" stroke="black" stroke-width="2" marker-end="url(#arrowhead)">
+          
+        </g>
+
           </svg> 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -101,26 +101,39 @@
     <script>
       
  $(function(){
-   drawConnector($("#start"),$("#process-0"));
+   generateConnector();
 
  });
  function generateConnector(){
    var node=$("#start");
-   var targetNode=$("#"+$(node).attr(id));
-   while(targetNode.attr(id)=="end"){
+   var targetNode=$("#"+$(node).attr("data-next"));
 
+   while(node.attr("id")!="end"){
+    //  console.log("node "+node.attr("id"));
+    //    console.log("targetNode "+targetNode.attr("id"));
+    drawConnector(node,targetNode);
+    node=targetNode;
+    targetNode=$("#"+$(node).attr("data-next"));
+  
    }
-   var targetNode=$($("#start").attr("data-next"));
+       
+
+
+    
 
  }
 function drawConnector(sourceNode,destinationNode){
-  var arrow=$("path#"+sourceNode.attr("id")+destinationNode.attr("id"));
-  
+  //  console.log("node "+sourceNode.attr("id"));
+  //      console.log("targetNode "+destinationNode.attr("id"));
+  // var arrow=$("path #"+sourceNode.attr("id")+destinationNode.attr("id"));
+  var arrow=document.createElement("line");
+  arrow=$(arrow);
+  arrow.attr("id",sourceNode.attr("id")+"--"+destinationNode.attr("id"));
   var Soffset=sourceNode.offset();
   var Doffset=destinationNode.offset();
 
   var positionS={
-    x: Soffset.left + sourceNode.outerWidth()/2,
+    x: Soffset.left + SourceNode.outerWidth()/2,
     y: Soffset.top  + sourceNode.outerHeight()
   
   }
@@ -130,18 +143,23 @@ function drawConnector(sourceNode,destinationNode){
     y: Doffset.top-8
   }
   
-  var str =
-      "M " +
-      (positionS.x) + "," + (positionS.y) + " " +
-      "C " +
-      (positionS.x) + "," + (positionS.y) + " " +
-      (positionD.x ) + "," + (positionD.y) + " " +
-      (positionD.x      ) + "," + (positionD.y);
-      $(arrow).attr("d",str);
+  // var str =
+  //     "M " +
+  //     (positionS.x) + "," + (positionS.y) + " " +
+  //     "C " +
+  //     (positionS.x) + "," + (positionS.y) + " " +
+  //     (positionD.x ) + "," + (positionD.y) + " " +
+  //     (positionD.x      ) + "," + (positionD.y);
 
-      $("g").append($(arrow));
+      arrow.attr("x1",positionS.x);
+      arrow.attr("y1",positionS.y);
+      arrow.attr("x2",positionD.x);
+      arrow.attr("y2",positionD.y);
 
-    
+      $("#con-arrow").append(arrow);
+
+
+  
  }
 
 
@@ -194,7 +212,7 @@ function drag(ev) {
 
   // ev.dataTransfer.setData("text", ev.target.getAttribute('data-type'));
   var id=ev.dataTransfer.setData("text", ev.target.id);
-   drawConnector($("#start"),$("#process-0"),$("#arrowstart-process-0"));
+  
  
 }
 function test(event){
@@ -227,7 +245,7 @@ function drop(ev) {
         var str="<div class='"+objClass+"'id='"+objId+"' "+objAttr+" >"+str+"</div>"
       }
       $("#content").append(str);
-      console.log(str);
+     
     }
    
 }
@@ -260,7 +278,7 @@ interact('.draggable')
   });
 
   function dragMoveListener (event) {
-    drawConnector($("#start"),$("#process-0"),$("#arrowstart-process-0"));
+   
 
     var target = event.target,
         // keep the dragged position in the data-x/data-y attributes
