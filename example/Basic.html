@@ -17,17 +17,17 @@
 
     </head>
     <body>
-        <svg  style="background:red;" >
+        <svg  >
             <defs>
               <marker id="arrowhead" viewBox="0 0 10 10" refX="3" refY="5"
-                  markerWidth="6" markerHeight="6" orient="auto">
+                  markerWidth="8" markerHeight="8" orient="auto">
                 <path d="M 0 0 L 10 5 L 0 10 z" />
               </marker>
             </defs>
 
-        <g id="con-arrow"fill="none" stroke="black" stroke-width="2" marker-end="url(#arrowhead)">
-          
-        </g>
+            <g fill="none" stroke="black" stroke-width="1" marker-end="url(#arrowhead)">
+         
+            </g>
 
           </svg> 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -63,11 +63,14 @@
      
       </div>
       
-      <div class="offset-2 col-8 py-5 con-fixed h-75" id="content"ondragover="allowDrop(event)"ondrop="drop(event)">
+      <div class="offset-2 col-8 py-5 con-fixed h-75 " id="content"ondragover="allowDrop(event)"ondrop="drop(event)">
       
      
         
-        <div class="my-5 py-2  start-end draggable" id="start"data-next="process-0">START</div>
+        <div class="my-5   start-end draggable" id="start"data-next="process-0">START
+
+          <div class="handle mx-auto "></div>
+        </div>
         <div class=' shape text-truncate text-center resize-drag py-2 my-5 process'id='process-0' data-next="process-2" >i=6,j=5,k=0</div>     
         
         
@@ -102,65 +105,12 @@
       
  $(function(){
    generateConnector();
-
- });
- function generateConnector(){
-   var node=$("#start");
-   var targetNode=$("#"+$(node).attr("data-next"));
-
-   while(node.attr("id")!="end"){
-    //  console.log("node "+node.attr("id"));
-    //    console.log("targetNode "+targetNode.attr("id"));
-    drawConnector(node,targetNode);
-    node=targetNode;
-    targetNode=$("#"+$(node).attr("data-next"));
-  
-   }
-       
-
-
-    
-
- }
-function drawConnector(sourceNode,destinationNode){
-  //  console.log("node "+sourceNode.attr("id"));
-  //      console.log("targetNode "+destinationNode.attr("id"));
-  // var arrow=$("path #"+sourceNode.attr("id")+destinationNode.attr("id"));
-  var arrow=document.createElement("line");
-  arrow=$(arrow);
-  arrow.attr("id",sourceNode.attr("id")+"--"+destinationNode.attr("id"));
-  var Soffset=sourceNode.offset();
-  var Doffset=destinationNode.offset();
-
-  var positionS={
-    x: Soffset.left + SourceNode.outerWidth()/2,
-    y: Soffset.top  + sourceNode.outerHeight()
-  
-  }
  
-  var positionD={
-    x: Doffset.left + destinationNode.outerWidth()/2,
-    y: Doffset.top-8
-  }
-  
-  // var str =
-  //     "M " +
-  //     (positionS.x) + "," + (positionS.y) + " " +
-  //     "C " +
-  //     (positionS.x) + "," + (positionS.y) + " " +
-  //     (positionD.x ) + "," + (positionD.y) + " " +
-  //     (positionD.x      ) + "," + (positionD.y);
-
-      arrow.attr("x1",positionS.x);
-      arrow.attr("y1",positionS.y);
-      arrow.attr("x2",positionD.x);
-      arrow.attr("y2",positionD.y);
-
-      $("#con-arrow").append(arrow);
-
-
-  
- }
+ });
+ $("#content").scroll(function(){
+    generateConnector();
+  console.log("A");
+   });
 
 
 
@@ -191,7 +141,9 @@ var obj=$(this);
 
 });
 $("div").on("click",".shape",function(){
-  var obj=$(this);
+  var obj=undefined;
+  obj=$(this);
+  console.log($(this).text());
 
 
   $(document).keydown(function(ev){
@@ -215,14 +167,12 @@ function drag(ev) {
   
  
 }
-function test(event){
-  event.preventDefault();
-  console.log(event.clientX);
-}
+
 function drop(ev) {
 
   ev.preventDefault();
     var type = ev.dataTransfer.getData("text");
+    console.log(type);
     if(type!=null){
      
       if($("#content").find("."+type+"").last().index()==-1){
@@ -278,7 +228,7 @@ interact('.draggable')
   });
 
   function dragMoveListener (event) {
-   
+    generateConnector();
 
     var target = event.target,
         // keep the dragged position in the data-x/data-y attributes

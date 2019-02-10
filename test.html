@@ -5,116 +5,247 @@
         <title>flowdocode</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css" />
-        <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
-        <script src="js/jquery.js"></script>
-        <script src="js/bootstrap.min.js"></script>
+        <!-- <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />-->
+      <script src="js/jquery.js"></script> 
+      <script src="js/jquery-ui.min.js"></script> 
+      <!--  <script src="js/bootstrap.min.js"></script>
         <script src="js/vue.js"></script>
         <script src="js/flowdocode.js"></script>
         <script src="js/svg.js"></script>
-        <script src="js/interact.js"></script>
+        <script src="js/interact.js"></script> -->
 
 
     </head>
     <style>
-      html,
-body {
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  margin: 0;
-}
-svg{
-    position: absolute;
-    width:100%;
-    height: 100%;
+    html,body{width:100%;height:100%}
+html,body,div{margin:0px;padding:0px;}
 
+#ui-browser,#canvas,#property-browser{
+  height:100%;
+  display:inline-block;
+  box-sizing:border-box;
+  position:relative;
 }
-#instructions {
-  position: fixed;
-  left: 50%;
+
+#ui-browser{
+  width:20%;
+  background-color:#eee;
+  float: left;
+  overflow:hidden;
 }
-#a, #b {
-  color: white;
-  text-align: center;
-  padding: 10px;
-  position: fixed;
-  width: 100px;
-  height: 100px;
-  left: 100px;
+
+#canvas{
+  width:60%;
+  right: 2;
 }
-#a {
-  background-color: blue;
-  top: 20px;
+
+#property-browser{
+  width:20%;
+  background-color:#eee;
 }
-#b {
-  background-color: red;
-  top: 150px;
+
+
+/*Anchor CSS*/
+/* .anchor{
+  opacity:0.5;
+  width: 10px;
+  height: 100%;
+  background-color: #0ebeff;
+  position: absolute;
+  transition: width ease-in-out 0.2s;
+} */
+
+#ui-browser:hover > .anchor, #property-browser:hover > .anchor{
+  background-color: #ffbe00;
+  width: 10px;
+  opacity:1;
+}
+
+#ui-browser .anchor{
+  right:0px;
+}
+
+.ui-item{
+  /* position:absolute; */
+  width:50px;
+  height:50px;
+  background-color:#eef;
+  top:-2px;
+  left:-2px;
+}
+
+.con_anchor{
+    width: 8px;
+    height: 8px;
+    background-color: #47cf73;
+    border-radius: 50%;
+    z-index:5;
+}
+
+#connector_canvas{
+  position:absolute;
+  width:100%;
+  height:100%;
+  stroke:#5c96bc;
+  stroke-width:2
+}
+
+.library{
+  border-left:10px solid #5c96bc;
+  background-color:white;
+  color:#0ebeff;
+  padding-bottom: 1px;
+}
+
+.library ul{
+  list-style-type:none;
+}
+
+.library .name-title{
+  text-align:center;
+  padding-top:5px;
+}
+
+.library ul li{
+  border-bottom:1px solid #eee;
+  margin-right:20px;
+  color:#4c4545;
+  padding: 5px;
+  margin-left: 15px;
+  cursor: pointer;
+  transition: all ease-out 0.1s; 
+}
+
+.library ul li:hover{
+  background-color:#4c4545;
+  color:white;
+  text-align:center;
+  font-size:1.2em;
 }
     </style>
-    <body>
- 
-      <p id="instructions">Click and drag either div to see automatic arrow adjustments.</p>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-      <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js"></script>
-
-      <svg  style="background:red;" >
-        <defs>
-          <marker id="arrowhead" viewBox="0 0 10 10" refX="3" refY="5"
-              markerWidth="6" markerHeight="6" orient="auto">
-            <path d="M 0 0 L 10 5 L 0 10 z" />
-          </marker>
-        </defs>
-     
-      </svg>
-
-      <div id="a">Div 1</div> 
-      <div id="b">Div 2</div>
- 
-
+  <body>
+    <div id="ui-browser"><div class="anchor"></div>
+    <div id="control-library" class="library">
+      <div class="name-title">Control Library</div>
+      <ul>
+        <li>Control A</li>
+        <li>Control B</li>
+        <li>Control C</li>
+        <li>Control D</li>
+      </ul>
+    </div><!--
+--></div><!--
+--><div id="canvas">
+    <svg id='connector_canvas'></svg>
+    <div class="ui-item item-1"><div class="con_anchor"></div></div>
+    <div class="ui-item item-2"><div class="con_anchor"></div></div>
+    <div class="ui-item item-3"><div class="con_anchor"></div></div>
+    <div class="ui-item item-1"><div class="con_anchor"></div></div>
+    <div class="ui-item item-2"><div class="con_anchor"></div></div>
+    <div class="ui-item item-3"><div class="con_anchor"></div></div>
+  </div><!--
+--><div id="property-browser"></div>
     </body>
+
     <script>
- var divA       = document.querySelector("#a");
-var divB       = document.querySelector("#b");
-var arrowLeft  = document.querySelector("#arrow1");
+      !function(a){function f(a,b){if(!(a.originalEvent.touches.length>1)){a.preventDefault();var c=a.originalEvent.changedTouches[0],d=document.createEvent("MouseEvents");d.initMouseEvent(b,!0,!0,window,1,c.screenX,c.screenY,c.clientX,c.clientY,!1,!1,!1,!1,0,null),a.target.dispatchEvent(d)}}if(a.support.touch="ontouchend"in document,a.support.touch){var e,b=a.ui.mouse.prototype,c=b._mouseInit,d=b._mouseDestroy;b._touchStart=function(a){var b=this;!e&&b._mouseCapture(a.originalEvent.changedTouches[0])&&(e=!0,b._touchMoved=!1,f(a,"mouseover"),f(a,"mousemove"),f(a,"mousedown"))},b._touchMove=function(a){e&&(this._touchMoved=!0,f(a,"mousemove"))},b._touchEnd=function(a){e&&(f(a,"mouseup"),f(a,"mouseout"),this._touchMoved||f(a,"click"),e=!1)},b._mouseInit=function(){var b=this;b.element.bind({touchstart:a.proxy(b,"_touchStart"),touchmove:a.proxy(b,"_touchMove"),touchend:a.proxy(b,"_touchEnd")}),c.call(b)},b._mouseDestroy=function(){var b=this;b.element.unbind({touchstart:a.proxy(b,"_touchStart"),touchmove:a.proxy(b,"_touchMove"),touchend:a.proxy(b,"_touchEnd")}),d.call(b)}}}(jQuery);
 
 
-// var drawConnector = function() {
-//   var posnALeft = {
-//     x: divA.offsetLeft+divA.offsetWidth/2,
-//     y: divA.offsetTop  + divA.offsetHeight
-//   };
 
-//   var posnBLeft = {
-//     x: divB.offsetLeft+divB.offsetWidth/2,
-//     y: divB.offsetTop-8
-//   };
- 
-//   var dStrLeft =
-//       "M" +
-//       (posnALeft.x      ) + "," + (posnALeft.y) + " " +
-//       "C" +
-//       (posnALeft.x) + "," + (posnALeft.y) + " " +
-//       (posnBLeft.x ) + "," + (posnBLeft.y) + " " +
-//       (posnBLeft.x      ) + "," + (posnBLeft.y);
-//   arrowLeft.setAttribute("d", dStrLeft);
+$('.anchor').on('click',function(){
+   var width = parseInt($(this).parent().css('width'));
+   if(width==10){
+     $(this).parent().css('width','20%');
+     $('#canvas').css('width','60%');
+   }else{
+      $(this).parent().css('width','10px');
+      $('#canvas').css('width','calc( 80% - 10px)');
+   }
+});
 
-// };
+$('.ui-item').draggable({
+  containment: "#canvas",
+  drag: function( event, ui ) {
+           var lines = $(this).data('lines');
+           var con_item =$(this).data('connected-item');
+           var con_lines = $(this).data('connected-lines');
+  
+           if(lines) {
+             lines.forEach(function(line,id){
+             		$(line).attr('x1',$(this).position().left).attr('y1',$(this).position().top+1);  
+             }.bind(this));
+           }
+    
+           if(con_lines){
+               con_lines.forEach(function(con_line,id){
+                  $(con_line).attr('x2',$(this).position().left+5)
+                        .attr('y2',$(this).position().top+(parseInt($(this).css('height'))/2)+(id*5));
+               }.bind(this));
+              
+           }
+           
+	   }
+});
 
-// $("#a, #b,svg").draggable({
-//   drag: function(event, ui) {
-//     drawConnector();
-//   }
-// });
+$('.ui-item').droppable({
+  accept: '.con_anchor',
+  drop: function(event,ui){
+     var item = ui.draggable.closest('.ui-item');
+     $(this).data('connected-item',item);
+     ui.draggable.css({top:-2,left:-2});
+     item.data('lines').push(item.data('line'));
+    
+     if($(this).data('connected-lines')){
+        $(this).data('connected-lines').push(item.data('line'));
+        
+         var y2_ = parseInt(item.data('line').attr('y2'));
+         item.data('line').attr('y2',y2_+$(this).data('connected-lines').length*5);
+        
+     }else $(this).data('connected-lines',[item.data('line')]);
+    
+     item.data('line',null);
+    console.log('dropped');
+  }
+});
 
-// setTimeout(drawConnector, 250);
-/* The setTimeout delay here is only required to prevent
- * the initial appearance of the arrows from being
- * incorrect due to the animated expansion of the
- * Stack Overflow code snippet results after clicking
- * "Run Code Snippet." If this was a simpler website,
- * a simple command, i.e. `drawConnector();` would suffice.
- */
+
+$('.con_anchor').draggable({
+     containment: "#canvas",
+     drag: function( event, ui ) {
+       var _end = $(event.target).parent().position();
+       var end = $(event.target).position();
+       if(_end&&end) 	
+       $(event.target).parent().data('line')
+                                .attr('x2',end.left+_end.left+5).attr('y2',end.top+_end.top+2);
+			},
+  	 stop: function(event,ui) {
+        if(!ui.helper.closest('.ui-item').data('line')) return;
+        ui.helper.css({top:-2,left:-2});
+        ui.helper.closest('.ui-item').data('line').remove();
+        ui.helper.closest('.ui-item').data('line',null);
+        console.log('stopped');
+      }
+});
+
+
+$('.con_anchor').on('mousedown',function(e){
+    var cur_ui_item = $(this).closest('.ui-item');
+    var connector = $('#connector_canvas');
+    var cur_con;
+  
+  if(!$(cur_ui_item).data('lines')) $(cur_ui_item).data('lines',[]);
+  
+  if(!$(cur_ui_item).data('line')){
+         cur_con = $(document.createElementNS('http://www.w3.org/2000/svg','line'));
+         cur_ui_item.data('line',cur_con);
+    } else cur_con = cur_ui_item.data('line');
+  
+    connector.append(cur_con);
+    var start = cur_ui_item.position();
+     cur_con.attr('x1',start.left).attr('y1',start.top+1);
+     cur_con.attr('x2',start.left+1).attr('y2',start.top+1);
+});
     </script>
 </html>
 

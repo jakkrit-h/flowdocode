@@ -14,10 +14,14 @@ div.con-fixed {
   height: 50px;
   width: 100px;
   background: #fff;
-  border: 2px solid #fff;
+  border: 1px solid #fff;
   border-radius: 2px;
   text-align: center;
   outline-width: 0;
+}
+
+.start-end::selection, .process::selection {
+  border: 1px dashed;
 }
 
 .shape {
@@ -28,11 +32,11 @@ div.con-fixed {
   max-width: 400px;
 }
 
-.start-end {
+.start-end, .start-end::selection {
   border-color: #FFC312;
 }
 
-.process {
+.process, .process::selection {
   border-color: #C4E538;
 }
 
