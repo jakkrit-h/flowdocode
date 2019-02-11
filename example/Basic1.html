@@ -53,7 +53,7 @@
       
       <div class="offset-2 col-8 py-5 con-fixed h-75 " id="content"ondragover="allowDrop(event)"ondrop="dropItem(event)">
         <div class="my-5 py-2 start-end shape" id="start"data-next="process-0">Start</div>
-
+        <div class="my-5 py-2 process shape"contenteditable="true" >asdas</div>
 
       </div>
 
@@ -67,198 +67,200 @@
  
 
     </body>
- 
+
+
     <script>
-    $(function(){
-      var selectedEl=undefined;
-      $(".shape").draggable();
-      $(".shape").resizable({handles: "e,  w"});
-
-    });  
-
-function allowDrop(event) {
-  event.preventDefault();
-}
-function drag(ev) {
-
-// ev.dataTransfer.setData("text", ev.target.getAttribute('data-type'));
-ev.dataTransfer.setData("text", ev.target.id);
-
-
-}
-function dropItem(event){
-
-
-  event.preventDefault();
-  var type=event.dataTransfer.getData("text");
-  var mousePoint={
-    left: event.clientX ,
-    top: event.clientY
+      $(function(){
+        var selectedEl=undefined;
+        $(".shape").draggable();
+        $(".shape").resizable({handles: "e,  w"});
+  
+      });  
+  
+  function allowDrop(event) {
+    event.preventDefault();
   }
-
-  if(type!=null){
-     
-     if($("#content").find("."+type+"").last().index()==-1){
-       var index=0;
-     }else{
-       var str= $("#content").find("."+type+"").last().prop("id");
-       str=str.split("-");
-     
-        var index=str[str.length-1];
-        index++;
-     }
-
-     var obj=document.createElement("div");
-     if(type=="end"){
-       var attrObj={
-        class:"py-2 shape start-end ",
-        id:"End"
-      } 
-
-     }else{
-        var attrObj={
-        class:"shape text-truncate text-center py-2 "+type,
-        id:(type+"-"+index),
-        contenteditable:false
-        
-        }
-     }
-
-      var obj=document.createElement("div");
-      $(obj).attr(attrObj);    
-     
-      $(obj).text(attrObj.id);
-      $("#content").append($(obj));
-      $(obj).offset(mousePoint);
-      $(obj).draggable();
-      $(obj).resizable({handles: "e,  w"});
-     
-
-      
-
-
-      
+  function drag(ev) {
+  
+  // ev.dataTransfer.setData("text", ev.target.getAttribute('data-type'));
+  ev.dataTransfer.setData("text", ev.target.id);
+  
+  
   }
-    
-   
-}
-
-$("div").on("click",".shape",function(){
-  document.body.style.cursor="text";
-var obj=$(this);
-  if(!$(obj).hasClass("start-end")){
-    $(obj).prop("contenteditable",true);
-  }
-  $(document).keydown(function(ev){
-
-  if(ev.keyCode==13){
-    disContentEdit(obj);
-    if(obj.text()==""){
-    obj.text(obj.attr("id"));
+  function dropItem(event){
+  
+  
+    event.preventDefault();
+    var type=event.dataTransfer.getData("text");
+    var mousePoint={
+      left: event.clientX ,
+      top: event.clientY
     }
+  
+    if(type!=null){
+       
+       if($("#content").find("."+type+"").last().index()==-1){
+         var index=0;
+       }else{
+         var str= $("#content").find("."+type+"").last().prop("id");
+         str=str.split("-");
+       
+          var index=str[str.length-1];
+          index++;
+       }
+  
+       var obj=document.createElement("div");
+       if(type=="end"){
+         var attrObj={
+          class:"py-2 shape start-end ",
+          id:"End"
+        } 
+  
+       }else{
+          var attrObj={
+          class:"shape text-truncate text-center py-2 "+type,
+          id:(type+"-"+index),
+          contenteditable:true
+          
+          }
+       }
+  
+        var obj=document.createElement("div");
+        $(obj).attr(attrObj);    
+       
+        $(obj).text(attrObj.id);
+        $("#content").append($(obj));
+        $(obj).offset(mousePoint);
+        $(obj).draggable();
+        $(obj).resizable({handles: "e,  w"});
+       
+  
+        
+  
+  
+        
+    }
+      
+     
   }
   
-
-  });
-  $(this).on("dblclick",function(){
-    $(this).execCommand('selectAll', false, null);
-  });
- 
-
-});
-$(document).on("blur",".shape",function(){
-  disContentEdit($(this));
-  shapeUnSelectedStyle();
-
-});
-$("#content").on("mouseup",function(event){
-  if(event.target === this)
-    shapeUnSelectedStyle();
-});
-
-$(document).on("mouseenter",".shape",function(){
-  document.body.style.cursor="grab";
-});
-$(document).on("mouseleave",".shape",function(){
-  document.body.style.cursor="";
-});
-$(document).on("mousedown",".shape",function(){
-  if(selectedEl!=undefined){
-    shapeUnSelectedStyle();
-  selectedEl=$(this);
-
-  document.body.style.cursor="";
-  
-  document.body.style.cursor="grabing";
-  shapeSelectedStyle();
+  $("div").on("click",".shape",function(){
+    document.body.style.cursor="text";
+    var obj=$(this);
+    if(!$(obj).hasClass("start-end")){
+      $(obj).prop("contenteditable",true);
+      $(selectedEl).draggable({ disabled: true });
+    }
     $(document).keydown(function(ev){
-
-  if((ev.keyCode==8||ev.keyCode==46||ev.keyCode==110)&&(selectedEl.prop("contenteditable")!="true")){
-
-
-    $(selectedEl).remove();
-  }
-
-  });
-  }
   
-});
-$(document).on("mouseup",".shape",function(){
-  selectedEl=$(this);
-  shapeSelectedStyle();
-  document.body.style.cursor="grab";
-});
-
-function shapeSelectedStyle(){
-  try {
-    selectedEl.css({
-    "border-style":"dashed",
-    "border-width":"2px"
-  });
-  } catch (error) {
-
-
-  }
-
-
-}
-function shapeUnSelectedStyle(){
-  try {
-    selectedEl.css({
-    "border-style":"solid",
-    "border-width":"1px"
+    if(ev.keyCode==13){
+      disContentEdit(obj);
+      if(obj.text()==""){
+      obj.text(obj.attr("id"));
+      }
+    }
+    
+  
     });
+  
    
-
-  } catch (error) {
-
-
-  }finally{
-    selectedEl=undefined;
-
+  
+  });
+  $(document).on("blur",".shape",function(){
+    disContentEdit($(this));
+    shapeUnSelectedStyle();
+  
+  });
+  $("#content").on("mouseup",function(event){
+    if(event.target === this)
+      shapeUnSelectedStyle();
+  });
+  
+  $(document).on("mouseenter",".shape",function(){
+    document.body.style.cursor="grab";
+  });
+  $(document).on("mouseleave",".shape",function(){
+    document.body.style.cursor="";
+  });
+  $(document).on("mousedown",".shape",function(){
+    if(selectedEl!=undefined){
+  
+      shapeUnSelectedStyle();
+    selectedEl=$(this);
+    document.body.style.cursor="";
+    
+    document.body.style.cursor="grabing";
+    shapeSelectedStyle();
+      $(document).keydown(function(ev){
+  
+      if((ev.keyCode==8||ev.keyCode==46||ev.keyCode==110)&&(selectedEl.prop("contenteditable")!="true")){
+  
+  
+        $(selectedEl).remove();
+      }
+  
+      });
+    }
+    
+  });
+  $(document).on("mouseup",".shape",function(){
+    selectedEl=$(this);
+    shapeSelectedStyle();
+    document.body.style.cursor="grab";
+  });
+  
+  function shapeSelectedStyle(){
+    try {
+      selectedEl.css({
+      "border-style":"dashed",
+      "border-width":"2px"
+    });
+    } catch (error) {
+  
+  
+    }
+  
+  
+  }
+  function shapeUnSelectedStyle(){
+    try {
+      selectedEl.css({
+      "border-style":"solid",
+      "border-width":"1px"
+      });
+     
+  
+    } catch (error) {
+  
+  
+    }finally{
+      selectedEl=undefined;
+  
+    }
+    
+  
+   
+  
+  }
+  function disContentEdit(obj){
+  
+  $(obj).prop("contenteditable",false);
+  $(obj).draggable({ disabled: false });
+  document.body.style.cursor="";
   }
   
-
- 
-
-}
-function disContentEdit(obj){
-
-$(obj).prop("contenteditable",false);
-document.body.style.cursor="";
-}
-
-
-
-
-function generateAnchor(node){
-
-
-}
-
-
-
-    </script>
+  
+  
+  
+  function generateAnchor(node){
+  
+  
+  }
+  
+  
+  
+      </script> 
+  
 </html>
 
 

@@ -28,11 +28,7 @@ div.con-fixed {
       outline-width: 0;      
 
   }
-  .start-end::selection,.process::selection{
-
-    border:1px dashed;
-
-}
+ 
   .shape{
     width: max-content;
     padding-left:3%;
@@ -41,10 +37,10 @@ div.con-fixed {
     max-width: 400px;
   }
 
-  .start-end,.start-end::selection{
+  .start-end{
 border-color: #FFC312;
   }
-  .process,.process::selection{
+  .process{
     border-color: #C4E538;
   }
   .input-output{
