@@ -1,0 +1,20 @@
+    .monitor-body {
+
+    }
+    .monitor-header{
+        width: 0; 
+        height: 0; 
+        border-top: 15px solid transparent;
+        border-bottom: 15px solid transparent; 
+        background: transparent;
+        border-right:15px solid blue; 
+
+    }
+
+    .monitor-tail{
+        border-top-right-radius: 500px;
+        border-bottom-right-radius: 500px;
+        background: red;
+
+  
+    }

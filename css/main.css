@@ -1,0 +1,146 @@
+div.con-fixed {
+  position: fixed;
+  overflow-y: scroll;
+}
+
+#content {
+  background-color: transparent;
+  background-image: linear-gradient(0deg, transparent 24%, rgba(0, 0, 0, 0.08) 25%, rgba(0, 0, 0, 0.08) 26%, transparent 27%, transparent 74%, rgba(0, 0, 0, 0.08) 75%, rgba(0, 0, 0, 0.08) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0, 0, 0, 0.08) 25%, rgba(0, 0, 0, 0.08) 26%, transparent 27%, transparent 74%, rgba(0, 0, 0, 0.08) 75%, rgba(0, 0, 0, 0.08) 76%, transparent 77%, transparent);
+  background-size: 50px 50px;
+}
+
+.start-end, .process, .input-output, .manual-input, .decision, .circle, .base, .monitor, .duc {
+  margin: auto;
+  height: 50px;
+  width: 100px;
+  background: #fff;
+  border: 1px solid #fff;
+  border-radius: 2px;
+  text-align: center;
+  outline-width: 0;
+}
+
+.start-end::selection, .process::selection {
+  border: 1px dashed;
+}
+
+.shape {
+  width: max-content;
+  padding-left: 3%;
+  padding-right: 3%;
+  min-width: 100px;
+  max-width: 400px;
+}
+
+.start-end, .start-end::selection {
+  border-color: #FFC312;
+}
+
+.process, .process::selection {
+  border-color: #C4E538;
+}
+
+.input-output {
+  border-color: #12CBC4;
+}
+
+.manual-input {
+  border-color: #FDA7DF;
+}
+
+.decision {
+  border-color: #ED4C67;
+}
+
+.circle {
+  border-color: #EE5A24;
+}
+
+.base {
+  border-color: #009432;
+}
+
+.monitor {
+  border-color: #0652DD;
+}
+
+.duc {
+  border-color: #9980FA;
+}
+
+.start-end:focus {
+  box-shadow: 0px 0px 20px #FFC312;
+}
+
+.process:focus {
+  box-shadow: 0px 0px 20px #C4E538;
+}
+
+.input-output:focus {
+  box-shadow: 0px 0px 20px #12CBC4;
+}
+
+.manual-input:focus {
+  box-shadow: 0px 0px 20px #FDA7DF;
+}
+
+.decision:focus {
+  box-shadow: 0px 0px 20px #ED4C67;
+}
+
+.circle:focus {
+  box-shadow: 0px 0px 20px #EE5A24;
+}
+
+.base:focus {
+  box-shadow: 0px 0px 20px #009432;
+}
+
+.monitor:focus {
+  box-shadow: 0px 0px 20px #0652DD;
+}
+
+.duc:focus {
+  box-shadow: 0px 0px 20px #9980FA;
+}
+
+.container-monitor {
+  min-width: 200px;
+  width: 400px;
+  max-width: 400px;
+}
+.container-monitor .monitor-body {
+  width: 60%;
+  text-align: center;
+  padding: 5%;
+  border-top: 2px solid #0652DD;
+  border-bottom: 2px solid #0652DD;
+}
+.container-monitor .monitor-header {
+  width: 20%;
+  height: 0;
+  border-top: 30px solid transparent;
+  border-bottom: 30px solid transparent;
+  background: transparent;
+  border-right: 30px solid red;
+}
+.container-monitor .monitor-header::before {
+  content: " ";
+  position: relative;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  left: 50px;
+  background: transparent;
+  border-right: 50px solid blue;
+}
+.container-monitor .monitor-tail {
+  min-width: 20%;
+  max-width: 20%;
+  border-top-right-radius: 500px;
+  border-bottom-right-radius: 500px;
+  background: red;
+}
+
+/*# sourceMappingURL=main.css.map */
+
+/*# sourceMappingURL=main.css.map */

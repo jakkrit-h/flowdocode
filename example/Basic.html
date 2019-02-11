@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>BASIC | FLOWDOCODE</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" media="screen" href="../css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="../css/main.css" />
+        <script src="../js/jquery.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/vue.js"></script>
+        <script src="../js/flowdocode.js"></script>
+        <script src="../js/svg.js"></script>
+        <script src="../js/interact.js"></script>
+
+
+    </head>
+    <body>
+        <svg  >
+            <defs>
+              <marker id="arrowhead" viewBox="0 0 10 10" refX="3" refY="5"
+                  markerWidth="8" markerHeight="8" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" />
+              </marker>
+            </defs>
+
+            <g fill="none" stroke="black" stroke-width="1" marker-end="url(#arrowhead)">
+         
+            </g>
+
+          </svg> 
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link "href="Basic.html">Basic</a>
+          </li>
+      <li class="nav-item">
+        <a class="nav-link "href="Decision.html">Decision</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link "href="Loop.html">Loop</a>
+      </li>
+     
+    </ul>
+  </div>
+ 
+
+  
+</nav>
+
+      <div class="col-2 con-fixed h-100 pb-5" >
+              <div class="my-5 py-2 start-end" id="start-end"data-type="tools"draggable="true" ondragstart="drag(event)">END</div>
+              <div class="my-5 py-2 process" id="process"data-type="tools"draggable="true" ondragstart="drag(event)">process</div>
+              <div class="my-5 py-2 input-output"id="input-output"data-type="tools" draggable="true" ondragstart="drag(event)">input-output</div>
+              <div class="my-5 py-2 manual-input"id="manual-input"data-type="tools" draggable="true" ondragstart="drag(event)"> manual-input</div>
+              <div class="my-5 py-2 decision"id="decision"data-type="tools" draggable="true" ondragstart="drag(event)">decision</div>
+              <div class="my-5 py-2 duc"id="duc"data-type="tools" draggable="true" ondragstart="drag(event)">duc</div>
+              <div class="my-5 py-2 monitor"id="monitor"data-type="tools" draggable="true"ondragstart="drag(event)">monitor</div>
+              <div class="my-5 py-2 base"id="base" data-type="tools"draggable="true"ondragstart="drag(event)">base</div>
+              <div class="my-5 py-2 circle" data-type="tools"id="circle"draggable="true"ondragstart="drag(event)">circle</div> 
+     
+      </div>
+      
+      <div class="offset-2 col-8 py-5 con-fixed h-75 " id="content"ondragover="allowDrop(event)"ondrop="drop(event)">
+      
+     
+        
+        <div class="my-5   start-end draggable" id="start"data-next="process-0">START
+
+          <div class="handle mx-auto "></div>
+        </div>
+        <div class=' shape text-truncate text-center resize-drag py-2 my-5 process'id='process-0' data-next="process-2" >i=6,j=5,k=0</div>     
+        
+        
+        <div class=' shape text-truncate text-center resize-drag py-2 my-5 process'id='process-2' data-next="monitor-0">k=i*j</div>
+        <div class=' shape text-truncate text-center resize-drag py-2 my-5 monitor'id='monitor-0' data-next="end" >k</div>
+        <div class="my-5 py-2  start-end draggable" id="end">END</div>
+        
+        <style>
+           svg{
+         
+             position: absolute;
+             width: 100%;
+             height: 100%;
+             left:0;
+             top:0;
+             z-index:-999999999990;
+           }
+        </style>
+ 
+      </div>
+      <div class="col-8 con-fixed h-25 offset-2 fixed-bottom"id="console" style="background: #fff;">Console</div>                                          
+  
+      <div class="offset-10 col-2  con-fixed h-100" >
+        <button>Compile</button>
+      </div>
+
+
+ 
+
+    </body>
+    <script>
+      
+ $(function(){
+   generateConnector();
+ 
+ });
+ $("#content").scroll(function(){
+    generateConnector();
+  console.log("A");
+   });
+
+
+
+
+// $(document).on("mouseleave",".shape",function(){
+//   document.body.style.cursor="";
+// });  
+$(document).on("blur",".shape",function(){
+  disContentEdit($(this));
+
+});
+function disContentEdit(obj){
+
+  $(obj).prop("contenteditable",false);
+  document.body.style.cursor="";
+}
+$("div").on("dblclick",".shape",function(){
+var obj=$(this);
+  $(this).prop("contenteditable",true);
+  $(document).keydown(function(ev){
+
+  if(ev.keyCode==13){
+ disContentEdit(obj);
+  }
+
+  });
+  document.body.style.cursor="text";
+
+});
+$("div").on("click",".shape",function(){
+  var obj=undefined;
+  obj=$(this);
+  console.log($(this).text());
+
+
+  $(document).keydown(function(ev){
+    if((ev.keyCode==8||ev.keyCode==46||ev.keyCode==110)&&(obj.prop("contenteditable")!="true")||obj.prop("id")=="end"){
+      $(obj).remove();
+    }
+  
+  });
+
+});
+
+    function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+
+function drag(ev) {
+
+  // ev.dataTransfer.setData("text", ev.target.getAttribute('data-type'));
+  var id=ev.dataTransfer.setData("text", ev.target.id);
+  
+ 
+}
+
+function drop(ev) {
+
+  ev.preventDefault();
+    var type = ev.dataTransfer.getData("text");
+    console.log(type);
+    if(type!=null){
+     
+      if($("#content").find("."+type+"").last().index()==-1){
+        var index=0;
+      }else{
+        var str= $("#content").find("."+type+"").last().prop("id");
+        str=str.split("-");
+      
+         var index=str[str.length-1];
+         index++;
+      }
+      var objClass=" shape text-truncate text-center resize-drag py-2 "+type;
+      var str=(type+"-"+index);
+      var objId=str;
+      var objAttr="";
+      if(type=="start-end"){
+        var str="<div class='py-2 shape start-end draggable'id='end'  >END</div>"
+
+      }else{
+        var str="<div class='"+objClass+"'id='"+objId+"' "+objAttr+" >"+str+"</div>"
+      }
+      $("#content").append(str);
+     
+    }
+   
+}
+
+interact('.draggable')
+  .draggable({
+    // enable inertial throwing
+    inertia: true,
+    // keep the element within the area of it's parent
+    restrict: {
+      restriction: "parent",
+      endOnly: true,
+      elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+    },
+    // enable autoScroll
+    autoScroll: true,
+
+    // call this function on every dragmove event
+    onmove: dragMoveListener,
+    // call this function on every dragend event
+    onend: function (event) {
+      var textEl = event.target.querySelector('p');
+
+      textEl && (textEl.textContent =
+        'moved a distance of '
+        + (Math.sqrt(Math.pow(event.pageX - event.x0, 2) +
+                     Math.pow(event.pageY - event.y0, 2) | 0))
+            .toFixed(2) + 'px');
+    }
+  });
+
+  function dragMoveListener (event) {
+    generateConnector();
+
+    var target = event.target,
+        // keep the dragged position in the data-x/data-y attributes
+        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+    // translate the element
+    target.style.webkitTransform =
+    target.style.transform =
+      'translate(' + x + 'px, ' + y + 'px)';
+
+    // update the posiion attributes
+    target.setAttribute('data-x', x);
+    target.setAttribute('data-y', y);
+  }
+
+  // this is used later in the resizing and gesture demos
+  window.dragMoveListener = dragMoveListener;
+  
+
+  // RESIZE
+  interact('.resize-drag')
+  .draggable({
+
+    onmove: window.dragMoveListener,
+    restrict: {
+      restriction: 'parent',
+      elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+    },
+  })
+  .resizable({
+  
+    // resize from all edges and corners
+    edges: { left: true, right: true},
+
+    // keep the edges inside the parent
+    restrictEdges: {
+      outer: 'parent',
+      endOnly: true,
+    },
+
+    // minimum size
+    restrictSize: {
+      min: { width: 100, height: 50 },
+    },
+
+    inertia: true,
+  })
+  .on('resizemove', function (event) {
+    var target = event.target,
+        x = (parseFloat(target.getAttribute('data-x')) || 0),
+        y = (parseFloat(target.getAttribute('data-y')) || 0);
+
+    // update the element's style
+    target.style.width  = event.rect.width + 'px';
+    target.style.height = event.rect.height + 'px';
+
+    // translate when resizing from top or left edges
+    x += event.deltaRect.left;
+    y += event.deltaRect.top;
+
+    target.style.webkitTransform = target.style.transform =
+        'translate(' + x + 'px,' + y + 'px)';
+
+    target.setAttribute('data-x', x);
+    target.setAttribute('data-y', y);
+  });
+
+    </script>
+</html>
+
+
