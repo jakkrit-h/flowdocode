@@ -16,6 +16,13 @@
 
 
     </head>
+    <style>
+      .svg-shape,path{
+        position: relative;
+        height: 100%;
+
+      }
+    </style>
     <body>
       
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -43,10 +50,14 @@
               <div class="my-5 py-2 process" id="process"draggable="true" ondragstart="drag(event)">process</div>
               <!-- <div class="my-5 py-2 input-output"id="input-output" draggable="true" >input-output</div> -->
               <div class="my-5 py-2 manual-input"id="manual-input" draggable="true"ondragstart="drag(event)" > manual-input</div>
-              <div class="my-5 py-2 decision"id="decision" draggable="true"ondragstart="drag(event)" >decision</div>
+              <div class="my-5 py-2 decision"id="decision" draggable="true"ondragstart="drag(event)" >
+                <svg class="svg-shape col-12" style="background:red;"viewBox="0 0 10 10">
+                  <path d="m0.75,47.00599l76.99991,-46.5l77.00009,46.5l-77.00009,46.5l-76.99991,-46.5z"></path>
+                </svg>
+                </div>
               <!-- <div class="my-5 py-2 duc"id="duc" draggable="true">duc</div> -->
               <div class="my-5 py-2 monitor"id="monitor" draggable="true"ondragstart="drag(event)">monitor</div>
-              <div class="my-5 py-2 base"id="base" draggable="true"ondragstart="drag(event)">base</div>
+              <!-- <div class="my-5 py-2 base"id="base" draggable="true"ondragstart="drag(event)">base</div> -->
               <div class="my-5 py-2 circle"id="circle"draggable="true"ondragstart="drag(event)">circle</div> 
      
       </div>
