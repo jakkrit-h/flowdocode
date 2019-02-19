@@ -13,41 +13,159 @@
     <body>
       
         <style>
-        #con{
-            width: 800px;
-            height: 200px;
+            
+        .a{
+            width: 100px;
+            height: 50px;
+            min-width: 100px;
+            max-width: 400px;
+            z-index: 0;
+            position: absolute;
+  
         }
         svg{
             position: relative;
+            top: 0px;
             padding: 0;
             width: 100%;
             height: 100%;
+
+            z-index: -1;
+          
+
         }
+        path{
+            width: 100%;
+            height:auto;
+        }
+        .text{
+            position: absolute;
+            z-index:1;
+
+        }
+    
         </style>
    
-        <div id="con"  style="background: blue;">
-       
-        <svg viewBox="150,0,100,100" stroke="red" fill="none" style="background:pink;">
-            <path d="M 0 50 L 25 99 H 150 C 215 100 ,215 0, 150 1 H 25 L 0,50  "/>
-         
+        <div  class="a"id="con"  style="border: 0px solid ;">
+
+        <svg  stroke="red" fill="none" >
+            <path d="M 0 10 L 100 0 L 100 50 L 0 50 Z"/>
+            
             
         </svg>
+        <div class="text text-center col-8  text-truncate mx-auto"  contenteditable="true">
+            Start
         </div>
-        <div id="result"></div>
+
+
+        </div>
+        <!-- <div  class="a"id="con"  style="border: 1px solid ;">
+
+        <svg  stroke="red" fill="none" >
+            <path d="M 200 0 L 400 100 L 200 200 L 0 100 Z "/>
+
+            
+        </svg>
+        <div class="text text-center col-6" style="top:80px;background:greenyellow;" contenteditable="true">sadasdsaadsada</div>
+
+        </div> -->
+
+  
     </body>
     <script>
+   
     $(function(){
-        var con=$("#con");
-        var posit={
-            a :con.outerWidth()*25/100,
-            b :con.outerWidth()*50/100,
-            c :con.outerWidth()*75/100,
-            d :con.outerWidth()
-
-        }
-        console.log(posit);
-        $("polygon").draggable();
+        let parent=$("svg").parent();
+        console.log(parent.attr("id"));
+        updateTextbox();
+        $(".a").draggable();
+        $("#con").resizable(
+            {handles: "e,  w",resize:function(){
+                updateSvgPathProcess();
+                
+            }
+        });
+  
+     
     });  
+ 
+    function updateSvgPathProcess(){
+        // <path d="M 0 0 L 100 0 L 100 50 L 0 50 Z"/>
+        let path=$("#con").find("path");      
+        let width=$("#con").outerWidth();
+        let d= "M 0 0 L "+width+" 0 L "+width+" 50 L 0 50 Z";
+        $(path).attr("d",d);
+         updateTextbox();
+    }
+    function updateSvgPathStartEnd(){
+   // <path d="M 25 0 C -5,0 -5,50 25,50 L 75 50 C 105,50 105,0 75,0 Z"/>
 
+   let path=$("#con").find("path");      
+            let width=$("#con").outerWidth();
+            let d= "M 25 0 C -5,0 -5,50 25,50 L "+width*95/100+" 50 C "+(width+3)+",50 "+(width+3)+",0 "+(width*95/100)+",0 Z";
+            $(path).attr("d",d);
+            updateTextbox();
+
+    }
+    function updateSvgPathManualInput(){
+        //         <path d="M 0 10 L 100 0 L 100 50 L 0 50 Z"/>
+
+
+        let path=$("#con").find("path");      
+              
+        let width=$("#con").outerWidth();
+        
+                
+
+                let d= "M 0 10 L "+ width+" 0 L "+width+" 50 L 0 50 Z";
+                $(path).attr("d",d);
+                updateTextbox();
+    }
+    function updateSvgPathDecision(){
+        //    <path d="M 50 0 L 100 25 L 50 50 L 0 25 Z "/>
+        let path=$("#con").find("path");      
+                let ratio={
+                    width:$("#con").outerWidth(),
+                    height:$("#con").outerHeight(),
+                    hw:$("#con").outerWidth()/2,
+                    hH:$("#con").outerHeight()/2
+
+                }
+              
+                let d= "M "+ratio.hw+" 0 L "+ratio.width+" "+ratio.hH+" L "+ratio.hw+" "+ratio.height+
+                " L 0 "+ratio.hH+" Z ";
+                $(path).attr("d",d);
+                updateTextbox();     
+       
+    }
+    function updateSvgPathDisplay(){
+        // <path d="M 0 25 L 15 50 H 80 C 105 50 ,105 0, 80 0 H 15 L 0,25  "/>
+
+        let path=$("#con").find("path");
+        
+        let originalWidth=$("#con").outerWidth();
+        
+        
+
+        if(originalWidth>200){
+            let width=originalWidth*93/100;
+             d= "M 0 25 L 15 50 H "+width+" C "+(originalWidth+5)+" 50 ,"+(originalWidth+5)+" 0, "+width+" 0 H 15 L 0,25";
+        }else{
+            let width=originalWidth*80/100;
+             d= "M 0 25 L 15 50 H "+width+" C "+(originalWidth+5)+" 50 ,"+(originalWidth+5)+" 0, "+width+" 0 H 15 L 0,25";
+        }
+        $(path).attr("d",d);
+        console.log(path.attr("d"));
+    }
+    function updateTextboxPosition(){
+        let position=$("#con").offset();
+        let textbox=$(".text").outerHeight(); 
+         p={
+            top:position.top+(($("#con").outerHeight()/2)-(textbox/2)),
+            left:position.left+($("#con").outerWidth()*15/100)
+        }   
+        $(".text").offset(p);
+
+    }
     </script>
 </html>

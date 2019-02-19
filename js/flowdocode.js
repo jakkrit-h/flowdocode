@@ -1,168 +1,78 @@
+function updateSvgPathProcess(){
+    // <path d="M 0 0 L 100 0 L 100 50 L 0 50 Z"/>
+    let path=$("#con").find("path");      
+    let width=$("#con").outerWidth();
+    let d= "M 0 0 L "+width+" 0 L "+width+" 50 L 0 50 Z";
+    $(path).attr("d",d);
+     updateTextbox();
+}
+function updateSvgPathStartEnd(){
+// <path d="M 25 0 C -5,0 -5,50 25,50 L 75 50 C 105,50 105,0 75,0 Z"/>
 
-var objArr;
-var pointer;
-$(document).on("click","button",function(){
-    // var rawCode="";
-    // collectPath();
-    // console.log(window.objArr);
-    $("#console").empty();
-    controller();
+let path=$("#con").find("path");      
+        let width=$("#con").outerWidth();
+        let d= "M 25 0 C -5,0 -5,50 25,50 L "+width*95/100+" 50 C "+(width+3)+",50 "+(width+3)+",0 "+(width*95/100)+",0 Z";
+        $(path).attr("d",d);
+        updateTextbox();
 
-  
- 
-});
-// function collectPath(){
-//     var nodePointer=$("#start").attr("data-next");
-//     var continues=true;
-//     var obj="";
-//     objArr=$("#"+nodePointer).text();
-//      while(continues){
-         
-//         // console.log($("#"+node).text());
-//         obj=$("#"+nodePointer);
+}
+function updateSvgPathManualInput(){
+    //         <path d="M 0 10 L 100 0 L 100 50 L 0 50 Z"/>
+
+
+    let path=$("#con").find("path");      
+          
+    let width=$("#con").outerWidth();
+    
+            
+
+            let d= "M 0 10 L "+ width+" 0 L "+width+" 50 L 0 50 Z";
+            $(path).attr("d",d);
+            updateTextbox();
+}
+function updateSvgPathDecision(){
+    //    <path d="M 50 0 L 100 25 L 50 50 L 0 25 Z "/>
+    let path=$("#con").find("path");      
+            let ratio={
+                width:$("#con").outerWidth(),
+                height:$("#con").outerHeight(),
+                hw:$("#con").outerWidth()/2,
+                hH:$("#con").outerHeight()/2
+
+            }
+          
+            let d= "M "+ratio.hw+" 0 L "+ratio.width+" "+ratio.hH+" L "+ratio.hw+" "+ratio.height+
+            " L 0 "+ratio.hH+" Z ";
+            $(path).attr("d",d);
+            updateTextbox();     
    
-//         node=obj.attr("data-next");      
-//         if(node=="end"){
-//             break;
-//         }else{
-//             objArr+=$("#"+nodePointer).text();
-//         }
-       
-       
-
-//     }
-
-
-// }
-function controller(){
-    var nodePointer=$("#start").attr("data-next");
-    
-    while(true){
-        var node=$("#"+nodePointer);
-      
-        nodePointer=classify(node);
-        if(nodePointer=="end"){
-            break;
-        }
-    }
-  
 }
-function compiler(str){
+function updateSvgPathDisplay(){
+    // <path d="M 0 25 L 15 50 H 80 C 105 50 ,105 0, 80 0 H 15 L 0,25  "/>
+
+    let path=$("#con").find("path");
     
-    return eval(str);
-}
-
-function classify(node){
-
- 
-    var result=compiler(node.text());
-    if(node.hasClass("monitor")){
-         displayConsole(result);
-    }
-    if(node.hasClass("decision")){
-       if(result){
-           node.attr("data-next",node.attr("data-true"));
-       }else{
-            node.attr("data-next",node.attr("data-false"));
-
-       }
-       
-    }
-    return node.attr("data-next");
+    let originalWidth=$("#con").outerWidth();
+    
     
 
-}
-// function synthetic(obj){
-//     var str="if("+obj.text()+")";
-//     return str;
-// }
-// function syntheticAlternative(obj){
-//     var pathTrue=obj.attr("data-true");
-//     var pathFalse=obj.attr("data-false");
-
-//     var str="if("+obj.text()+"){";
-//     str+=$("#"+pathTrue+"").text()+"}";
-//     str+="else{"+$("#"+pathFalse+"").text()+"}";
-//     console.log(str);
-// }
-
-function displayConsole(rsCompile){
- 
-    $("#console").append(rsCompile+"<br>");
-}
-// function start(){
-//     var text= "";
-//     var row=1;
-//     $("#content").find(".shape").each(function(){
-//         process($(this));
-//         // text+= row+". &emsp;&emsp;"+$(this).text()+"<br>";
-//         row++;
-//     });
-//     return text;
-// }
-// function process(shape){
-//     alert(eval(shape.text));
-// }
-
-
-
-   function generateConnector(){
-    $("g").empty();
-    var node=$("#start");
-    var targetNode=$("#"+$(node).attr("data-next"));
- 
-    while(node.attr("id")!="end"){
-     //  console.log("node "+node.attr("id"));
-     //    console.log("targetNode "+targetNode.attr("id"));
-     drawConnector(node,targetNode);
-     node=targetNode;
-     targetNode=$("#"+$(node).attr("data-next"));
-   
+    if(originalWidth>200){
+        let width=originalWidth*93/100;
+         d= "M 0 25 L 15 50 H "+width+" C "+(originalWidth+5)+" 50 ,"+(originalWidth+5)+" 0, "+width+" 0 H 15 L 0,25";
+    }else{
+        let width=originalWidth*80/100;
+         d= "M 0 25 L 15 50 H "+width+" C "+(originalWidth+5)+" 50 ,"+(originalWidth+5)+" 0, "+width+" 0 H 15 L 0,25";
     }
-     $("g").html($("g").html());
- 
-  }
- function drawConnector(sourceNode,destinationNode){
-   //  console.log("node "+sourceNode.attr("id"));
-   //      console.log("targetNode "+destinationNode.attr("id"));
-   // var arrow=$("path #"+sourceNode.attr("id")+destinationNode.attr("id"));
-   var arrow=document.createElement("line");
-   arrow=$(arrow);
-   arrow.attr("id",sourceNode.attr("id")+"--"+destinationNode.attr("id"));
-   var Soffset=sourceNode.offset();
-   var Doffset=destinationNode.offset();
- 
-   var positionS={
-     x: Soffset.left + sourceNode.outerWidth()/2,
-     y: Soffset.top  + sourceNode.outerHeight()
-   
-   }
-  
-   var positionD={
-     x: Doffset.left + destinationNode.outerWidth()/2,
-     y: Doffset.top-8
-   }
-   
-   // var str =
-   //     "M " +
-   //     (positionS.x) + "," + (positionS.y) + " " +
-   //     "C " +
-   //     (positionS.x) + "," + (positionS.y) + " " +
-   //     (positionD.x ) + "," + (positionD.y) + " " +
-   //     (positionD.x      ) + "," + (positionD.y);
- 
-       arrow.attr("x1",positionS.x);
-       arrow.attr("y1",positionS.y);
-       arrow.attr("x2",positionD.x);
-       arrow.attr("y2",positionD.y);
- 
-   
-       $("g").append(arrow);
-    
- 
-   
-  }
-function createHandle(){
+    $(path).attr("d",d);
+    console.log(path.attr("d"));
+}
+function updateTextboxPosition(parent){
+    let position=$(parent).offset();
+    let textbox=$(parent).find(".text").outerHeight(); 
+     p={
+        top:position.top+(($(parent).outerHeight()/2)-(textbox/2)),
+        left:position.left+($(parent).outerWidth()*15/100)
+    }   
+    $(parent).find(".text").offset(p);
 
 }
- 

@@ -17,11 +17,7 @@
 
     </head>
     <style>
-      .svg-shape,path{
-        position: relative;
-        height: 100%;
-
-      }
+   
     </style>
     <body>
       
@@ -46,26 +42,61 @@
 </nav>
 
       <div class="col-2 con-fixed h-100 pb-5" >
-              <div class="my-5 py-2 start-end " id="end"draggable="true" ondragstart="drag(event)">End</div>
-              <div class="my-5 py-2 process" id="process"draggable="true" ondragstart="drag(event)">process</div>
-              <!-- <div class="my-5 py-2 input-output"id="input-output" draggable="true" >input-output</div> -->
-              <div class="my-5 py-2 manual-input"id="manual-input" draggable="true"ondragstart="drag(event)" > manual-input</div>
-              <div class="my-5 py-2 decision"id="decision" draggable="true"ondragstart="drag(event)" >
-                <svg class="svg-shape col-12" style="background:red;"viewBox="0 0 10 10">
-                  <path d="m0.75,47.00599l76.99991,-46.5l77.00009,46.5l-77.00009,46.5l-76.99991,-46.5z"></path>
+              <div class="my-5  toolbox start-end " id="end"draggable="true" ondragstart="drag(event)">
+                <svg   >
+                  <path d="M 25 0 C -5,0 -5,50 25,50 L 120 50 C 155,50 155,0 120,0 Z"/>                
                 </svg>
+                <div class="text text-center col-6  text-truncate mx-auto"  >
+                  End
                 </div>
-              <!-- <div class="my-5 py-2 duc"id="duc" draggable="true">duc</div> -->
-              <div class="my-5 py-2 monitor"id="monitor" draggable="true"ondragstart="drag(event)">monitor</div>
-              <!-- <div class="my-5 py-2 base"id="base" draggable="true"ondragstart="drag(event)">base</div> -->
-              <div class="my-5 py-2 circle"id="circle"draggable="true"ondragstart="drag(event)">circle</div> 
+              </div>
+              <div class="my-5 toolbox process" id="process"draggable="true" ondragstart="drag(event)">
+                <svg   >
+                  <path d="M 0 0 L 150 0 L 150 50 L 0 50 Z"/>
+                </svg>
+                <div class="text text-center col-6  text-truncate mx-auto"  >
+                  Process
+                </div>
+              </div>
+              <div class="my-5  toolbox manual-input"id="manual-input" draggable="true"ondragstart="drag(event)" >
+                <svg   >
+                  <path d="M 0 10 L 150 0 L 150 50 L 0 50 Z"/>
+                </svg>
+                <div class="text text-center col-6  text-truncate mx-auto"  >
+                  Input
+                </div>
+              </div>
+              <div class="my-5  toolbox decision"id="decision" draggable="true"ondragstart="drag(event)" >
+                <svg   >
+                  <path d="M 75 0 L 150 25 L 75 50 L 0 25 Z "/>
+                </svg>
+                <div class="text text-center  col-6 text-truncate mx-auto"  >
+                  Input
+                </div>
+              </div>
+              <div class="my-5 toolbox monitor"id="monitor" draggable="true"ondragstart="drag(event)">
+                <svg   >
+                  <path d="M 0 25 L 15 50 H 120 C 155 50 ,155 0, 120 0 H 15 L 0,25  "/>
+                </svg>
+                <div class="text text-center col-6  text-truncate mx-auto"  >
+                  Display
+                </div>
+              </div>
      
       </div>
       
       <div class="offset-2 col-8 py-5 con-fixed h-75 " id="content"ondragover="allowDrop(event)"ondrop="dropItem(event)">
-        <div class="my-5 py-2 start-end shape" id="start"data-next="process-0">Start</div>
-        <div class="my-5 py-2 process shape"contenteditable="true" >asdas</div>
-
+        
+        <div class="toolbox shape start-end " id="start"  >
+          <svg   >
+            <path d="M 25 0 C -5,0 -5,50 25,50 L 175 50 C 200,50 200,0 175,0 Z"/>                
+          </svg>
+          <div class="text text-center col-8  text-truncate mx-auto" >
+            Start
+          </div>
+        </div>
+       
+       
       </div>
 
       <div class="col-8 con-fixed h-25 offset-2 fixed-bottom"id="console" style="background: #fff;">Console</div>                                          
@@ -81,10 +112,15 @@
 
 
     <script>
+  
       $(function(){
         var selectedEl=undefined;
+        $(".toolbox").each(function (){
+          updateTextboxPosition($(this));
+        });
         $(".shape").draggable();
-        $(".shape").resizable({handles: "e,  w"});
+          
+        
   
       });  
   
@@ -271,7 +307,50 @@
   
   
       </script> 
-  
+  <scrip type="text/template">
+    <template id="end">
+      <div class="my-5  shape start-end " >
+          <svg   >
+            <path d="M 25 0 C -5,0 -5,50 25,50 L 120 50 C 155,50 155,0 120,0 Z"/>                
+          </svg>
+          <div class="text text-center col-6  text-truncate mx-auto"  >
+            End
+          </div>
+      </div>
+    <template> 
+    <template id="end">
+        <div class="my-5  shape start-end " >
+            <svg   >
+              <path d="M 25 0 C -5,0 -5,50 25,50 L 120 50 C 155,50 155,0 120,0 Z"/>                
+            </svg>
+            <div class="text text-center col-6  text-truncate mx-auto"  >
+              End
+            </div>
+        </div>
+    <template>
+    <template id="end">
+            <div class="my-5  shape start-end " >
+                <svg   >
+                  <path d="M 25 0 C -5,0 -5,50 25,50 L 120 50 C 155,50 155,0 120,0 Z"/>                
+                </svg>
+                <div class="text text-center col-6  text-truncate mx-auto"  >
+                  End
+                </div>
+            </div>
+      <template>   
+      <template id="end">
+                  <div class="my-5  shape start-end " >
+                      <svg   >
+                        <path d="M 25 0 C -5,0 -5,50 25,50 L 120 50 C 155,50 155,0 120,0 Z"/>                
+                      </svg>
+                      <div class="text text-center col-6  text-truncate mx-auto"  >
+                        End
+                      </div>
+                  </div>
+      <template>
+
+
+  </scrip>
 </html>
 
 
