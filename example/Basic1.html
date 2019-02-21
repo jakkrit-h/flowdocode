@@ -82,6 +82,15 @@
                   Display
                 </div>
               </div>
+              <div class="my-5 toolbox connect"id="connect" >
+                <svg  stroke="red" fill="none" >
+                  <circle cx="50" cy="50" r="45"   />            
+                </svg>
+                <div class="text text-center col-4 p-0   text-truncate mx-auto"  >
+                  Connect
+                </div>
+              </div>
+              
      
       </div>
       
@@ -112,12 +121,20 @@
 
 
     <script>
-  
+     
       $(function(){
         var selectedEl=undefined;
         $(".toolbox").each(function (){
-          updateTextboxPosition($(this));
+          updateTextboxPosition($(this),10);
         });
+        $(".shape").each(function (){
+          updateTextboxPosition($(this),15);
+        });
+        let p={
+          top:87,
+          left:650
+        }
+        $("#start").offset(p);
         $(".shape").draggable();
           
         
@@ -309,7 +326,7 @@
       </script> 
   <scrip type="text/template">
     <template id="end">
-      <div class="my-5  shape start-end " >
+      <div class="shape start-end " >
           <svg   >
             <path d="M 25 0 C -5,0 -5,50 25,50 L 120 50 C 155,50 155,0 120,0 Z"/>                
           </svg>
@@ -318,8 +335,8 @@
           </div>
       </div>
     <template> 
-    <template id="end">
-        <div class="my-5  shape start-end " >
+    <template id="process">
+        <div class="shape process "id="" >
             <svg   >
               <path d="M 25 0 C -5,0 -5,50 25,50 L 120 50 C 155,50 155,0 120,0 Z"/>                
             </svg>
@@ -328,8 +345,8 @@
             </div>
         </div>
     <template>
-    <template id="end">
-            <div class="my-5  shape start-end " >
+    <template id="input">
+            <div class="my-5  shape input " >
                 <svg   >
                   <path d="M 25 0 C -5,0 -5,50 25,50 L 120 50 C 155,50 155,0 120,0 Z"/>                
                 </svg>
@@ -338,16 +355,26 @@
                 </div>
             </div>
       <template>   
-      <template id="end">
-                  <div class="my-5  shape start-end " >
-                      <svg   >
+      <template id="decision">
+        <div class="my-5  shape decision " >
+          <svg>
                         <path d="M 25 0 C -5,0 -5,50 25,50 L 120 50 C 155,50 155,0 120,0 Z"/>                
-                      </svg>
-                      <div class="text text-center col-6  text-truncate mx-auto"  >
-                        End
-                      </div>
-                  </div>
+          </svg>
+          <div class="text text-center col-6  text-truncate mx-auto"  >
+            End
+          </div>
+        </div>
       <template>
+          <template id="decision">
+              <div class="my-5  shape decision " >
+                <svg>
+                              <path d="M 25 0 C -5,0 -5,50 25,50 L 120 50 C 155,50 155,0 120,0 Z"/>                
+                </svg>
+                <div class="text text-center col-6  text-truncate mx-auto"  >
+                  End
+                </div>
+              </div>
+            <template>
 
 
   </scrip>

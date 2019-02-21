@@ -15,8 +15,8 @@
         <style>
             
         .a{
-            width: 100px;
-            height: 50px;
+            width: 150px;
+            height:150px;
             min-width: 100px;
             max-width: 400px;
             z-index: 0;
@@ -46,15 +46,13 @@
     
         </style>
    
-        <div  class="a"id="con"  style="border: 0px solid ;">
+        <div  class="a"id="con"  style="border: 1px solid ;">
 
         <svg  stroke="red" fill="none" >
-            <path d="M 0 10 L 100 0 L 100 50 L 0 50 Z"/>
-            
-            
+            <path d="M 0 10 L 100 0 L 100 50 L 0 50 Z"/>            
         </svg>
-        <div class="text text-center col-8  text-truncate mx-auto"  contenteditable="true">
-            Start
+        <div class="text text-center col-8 p-0   mx-auto"  style="background:greenyellow;">
+            Connect
         </div>
 
 
@@ -69,7 +67,7 @@
         <div class="text text-center col-6" style="top:80px;background:greenyellow;" contenteditable="true">sadasdsaadsada</div>
 
         </div> -->
-
+        shape-rendering="optimizeQuality" 
   
     </body>
     <script>
@@ -157,7 +155,7 @@
         $(path).attr("d",d);
         console.log(path.attr("d"));
     }
-    function updateTextboxPosition(){
+    function updateTextbox(){
         let position=$("#con").offset();
         let textbox=$(".text").outerHeight(); 
          p={

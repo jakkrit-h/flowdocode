@@ -66,12 +66,12 @@ function updateSvgPathDisplay(){
     $(path).attr("d",d);
     console.log(path.attr("d"));
 }
-function updateTextboxPosition(parent){
+function updateTextboxPosition(parent,scale){
     let position=$(parent).offset();
     let textbox=$(parent).find(".text").outerHeight(); 
      p={
         top:position.top+(($(parent).outerHeight()/2)-(textbox/2)),
-        left:position.left+($(parent).outerWidth()*15/100)
+        left:position.left+($(parent).outerWidth()*scale/100)
     }   
     $(parent).find(".text").offset(p);
 
