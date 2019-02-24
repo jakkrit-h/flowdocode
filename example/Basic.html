@@ -184,7 +184,10 @@
         }
         let node=$("template#"+type).html();
          
-        node=$(node).draggable();
+        node=$(node).draggable( { opacity: 0.5,drag:function(){
+          shapeUnSelectedStyle();
+          selectedEl=$(this);
+        }});
         node=$(node).resizable({handles: "e,  w",resize:function(){
                 updateSvgPath(node,type);
                 
@@ -208,6 +211,7 @@
       
      
   }
+  
   $("div").on("click",".shape",function(){
       if($(selectedEl).prop("id")!=$(this).prop("id")){
         shapeUnSelectedStyle();
@@ -229,14 +233,13 @@
         if(!$(selectedEl).hasClass("start-end")){
           document.body.style.cursor="";
           $(selectedEl).find("div.text").prop("contenteditable",true);
-          $(selectedEl).draggable({ disabled: true });
+          $(selectedEl).draggable({ disabled: true  });
         }
         
       });
       $("div").on("blur",".text",function(){
 
           disContentEdit();
-        console.log($(selectedEl).prop("contenteditable"));
         
       });
 
@@ -264,6 +267,10 @@
 
 
   $(document).on("mouseup",".shape",function(){
+    if(selectedEl==undefined){
+      selectedEl=$(this);
+
+    }
     shapeSelectedStyle();
     document.body.style.cursor="grab";
   });

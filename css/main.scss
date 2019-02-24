@@ -6,6 +6,7 @@ div.con-fixed {
   }
 
   #content{
+    overflow-y: scroll;
     background-color: transparent;
 
     background-image: linear-gradient(0deg, transparent 24%, rgba(0, 0, 0, .08) 25%,
@@ -21,8 +22,9 @@ div.con-fixed {
   .toolbox{
       margin:auto;
       height: 50px;
-      width: 150px;
-   
+      max-width: 150px;
+      min-width: 150px;
+
      
   }
  
@@ -55,7 +57,9 @@ path{
 .text{
     position: absolute;
     z-index:2;
-    
+    height: 30px;
+    padding-top:5px; 
+
 }
 .connect{
   width:100px;
