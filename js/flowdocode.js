@@ -1,70 +1,80 @@
-function updateSvgPathProcess(){
-    // <path d="M 0 0 L 100 0 L 100 50 L 0 50 Z"/>
-    let path=$("#con").find("path");      
-    let width=$("#con").outerWidth();
-    let d= "M 0 0 L "+width+" 0 L "+width+" 50 L 0 50 Z";
+function updateSvgPathProcess(node){
+    // <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z"/>
+    let path=$(node).find("path");      
+    let width=$(node).outerWidth()-1;
+    let d= "M 1 1 L "+width+" 1 L "+width+" 49 L 1 49 Z";
     $(path).attr("d",d);
-     updateTextbox();
+    updateTextboxPosition(node,0);
 }
-function updateSvgPathStartEnd(){
-// <path d="M 25 0 C -5,0 -5,50 25,50 L 75 50 C 105,50 105,0 75,0 Z"/>
-
-let path=$("#con").find("path");      
-        let width=$("#con").outerWidth();
-        let d= "M 25 0 C -5,0 -5,50 25,50 L "+width*95/100+" 50 C "+(width+3)+",50 "+(width+3)+",0 "+(width*95/100)+",0 Z";
-        $(path).attr("d",d);
-        updateTextbox();
+function updateSvgPathStartEnd(node){
+    // <path d="M 25 1 C -5,1 -5,49 25,49 L 175 49 C 200,49 200,1 175,1 Z"/>                
+    let path=$(node).find("path");      
+    let width=$(node).outerWidth();
+    let d= "M 25 1 C -5,1 -5,49 25,49 L "+(width*93/100-1)+" 49 C "+(width+2)+",49 "+(width+2)+",1 "+(width*93/100-1)+",1 Z";
+    $(path).attr("d",d);
+     updateTextboxPosition(node,0);
 
 }
-function updateSvgPathManualInput(){
-    //         <path d="M 0 10 L 100 0 L 100 50 L 0 50 Z"/>
-
-
-    let path=$("#con").find("path");      
+function updateSvgPathInput(node){
+    // <path d="M 1 10 L 199 1 L 199 49 L 1 49 Z"/>
+    let path=$(node).find("path");      
           
-    let width=$("#con").outerWidth();
-    
-            
-
-            let d= "M 0 10 L "+ width+" 0 L "+width+" 50 L 0 50 Z";
-            $(path).attr("d",d);
-            updateTextbox();
+    let width=$(node).outerWidth()-1;          
+    let d= "M 1 15 L "+width+" 1 L "+width+" 49 L 1 49 Z";
+    $(path).attr("d",d);
+    updateTextboxPosition(node,0);
 }
-function updateSvgPathDecision(){
-    //    <path d="M 50 0 L 100 25 L 50 50 L 0 25 Z "/>
-    let path=$("#con").find("path");      
+function updateSvgPathDecision(node){
+    // <path d="M 100 1 L 199 25 L 100 49 L 1 25 Z "/>
+    let path=$(node).find("path");      
             let ratio={
-                width:$("#con").outerWidth(),
-                height:$("#con").outerHeight(),
-                hw:$("#con").outerWidth()/2,
-                hH:$("#con").outerHeight()/2
-
+                width:$(node).outerWidth()-1,
+                height:$(node).outerHeight()-1,
+                hw:$(node).outerWidth()/2,
+                hH:$(node).outerHeight()/2
             }
-          
-            let d= "M "+ratio.hw+" 0 L "+ratio.width+" "+ratio.hH+" L "+ratio.hw+" "+ratio.height+
-            " L 0 "+ratio.hH+" Z ";
-            $(path).attr("d",d);
-            updateTextbox();     
+     let d= "M "+ratio.hw+" 1 L "+ratio.width+" "+ratio.hH+" L "+ratio.hw+" "+ratio.height+
+    " L 1 "+ratio.hH+" Z ";
+    $(path).attr("d",d);
+    updateTextboxPosition(node,0);
    
 }
-function updateSvgPathDisplay(){
-    // <path d="M 0 25 L 15 50 H 80 C 105 50 ,105 0, 80 0 H 15 L 0,25  "/>
-
-    let path=$("#con").find("path");
-    
-    let originalWidth=$("#con").outerWidth();
-    
-    
-
+function updateSvgPathDisplay(node){
+    // <path d="M 1 25 L 15 49 H 180 C 205 49 ,205 1, 180 1 H 15 L 1,25  "/>
+    let path=$(node).find("path");
+    let originalWidth=$(node).outerWidth()-1;
+    let width=0;
     if(originalWidth>200){
-        let width=originalWidth*93/100;
-         d= "M 0 25 L 15 50 H "+width+" C "+(originalWidth+5)+" 50 ,"+(originalWidth+5)+" 0, "+width+" 0 H 15 L 0,25";
+        width=originalWidth*93/100;
     }else{
-        let width=originalWidth*80/100;
-         d= "M 0 25 L 15 50 H "+width+" C "+(originalWidth+5)+" 50 ,"+(originalWidth+5)+" 0, "+width+" 0 H 15 L 0,25";
+        width=originalWidth*90/100;
     }
+    d= "M 1 25 L 15 49 H "+width+" C "+(originalWidth+5)+" 49 ,"+(originalWidth+5)+" 1, "+width+" 1 H 15 L 1,25";
+
     $(path).attr("d",d);
-    console.log(path.attr("d"));
+    updateTextboxPosition(node,0);
+
+}
+
+function updateSvgPath(node,name){
+    switch (name){
+        case 'start-end':
+            updateSvgPathStartEnd(node);
+            break;
+        case 'process':
+            updateSvgPathProcess(node);
+            break;
+        case 'input':
+            updateSvgPathInput(node);
+            break;
+        case 'decision':
+            updateSvgPathDecision(node);
+            break;
+        case 'display':
+            updateSvgPathDisplay(node);
+            break;
+       
+    }
 }
 function updateTextboxPosition(parent,scale){
     let position=$(parent).offset();

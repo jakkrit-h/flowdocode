@@ -16,12 +16,13 @@ div.con-fixed {
 }
 
 .shape {
-  width: 150px;
+  width: 200px;
   height: 50px;
   min-width: 200px;
   max-width: 400px;
   z-index: 1;
   position: absolute;
+  border: 0px solid;
 }
 
 svg {

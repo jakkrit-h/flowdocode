@@ -17,7 +17,7 @@
 
     </head>
     <style>
-  
+   
     </style>
     <body>
       
@@ -42,27 +42,27 @@
 </nav>
 
       <div class="col-2 con-fixed h-100 pb-5" >
-              <div class="my-5  toolbox start-end " id="end"draggable="true" ondragstart="drag(event)">
-                <svg   stroke="red" fill="none">
-                  <path d="M 25 0 C -5,0 -5,50 25,50 L 120 50 C 155,50 155,0 120,0 Z"/>                
+              <div class="my-5  toolbox start-end " id="start-end"draggable="true" ondragstart="drag(event)" >
+                <svg   >
+                  <path d="M 25 1 C -5,1 -5,49 25,49 L 120 49 C 155,49 155,0 120,1 Z"/>                
                 </svg>
-                <div class="text text-center col-6  text-truncate mx-auto"  >
+                <div class="text text-center col-7  text-truncate mx-auto" >
                   End
                 </div>
               </div>
               <div class="my-5 toolbox process" id="process"draggable="true" ondragstart="drag(event)">
-                <svg   >
-                  <path d="M 0 0 L 150 0 L 150 50 L 0 50 Z"/>
+                <svg                     >
+                  <path d="M 1 1 L 149 1 L 149 49 L 1 49 Z"/>
                 </svg>
-                <div class="text text-center col-6  text-truncate mx-auto"  >
+                <div class="text text-center col-7  text-truncate mx-auto"  >
                   Process
                 </div>
               </div>
-              <div class="my-5  toolbox manual-input"id="manual-input" draggable="true"ondragstart="drag(event)" >
-                <svg   >
-                  <path d="M 0 10 L 150 0 L 150 50 L 0 50 Z"/>
-                </svg>
-                <div class="text text-center col-6  text-truncate mx-auto"  >
+              <div class="my-5  toolbox input"id="input" draggable="true"ondragstart="drag(event)" >
+                <svg >
+                  <path d="M 1 15 L 149 1 L 149 49 L 1 49 Z"/>
+                </svg >
+                <div class="text text-center col-7  text-truncate mx-auto"  >
                   Input
                 </div>
               </div>
@@ -70,15 +70,15 @@
                 <svg   >
                   <path d="M 75 0 L 150 25 L 75 50 L 0 25 Z "/>
                 </svg>
-                <div class="text text-center  col-6 text-truncate mx-auto"  >
-                  Input
+                <div class="text text-center  col-7 text-truncate mx-auto"  >
+                  Decision
                 </div>
               </div>
-              <div class="my-5 toolbox monitor"id="monitor" draggable="true"ondragstart="drag(event)">
+              <div class="my-5 toolbox display"id="display" draggable="true"ondragstart="drag(event)">
                 <svg   >
-                  <path d="M 0 25 L 15 50 H 120 C 155 50 ,155 0, 120 0 H 15 L 0,25  "/>
+                  <path d="M 1 25 L 15 49 H 120 C 155 49 ,155 1, 120 1 H 15 L 1,25  "/>
                 </svg>
-                <div class="text text-center col-6  text-truncate mx-auto"  >
+                <div class="text text-center col-7  text-truncate mx-auto"  >
                   Display
                 </div>
               </div>
@@ -98,7 +98,8 @@
         
         <div class="toolbox shape start-end " id="start"  >
           <svg   >
-            <path d="M 25 0 C -5,0 -5,50 25,50 L 175 50 C 200,50 200,0 175,0 Z"/>                
+
+            <path d="M 25 1 C -5,1 -5,49 25,49 L 175 49 C 200,49 200,1 175,1 Z"/>                
           </svg>
           <div class="text text-center col-8  text-truncate mx-auto" >
             Start
@@ -121,9 +122,8 @@
 
 
     <script>
-     
+      var selectedEl=undefined;
       $(function(){
-        var selectedEl=undefined;
         $(".toolbox").each(function (){
           updateTextboxPosition($(this),10);
         });
@@ -132,7 +132,7 @@
         });
         let p={
           top:87,
-          left:650
+          left:550
         }
         $("#start").offset(p);
         $(".shape").draggable();
@@ -156,10 +156,7 @@
   
     event.preventDefault();
     var type=event.dataTransfer.getData("text");
-    var mousePoint={
-      left: event.clientX ,
-      top: event.clientY
-    }
+   
   
     if(type!=null){
        
@@ -173,30 +170,34 @@
           index++;
        }
   
-       var obj=document.createElement("div");
-       if(type=="end"){
-         var attrObj={
-          class:"py-2 shape start-end ",
-          id:"End"
-        } 
+     
   
-       }else{
-          var attrObj={
-          class:"shape text-truncate text-center py-2 "+type,
-          id:(type+"-"+index),
-          contenteditable:true
-          
-          }
-       }
-  
-        var obj=document.createElement("div");
-        $(obj).attr(attrObj);    
        
-        $(obj).text(attrObj.id);
-        $("#content").append($(obj));
-        $(obj).offset(mousePoint);
-        $(obj).draggable();
-        $(obj).resizable({handles: "e,  w"});
+        var attrObj={
+          id:(type+"-"+index),
+        
+        }
+       
+        let mousePoint={
+          left: event.clientX-100 ,
+          top: event.clientY-25
+        }
+        let node=$("template#"+type).html();
+         
+        node=$(node).draggable();
+        node=$(node).resizable({handles: "e,  w",resize:function(){
+                updateSvgPath(node,type);
+                
+        }});
+       
+
+        $("#content").append(node);
+       
+        $(node).offset(mousePoint);
+        $(node).prop(attrObj);  
+        updateTextboxPosition(node,0);
+    
+        
        
   
         
@@ -207,97 +208,92 @@
       
      
   }
-  
   $("div").on("click",".shape",function(){
-    document.body.style.cursor="text";
-    var obj=$(this);
-    if(!$(obj).hasClass("start-end")){
-      $(obj).prop("contenteditable",true);
-      $(selectedEl).draggable({ disabled: true });
-    }
-    $(document).keydown(function(ev){
-  
-    if(ev.keyCode==13){
-      disContentEdit(obj);
-      if(obj.text()==""){
-      obj.text(obj.attr("id"));
+      if($(selectedEl).prop("id")!=$(this).prop("id")){
+        shapeUnSelectedStyle();
       }
-    }
+        selectedEl=$(this);
+      shapeSelectedStyle();
+      $(document).keydown(function(event){
+        if((event.keyCode==8||event.keyCode==46)&&$(selectedEl).find("div.text").prop("contenteditable")!="true"){
+          $(selectedEl).remove();
+        }
+        if(event.keyCode==13){
+          disContentEdit();
+        }
+      });
     
-  
-    });
-  
-   
-  
+      
+     
+      $("div").on("click",".text",function(){
+        if(!$(selectedEl).hasClass("start-end")){
+          document.body.style.cursor="";
+          $(selectedEl).find("div.text").prop("contenteditable",true);
+          $(selectedEl).draggable({ disabled: true });
+        }
+        
+      });
+      $("div").on("blur",".text",function(){
+
+          disContentEdit();
+        console.log($(selectedEl).prop("contenteditable"));
+        
+      });
+
+    
+
+    
   });
-  $(document).on("blur",".shape",function(){
-    disContentEdit($(this));
-    shapeUnSelectedStyle();
   
-  });
+ 
   $("#content").on("mouseup",function(event){
-    if(event.target === this)
+    if(event.target === this){
       shapeUnSelectedStyle();
+
+    }
+     
   });
   
+
   $(document).on("mouseenter",".shape",function(){
     document.body.style.cursor="grab";
   });
   $(document).on("mouseleave",".shape",function(){
     document.body.style.cursor="";
   });
-  $(document).on("mousedown",".shape",function(){
-    if(selectedEl!=undefined){
-  
-      shapeUnSelectedStyle();
-    selectedEl=$(this);
-    document.body.style.cursor="";
-    
-    document.body.style.cursor="grabing";
-    shapeSelectedStyle();
-      $(document).keydown(function(ev){
-  
-      if((ev.keyCode==8||ev.keyCode==46||ev.keyCode==110)&&(selectedEl.prop("contenteditable")!="true")){
-  
-  
-        $(selectedEl).remove();
-      }
-  
-      });
-    }
-    
-  });
+
+
   $(document).on("mouseup",".shape",function(){
-    selectedEl=$(this);
     shapeSelectedStyle();
     document.body.style.cursor="grab";
   });
   
   function shapeSelectedStyle(){
     try {
-      selectedEl.css({
-      "border-style":"dashed",
-      "border-width":"2px"
-    });
+      selectedEl.find("svg").css({
+        "stroke-dasharray":"5,5"
+      });
     } catch (error) {
   
   
     }
+
+
   
   
   }
   function shapeUnSelectedStyle(){
     try {
-      selectedEl.css({
-      "border-style":"solid",
-      "border-width":"1px"
+
+      selectedEl.find("svg").css({
+        "stroke-dasharray":"0,0"
       });
-     
   
     } catch (error) {
   
   
     }finally{
+      disContentEdit();
       selectedEl=undefined;
   
     }
@@ -306,75 +302,85 @@
    
   
   }
-  function disContentEdit(obj){
+  function disContentEdit(){
   
-  $(obj).prop("contenteditable",false);
-  $(obj).draggable({ disabled: false });
+  $(selectedEl).find(".text").prop("contenteditable","false");
+  $(selectedEl).draggable({ disabled: false });
   document.body.style.cursor="";
   }
   
   
   
-  
-  function generateAnchor(node){
-  
-  
-  }
+
   
   
   
       </script> 
   <scrip type="text/template">
-    <template id="end">
+
+    <template id="start-end">
       <div class="shape start-end " >
-          <svg   >
-            <path d="M 25 0 C -5,0 -5,50 25,50 L 120 50 C 155,50 155,0 120,0 Z"/>                
+          <svg>
+              <path d="M 25 1 C -5,1 -5,49 25,49 L 175 49 C 200,49 200,1 175,1 Z"/>                
           </svg>
-          <div class="text text-center col-6  text-truncate mx-auto"  >
+          <div class="text text-center col-12  text-truncate mx-auto "   >
             End
           </div>
       </div>
-    <template> 
+    </template> 
     <template id="process">
-        <div class="shape process "id="" >
+        <div class="shape process ">
             <svg   >
-              <path d="M 25 0 C -5,0 -5,50 25,50 L 120 50 C 155,50 155,0 120,0 Z"/>                
+              <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z"/>
             </svg>
-            <div class="text text-center col-6  text-truncate mx-auto"  >
-              End
+            <div class="text text-center col-12  text-truncate mx-auto"contenteditable=false  >
+              Process
             </div>
         </div>
-    <template>
+    </template>
     <template id="input">
-            <div class="my-5  shape input " >
-                <svg   >
-                  <path d="M 25 0 C -5,0 -5,50 25,50 L 120 50 C 155,50 155,0 120,0 Z"/>                
-                </svg>
-                <div class="text text-center col-6  text-truncate mx-auto"  >
-                  End
-                </div>
-            </div>
-      <template>   
-      <template id="decision">
-        <div class="my-5  shape decision " >
-          <svg>
-                        <path d="M 25 0 C -5,0 -5,50 25,50 L 120 50 C 155,50 155,0 120,0 Z"/>                
+        <div class="shape input" >
+          <svg   >
+            <path d="M 1 15 L 199 1 L 199 49 L 1 49 Z"/>
           </svg>
-          <div class="text text-center col-6  text-truncate mx-auto"  >
-            End
+          <div class="text text-center col-12  text-truncate mx-auto"contenteditable=false  >
+                  Input
           </div>
         </div>
-      <template>
-          <template id="decision">
-              <div class="my-5  shape decision " >
-                <svg>
-                              <path d="M 25 0 C -5,0 -5,50 25,50 L 120 50 C 155,50 155,0 120,0 Z"/>                
-                </svg>
-                <div class="text text-center col-6  text-truncate mx-auto"  >
-                  End
-                </div>
-              </div>
-            <template>
+    </template>   
+    <template id="decision">
+        <div class=" shape decision " >
+          <svg>
+            <path d="M 100 1 L 199 25 L 100 49 L 1 25 Z "/>
+          </svg>
+          <div class="text text-center col-12  text-truncate mx-auto"contenteditable="false"  >
+            Decision
+          </div>
+        </div>
+    </template>
+    <template id="display">
+      <div class=" shape display " >
+        <svg>
+          <path d="M 1 25 L 15 49 H 180 C 205 49 ,205 1, 180 1 H 15 L 1,25  "/>
+        </svg>
+        <div class="text text-center col-12  text-truncate mx-auto"contenteditable="false"  >
+          Display
+        </div>
+      </div>
+  </template>
+</template>
+<template id="connect">
+  <div class="shape connect " >
+    <svg>
+      <circle cx="50" cy="50" r="45"   />            
+    </svg>
+    <div class="text text-center col-6  text-truncate mx-auto" contenteditable="false" >
+      Connect
+    </div>
+  </div>
+</template>
+
+
 
 
   </scrip>

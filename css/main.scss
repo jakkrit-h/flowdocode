@@ -28,13 +28,13 @@ div.con-fixed {
  
 
   .shape{
-    width: 150px;
+    width: 200px;
     height: 50px;
     min-width: 200px;
     max-width: 400px;
     z-index: 1;
     position: absolute;
-
+    border:0px solid ;
   }
 svg{
     position: relative;
@@ -46,16 +46,16 @@ svg{
     stroke: #4f7df9;
     fill: none;
     stroke-width: 1px;
-
 }
 path{
     width: 100%;
     height:auto;
+
 }
 .text{
     position: absolute;
     z-index:2;
-
+    
 }
 .connect{
   width:100px;
