@@ -1,236 +1,298 @@
 <html>
-        <head>
-                <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css" />
-                <link rel="stylesheet" type="text/css" media="screen" href="css/jquery-ui.min.css" />
-                <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
-                <script src="js/jquery.js"></script>
-                <script src="js/jquery.js"></script>
-                <script src="js/jquery-ui.min.js"></script>
-                <script src="js/bootstrap.min.js"></script>
-                <script src="js/flowdocode.js"></script>
-        
-        </head>
-    <body>
-            <svg id="test"  >
-                    <defs>
-                      <marker id="arrowhead" viewBox="0 0 10 10" refX="3" refY="5"
-                          markerWidth="6" markerHeight="6" orient="auto">
-                        <path d="M 0 0 L 10 5 L 0 10 z"fill="#4f7df9" />
-                      </marker>
-                    </defs>
-        
-                <g id="con-arrow"fill="none" stroke="black" stroke-width="2" marker-end="url(#arrowhead)">
-                        <line id="line"x1="600" y1="300" x2="651" y2="230"></line>
-                </g>
-        
-            </svg> 
-        <style>
-            
-        .a{
+
+<head>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="css/jquery-ui.min.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/flowdocode.js"></script>
+
+</head>
+
+<body>
+    <svg id="test">
+        <defs>
+            <marker id="arrowhead" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6"
+                orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#fff" />
+            </marker>
+        </defs>
+
+        <g id="con-arrow" fill="none" stroke="#4f7df9" stroke-width="2" marker-end="url(#arrowhead)">
+            <!-- <line class="con2 con" x1="604" y1="300" x2="557" y2="102" data-from="#con2" data-to="#con"></line> -->
+
+        </g>
+
+    </svg>
+    <style>
+        .a {
             width: 200px;
-            height:50px;
+            height: 50px;
             min-width: 200px;
             max-width: 400px;
             z-index: 0;
             position: absolute;
-            left:500;
-            top:50;
-  
+            left: 500;
+            top: 50;
+
         }
-        #con2{
-            top:300;
+
+        #con2 {
+            top: 300;
         }
-        svg{
+
+        svg {
             position: relative;
             top: 0px;
             padding: 0;
             width: 100%;
             height: 100%;
 
-            z-index: -1;
-          
+            z-index: 0;
+
 
         }
-        path{
+
+        path {
             width: 100%;
-            height:auto;
+            height: auto;
         }
-        .text{
+
+        .text {
             position: absolute;
-            z-index:1;
+            z-index: 1;
 
         }
-        .con_anchor{
+
+        .con_anchor {
             width: 8px;
             height: 8px;
             background-color: #fff;
-            border:2px solid #4f7df9;
-            border-radius: 50%;
-            z-index:5;
+            border: 2px solid #4f7df9;
+            z-index: 5;
             position: absolute;
         }
-        .anchor_top{
-            top:-3;
-            left:100;
+
+        .anchor_top {
+            top: -3;
+            left: 100;
         }
-        .anchor_right{
-            top:21;
-            left:195;
+
+        .anchor_right {
+            top: 21;
+            left: 195;
         }
-        .anchor_bottom{
-            top:46;
-            left:100;
+
+        .anchor_bottom {
+            top: 46;
+            left: 100;
         }
-        .anchor_left{
-            top:21;
-            left:-3;
+
+        .anchor_left {
+            top: 21;
+            left: -3;
         }
-    
-        </style>
-   
-        <div  class="a"id="con"  style="border: 0px solid ;">
-            <div class="con_anchor anchor_top"></div>
-            <div class="con_anchor anchor_right"></div>
-            <div class="con_anchor anchor_bottom"></div>
-            <div class="con_anchor anchor_left"></div>
-        <svg  stroke="red" fill="none" >
-            <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z"/>
+    </style>
+
+    <div class="a" id="con" style="border: 0px solid ;">
+        <div class="con_anchor anchor_top"></div>
+        <div class="con_anchor anchor_right"></div>
+        <div class="con_anchor anchor_bottom"></div>
+        <div class="con_anchor anchor_left"></div>
+        <svg stroke="red" fill="none">
+            <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z" />
         </svg>
-        <div class="text text-center col-12  mx-auto"  >
+        <div class="text text-center col-12  mx-auto" contenteditable="true">
             Process
         </div>
 
 
-        </div>
-        <div  class="a"id="con2"  style="border: 0px solid ;">
-            <div class="con_anchor anchor_con2 anchor_top"></div>
-            <div class="con_anchor anchor_con2 anchor_right"></div>
-            <div class="con_anchor anchor_con2 anchor_bottom"></div>
-            <div class="con_anchor anchor_con2 anchor_left"></div>
-        <svg  stroke="red" fill="none" >
-            <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z"/>
+    </div>
+    <div class="a" id="con2" style="border: 0px solid ;">
+        <div class="con_anchor anchor_con2 anchor_top"></div>
+        <div class="con_anchor anchor_con2 anchor_right"></div>
+        <div class="con_anchor anchor_con2 anchor_bottom"></div>
+        <div class="con_anchor anchor_con2 anchor_left"></div>
+        <svg stroke="red" fill="none">
+            <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z" />
         </svg>
-        <div class="text text-center col-12  mx-auto"  >
+        <div class="text text-center col-12  mx-auto">
             Process
         </div>
 
 
-        </div>
+    </div>
 
-    </body>
-    <script>
-   
-    $(function(){
-        $("#line").remove();
-        var originalPosition=null;
-        var selectAnchor=null;
-        var lineDraw=null;
-        $(".con_anchor").draggable(
-            {snap:true,opacity: 0.1,
-            drag:function(){
-                let currentPosition=$(this).offset();
-                 lineDraw=document.createElementNS("http://www.w3.org/2000/svg","line");
-                linePosition={
-                    x1:originalPosition.left+4,
-                    y1:originalPosition.top+3,
-                    x2:currentPosition.left+5,
-                    y2:currentPosition.top,
+</body>
+<script>
+
+    $(function () {
+
+        var originalPosition = null;
+        var selectAnchor = null;
+        var lineDraw = null;
+        var successStatus = null;
+        $(".con_anchor").draggable({
+            snap: ".con_anchor", opacity: 0.01,
+            drag: function () {
+                let currentPosition = $(this).offset();
+                lineDraw = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                let linePosition = {
+                    x1: originalPosition.left + 4,
+                    y1: originalPosition.top + 3,
+                    x2: currentPosition.left + 5,
+                    y2: currentPosition.top,
+                    "data-from": "#" + $(this).parent().prop("id")
 
                 }
-                lineDraw=$(lineDraw).attr(linePosition);
+                lineDraw = $(lineDraw).addClass($(this).parent().prop("id"));
+                lineDraw = $(lineDraw).attr(linePosition);
                 //  เพิ่ม tag g เข้าไปแล้วใส่ append ใน g แล้วค่อยเอาไป html ใน svg
                 // event drop ของ droppable ทำ ก่อน event stop ของ draggable
                 $("#con-arrow").html($(lineDraw));
                 // $("#con-arrow").html($("#con-arrow").html());
-            },stop:function(){
+            }, stop: function () {
+
                 console.log("stop");
-             
+                if (successStatus) {
+                    $(".con_anchor").css({ opacity: 0 });
+                } else {
+                    $(lineDraw).remove();
+                }
                 // $(lineDraw).remove();
                 $(this).offset(originalPosition);
                 // $(".con_anchor").css({opacity:0.1});
             }
-         
+
         });
         $(".con_anchor").droppable({
             accept: ".con_anchor",
-            drop:function(event){
-                console.log("drop");
+            drop: function (event) {
+                console.log("dropped");
+                successStatus = true;
+                lineAttr = {
+                    "data-to": "#" + $(this).parent().prop("id")
+                }
+                lineDraw = $(lineDraw).addClass($(this).parent().prop("id"));
+                $(lineDraw).attr(lineAttr);
 
-            }   
+                $(lineDraw).offset()
+                console.log($("#con-arrow").html());
+
+            }
         });
-        $(document).on("mousedown",".con_anchor",function(){
-             originalPosition=$(this).offset();
+
+
+        $(document).on("mousedown", ".con_anchor", function () {
+            originalPosition = $(this).offset();
         });
-        $(".a").each(function(){
-            updateTextboxPosition($(this),0);
-            // $(this).find(".con_anchor").draggable();
-            $(this).resizable(
-                {handles: "e,  w",resize:function(){
-                    updateSvgPath($(this),"process");
-                    updateAnchorPosition($(this));
+
+        $(".a").each(function () {
+            updateTextboxPosition($(this), 0);
+            $(this).draggable({
+                drag: function () {
+                    let nodeId = $(this).prop("id");
+                    $("line").each(function () {
+                        if ($(this).hasClass(nodeId))
+                            updateConnectorPosition($(this));
+
+                    });
+
+
+
                 }
             });
+            $(this).resizable(
+                {
+                    handles: "e,  w", resize: function () {
+                        updateSvgPath($(this), "process");
+                        updateAnchorPosition($(this));
+                    }
+                });
         });
-        
-  
-     
-    });  
-    function updateAnchorPosition(node){
+
+
+    });
+    function updateAnchorPosition(node) {
         updateAnchorTop(node);
         updateAnchorRight(node);
         updateAnchorBottom(node);
         updateAnchorLeft(node);
     }
-    function getPropertyNode(node){
-        let nodePosition=$(node).offset();
+    function getPropertyNode(node) {
+        let nodePosition = $(node).offset();
         return {
-            width:$(node).outerWidth(),
-            height:$(node).outerHeight(),
-            top:nodePosition.top,
-            left:nodePosition.left
+            width: $(node).outerWidth(),
+            height: $(node).outerHeight(),
+            top: nodePosition.top,
+            left: nodePosition.left
         }
     }
-    function updateAnchorTop(node){
-        let anchor=$(node).find(".anchor_top");
-        
-        let nodeProperty=getPropertyNode(node);
-        let position={
-            top:nodeProperty.top-3,
-            left:nodeProperty.left+(nodeProperty.width/2)
+    function updateAnchorTop(node) {
+        let anchor = $(node).find(".anchor_top");
+
+        let nodeProperty = getPropertyNode(node);
+        let position = {
+            top: nodeProperty.top - 3,
+            left: nodeProperty.left + (nodeProperty.width / 2)
         }
         $(anchor).offset(position);
     }
-    function updateAnchorRight(node){
-        let anchor=$(node).find(".anchor_right");
-        let nodeProperty=getPropertyNode(node);
-        let position={
-            top:nodeProperty.top+(nodeProperty.height/2)-4,
-            left:nodeProperty.left+nodeProperty.width-5
-        }
-        $(anchor).offset(position);
-
-
-    }
-    function updateAnchorBottom(node){
-        let anchor=$(node).find(".anchor_bottom");
-        let nodeProperty=getPropertyNode(node);
-        let position={
-            top:nodeProperty.top+(nodeProperty.height)-4,
-            left:nodeProperty.left+(nodeProperty.width/2)
+    function updateAnchorRight(node) {
+        let anchor = $(node).find(".anchor_right");
+        let nodeProperty = getPropertyNode(node);
+        let position = {
+            top: nodeProperty.top + (nodeProperty.height / 2) - 4,
+            left: nodeProperty.left + nodeProperty.width - 5
         }
         $(anchor).offset(position);
 
     }
-    function updateAnchorLeft(node){
-        let anchor=$(node).find(".anchor_left");
-        let nodeProperty=getPropertyNode(node);
-        let position={
-            top:nodeProperty.top+(nodeProperty.height/2)-4,
-            left:nodeProperty.left-3
+    function updateConnectorPosition(connector) {
+
+        let fromNode =$($(connector).attr("data-from"));
+        let toNode = $($(connector).attr("data-to"));
+        let positionFromNode=fromNode.offset();
+        let positionToNode=toNode.offset();
+        let linePosition = {
+            x1: positionFromNode.left+$(fromNode).outerWidth()/2,
+            y1: positionFromNode.top,
+            x2: positionToNode.left+$(toNode).outerWidth()/2,
+            y2: positionToNode.top+toNode.outerHeight()
+
+        }
+
+        g = $(connector).parent("g");
+        connector=$(connector).attr(linePosition);
+        $("#con-arrow").html($(connector));
+
+        console.log(linePosition);
+    }
+    function updateAnchorBottom(node) {
+        let anchor = $(node).find(".anchor_bottom");
+        let nodeProperty = getPropertyNode(node);
+        let position = {
+            top: nodeProperty.top + (nodeProperty.height) - 4,
+            left: nodeProperty.left + (nodeProperty.width / 2)
         }
         $(anchor).offset(position);
 
     }
- 
-    </script>
+
+    function updateAnchorLeft(node) {
+        let anchor = $(node).find(".anchor_left");
+        let nodeProperty = getPropertyNode(node);
+        let position = {
+            top: nodeProperty.top + (nodeProperty.height / 2) - 4,
+            left: nodeProperty.left - 3
+        }
+        $(anchor).offset(position);
+
+    }
+
+</script>
+
 </html>
