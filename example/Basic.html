@@ -46,50 +46,43 @@
                 <svg   >
                   <path d="M 25 1 C -5,1 -5,49 25,49 L 120 49 C 155,49 155,0 120,1 Z"/>                
                 </svg>
-                <div class="text text-center col-7  text-truncate mx-auto" >
+                <!-- <div class="text text-center col-7  text-truncate mx-auto" >
                   End
-                </div>
+                </div> -->
               </div>
               <div class="my-5 toolbox process" id="process"draggable="true" ondragstart="drag(event)">
                 <svg                     >
                   <path d="M 1 1 L 149 1 L 149 49 L 1 49 Z"/>
                 </svg>
-                <div class="text text-center col-7  text-truncate mx-auto"  >
+                <!-- <div class="text text-center col-7  text-truncate mx-auto"  >
                   Process
-                </div>
+                </div> -->
               </div>
               <div class="my-5  toolbox input"id="input" draggable="true"ondragstart="drag(event)" >
                 <svg >
                   <path d="M 1 15 L 149 1 L 149 49 L 1 49 Z"/>
                 </svg >
-                <div class="text text-center col-7  text-truncate mx-auto"  >
+                <!-- <div class="text text-center col-7  text-truncate mx-auto"  >
                   Input
-                </div>
+                </div> -->
               </div>
               <div class="my-5  toolbox decision"id="decision" draggable="true"ondragstart="drag(event)" >
                 <svg   >
                   <path d="M 75 0 L 150 25 L 75 50 L 0 25 Z "/>
                 </svg>
-                <div class="text text-center  col-7 text-truncate mx-auto"  >
+                <!-- <div class="text text-center  col-7 text-truncate mx-auto"  >
                   Decision
-                </div>
+                </div> -->
               </div>
               <div class="my-5 toolbox display"id="display" draggable="true"ondragstart="drag(event)">
                 <svg   >
                   <path d="M 1 25 L 15 49 H 120 C 155 49 ,155 1, 120 1 H 15 L 1,25  "/>
                 </svg>
-                <div class="text text-center col-7  text-truncate mx-auto"  >
+                <!-- <div class="text text-center col-7  text-truncate mx-auto"  >
                   Display
-                </div>
+                </div> -->
               </div>
-              <div class="my-5 toolbox connect"id="connect" >
-                <svg  stroke="red" fill="none" >
-                  <circle cx="50" cy="50" r="45"   />            
-                </svg>
-                <div class="text text-center col-4 p-0   text-truncate mx-auto"  >
-                  Connect
-                </div>
-              </div>
+   
               
      
       </div>
@@ -220,10 +213,12 @@
       shapeSelectedStyle();
       $(document).keydown(function(event){
         if((event.keyCode==8||event.keyCode==46)&&$(selectedEl).find("div.text").prop("contenteditable")!="true"){
-          $(selectedEl).remove();
+          if($(selectedEl).prop("id")!="start")
+            $(selectedEl).remove();
         }
         if(event.keyCode==13){
           disContentEdit();
+          shapeUnSelectedStyle();
         }
       });
     

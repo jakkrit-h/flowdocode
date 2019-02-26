@@ -36,14 +36,15 @@ $(document).on("click","button",function(){
 // }
 function controller(){
     var nodePointer=$("#start").attr("data-next");
-    
-    while(true){
+    let i=1
+    while(i<=2){
         var node=$("#"+nodePointer);
-      
-        nodePointer=classify(node);
-        if(nodePointer=="end"){
-            break;
-        }
+        
+        i++;
+        // nodePointer=classify(node);
+        // if(nodePointer=="end"){
+        //     break;
+        // }
     }
   
 }

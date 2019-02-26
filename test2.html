@@ -9,6 +9,7 @@
     <script src="js/jquery-ui.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/flowdocode.js"></script>
+    <script src="js/compiler.js"></script>
 
 </head>
 
@@ -21,13 +22,15 @@
             </marker>
         </defs>
 
-        <g id="con-arrow" fill="none" stroke="#4f7df9" stroke-width="2" marker-end="url(#arrowhead)">
-            <!-- <line class="con2 con" x1="604" y1="300" x2="557" y2="102" data-from="#con2" data-to="#con"></line> -->
-
-        </g>
+  
 
     </svg>
     <style>
+        g{
+            fill:"none";
+            stroke: #4f7df9;
+            stroke-width:"2";
+        }
         .a {
             width: 200px;
             height: 50px;
@@ -43,6 +46,9 @@
         #con2 {
             top: 300;
         }
+        #con3{
+            left:50;
+        }
 
         svg {
             position: relative;
@@ -50,11 +56,11 @@
             padding: 0;
             width: 100%;
             height: 100%;
-
             z-index: 0;
 
 
         }
+   
 
         path {
             width: 100%;
@@ -95,13 +101,17 @@
             top: 21;
             left: -3;
         }
+        .hide{
+            opacity: 0 !important; 
+        }
+
     </style>
 
     <div class="a" id="con" style="border: 0px solid ;">
-        <div class="con_anchor anchor_top"></div>
-        <div class="con_anchor anchor_right"></div>
-        <div class="con_anchor anchor_bottom"></div>
-        <div class="con_anchor anchor_left"></div>
+        <div class="con_anchor anchor_top" data-point="top"></div>
+        <div class="con_anchor anchor_right" data-point="right"></div>
+        <div class="con_anchor anchor_bottom" data-point="bottom"></div>
+        <div class="con_anchor anchor_left" data-point="left"></div>
         <svg stroke="red" fill="none">
             <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z" />
         </svg>
@@ -112,10 +122,10 @@
 
     </div>
     <div class="a" id="con2" style="border: 0px solid ;">
-        <div class="con_anchor anchor_con2 anchor_top"></div>
-        <div class="con_anchor anchor_con2 anchor_right"></div>
-        <div class="con_anchor anchor_con2 anchor_bottom"></div>
-        <div class="con_anchor anchor_con2 anchor_left"></div>
+        <div class="con_anchor anchor_con2 anchor_top" data-point="top"></div>
+        <div class="con_anchor anchor_con2 anchor_right" data-point="right"></div>
+        <div class="con_anchor anchor_con2 anchor_bottom" data-point="bottom"></div>
+        <div class="con_anchor anchor_con2 anchor_left" data-point="left"></div>
         <svg stroke="red" fill="none">
             <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z" />
         </svg>
@@ -125,45 +135,81 @@
 
 
     </div>
+    <div class="a" id="con3" style="border: 0px solid ;">
+            <div class="con_anchor anchor_con3 anchor_top" data-point="top"></div>
+            <div class="con_anchor anchor_con3 anchor_right" data-point="right"></div>
+            <div class="con_anchor anchor_con3 anchor_bottom" data-point="bottom"></div>
+            <div class="con_anchor anchor_con3 anchor_left" data-point="left"></div>
+            <svg stroke="red" fill="none">
+                <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z" />
+            </svg>
+            <div class="text text-center col-12  mx-auto">
+                Process
+            </div>
+    
+    
+        </div>
 
 </body>
 <script>
 
     $(function () {
 
-        var originalPosition = null;
-        var selectAnchor = null;
-        var lineDraw = null;
-        var successStatus = null;
+        var originalPosition = undefined;
+        var selectAnchor = undefined;
+        var lineDraw = undefined;
+        var successStatus = undefined;
+        var g=undefined
         $(".con_anchor").draggable({
             snap: ".con_anchor", opacity: 0.01,
             drag: function () {
+                
+
                 let currentPosition = $(this).offset();
                 lineDraw = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                $(lineDraw).attr("id","line_"+$(this).parent().prop("id"));
+
                 let linePosition = {
+                    
                     x1: originalPosition.left + 4,
                     y1: originalPosition.top + 3,
                     x2: currentPosition.left + 5,
                     y2: currentPosition.top,
-                    "data-from": "#" + $(this).parent().prop("id")
+                    
+                    "data-from": "#" + $(this).parent().prop("id"),//ใช้บอกว่ามาจาก Node ไหน
+                    "data-anchorfrom": $(this).attr("data-point")//ใช้บอกว่ามาจาก หมุด ตำแหน่งไหนของ Node ต้นทาง
 
                 }
-                lineDraw = $(lineDraw).addClass($(this).parent().prop("id"));
-                lineDraw = $(lineDraw).attr(linePosition);
-                //  เพิ่ม tag g เข้าไปแล้วใส่ append ใน g แล้วค่อยเอาไป html ใน svg
-                // event drop ของ droppable ทำ ก่อน event stop ของ draggable
-                $("#con-arrow").html($(lineDraw));
-                // $("#con-arrow").html($("#con-arrow").html());
+                
+                 $(lineDraw).addClass($(this).parent().prop("id"));
+                //เพิ่ม class เพื่อบอก ว่า connector นี้ มีส่วนเชื่อมยังกับ Node(ต้นทาง) ใช้ check ตอน Node เกิดการเปลี่ยนแปลง
+        
+
+                $(lineDraw).attr(linePosition);
+                //เพิ่ม attr position ให้ กับ line connector
+                $(g).html($(lineDraw));
+          
+   
             }, stop: function () {
 
                 console.log("stop");
                 if (successStatus) {
-                    $(".con_anchor").css({ opacity: 0 });
+                    if($(this).parent().attr("data-connector")!=undefined){
+                        let connector= $(this).parent().attr("data-connector");
+                        $(connector).parent("g").remove();
+                    }
+                    $(".con_anchor").css({ opacity: 1 });
+                    $(this).parent().attr("data-connector","#"+$(lineDraw).prop("id"));
+                    $(this).addClass("hide");
+                    successStatus=undefined;
+                   
                 } else {
-                    $(lineDraw).remove();
+                    $(g).remove();
                 }
+
                 // $(lineDraw).remove();
                 $(this).offset(originalPosition);
+                
                 // $(".con_anchor").css({opacity:0.1});
             }
 
@@ -174,20 +220,29 @@
                 console.log("dropped");
                 successStatus = true;
                 lineAttr = {
-                    "data-to": "#" + $(this).parent().prop("id")
+                    "data-to": "#" + $(this).parent().prop("id"),
+                    "data-anchorto": $(this).attr("data-point")
                 }
-                lineDraw = $(lineDraw).addClass($(this).parent().prop("id"));
+                $(lineDraw).addClass($(this).parent().prop("id"));
+
                 $(lineDraw).attr(lineAttr);
 
-                $(lineDraw).offset()
-                console.log($("#con-arrow").html());
+                $(lineDraw).offset()   
+                $(this).addClass("hide");
+             
 
             }
         });
 
 
         $(document).on("mousedown", ".con_anchor", function () {
+            
             originalPosition = $(this).offset();
+            g=document.createElementNS("http://www.w3.org/2000/svg","g");
+                g=$(g).attr("marker-end","url(#arrowhead)");
+                g=$(g).attr("stroke-width","2");
+                
+                $("#test").append($(g));
         });
 
         $(".a").each(function () {
@@ -196,8 +251,10 @@
                 drag: function () {
                     let nodeId = $(this).prop("id");
                     $("line").each(function () {
-                        if ($(this).hasClass(nodeId))
+                        
+                        if ($(this).hasClass(nodeId)){
                             updateConnectorPosition($(this));
+                        }
 
                     });
 
@@ -216,6 +273,9 @@
 
 
     });
+    function checkOldConnector(node){
+
+    }
     function updateAnchorPosition(node) {
         updateAnchorTop(node);
         updateAnchorRight(node);
@@ -251,25 +311,57 @@
         $(anchor).offset(position);
 
     }
-    function updateConnectorPosition(connector) {
-
-        let fromNode =$($(connector).attr("data-from"));
-        let toNode = $($(connector).attr("data-to"));
-        let positionFromNode=fromNode.offset();
-        let positionToNode=toNode.offset();
+    function updateConnectorPosition(node) {
+        let fromNode = $($(node).attr("data-from"));
+        let toNode = $($(node).attr("data-to"));
+        let pointFrom = $(node).attr("data-anchorfrom");
+        let pointTo = $(node).attr("data-anchorto");
+   
+        positionFromNode = getPositionByPoint(fromNode, pointFrom);
+        positionToNode=getPositionByPoint(toNode,pointTo);
         let linePosition = {
-            x1: positionFromNode.left+$(fromNode).outerWidth()/2,
-            y1: positionFromNode.top,
-            x2: positionToNode.left+$(toNode).outerWidth()/2,
-            y2: positionToNode.top+toNode.outerHeight()
+            x1: positionFromNode.x,
+            y1: positionFromNode.y,
+            x2: positionToNode.x,
+            y2: positionToNode.y
 
         }
+    
+        g = $(node).parent("g");
+        node = $(node).attr(linePosition);
+        $("#con-arrow").html($(node));
 
-        g = $(connector).parent("g");
-        connector=$(connector).attr(linePosition);
-        $("#con-arrow").html($(connector));
 
-        console.log(linePosition);
+    }
+    function getPositionByPoint(node, point) {
+        let positionNode = $(node).offset();
+        switch (point) {
+            case "top":
+                return {
+                    x: positionNode.left + $(node).outerWidth() / 2,
+                    y: positionNode.top
+                }
+                break;
+            case "right":
+                return {
+                    x: positionNode.left + $(node).outerWidth(),
+                    y: positionNode.top + $(node).outerHeight() / 2
+                }
+                break;
+            case "bottom":
+                return {
+                    x: positionNode.left + $(node).outerWidth() / 2,
+                    y: positionNode.top + $(node).outerHeight()
+                }
+                break;
+            case "left":
+                return {
+                    x: positionNode.left,
+                    y: positionNode.top + $(node).outerHeight() / 2
+                }
+                break;
+
+        }
     }
     function updateAnchorBottom(node) {
         let anchor = $(node).find(".anchor_bottom");
