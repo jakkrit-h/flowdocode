@@ -1,3 +1,11 @@
+var selectedEl=undefined;
+var originalPosition = undefined;
+var selectAnchor = undefined;
+var lineDraw = undefined;
+var successStatus = undefined;
+var g = undefined
+var mouseDown=undefined;
+
 function updateSvgPathProcess(node){
     // <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z"/>
     let path=$(node).find("path");      
@@ -76,13 +84,186 @@ function updateSvgPath(node,name){
        
     }
 }
-function updateTextboxPosition(parent,scale){
+function updateTextboxPosition(parent){
     let position=$(parent).offset();
     let textbox=$(parent).find(".text").outerHeight(); 
      p={
         top:position.top+(($(parent).outerHeight()/2)-(textbox/2)),
-        left:position.left+($(parent).outerWidth()*scale/100)
+        left:position.left
     }   
     $(parent).find(".text").offset(p);
 
 }
+
+
+function updateAnchorPosition(node) {
+    updateAnchorTop(node);
+    updateAnchorRight(node);
+    updateAnchorBottom(node);
+    updateAnchorLeft(node);
+}
+function getPropertyNode(node) {
+    let nodePosition = $(node).offset();
+    return {
+        width: $(node).outerWidth(),
+        height: $(node).outerHeight(),
+        top: nodePosition.top,
+        left: nodePosition.left
+    }
+}
+function updateAnchorTop(node) {
+    let anchor = $(node).find(".anchor_top");
+
+    let nodeProperty = getPropertyNode(node);
+    let position = {
+        top: nodeProperty.top - 4,
+        left: nodeProperty.left + (nodeProperty.width / 2) - 4
+    }
+    $(anchor).offset(position);
+}
+function updateAnchorRight(node) {
+    let anchor = $(node).find(".anchor_right");
+    let nodeProperty = getPropertyNode(node);
+    let position = {
+        top: nodeProperty.top + (nodeProperty.height / 2) - 4,
+        left: nodeProperty.left + nodeProperty.width - 5
+    }
+    $(anchor).offset(position);
+
+}
+function updateConnectorPosition(node) {
+    let fromNode = $($(node).attr("data-from"));
+    let toNode = $($(node).attr("data-to"));
+    let pointFrom = $(node).attr("data-anchorfrom");
+    let pointTo = $(node).attr("data-anchorto");
+
+    positionFromNode = getPositionByPoint(fromNode, pointFrom);
+    positionToNode = getPositionByPoint(toNode, pointTo);
+    let linePosition = {
+        x1: positionFromNode.x,
+        y1: positionFromNode.y,
+        x2: positionToNode.x,
+        y2: positionToNode.y
+
+    }
+
+    g = $(node).parent("g");
+    node = $(node).attr(linePosition);
+    $(g).html($(node));
+   
+
+
+}
+
+
+function getPositionByPoint(node, point) {
+    // ไว้ให้ updateConnectorPosition เรียกเพื่อ return  ตำแหน่ง ของ connector โดยยึดตำแหน่งของ Anchor
+    let positionNode = $(node).offset();
+    switch (point) {
+        case "top":
+            return {
+                x: (positionNode.left + $(node).outerWidth() / 2) + 4,
+                y: positionNode.top
+            }
+            break;
+        case "right":
+            return {
+                x: positionNode.left + $(node).outerWidth(),
+                y: positionNode.top + $(node).outerHeight() / 2
+            }
+            break;
+        case "bottom":
+            return {
+                x: positionNode.left + $(node).outerWidth() / 2 + 4,
+                y: positionNode.top + $(node).outerHeight()
+            }
+            break;
+        case "left":
+            return {
+                x: positionNode.left,
+                y: positionNode.top + $(node).outerHeight() / 2
+            }
+            break;
+
+    }
+}
+function updateAnchorBottom(node) {
+    let anchor = $(node).find(".anchor_bottom");
+    let nodeProperty = getPropertyNode(node);
+    let position = {
+        top: nodeProperty.top + (nodeProperty.height) - 4,
+        left: (nodeProperty.left + (nodeProperty.width / 2)) - 4
+    }
+    $(anchor).offset(position);
+
+}
+
+function updateAnchorLeft(node) {
+    let anchor = $(node).find(".anchor_left");
+    let nodeProperty = getPropertyNode(node);
+    let position = {
+        top: nodeProperty.top + (nodeProperty.height / 2) - 4,
+        left: nodeProperty.left - 3
+    }
+    $(anchor).offset(position);
+
+}
+function updateConnectorPositionOnAction(node){
+    //เอาไว้ตอนที่ Node draggable หรือ resize
+    let nodeId = $(node).prop("id");
+  
+
+
+    $("line").each(function () {
+        
+
+        if ($(this).hasClass(nodeId)) {
+            updateConnectorPosition($(this));
+        }
+
+    });
+
+}
+
+
+function shapeSelectedStyle(){
+    try {
+      selectedEl.find("svg").css({
+        "stroke-dasharray":"5,5"
+      });
+    } catch (error) {
+  
+  
+    }
+
+
+  
+  
+  }
+  function shapeUnSelectedStyle(){
+    try {
+
+      selectedEl.find("svg").css({
+        "stroke-dasharray":"0,0"
+      });
+  
+    } catch (error) {
+  
+  
+    }finally{
+      disContentEdit();
+      selectedEl=undefined;
+  
+    }
+    
+  
+   
+  
+  }
+  function disContentEdit(){
+  
+  $(selectedEl).find(".text").prop("contenteditable","false");
+  $(selectedEl).draggable({ disabled: false });
+  document.body.style.cursor="";
+  }
+  

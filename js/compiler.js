@@ -1,10 +1,11 @@
 
 var objArr;
-var pointer;
+
 $(document).on("click","button",function(){
     // var rawCode="";
     // collectPath();
     // console.log(window.objArr);
+
     $("#console").empty();
     controller();
 
@@ -35,41 +36,45 @@ $(document).on("click","button",function(){
 
 // }
 function controller(){
-    var nodePointer=$("#start").attr("data-next");
-    let i=1
-    while(i<=2){
-        var node=$("#"+nodePointer);
-        
-        i++;
-        // nodePointer=classify(node);
-        // if(nodePointer=="end"){
-        //     break;
-        // }
+    let linePointer=$("#start").attr("data-connector");
+
+    let str="";
+    while(true){
+        if($(linePointer).attr("data-to")==undefined ){
+            break;
+        }else{
+            let nodePointer=$(linePointer).attr("data-to");
+           
+            classify(nodePointer);
+            linePointer=$(nodePointer).attr("data-connector");
+        }
     }
-  
+     console.log(str);
+    
+   
+   
 }
 function compiler(str){
-    
     return eval(str);
 }
 
 function classify(node){
 
  
-    var result=compiler(node.text());
-    if(node.hasClass("monitor")){
+    var result=compiler($(node).find(".text").text());
+    if($(node).hasClass("display")){
          displayConsole(result);
     }
-    if(node.hasClass("decision")){
-       if(result){
-           node.attr("data-next",node.attr("data-true"));
-       }else{
-            node.attr("data-next",node.attr("data-false"));
+    // if(node.hasClass("decision")){
+    //    if(result){
+    //        node.attr("data-next",node.attr("data-true"));
+    //    }else{
+    //         node.attr("data-next",node.attr("data-false"));
 
-       }
+    //    }
        
-    }
-    return node.attr("data-next");
+    // }
+    // return node.attr("data-next");
     
 
 }
@@ -107,63 +112,6 @@ function displayConsole(rsCompile){
 
 
 
-   function generateConnector(){
-    $("g").empty();
-    var node=$("#start");
-    var targetNode=$("#"+$(node).attr("data-next"));
- 
-    while(node.attr("id")!="end"){
-     //  console.log("node "+node.attr("id"));
-     //    console.log("targetNode "+targetNode.attr("id"));
-     drawConnector(node,targetNode);
-     node=targetNode;
-     targetNode=$("#"+$(node).attr("data-next"));
    
-    }
-     $("g").html($("g").html());
- 
-  }
- function drawConnector(sourceNode,destinationNode){
-   //  console.log("node "+sourceNode.attr("id"));
-   //      console.log("targetNode "+destinationNode.attr("id"));
-   // var arrow=$("path #"+sourceNode.attr("id")+destinationNode.attr("id"));
-   var arrow=document.createElement("line");
-   arrow=$(arrow);
-   arrow.attr("id",sourceNode.attr("id")+"--"+destinationNode.attr("id"));
-   var Soffset=sourceNode.offset();
-   var Doffset=destinationNode.offset();
- 
-   var positionS={
-     x: Soffset.left + sourceNode.outerWidth()/2,
-     y: Soffset.top  + sourceNode.outerHeight()
-   
-   }
-  
-   var positionD={
-     x: Doffset.left + destinationNode.outerWidth()/2,
-     y: Doffset.top-8
-   }
-   
-   // var str =
-   //     "M " +
-   //     (positionS.x) + "," + (positionS.y) + " " +
-   //     "C " +
-   //     (positionS.x) + "," + (positionS.y) + " " +
-   //     (positionD.x ) + "," + (positionD.y) + " " +
-   //     (positionD.x      ) + "," + (positionD.y);
- 
-       arrow.attr("x1",positionS.x);
-       arrow.attr("y1",positionS.y);
-       arrow.attr("x2",positionD.x);
-       arrow.attr("y2",positionD.y);
  
    
-       $("g").append(arrow);
-    
- 
-   
-  }
-function createHandle(){
-
-}
- 

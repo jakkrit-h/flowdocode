@@ -22,15 +22,16 @@
             </marker>
         </defs>
 
-  
+
 
     </svg>
     <style>
-        g{
-            fill:"none";
+        g {
+            fill: "none";
             stroke: #4f7df9;
-            stroke-width:"2";
+            stroke-width: "2";
         }
+
         .a {
             width: 200px;
             height: 50px;
@@ -46,8 +47,9 @@
         #con2 {
             top: 300;
         }
-        #con3{
-            left:50;
+
+        #con3 {
+            left: 50;
         }
 
         svg {
@@ -60,7 +62,7 @@
 
 
         }
-   
+
 
         path {
             width: 100%;
@@ -80,6 +82,7 @@
             border: 2px solid #4f7df9;
             z-index: 5;
             position: absolute;
+            opacity: 0;
         }
 
         .anchor_top {
@@ -102,9 +105,8 @@
             left: -3;
         }
         .hide{
-            opacity: 0 !important; 
+            opacity: 0 !important;
         }
-
     </style>
 
     <div class="a" id="con" style="border: 0px solid ;">
@@ -136,81 +138,86 @@
 
     </div>
     <div class="a" id="con3" style="border: 0px solid ;">
-            <div class="con_anchor anchor_con3 anchor_top" data-point="top"></div>
-            <div class="con_anchor anchor_con3 anchor_right" data-point="right"></div>
-            <div class="con_anchor anchor_con3 anchor_bottom" data-point="bottom"></div>
-            <div class="con_anchor anchor_con3 anchor_left" data-point="left"></div>
-            <svg stroke="red" fill="none">
-                <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z" />
-            </svg>
-            <div class="text text-center col-12  mx-auto">
-                Process
-            </div>
-    
-    
+        <div class="con_anchor anchor_con3 anchor_top" data-point="top"></div>
+        <div class="con_anchor anchor_con3 anchor_right" data-point="right"></div>
+        <div class="con_anchor anchor_con3 anchor_bottom" data-point="bottom"></div>
+        <div class="con_anchor anchor_con3 anchor_left" data-point="left"></div>
+        <svg stroke="red" fill="none">
+            <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z" />
+        </svg>
+        <div class="text text-center col-12  mx-auto">
+            Process
         </div>
+
+
+    </div>
 
 </body>
 <script>
 
     $(function () {
 
-        var originalPosition = undefined;
-        var selectAnchor = undefined;
-        var lineDraw = undefined;
-        var successStatus = undefined;
-        var g=undefined
+ 
         $(".con_anchor").draggable({
             snap: ".con_anchor", opacity: 0.01,
             drag: function () {
-                
 
+                $(".con_anchor").css("opacity","1");
+                $(this).addClass("hide");
                 let currentPosition = $(this).offset();
                 lineDraw = document.createElementNS("http://www.w3.org/2000/svg", "line");
-                $(lineDraw).attr("id","line_"+$(this).parent().prop("id"));
+                $(lineDraw).attr("id", "line_" + $(this).parent().prop("id"));
 
                 let linePosition = {
-                    
+
                     x1: originalPosition.left + 4,
                     y1: originalPosition.top + 3,
                     x2: currentPosition.left + 5,
                     y2: currentPosition.top,
-                    
+
                     "data-from": "#" + $(this).parent().prop("id"),//ใช้บอกว่ามาจาก Node ไหน
                     "data-anchorfrom": $(this).attr("data-point")//ใช้บอกว่ามาจาก หมุด ตำแหน่งไหนของ Node ต้นทาง
 
                 }
-                
-                 $(lineDraw).addClass($(this).parent().prop("id"));
+
+                $(lineDraw).addClass($(this).parent().prop("id"));
                 //เพิ่ม class เพื่อบอก ว่า connector นี้ มีส่วนเชื่อมยังกับ Node(ต้นทาง) ใช้ check ตอน Node เกิดการเปลี่ยนแปลง
-        
+
 
                 $(lineDraw).attr(linePosition);
                 //เพิ่ม attr position ให้ กับ line connector
                 $(g).html($(lineDraw));
-          
-   
+                
+
+
             }, stop: function () {
 
-                console.log("stop");
+               
                 if (successStatus) {
-                    if($(this).parent().attr("data-connector")!=undefined){
-                        let connector= $(this).parent().attr("data-connector");
+                    $(".con_anchor").css("opacity","0");
+
+                    if ($(this).parent().attr("data-connector") != undefined) {
+                        // data-connector คือ Node นั้นมี line ของตัวเองมั้ยแล้วชื่ออะไร
+                        let connector = $(this).parent().attr("data-connector");
                         $(connector).parent("g").remove();
                     }
-                    $(".con_anchor").css({ opacity: 1 });
-                    $(this).parent().attr("data-connector","#"+$(lineDraw).prop("id"));
-                    $(this).addClass("hide");
-                    successStatus=undefined;
-                   
+            
+                    $(this).parent().attr("data-connector", "#" + $(lineDraw).prop("id"));
+                    // $(this).addClass("hide");
+                    successStatus = undefined;
+
                 } else {
                     $(g).remove();
                 }
+                $(this).removeClass("hide");
 
-                // $(lineDraw).remove();
                 $(this).offset(originalPosition);
-                
-                // $(".con_anchor").css({opacity:0.1});
+                console.log(lineDraw);
+                let a=$(this).parent();
+                a= a;
+                console.log(a);
+                // console.log($(this).parent());
+
             }
 
         });
@@ -227,32 +234,39 @@
 
                 $(lineDraw).attr(lineAttr);
 
-                $(lineDraw).offset()   
-                $(this).addClass("hide");
-             
+                $(lineDraw).offset();
+                // $(this).addClass("hide");
+
 
             }
         });
 
 
-        $(document).on("mousedown", ".con_anchor", function () {
+   
+        
+        $(".a").hover(function () {
+            $(this).find(".con_anchor").css("opacity", "1");
+            $(document).on("mousedown",function(){
+                 mouseDown=true;
+            });
+        }, function () {
+            if(!mouseDown){
+                $(this).find(".con_anchor").css("opacity", "0");
+            }
+            $(document).on("mouseup",function(){
+                 mouseDown=false;
+            });
             
-            originalPosition = $(this).offset();
-            g=document.createElementNS("http://www.w3.org/2000/svg","g");
-                g=$(g).attr("marker-end","url(#arrowhead)");
-                g=$(g).attr("stroke-width","2");
-                
-                $("#test").append($(g));
         });
-
+   
         $(".a").each(function () {
-            updateTextboxPosition($(this), 0);
+            updateTextboxPosition($(this));
             $(this).draggable({
                 drag: function () {
                     let nodeId = $(this).prop("id");
                     $("line").each(function () {
-                        
-                        if ($(this).hasClass(nodeId)){
+
+                        if ($(this).hasClass(nodeId)) {
                             updateConnectorPosition($(this));
                         }
 
@@ -267,15 +281,22 @@
                     handles: "e,  w", resize: function () {
                         updateSvgPath($(this), "process");
                         updateAnchorPosition($(this));
+                        let nodeId = $(this).prop("id");
+                    $("line").each(function () {
+
+                        if ($(this).hasClass(nodeId)) {
+                            updateConnectorPosition($(this));
+                        }
+
+                    });
+
                     }
                 });
         });
 
 
     });
-    function checkOldConnector(node){
-
-    }
+  
     function updateAnchorPosition(node) {
         updateAnchorTop(node);
         updateAnchorRight(node);
@@ -296,8 +317,8 @@
 
         let nodeProperty = getPropertyNode(node);
         let position = {
-            top: nodeProperty.top - 3,
-            left: nodeProperty.left + (nodeProperty.width / 2)
+            top: nodeProperty.top - 4,
+            left: nodeProperty.left + (nodeProperty.width / 2) - 4
         }
         $(anchor).offset(position);
     }
@@ -316,9 +337,9 @@
         let toNode = $($(node).attr("data-to"));
         let pointFrom = $(node).attr("data-anchorfrom");
         let pointTo = $(node).attr("data-anchorto");
-   
+
         positionFromNode = getPositionByPoint(fromNode, pointFrom);
-        positionToNode=getPositionByPoint(toNode,pointTo);
+        positionToNode = getPositionByPoint(toNode, pointTo);
         let linePosition = {
             x1: positionFromNode.x,
             y1: positionFromNode.y,
@@ -326,19 +347,22 @@
             y2: positionToNode.y
 
         }
-    
+
         g = $(node).parent("g");
         node = $(node).attr(linePosition);
         $("#con-arrow").html($(node));
 
 
     }
+
+
     function getPositionByPoint(node, point) {
+        // ไว้ให้ updateConnectorPosition เรียกเพื่อ return  ตำแหน่ง ของ connector โดยยึดตำแหน่งของ Anchor
         let positionNode = $(node).offset();
         switch (point) {
             case "top":
                 return {
-                    x: positionNode.left + $(node).outerWidth() / 2,
+                    x: (positionNode.left + $(node).outerWidth() / 2) + 4,
                     y: positionNode.top
                 }
                 break;
@@ -350,7 +374,7 @@
                 break;
             case "bottom":
                 return {
-                    x: positionNode.left + $(node).outerWidth() / 2,
+                    x: positionNode.left + $(node).outerWidth() / 2 + 4,
                     y: positionNode.top + $(node).outerHeight()
                 }
                 break;
@@ -368,7 +392,7 @@
         let nodeProperty = getPropertyNode(node);
         let position = {
             top: nodeProperty.top + (nodeProperty.height) - 4,
-            left: nodeProperty.left + (nodeProperty.width / 2)
+            left: (nodeProperty.left + (nodeProperty.width / 2)) - 4
         }
         $(anchor).offset(position);
 
