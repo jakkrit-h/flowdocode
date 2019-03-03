@@ -1,305 +1,395 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <title>BASIC | FLOWDOCODE</title>
-        <meta http-equiv="refresh" content="0;url=example/Basic.html" />
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" media="screen" href="../css/bootstrap.min.css" />
-        <link rel="stylesheet" type="text/css" media="screen" href="../css/main.css" />
-        <script src="../js/jquery.js"></script>
-        <script src="../js/bootstrap.min.js"></script>
-        <script src="../js/vue.js"></script>
-        <script src="../js/flowdocode.js"></script>
-        <script src="../js/svg.js"></script>
-        <script src="../js/interact.js"></script>
 
-
-    </head>
-    <body>
-            <defs>
-              <marker id="arrowhead" viewBox="0 0 10 10" refX="3" refY="5"
-                  markerWidth="6" markerHeight="6" orient="auto">
-                <path d="M 0 0 L 10 5 L 0 10 z" />
-              </marker>
-            </defs>
-
-        <g id="con-arrow"fill="none" stroke="black" stroke-width="2" marker-end="url(#arrowhead)">
-          
-        </g>
-
-          </svg> 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="collapse navbar-collapse" id="navbarNavDropdown">
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link "href="Basic.html">Basic</a>
-          </li>
-      <li class="nav-item">
-        <a class="nav-link "href="Decision.html">Decision</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link "href="Loop.html">Loop</a>
-      </li>
-     
-    </ul>
-  </div>
- 
-
-  
-</nav>
-
-      <div class="col-2 con-fixed h-100 pb-5" >
-              <div class="my-5 py-2 start-end" id="start-end"data-type="tools"draggable="true" ondragstart="drag(event)">END</div>
-              <div class="my-5 py-2 process" id="process"data-type="tools"draggable="true" ondragstart="drag(event)">process</div>
-              <div class="my-5 py-2 input-output"id="input-output"data-type="tools" draggable="true" ondragstart="drag(event)">input-output</div>
-              <div class="my-5 py-2 manual-input"id="manual-input"data-type="tools" draggable="true" ondragstart="drag(event)"> manual-input</div>
-              <div class="my-5 py-2 decision"id="decision"data-type="tools" draggable="true" ondragstart="drag(event)">decision</div>
-              <div class="my-5 py-2 duc"id="duc"data-type="tools" draggable="true" ondragstart="drag(event)">duc</div>
-              <div class="my-5 py-2 monitor"id="monitor"data-type="tools" draggable="true"ondragstart="drag(event)">monitor</div>
-              <div class="my-5 py-2 base"id="base" data-type="tools"draggable="true"ondragstart="drag(event)">base</div>
-              <div class="my-5 py-2 circle" data-type="tools"id="circle"draggable="true"ondragstart="drag(event)">circle</div> 
-     
-      </div>
-      
-      <div class="offset-2 col-8 py-5 con-fixed h-75" id="content"ondragover="allowDrop(event)"ondrop="drop(event)">
-      
-     
-        
-        <div class="my-5 py-2  start-end draggable" id="start"data-next="process-0">START</div>
-        <div class=' shape text-truncate text-center resize-drag py-2 my-5 process'id='process-0' data-next="process-2" >i=6,j=5,k=0</div>     
-        
-        
-        <div class=' shape text-truncate text-center resize-drag py-2 my-5 process'id='process-2' data-next="monitor-0">k=i*j</div>
-        <div class=' shape text-truncate text-center resize-drag py-2 my-5 monitor'id='monitor-0' data-next="end" >k</div>
-        <div class="my-5 py-2  start-end draggable" id="end">END</div>
-        
-        <style>
-           svg{
-         
-             position: absolute;
-             width: 100%;
-             height: 100%;
-             left:0;
-             top:0;
-             z-index:-999999999990;
-           }
-        </style>
- 
-      </div>
-      <div class="col-8 con-fixed h-25 offset-2 fixed-bottom"id="console" style="background: #fff;">Console</div>                                          
-  
-      <div class="offset-10 col-2  con-fixed h-100" >
-        <button>Compile</button>
-      </div>
-
-
- 
-
-    </body>
-    <script>
-      
- $(function(){
-   generateConnector();
- });
- function generateConnector(){
-   var node=$("#start");
-   var targetNode=$("#"+$(node).attr("data-next"));
-   while(node.attr("id")!="end"){
-    //  console.log("node "+node.attr("id"));
-    //    console.log("targetNode "+targetNode.attr("id"));
-    drawConnector(node,targetNode);
-    node=targetNode;
-    targetNode=$("#"+$(node).attr("data-next"));
-  
-   }
+<head>
+  <title>FlowdoCode | FLOWDOCODE</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="css/jquery-ui.min.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome-all.min.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
        
+       
+
+  <script src="js/jquery.js"></script>
+  <script src="js/jquery-ui.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/flowdocode.js"></script>
+  <script src="js/compiler.js"></script>
+  <script src="js/font-awesome-all.min.js"></script>
+
+
+
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light p-0">
+      <div class="col-6">
+          <ul class="navbar-nav" >
+              <li class="nav-item">
+                <a class="nav-link " >File</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link " >Edit</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link ">Help</a>
+              </li>
+            
+          </ul>
+      </div>
+      <div class="col-6 py-2 m-0">
+          <ul class="navbar-nav  m-0" >
+              <li class="nav-item ">
+                  <button class="btn btn-sm btn-flowdocode"><i class="fas fa-play"></i></button>
+              </li>
+          </ul>
+      </div>
+
     
- }
-function drawConnector(sourceNode,destinationNode){
-  //  console.log("node "+sourceNode.attr("id"));
-  //      console.log("targetNode "+destinationNode.attr("id"));
-  // var arrow=$("path #"+sourceNode.attr("id")+destinationNode.attr("id"));
-  var arrow=document.createElement("line");
-  arrow=$(arrow);
-  arrow.attr("id",sourceNode.attr("id")+"--"+destinationNode.attr("id"));
-  var Soffset=sourceNode.offset();
-  var Doffset=destinationNode.offset();
-  var positionS={
-    x: Soffset.left + SourceNode.outerWidth()/2,
-    y: Soffset.top  + sourceNode.outerHeight()
-  
-  }
- 
-  var positionD={
-    x: Doffset.left + destinationNode.outerWidth()/2,
-    y: Doffset.top-8
-  }
-  
-  // var str =
-  //     "M " +
-  //     (positionS.x) + "," + (positionS.y) + " " +
-  //     "C " +
-  //     (positionS.x) + "," + (positionS.y) + " " +
-  //     (positionD.x ) + "," + (positionD.y) + " " +
-  //     (positionD.x      ) + "," + (positionD.y);
-      arrow.attr("x1",positionS.x);
-      arrow.attr("y1",positionS.y);
-      arrow.attr("x2",positionD.x);
-      arrow.attr("y2",positionD.y);
-      $("#con-arrow").append(arrow);
-  
- }
-// $(document).on("mouseleave",".shape",function(){
-//   document.body.style.cursor="";
-// });  
-$(document).on("blur",".shape",function(){
-  disContentEdit($(this));
-});
-function disContentEdit(obj){
-  $(obj).prop("contenteditable",false);
-  document.body.style.cursor="";
-}
-$("div").on("dblclick",".shape",function(){
-var obj=$(this);
-  $(this).prop("contenteditable",true);
-  $(document).keydown(function(ev){
-  if(ev.keyCode==13){
- disContentEdit(obj);
-  }
-  });
-  document.body.style.cursor="text";
-});
-$("div").on("click",".shape",function(){
-  var obj=$(this);
-  $(document).keydown(function(ev){
-    if((ev.keyCode==8||ev.keyCode==46||ev.keyCode==110)&&(obj.prop("contenteditable")!="true")||obj.prop("id")=="end"){
-      $(obj).remove();
-    }
-  
-  });
-});
-    function allowDrop(ev) {
-    ev.preventDefault();
-}
-function drag(ev) {
-  // ev.dataTransfer.setData("text", ev.target.getAttribute('data-type'));
-  var id=ev.dataTransfer.setData("text", ev.target.id);
-  
- 
-}
-function test(event){
-  event.preventDefault();
-  console.log(event.clientX);
-}
-function drop(ev) {
-  ev.preventDefault();
-    var type = ev.dataTransfer.getData("text");
-    if(type!=null){
      
-      if($("#content").find("."+type+"").last().index()==-1){
-        var index=0;
-      }else{
-        var str= $("#content").find("."+type+"").last().prop("id");
-        str=str.split("-");
-      
-         var index=str[str.length-1];
-         index++;
-      }
-      var objClass=" shape text-truncate text-center resize-drag py-2 "+type;
-      var str=(type+"-"+index);
-      var objId=str;
-      var objAttr="";
-      if(type=="start-end"){
-        var str="<div class='py-2 shape start-end draggable'id='end'  >END</div>"
-      }else{
-        var str="<div class='"+objClass+"'id='"+objId+"' "+objAttr+" >"+str+"</div>"
-      }
-      $("#content").append(str);
-     
+
+
+
+  </nav>
+  <svg id="canvas">
+    <defs>
+      <marker id="arrowhead" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#fff" />
+      </marker>
+    </defs>
+
+
+
+  </svg>
+  <div class="col-2 con-fixed h-100 pb-5">
+    <div class="my-5  toolbox start-end " id="start-end" draggable="true" ondragstart="drag(event)">
+      <svg >
+        <path d="M 25 1 C -5,1 -5,49 25,49 L 120 49 C 155,49 155,0 120,1 Z" />
+      </svg>
+      <!-- <div class="text text-center col-7  text-truncate mx-auto" >
+                  End
+                </div> -->
+    </div>
+    <div class="my-5 toolbox process" id="process" draggable="true" ondragstart="drag(event)">
+      <svg>
+        <path d="M 1 1 L 149 1 L 149 49 L 1 49 Z" />
+      </svg>
+      <!-- <div class="text text-center col-7  text-truncate mx-auto"  >
+                  Process
+                </div> -->
+    </div>
+    <div class="my-5  toolbox input" id="input" draggable="true" ondragstart="drag(event)">
+      <svg>
+        <path d="M 1 15 L 149 1 L 149 49 L 1 49 Z" />
+      </svg>
+      <!-- <div class="text text-center col-7  text-truncate mx-auto"  >
+                  Input
+                </div> -->
+    </div>
+    <div class="my-5  toolbox decision" id="decision" draggable="true" ondragstart="drag(event)">
+      <svg>
+        <path d="M 75 1 L 150 25 L 75 50 L 1 25 Z " />
+      </svg>
+      <!-- <div class="text text-center  col-7 text-truncate mx-auto"  >
+                  Decision
+                </div> -->
+    </div>
+    <div class="my-5 toolbox display" id="display" draggable="true" ondragstart="drag(event)">
+      <svg>
+        <path d="M 1 25 L 15 49 H 120 C 155 49 ,155 1, 120 1 H 15 L 1,25  " />
+      </svg>
+      <!-- <div class="text text-center col-7  text-truncate mx-auto"  >
+                  Display
+                </div> -->
+    </div>
+
+
+  </div>
+
+  <div class="offset-2 col-8 py-0 con-fixed con-content h-75 "  ondragover="allowDrop(event)" ondrop="dropItem(event)">
+    <div id="content">
+      <div class="toolbox shape start-end " id="start">
+        <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
+        <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
+        <div class="con_anchor anchor_start anchor_bottom" data-point="bottom"></div>
+        <div class="con_anchor anchor_start anchor_left" data-point="left"></div>
+        <svg>
+    
+          <path d="M 25 1 C -5,1 -5,49 25,49 L 180 49 C 205,49 205,1 180,1 Z" />
+        </svg>
+        <div class="text text-center col-12  text-truncate mx-auto">
+          Start
+        </div>
+      </div>
+    </div>
+
+
+  
+  
+  </div>
+
+  <div class="col-8 con-fixed h-25 p-3 offset-2 fixed-bottom " id="console" style="background: #fff;">
+    
+  </div>
+
+  <div class="offset-10 col-2  con-fixed h-100">
+  </div>
+
+
+
+
+</body>
+
+
+<script>
+
+  $(function () {
+
+    $(".shape").each(function () {
+      $(this).find(".con_anchor").draggable(conAnchorDraggableProperty());
+      $(this).find(".con_anchor").droppable(conAnchorDroppableProperty());
+      $(this).draggable(nodeDraggableProperty());
+      $(this).resizable(nodeResizableProperty("start-end"));
+      updateAnchorPosition($(this));
+      updateTextboxPosition($(this));
+    });
+    let p = {
+      top: 87,
+      left: 550
     }
-   
-}
-interact('.draggable')
-  .draggable({
-    // enable inertial throwing
-    inertia: true,
-    // keep the element within the area of it's parent
-    restrict: {
-      restriction: "parent",
-      endOnly: true,
-      elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
-    },
-    // enable autoScroll
-    autoScroll: true,
-    // call this function on every dragmove event
-    onmove: dragMoveListener,
-    // call this function on every dragend event
-    onend: function (event) {
-      var textEl = event.target.querySelector('p');
-      textEl && (textEl.textContent =
-        'moved a distance of '
-        + (Math.sqrt(Math.pow(event.pageX - event.x0, 2) +
-                     Math.pow(event.pageY - event.y0, 2) | 0))
-            .toFixed(2) + 'px');
-    }
+    $("#start").offset(p);
+    $(".shape").draggable();
+
+
+
   });
-  function dragMoveListener (event) {
-   
-    var target = event.target,
-        // keep the dragged position in the data-x/data-y attributes
-        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-    // translate the element
-    target.style.webkitTransform =
-    target.style.transform =
-      'translate(' + x + 'px, ' + y + 'px)';
-    // update the posiion attributes
-    target.setAttribute('data-x', x);
-    target.setAttribute('data-y', y);
+
+  function allowDrop(event) {
+    event.preventDefault();
   }
-  // this is used later in the resizing and gesture demos
-  window.dragMoveListener = dragMoveListener;
+  function drag(ev) {
+
+    // ev.dataTransfer.setData("text", ev.target.getAttribute('data-type'));
+    ev.dataTransfer.setData("text", ev.target.id);
+
+
+  }  
+  function dropItem(event) {
+
+
+    event.preventDefault();
+    try {
+
+      var type = event.dataTransfer.getData("text");
+      onDropItemSuccess(type);
+    } catch (event) {
+      var type = "";
+    }
+
+
+
+
+
+
+  }
   
-  // RESIZE
-  interact('.resize-drag')
-  .draggable({
-    onmove: window.dragMoveListener,
-    restrict: {
-      restriction: 'parent',
-      elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
-    },
-  })
-  .resizable({
-  
-    // resize from all edges and corners
-    edges: { left: true, right: true},
-    // keep the edges inside the parent
-    restrictEdges: {
-      outer: 'parent',
-      endOnly: true,
-    },
-    // minimum size
-    restrictSize: {
-      min: { width: 100, height: 50 },
-    },
-    inertia: true,
-  })
-  .on('resizemove', function (event) {
-    var target = event.target,
-        x = (parseFloat(target.getAttribute('data-x')) || 0),
-        y = (parseFloat(target.getAttribute('data-y')) || 0);
-    // update the element's style
-    target.style.width  = event.rect.width + 'px';
-    target.style.height = event.rect.height + 'px';
-    // translate when resizing from top or left edges
-    x += event.deltaRect.left;
-    y += event.deltaRect.top;
-    target.style.webkitTransform = target.style.transform =
-        'translate(' + x + 'px,' + y + 'px)';
-    target.setAttribute('data-x', x);
-    target.setAttribute('data-y', y);
+
+
+  $("div").on("click", ".shape", function () {
+    if ($(selectedEl).prop("id") != $(this).prop("id")) {
+      shapeUnSelectedStyle();
+    }
+    selectedEl = $(this);
+
+    shapeSelectedStyle();
+    $(document).keydown(function (event) {
+
+      if ((event.keyCode == 8 || event.keyCode == 46) && $(selectedEl).find("div.text").prop("contenteditable") != "true") {
+        if ($(selectedEl).prop("id") != "start"){
+          $(selectedEl).remove();
+          checkConnectorOnNodeDelete(selectedEl);
+        }
+      }
+      if (event.keyCode == 13) {
+        disContentEdit();
+        shapeUnSelectedStyle();
+      }
+    });
+
+
+
+    $("div").on("dblclick", ".text", function () {
+      if (!$(selectedEl).hasClass("start-end")) {
+        document.body.style.cursor = "";
+        $(selectedEl).find("div.text").prop("contenteditable", true);
+        $(selectedEl).draggable({ disabled: true });
+
+      }
+
+    });
+    $("div").on("blur", ".text", function () {
+
+      disContentEdit();
+
+    });
+
+
+
+
   });
-    </script>
+
+
+  $("#content").on("mouseup", function (event) {
+    if (event.target === this) {
+      shapeUnSelectedStyle();
+
+    }
+
+  });
+
+
+  $(document).on("mouseenter", ".shape", function () {
+    document.body.style.cursor = "grab";
+    if($(selectedEl).prop("id") != $(this).prop("id")){
+      $(this).find(".con_anchor").css("opacity", "1");
+      $(document).on("mousedown", function () {
+        mouseDown = true;
+     
+
+      });
+    }
+ });
+  $(document).on("mouseleave", ".shape", function () {
+    document.body.style.cursor = "";
+    if (!mouseDown) {
+      $(this).find(".con_anchor").css("opacity", "0");
+    }
+    $(document).on("mouseup", function () {
+      mouseDown = false;
+    });
+  });
+
+
+  $(document).on("mouseup", ".shape", function () {
+    if (selectedEl == undefined) {
+      selectedEl = $(this);
+
+    }
+    shapeSelectedStyle();
+    document.body.style.cursor = "grab";
+  });
+
+  $(document).on("mousedown", ".con_anchor", function () {
+
+      originalPosition = $(this).offset();
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g = $(g).attr("marker-end", "url(#arrowhead)");
+      g = $(g).attr("stroke-width", "2");
+
+      $("#canvas").append($(g));
+
+  });
+
+
+  $(".con-content").on("scroll",function(){
+    $("line").each(function () {
+          updateConnectorPosition($(this));
+
+    });
+  });
+
+
+
+
+
+
+
+
+
+
+</script>
+<scrip type="text/template">
+
+  <template id="start-end">
+    <div class="shape start-end ">
+      <div class="con_anchor  anchor_top" data-point="top"></div>
+      <div class="con_anchor  anchor_right" data-point="right"></div>
+      <div class="con_anchor  anchor_bottom" data-point="bottom"></div>
+      <div class="con_anchor  anchor_left" data-point="left"></div>
+
+      <svg>
+        <path d="M 25 1 C -5,1 -5,49 25,49 L 180 49 C 205,49 205,1 180,1 Z" />
+      </svg>
+      <div class="text text-center col-12  text-truncate mx-auto ">
+        End
+      </div>
+    </div>
+  </template>
+  <template id="process">
+    <div class="shape process ">
+      <div class="con_anchor  anchor_top" data-point="top"></div>
+      <div class="con_anchor  anchor_right" data-point="right"></div>
+      <div class="con_anchor  anchor_bottom" data-point="bottom"></div>
+      <div class="con_anchor  anchor_left" data-point="left"></div>
+      <svg>
+        <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z" />
+      </svg>
+      <div class="text text-center col-12  text-truncate mx-auto" contenteditable=false>
+        Process
+      </div>
+    </div>
+  </template>
+  <template id="input">
+    <div class="shape input">
+      <div class="con_anchor  anchor_top" data-point="top"></div>
+      <div class="con_anchor  anchor_right" data-point="right"></div>
+      <div class="con_anchor  anchor_bottom" data-point="bottom"></div>
+      <div class="con_anchor  anchor_left" data-point="left"></div>
+      <svg>
+        <path d="M 1 15 L 199 1 L 199 49 L 1 49 Z" />
+      </svg>
+      <div class="text text-center col-12  text-truncate mx-auto" contenteditable=false>
+        Input
+      </div>
+    </div>
+  </template>
+  <template id="decision">
+    <div class=" shape decision ">
+      <div class="con_anchor  anchor_top" data-point="top"></div>
+      <div class="con_anchor  anchor_right" data-point="right"></div>
+      <div class="con_anchor  anchor_bottom" data-point="bottom"></div>
+      <div class="con_anchor  anchor_left" data-point="left"></div>
+      <svg>
+        <path d="M 100 1 L 199 25 L 100 49 L 1 25 Z " />
+      </svg>
+      <div class="text text-center col-12  text-truncate mx-auto" contenteditable="false">
+        Decision
+      </div>
+    </div>
+  </template>
+  <template id="display">
+    <div class=" shape display ">
+      <div class="con_anchor  anchor_top" data-point="top"></div>
+      <div class="con_anchor  anchor_right" data-point="right"></div>
+      <div class="con_anchor  anchor_bottom" data-point="bottom"></div>
+      <div class="con_anchor  anchor_left" data-point="left"></div>
+      <svg>
+        <path d="M 1 25 L 15 49 H 180 C 205 49 ,205 1, 180 1 H 15 L 1,25  " />
+      </svg>
+      <div class="text text-center col-12  text-truncate mx-auto" contenteditable="false">
+        Display
+      </div>
+    </div>
+  </template>
+
+
+
+
+
+</scrip>
+
 </html>

@@ -18,9 +18,13 @@ function updateSvgPathStartEnd(node){
     // <path d="M 25 1 C -5,1 -5,49 25,49 L 175 49 C 200,49 200,1 175,1 Z"/>                
     let path=$(node).find("path");      
     let width=$(node).outerWidth();
-    let d= "M 25 1 C -5,1 -5,49 25,49 L "+(width*93/100-1)+" 49 C "+(width+2)+",49 "+(width+2)+",1 "+(width*93/100-1)+",1 Z";
+    let d
+    if(width>200)
+        d= "M 25 1 C -5,1 -5,49 25,49 L "+(width*93/100)+" 49 C "+(width+8)+",49 "+(width+8)+",1 "+(width*93/100)+",1 Z";
+    else
+        d= "M 25 1 C -5,1 -5,49 25,49 L "+(width*90/100)+" 49 C "+(width+5)+",49 "+(width+5)+",1 "+(width*90/100)+",1 Z";
     $(path).attr("d",d);
-     updateTextboxPosition(node,0);
+    updateTextboxPosition(node,0);
 
 }
 function updateSvgPathInput(node){
@@ -54,16 +58,18 @@ function updateSvgPathDisplay(node){
     let width=0;
     if(originalWidth>200){
         width=originalWidth*93/100;
+        d= "M 1 25 L 15 49 H "+width+" C "+(originalWidth+9)+" 49 ,"+(originalWidth+9)+" 1, "+width+" 1 H 15 L 1,25";
+
     }else{
         width=originalWidth*90/100;
+        d= "M 1 25 L 15 49 H "+width+" C "+(originalWidth+5)+" 49 ,"+(originalWidth+5)+" 1, "+width+" 1 H 15 L 1,25";
+
     }
-    d= "M 1 25 L 15 49 H "+width+" C "+(originalWidth+5)+" 49 ,"+(originalWidth+5)+" 1, "+width+" 1 H 15 L 1,25";
 
     $(path).attr("d",d);
     updateTextboxPosition(node,0);
 
 }
-
 function updateSvgPath(node,name){
     switch (name){
         case 'start-end':
@@ -94,8 +100,6 @@ function updateTextboxPosition(parent){
     $(parent).find(".text").offset(p);
 
 }
-
-
 function updateAnchorPosition(node) {
     updateAnchorTop(node);
     updateAnchorRight(node);
@@ -154,8 +158,6 @@ function updateConnectorPosition(node) {
 
 
 }
-
-
 function getPositionByPoint(node, point) {
     // ไว้ให้ updateConnectorPosition เรียกเพื่อ return  ตำแหน่ง ของ connector โดยยึดตำแหน่งของ Anchor
     let positionNode = $(node).offset();
@@ -197,7 +199,6 @@ function updateAnchorBottom(node) {
     $(anchor).offset(position);
 
 }
-
 function updateAnchorLeft(node) {
     let anchor = $(node).find(".anchor_left");
     let nodeProperty = getPropertyNode(node);
@@ -224,13 +225,14 @@ function updateConnectorPositionOnAction(node){
     });
 
 }
-
-
 function shapeSelectedStyle(){
     try {
       selectedEl.find("svg").css({
         "stroke-dasharray":"5,5"
       });
+   
+      $(selectedEl).resizable({disabled:false});
+      $(selectedEl).find(".con_anchor").addClass("hide");
     } catch (error) {
   
   
@@ -240,12 +242,14 @@ function shapeSelectedStyle(){
   
   
   }
-  function shapeUnSelectedStyle(){
+function shapeUnSelectedStyle(){
     try {
 
       selectedEl.find("svg").css({
         "stroke-dasharray":"0,0"
       });
+      $(selectedEl).resizable({disabled:true});
+      $(selectedEl).find(".con_anchor").removeClass("hide");
   
     } catch (error) {
   
@@ -260,10 +264,153 @@ function shapeSelectedStyle(){
    
   
   }
-  function disContentEdit(){
+function disContentEdit(){
   
   $(selectedEl).find(".text").prop("contenteditable","false");
   $(selectedEl).draggable({ disabled: false });
   document.body.style.cursor="";
   }
-  
+function checkConnectorOnNodeDelete(node){
+   $("line").each(function(){
+        if($(this).hasClass($(node).prop("id"))){
+            let parent= $(this).attr("data-from");  
+            $(parent).attr("data-connector","undefined");
+            $(this).parent("g").remove();
+            
+        }
+   });
+}
+
+
+function onDropItemSuccess(type) {
+    if (type != null) {
+
+      if ($("#content").find("." + type + "").last().index() == -1) {
+        var index = 0;
+      } else {
+        var str = $("#content").find("." + type + "").last().prop("id");
+        str = str.split("-");
+        var index = str[str.length - 1];
+        index++;
+      }
+      let attrObj = {
+        id: (type + "-" + index),
+      }
+      let mousePoint = {
+        left: event.clientX - 100,
+        top: event.clientY - 25
+      }
+      let node = $("template#" + type).html();
+
+      node = $(node).draggable(nodeDraggableProperty());
+      node = $(node).resizable(nodeResizableProperty(type));
+
+
+
+      $("#content").append($(node));
+      
+      $(node).offset(mousePoint);
+      $(node).prop(attrObj);
+      $(node).find(".con_anchor").draggable(conAnchorDraggableProperty());
+      $(node).find(".con_anchor").droppable(conAnchorDroppableProperty());
+      
+      updateTextboxPosition(node);
+      updateAnchorPosition(node);
+    }
+}
+function nodeDraggableProperty(){
+    return{
+        containment:"#content",opacity: 0.5, drag: function () {
+          shapeUnSelectedStyle();
+          updateConnectorPositionOnAction(this);
+          updateAnchorPosition(this);
+          selectedEl = $(this);
+        }
+      }
+    
+}
+function nodeResizableProperty(type){
+    return{
+        disabled:"true",
+        handles: "w,e", resize: function () {
+          updateSvgPath(this, type);
+          updateConnectorPositionOnAction(this);
+          updateAnchorPosition(this);
+
+        }
+      }
+}
+function conAnchorDraggableProperty(){
+    return{
+        snap: ".con_anchor", opacity: 0.01, drag: function () {
+         
+          $(this).addClass("hide");
+          $(".con_anchor").css("opacity", "1");
+          let currentPosition = $(this).offset();
+          lineDraw = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          $(lineDraw).attr("id", "line_" + $(this).parent().prop("id"));
+
+          let linePosition = {
+
+            x1: originalPosition.left + 4,
+            y1: originalPosition.top + 3,
+            x2: currentPosition.left + 5,
+            y2: currentPosition.top,
+
+            "data-from": "#" + $(this).parent().prop("id"),//ใช้บอกว่ามาจาก Node ไหน
+            "data-anchorfrom": $(this).attr("data-point")//ใช้บอกว่ามาจาก หมุด ตำแหน่งไหนของ Node ต้นทาง
+
+          }
+
+          $(lineDraw).addClass($(this).parent().prop("id"));
+          //เพิ่ม class เพื่อบอก ว่า connector นี้ มีส่วนเชื่อมยังกับ Node(ต้นทาง) ใช้ check ตอน Node เกิดการเปลี่ยนแปลง
+
+
+          $(lineDraw).attr(linePosition);
+          //เพิ่ม attr position ให้ กับ line connector
+
+          $(g).html($(lineDraw));
+        }, stop: function () {
+
+          if (successStatus) {
+
+            $(".con_anchor").css("opacity", "0");
+
+            if ($(this).parent().attr("data-connector") != undefined) {
+              // data-connector คือ Node นั้นมี line ของตัวเองมั้ยแล้วชื่ออะไร
+
+              let connector = $(this).parent().attr("data-connector");
+              $(connector).parent().remove();
+
+            }
+
+            $(this).parent().attr("data-connector", "#" + $(lineDraw).prop("id"));
+
+            successStatus = undefined;
+          }else {
+            $(g).remove();
+          }
+          $(this).removeClass("hide");
+
+          $(this).offset(originalPosition);
+
+        }
+    }
+}
+function conAnchorDroppableProperty(){
+    return{
+        accept: ".con_anchor",
+        drop: function () {
+          successStatus = true;
+
+          lineAttr = {
+            "data-to": "#" + $(this).parent().prop("id"),
+            "data-anchorto": $(this).attr("data-point")
+          }
+          $(lineDraw).addClass($(this).parent().prop("id"));
+
+          $(lineDraw).attr(lineAttr);
+
+        }
+      }
+}
