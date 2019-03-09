@@ -148,6 +148,7 @@
 <script>
 
   $(function () {
+    // $( "#content" ).selectable();
 
     $(".shape").each(function () {
       $(this).find(".con_anchor").draggable(conAnchorDraggableProperty());
@@ -163,8 +164,6 @@
     }
     $("#start").offset(p);
     $(".shape").draggable();
-
-
 
   });
 
