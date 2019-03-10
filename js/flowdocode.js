@@ -346,10 +346,10 @@ function onDropItemSuccess(type) {    //เมื่อมีการลาก�
 
     if (type != null) {
 
-      if ($("#content").find("." + type + "").last().index() == -1) {
+      if ($("#design").find("." + type + "").last().index() == -1) {
         var index = 0;
       } else {
-        var str = $("#content").find("." + type + "").last().prop("id");
+        var str = $("#design").find("." + type + "").last().prop("id");
         str = str.split("-");
         var index = str[str.length - 1];
         index++;
@@ -369,7 +369,7 @@ function onDropItemSuccess(type) {    //เมื่อมีการลาก�
 
 
 
-      $("#content").append($(node));//เพิ่ม node ที่สร้างลงในส่วน Design 
+      $("#design").append($(node));//เพิ่ม node ที่สร้างลงในส่วน Design 
       
       $(node).offset(mousePoint);//set ตำแหน่งให้ Node โดยใช้ตำแหน่งของ mouse
       $(node).prop(attrObj);// set property ให้ Node
@@ -382,9 +382,13 @@ function onDropItemSuccess(type) {    //เมื่อมีการลาก�
 }
 function nodeDraggableProperty(){// returnความสามารถของ Node ในการ Draggable
     return{
-        containment:"#content",
+        containment:"#design",
         opacity: 0.5,
-        grid: [ 20, 20 ], 
+        grid: [ 10, 10 ], 
+        scroll: true,
+        stack: ".shape",
+        scrollSensitivity: 100,
+        scrollSpeed: 50,
         drag: function () {
           shapeUnSelectedStyle();
           updateConnectorPositionOnAction(this);
@@ -398,7 +402,7 @@ function nodeResizableProperty(type){// returnความสามารถข�
     return{
         disabled:"true",
         handles: "w,e", 
-        grid: [ 20, 20 ],
+        grid: [ 10, 10 ],
         resize: function () {
           updateSvgPath(this, type);
           updateConnectorPositionOnAction(this);
@@ -459,6 +463,7 @@ function conAnchorDraggableProperty(){// returnความสามารถข
             successStatus = undefined;
           }else {
             $(g).remove();
+            $(".con_anchor").css("opacity", "0");
           }
           $(this).removeClass("hide");// ลบ class hide ออกให้เป็น Anchor ปกติ
 

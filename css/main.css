@@ -1,20 +1,25 @@
+nav {
+  background: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
 div.con-fixed {
   position: fixed;
   overflow-y: scroll;
 }
 
-div.con-content {
-  background-image: linear-gradient(0deg, transparent 24%, rgba(0, 0, 0, 0.08) 25%, rgba(0, 0, 0, 0.08) 26%, transparent 27%, transparent 74%, rgba(0, 0, 0, 0.08) 75%, rgba(0, 0, 0, 0.08) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0, 0, 0, 0.08) 25%, rgba(0, 0, 0, 0.08) 26%, transparent 27%, transparent 74%, rgba(0, 0, 0, 0.08) 75%, rgba(0, 0, 0, 0.08) 76%, transparent 77%, transparent);
+.con-design {
+  background-image: linear-gradient(0deg, transparent 9%, rgba(0, 0, 0, 0.2) 10%, rgba(0, 0, 0, 0.2) 12%, transparent 13%, transparent 29%, rgba(0, 0, 0, 0.1) 30%, rgba(0, 0, 0, 0.1) 31%, transparent 32%, transparent 49%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.1) 51%, transparent 52%, transparent 69%, rgba(0, 0, 0, 0.1) 70%, rgba(0, 0, 0, 0.1) 71%, transparent 72%, transparent 89%, rgba(0, 0, 0, 0.1) 90%, rgba(0, 0, 0, 0.1) 91%, transparent 92%, transparent), linear-gradient(90deg, transparent 9%, rgba(0, 0, 0, 0.2) 10%, rgba(0, 0, 0, 0.2) 12%, transparent 13%, transparent 29%, rgba(0, 0, 0, 0.1) 30%, rgba(0, 0, 0, 0.1) 31%, transparent 32%, transparent 49%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.1) 51%, transparent 52%, transparent 69%, rgba(0, 0, 0, 0.1) 70%, rgba(0, 0, 0, 0.1) 71%, transparent 72%, transparent 89%, rgba(0, 0, 0, 0.1) 90%, rgba(0, 0, 0, 0.1) 91%, transparent 92%, transparent);
+  height: 100%;
   background-size: 50px 50px;
+  padding: 50px;
   overflow: scroll;
 }
 
-#content {
-  position: absolute;
-  width: 5000px;
-  height: 5000px;
-  overflow-y: auto;
-  background-color: transparent;
+#design {
+  width: 10000px;
+  height: 10000px;
+  margin: 50px;
 }
 
 .toolbox {
@@ -118,6 +123,56 @@ nav {
 
 .btn-flowdocode:active {
   box-shadow: #4f7df9;
+}
+
+#con-toolbox {
+  overflow-y: hidden !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  z-index: 9;
+}
+
+#con-console {
+  z-index: 8;
+  background: #fff;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(85, 85, 85, 0.7);
+  border-radius: 5000px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/*Property*/
+.header {
+  font-weight: bold;
+  text-align: center;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.con-property div, .con-property input {
+  border-bottom: 1px solid;
+  border-top: 0px;
+  border-right: 0px solid;
+  border-left: 1px solid;
+  border-color: rgba(0, 0, 0, 0.08);
+  background: #fff;
 }
 
 /*# sourceMappingURL=main.css.map */

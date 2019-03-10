@@ -19,6 +19,8 @@
   <script src="js/flowdocode.js"></script>
   <script src="js/compiler.js"></script>
   <script src="js/font-awesome-all.min.js"></script>
+  <script src="js/vue.js"></script>
+
 
 
 
@@ -26,9 +28,9 @@
 
 <body>
 
-  <nav class="navbar navbar-expand-lg navbar-light bg-light p-0">
+  <nav class="navbar navbar-expand-lg  p-0">
       <div class="col-6">
-          <ul class="navbar-nav" >
+          <ul class="navbar-nav p-0" >
               <li class="nav-item">
                 <a class="nav-link " >File</a>
               </li>
@@ -44,7 +46,7 @@
       <div class="col-6 py-2 m-0">
           <ul class="navbar-nav  m-0" >
               <li class="nav-item ">
-                  <button class="btn btn-sm btn-flowdocode"><i class="fas fa-play"></i></button>
+                  <button class="btn btn-sm btn-flowdocode px-2"><i class="fas fa-play"></i></button>
               </li>
           </ul>
       </div>
@@ -65,7 +67,7 @@
 
 
   </svg>
-  <div class="col-2 con-fixed h-100 pb-5">
+  <div class="col-2 con-fixed h-100 pb-5 "id="con-toolbox">
     <div class="my-5  toolbox start-end " id="start-end" draggable="true" ondragstart="drag(event)">
       <svg >
         <path d="M 25 1 C -5,1 -5,49 25,49 L 120 49 C 155,49 155,0 120,1 Z" />
@@ -110,9 +112,9 @@
 
   </div>
 
-  <div class="offset-2 col-8 py-0 con-fixed con-content h-75 "  ondragover="allowDrop(event)" ondrop="dropItem(event)">
-    <div id="content">
-      <div class="toolbox shape start-end " id="start">
+  <div class="offset-2 col-8 h-75  p-0  con-fixed con-design  "  ondragover="allowDrop(event)" ondrop="dropItem(event)">
+    <div id="design" >
+      <div class=" shape start-end " id="start">
         <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
         <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
         <div class="con_anchor anchor_start anchor_bottom" data-point="bottom"></div>
@@ -132,11 +134,51 @@
   
   </div>
 
-  <div class="col-8 con-fixed h-25 p-3 offset-2 fixed-bottom " id="console" style="background: #fff;">
-    
+  <div class="col-8 con-fixed h-25 p-0 offset-2 fixed-bottom  " id="con-console" >
+    <p class="header py-1 m-0 "> Output</p>
+    <div class="m-4"id="console">
+        gfdhgdf<br>
+        gfdhgdfgfdhgd<br>
+        fgfdhgdfgfdhgdf<br>
+        gfdhgdf<br>
+        gfdhgdf<br>
+        gfdhgdf<br>
+        gfdhgdf<br>
+    </div>
+
+
   </div>
 
-  <div class="offset-10 col-2  con-fixed h-100">
+  <div class="offset-10 col-2 p-0 con-fixed h-100">
+    <div class="col-12 h-50  p-0 m-0"  >
+        <p class="header py-1 m-0"> Debugger</p>
+    </div>
+    <div class="col-12 p-0 h-50 m-0" style="background:#fff;">
+      <p class="header py-1 m-0"> Properties</p>
+      <div class="row p-0 con-property">
+          <div class="col-6">Name</div>
+          <input class="col-6" id="name" v-model="name">
+
+          <div class="col-6">Type</div>
+          <input class="col-6" id="type" v-model="name">
+
+          <div class="col-6">Code</div>
+          <input class="col-6" id="code" value="aaad">
+
+          <div class="col-6">Width</div>
+          <input class="col-6" id="width" value="aaad">
+
+          <div class="col-6">Height</div>
+          <input class="col-6" id="Height" value="aaad">
+
+          <div class="col-6">Location</div>
+          <input class="col-6" id="location" value="aaad">
+    
+
+      
+      </div>
+ 
+    </div>
   </div>
 
 
@@ -159,8 +201,8 @@
       updateTextboxPosition($(this));
     });
     let p = {
-      top: 87,
-      left: 550
+      top: 100,
+      left: 580
     }
     $("#start").offset(p);
     $(".shape").draggable();
@@ -242,7 +284,7 @@
   });
 
 
-  $("#content").on("mouseup", function (event) {
+  $("#design").on("mouseup", function (event) {
     if (event.target === this) {
       shapeUnSelectedStyle();
 
@@ -294,23 +336,15 @@
   });
 
 
-  $(".con-content").on("scroll",function(){
+  $(".con-design").on("scroll",function(){
     $("line").each(function () {
           updateConnectorPosition($(this));
 
     });
   });
 
-
-
-
-
-
-
-
-
-
 </script>
+
 <scrip type="text/template">
 
   <template id="start-end">
