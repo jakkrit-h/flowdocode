@@ -2,10 +2,7 @@
 var objArr;
 
 $(document).on("click","button",function(){
-    // var rawCode="";
-    // collectPath();
-    // console.log(window.objArr);
-
+    console.log($("#canvas").html());
     $("#console").empty();
     controller();
 
@@ -64,17 +61,16 @@ function classify(node){
     var result=compiler($(node).find(".text").text());
     if($(node).hasClass("display")){
          displayConsole(result);
-    }
-    // if(node.hasClass("decision")){
-    //    if(result){
-    //        node.attr("data-next",node.attr("data-true"));
-    //    }else{
-    //         node.attr("data-next",node.attr("data-false"));
+    }else if($(node).hasClass("decision")){
+            console.log(result);
+        if(result){
+            $(node).attr("data-connector",$(node).attr("data-yes"));
+        }else{
+            $(node).attr("data-connector",$(node).attr("data-no"));
 
-    //    }
-       
-    // }
-    // return node.attr("data-next");
+        }
+        console.log($(node).attr("data-connector"));
+    }
     
 
 }

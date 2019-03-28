@@ -228,7 +228,7 @@ function updateConnectorPosition(connector) {    //ไว้ใช้เปล�
     g = $(connector).parent("g");
     connector = $(connector).attr(linePosition);
     $(g).html($(connector));
-   
+    updateTextLabelPosition(connector);
 
 
 }
@@ -334,7 +334,9 @@ function checkConnectorOnNodeDelete(node){ /*ไว้เมื่อมี Node
    $("line").each(function(){
         if($(this).hasClass($(node).prop("id"))){
             let parent= $(this).attr("data-from");  
-            $(parent).attr("data-connector","undefined");//ให้ Node ต้นทางของเส้นไม่มีเส้นเป็นของตัวเอง
+            $(parent).removeAttr("data-connector");//ให้ Node ต้นทางของเส้นไม่มีเส้นเป็นของตัวเอง  
+            let label="#"+$(this).attr("data-label");
+            $(label).remove();
             $(this).parent("g").remove();
             
         }
@@ -407,7 +409,6 @@ function nodeResizableProperty(type){// returnความสามารถข�
           updateSvgPath(this, type);
           updateConnectorPositionOnAction(this);
           updateAnchorPosition(this);
-          console.log($(this).outerWidth());
 
         }
       }
@@ -448,17 +449,48 @@ function conAnchorDraggableProperty(){// returnความสามารถข
           if (successStatus) {// ถ้า connector ถูกลากให้ไปเชื่อมกับ Anchor สำเร็จ
 
             $(".con_anchor").css("opacity", "0");//ให้ Anchorมั้งหมด ถูกซ่อน
+                       
 
-            if ($(this).parent().attr("data-connector") != undefined) {//ถ้า Node นั้นเคยมีConnector เก่าให้ลบออก
-              // data-connector คือ Node นั้นมี line ของตัวเองมั้ยแล้วชื่ออะไร
+            if($(this).parent().hasClass("decision")){
+                if($(this).parent().attr("data-yes")!= undefined && $(this).parent().attr("data-no")!= undefined){
+                    let connector= $(this).parent().attr("data-yes");
+                    let label="#"+$(connector).attr("data-label");
+                    $(label).remove();
+                    $(connector).parent().remove();
+    
+                    connector= $(this).parent().attr("data-no");
+                    label="#"+$(connector).attr("data-label");
+                    $(label).remove();
+                    $(connector).parent().remove();
+    
+                    $(this).parent().removeAttr("data-yes");
+                    $(this).parent().removeAttr("data-no");
+                }
 
-              let connector = $(this).parent().attr("data-connector");
-              $(connector).parent().remove();
-
+                if($(this).parent().attr("data-yes")== undefined ){
+                    $(lineDraw).prop("id",$(lineDraw).prop("id")+"-yes");
+                    $(this).parent().attr("data-yes", "#" + $(lineDraw).prop("id"));
+                    addTextLabelForDecision(lineDraw,"YES");
+                }else{
+                  
+                    $(lineDraw).prop("id",$(lineDraw).prop("id")+"-no");
+                    $(this).parent().attr("data-no", "#" + $(lineDraw).prop("id"));
+                    addTextLabelForDecision(lineDraw,"NO");
+                }
+                
+            }else{
+                if ($(this).parent().attr("data-connector") != undefined) {//ถ้า Node นั้นเคยมีConnector เก่าให้ลบออก
+                    // data-connector คือ Node นั้นมี line ของตัวเองมั้ยแล้วชื่ออะไร
+      
+                    let connector = $(this).parent().attr("data-connector");
+                    $(connector).parent().remove();
+      
+                  }
+                $(this).parent().attr("data-connector", "#" + $(lineDraw).prop("id"));
+                //เพิ่ม connector ลงไปใน Node เพื่อให้รู้ว่า Node นี้มี Connector เป็นของตัวเอง
             }
 
-            $(this).parent().attr("data-connector", "#" + $(lineDraw).prop("id"));
-            //เพิ่ม connector ลงไปใน Node เพื่อให้รู้ว่า Node นี้มี Connector เป็นของตัวเอง
+
             updateConnectorPosition(lineDraw);
             successStatus = undefined;
           }else {
@@ -490,4 +522,33 @@ function conAnchorDroppableProperty(){// returnความสามารถข
 
         }
       }
+}
+function addTextLabelForDecision(connector,word){
+
+
+    let label=document.createElement("label");// สร้าง text  yes,no
+    let labelId=$(connector).prop("id")+"-"+word;
+    $(label).text(word);
+    $(label).prop("id",labelId);
+    $("#design").append(label);
+    $(connector).attr("data-label",labelId);
+    updateTextLabelPosition(connector);
+   
+
+}
+function updateTextLabelPosition(connector){
+    let label="#"+$(connector).attr("data-label");
+    let connectorPosition={
+        x1:$(connector).attr("x1"),
+        y1:$(connector).attr("y1"),
+        x2:$(connector).attr("x2"),
+        y2:$(connector).attr("y2")
+    }
+     labelPosition={
+        top:(parseInt(connectorPosition.y1)+parseInt(connectorPosition.y2))/2,
+        left:(parseInt(connectorPosition.x1)+parseInt(connectorPosition.x2))/2
+    }
+    $(label).offset(labelPosition);
+
+
 }
