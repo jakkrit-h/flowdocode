@@ -1,12 +1,13 @@
 
-var objArr;
+var nodePointer=undefined;
+var connectorPointer=undefined;
+var inputSuccess=false;
 
 $(document).on("click","button",function(){
-    console.log($("#canvas").html());
     $("#console").empty();
-    controller();
+    controller($("#start").attr("data-connector"));
 
-  
+
  
 });
 // function collectPath(){
@@ -32,21 +33,23 @@ $(document).on("click","button",function(){
 
 
 // }
-function controller(){
-    let linePointer=$("#start").attr("data-connector");
-
+function controller(starterConnector){
+     connectorPointer=starterConnector;
+        console.log(connectorPointer);
     let str="";
     while(true){
-        if($(linePointer).attr("data-to")==undefined ){
+        if($(connectorPointer).attr("data-to")==undefined ){
             break;
         }else{
-            let nodePointer=$(linePointer).attr("data-to");
-           
-            classify(nodePointer);
-            linePointer=$(nodePointer).attr("data-connector");
+            nodePointer=$(connectorPointer).attr("data-to");
+            console.log(nodePointer);
+            let result=classify(nodePointer);
+            if(result)
+                break;
+            connectorPointer=$(nodePointer).attr("data-connector");
+            console.log("in Loop"+connectorPointer);
         }
     }
-     console.log(str);
     
    
    
@@ -56,13 +59,14 @@ function compiler(str){
 }
 
 function classify(node){
+    let result
+    if(!$(node).hasClass("input")){
+        result=compiler($(node).find(".text").text());
 
- 
-    var result=compiler($(node).find(".text").text());
+    }
     if($(node).hasClass("display")){
          displayConsole(result);
     }else if($(node).hasClass("decision")){
-            console.log(result);
         if(result){
             $(node).attr("data-connector",$(node).attr("data-yes"));
         }else{
@@ -70,9 +74,30 @@ function classify(node){
 
         }
         console.log($(node).attr("data-connector"));
+    }else if($(node).hasClass("input")){
+        if(!inputSuccess){
+            console.log("if"+inputSuccess);
+            let input=document.createElement("div");
+            $(input).attr("contenteditable","true");
+            $(input).addClass("consoleInput");
+            $("#console").append(input);
+            $(input).focus();
+            return true;
+        }else{
+            console.log("else"+inputSuccess);
+
+            let source=$(node).find(".text").text()+"="+$(".consoleInput").text();
+            result=compiler(source);
+            $(".consoleInput").removeClass("consoleInput");
+            inputSuccess=false;
+        }
+       
     }
     
 
+}
+function compileContinue(){
+    controller(connectorPointer);
 }
 // function synthetic(obj){
 //     var str="if("+obj.text()+")";
@@ -90,7 +115,7 @@ function classify(node){
 
 function displayConsole(rsCompile){
  
-    $("#console").append(rsCompile+"<br>");
+    $("#console").append(rsCompile);
 }
 // function start(){
 //     var text= "";

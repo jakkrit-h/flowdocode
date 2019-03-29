@@ -127,6 +127,7 @@
           Start
         </div>
       </div>
+      
     </div>
 
 
@@ -134,16 +135,10 @@
   
   </div>
 
-  <div class="col-8 con-fixed h-25 p-0 offset-2 fixed-bottom  " id="con-console" >
+  <div class="col-8  h-25 p-0 offset-2 fixed-bottom  " id="con-console" >
     <p class="header py-1 m-0 "> Output</p>
-    <div class="m-4"id="console">
-        gfdhgdf<br>
-        gfdhgdfgfdhgd<br>
-        fgfdhgdfgfdhgdf<br>
-        gfdhgdf<br>
-        gfdhgdf<br>
-        gfdhgdf<br>
-        gfdhgdf<br>
+    <div class="my-2 mb-5 m-0 px-4"id="console" >
+
     </div>
 
 
@@ -335,7 +330,16 @@
 
   });
 
-
+  $(document).on("focus",".consoleInput",function(){
+    $(this).on("keydown",function(){
+      if(event.keyCode==13){
+        $(this).prop("contenteditable","false");
+        inputSuccess=true;
+        compileContinue()
+       
+      }
+    });
+  });
   $(".con-design").on("scroll",function(){
     $("line").each(function () {
           updateConnectorPosition($(this));
