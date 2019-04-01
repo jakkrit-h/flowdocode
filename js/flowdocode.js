@@ -154,13 +154,13 @@ function updateAnchorTop(node) {    // เพื่อเปลี่ยนต�
     let anchor = $(node).find(".anchor_top");
 
     let nodeProperty = getPropertyNode(node);
-    let topP=nodeProperty.top - 4;
+    let topP=nodeProperty.top - 5;
     if($(node).hasClass("input")){
-       topP= nodeProperty.top + 5
+       topP= nodeProperty.top + 3
     }
     let position = {
         top:topP ,
-        left: nodeProperty.left + (nodeProperty.width / 2) - 4
+        left: nodeProperty.left + (nodeProperty.width / 2) - 5
     }
     $(anchor).offset(position);
 }
@@ -170,7 +170,7 @@ function updateAnchorRight(node) {    // เพื่อเปลี่ยนต
     let anchor = $(node).find(".anchor_right");
     let nodeProperty = getPropertyNode(node);
     let position = {
-        top: nodeProperty.top + (nodeProperty.height / 2) - 4,
+        top: nodeProperty.top + (nodeProperty.height / 2) - 5,
         left: nodeProperty.left + nodeProperty.width - 5
     }
     $(anchor).offset(position);
@@ -182,8 +182,8 @@ function updateAnchorBottom(node) {    // เพื่อเปลี่ยน�
     let anchor = $(node).find(".anchor_bottom");
     let nodeProperty = getPropertyNode(node);
     let position = {
-        top: nodeProperty.top + (nodeProperty.height) - 4,
-        left: (nodeProperty.left + (nodeProperty.width / 2)) - 4
+        top: nodeProperty.top + (nodeProperty.height) - 5,
+        left: (nodeProperty.left + (nodeProperty.width / 2)) - 5
     }
     $(anchor).offset(position);
 
@@ -194,8 +194,8 @@ function updateAnchorLeft(node) {    // เพื่อเปลี่ยนต�
     let anchor = $(node).find(".anchor_left");
     let nodeProperty = getPropertyNode(node);
     let position = {
-        top: nodeProperty.top + (nodeProperty.height / 2) - 4,
-        left: nodeProperty.left - 3
+        top: nodeProperty.top + (nodeProperty.height / 2) - 5,
+        left: nodeProperty.left - 5
     }
     $(anchor).offset(position);
 

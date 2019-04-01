@@ -18,6 +18,7 @@
   <script src="js/bootstrap.min.js"></script>
   <script src="js/flowdocode.js"></script>
   <script src="js/compiler.js"></script>
+  <script src="js/debugger.js"></script>
   <script src="js/font-awesome-all.min.js"></script>
   <script src="js/vue.js"></script>
 
@@ -46,7 +47,7 @@
       <div class="col-6 py-2 m-0">
           <ul class="navbar-nav  m-0" >
               <li class="nav-item ">
-                  <button class="btn btn-sm btn-flowdocode px-2"><i class="fas fa-play"></i></button>
+                  <button class="btn btn-sm btn-flowdocode px-2"id="play"><i class='fas fa-play'></i></button>
               </li>
           </ul>
       </div>
@@ -144,29 +145,42 @@
 
   </div>
 
-  <div class="offset-10 col-2 p-0 con-fixed h-100">
+  <div class="offset-10 col-2 p-0 con-fixed h-100 ">
     <div class="col-12 h-50  p-0 m-0"  >
         <p class="header py-1 m-0"> Debugger</p>
+        <table class="table table-striped " >
+          <thead class="text-center">
+              <tr>
+                <th>Variable</th>
+                <th>Value</th>
+
+              </tr>
+              
+          </thead>
+          <tbody id="debugger">
+    
+          </tbody>
+        </table>
     </div>
-    <div class="col-12 p-0 h-50 m-0" style="background:#fff;">
+    <div class="col-12 p-0 h-50 m-0" style="background:#fff; ">
       <p class="header py-1 m-0"> Properties</p>
       <div class="row p-0 con-property">
-          <div class="col-6">Name</div>
+          <div class="col-6 pl-4 font-weight-bold">Name</div>
           <input class="col-6" id="name" v-model="name">
 
-          <div class="col-6">Type</div>
+          <div class="col-6 pl-4 font-weight-bold">Type</div>
           <input class="col-6" id="type" v-model="name">
 
-          <div class="col-6">Code</div>
+          <div class="col-6 pl-4 font-weight-bold">Code</div>
           <input class="col-6" id="code" value="aaad">
 
-          <div class="col-6">Width</div>
+          <div class="col-6 pl-4 font-weight-bold">Width</div>
           <input class="col-6" id="width" value="aaad">
 
-          <div class="col-6">Height</div>
+          <div class="col-6 pl-4 font-weight-bold">Height</div>
           <input class="col-6" id="Height" value="aaad">
 
-          <div class="col-6">Location</div>
+          <div class="col-6 pl-4 font-weight-bold">Location</div>
           <input class="col-6" id="location" value="aaad">
     
 
@@ -186,7 +200,6 @@
 
   $(function () {
     // $( "#content" ).selectable();
-
     $(".shape").each(function () {
       $(this).find(".con_anchor").draggable(conAnchorDraggableProperty());
       $(this).find(".con_anchor").droppable(conAnchorDroppableProperty());
@@ -197,7 +210,8 @@
     });
     let p = {
       top: 100,
-      left: 580
+      left:$(document).width()/2-100
+
     }
     $("#start").offset(p);
     $(".shape").draggable();

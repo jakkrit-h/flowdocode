@@ -4,10 +4,11 @@ var connectorPointer=undefined;
 var inputSuccess=false;
 
 $(document).on("click","button",function(){
+    $(this).html("<i class='fas fa-pause'></i>");
     $("#console").empty();
     controller($("#start").attr("data-connector"));
-
-
+    
+    
  
 });
 // function collectPath(){
@@ -35,19 +36,17 @@ $(document).on("click","button",function(){
 // }
 function controller(starterConnector){
      connectorPointer=starterConnector;
-        console.log(connectorPointer);
     let str="";
     while(true){
         if($(connectorPointer).attr("data-to")==undefined ){
+            $("#play").html("<i class='fas fa-play'></i>");
             break;
         }else{
             nodePointer=$(connectorPointer).attr("data-to");
-            console.log(nodePointer);
             let result=classify(nodePointer);
             if(result)
                 break;
             connectorPointer=$(nodePointer).attr("data-connector");
-            console.log("in Loop"+connectorPointer);
         }
     }
     
@@ -61,22 +60,23 @@ function compiler(str){
 function classify(node){
     let result
     if(!$(node).hasClass("input")){
-        result=compiler($(node).find(".text").text());
-
+        let text =$(node).find(".text").text();
+        result=compiler(text);
+        Debugger(text,result);
     }
     if($(node).hasClass("display")){
          displayConsole(result);
-    }else if($(node).hasClass("decision")){
+    }
+    if($(node).hasClass("decision")){
         if(result){
             $(node).attr("data-connector",$(node).attr("data-yes"));
         }else{
             $(node).attr("data-connector",$(node).attr("data-no"));
 
         }
-        console.log($(node).attr("data-connector"));
-    }else if($(node).hasClass("input")){
+    }
+    if($(node).hasClass("input")){
         if(!inputSuccess){
-            console.log("if"+inputSuccess);
             let input=document.createElement("div");
             $(input).attr("contenteditable","true");
             $(input).addClass("consoleInput");
@@ -84,7 +84,6 @@ function classify(node){
             $(input).focus();
             return true;
         }else{
-            console.log("else"+inputSuccess);
 
             let source=$(node).find(".text").text()+"="+$(".consoleInput").text();
             result=compiler(source);
@@ -93,6 +92,7 @@ function classify(node){
         }
        
     }
+   
     
 
 }

@@ -64,8 +64,9 @@ g {
 }
 
 .con_anchor {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
+  border-radius: 500px;
   background-color: #fff;
   border: 2px solid #4f7df9;
   z-index: 5;
@@ -80,10 +81,9 @@ g {
 }
 
 .ui-resizable-handle {
-  background: white;
-  border-radius: 50px;
-  height: 9px;
-  width: 9px;
+  background: #fff;
+  height: 8px;
+  width: 8px;
   border: 1px solid #4f7df9;
   top: 40%;
   right: 1;
