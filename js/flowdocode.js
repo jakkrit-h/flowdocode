@@ -372,12 +372,14 @@ function onDropItemSuccess(type) {    //เมื่อมีการลาก�
 
 
       $("#design").append($(node));//เพิ่ม node ที่สร้างลงในส่วน Design 
-      
       $(node).offset(mousePoint);//set ตำแหน่งให้ Node โดยใช้ตำแหน่งของ mouse
-      $(node).prop(attrObj);// set property ให้ Node
+      if(type =="start-end")
+        $(node).prop("id","end");// set property ให้ Node
+      else
+        $(node).prop(attrObj);// set property ให้ Node
+
       $(node).find(".con_anchor").draggable(conAnchorDraggableProperty());//ใส่ความสามารถ Draggableให้กับ Anchor ใน Node
       $(node).find(".con_anchor").droppable(conAnchorDroppableProperty());//ใส่ความสามารถ Resizableให้กับ Anchor ใน Node
-      
       updateTextboxPosition(node);
       updateAnchorPosition(node);
     }

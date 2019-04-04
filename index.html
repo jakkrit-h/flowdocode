@@ -66,7 +66,6 @@
     </defs>
 
 
-
   </svg>
   <div class="col-2 con-fixed h-100 pb-5 "id="con-toolbox">
     <div class="my-5  toolbox start-end " id="start-end" draggable="true" ondragstart="drag(event)">
@@ -115,7 +114,7 @@
 
   <div class="offset-2 col-8 h-75  p-0  con-fixed con-design  "  ondragover="allowDrop(event)" ondrop="dropItem(event)">
     <div id="design" >
-      <div class=" shape start-end " id="start">
+      <div class=" shape start-end "id="start">
         <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
         <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
         <div class="con_anchor anchor_start anchor_bottom" data-point="bottom"></div>
@@ -128,6 +127,8 @@
           Start
         </div>
       </div>
+      
+      
       
     </div>
 
@@ -145,20 +146,25 @@
 
   </div>
 
-  <div class="offset-10 col-2 p-0 con-fixed h-100 ">
-    <div class="col-12 h-50  p-0 m-0"  >
-        <p class="header py-1 m-0"> Debugger</p>
-        <table class="table table-striped " >
+  <div class="offset-10 col-2 p-0 con-fixed h-100 "style="overflow-y: hidden !important;">
+    <p class="header py-1 m-0"> Debugger</p>
+
+    <div class="col-12 h-50  p-0 m-0" style="overflow-y: scroll !important;" >
+        <table class="table table-striped m-0" >
           <thead class="text-center">
               <tr>
+                <!-- <th>#</th> -->
+
                 <th>Variable</th>
                 <th>Value</th>
 
               </tr>
               
           </thead>
-          <tbody id="debugger">
-    
+          <tbody id="debugger" class="text-center">
+            
+     
+        
           </tbody>
         </table>
     </div>
@@ -199,14 +205,18 @@
 <script>
 
   $(function () {
+
     // $( "#content" ).selectable();
     $(".shape").each(function () {
+
       $(this).find(".con_anchor").draggable(conAnchorDraggableProperty());
       $(this).find(".con_anchor").droppable(conAnchorDroppableProperty());
       $(this).draggable(nodeDraggableProperty());
-      $(this).resizable(nodeResizableProperty("start-end"));
+      $(this).resizable(nodeResizableProperty("start-end"));//ใช้ในช่วง tester เปลี่ยน s เป็น start-end ตอนจริง
       updateAnchorPosition($(this));
       updateTextboxPosition($(this));
+    
+    
     });
     let p = {
       top: 100,
@@ -247,6 +257,15 @@
 
   }
   
+$(document).on("mouseenter","tr",function(){
+  let node=$(this).attr("data-node");
+  $($(node).find("svg")).css("stroke","red");
+
+});
+$(document).on("mouseleave","tr",function(){
+  let node=$(this).attr("data-node");
+  $($(node).find("svg")).css("stroke","#4f7df9");
+});
 
 
   $("div").on("click", ".shape", function () {

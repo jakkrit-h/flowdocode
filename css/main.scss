@@ -9,7 +9,7 @@ nav{
 div.con-fixed {
     position: fixed;
     overflow-y: scroll;
-    
+    overflow-x:hidden;
   }
 
 .con-design{
@@ -163,6 +163,10 @@ nav{
   // box-shadow:0px -2px 1px rgba(0, 0, 0, 0.05);
   background: #fff;
   // background: #f8f8f8;
+}
+table{
+  position: absolute;
+  overflow-y:scroll !important;
 }
 
 ::-webkit-scrollbar {

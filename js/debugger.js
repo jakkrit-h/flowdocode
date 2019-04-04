@@ -1,26 +1,30 @@
 
 
-function Debugger(text,result){
+function Debugger(node,text,result){
     text = text.split(",");
     if(text.length == 1 ){
-        let temp = text[0].split('=');
-        show(temp[0],result);
+        if($(node).hasClass("decision")){
+            show(node,text,result);
+        }else{
+            let temp = text[0].split('=');
+            show(node,temp[0],result);
+        }
+        
     }
+  
+}
 
-}
-function checkHasVariable(vari){
-    
-}
-function show(vari,result){
+function show(node,variable,result){
     let row=undefined;
     
-    if($("#debugger").find("tr").prop("id")==vari){
-        let td = "<td>" + vari + "</td>    <td>" + result + "</td>";
-        console.log(this);
+    if($("#debugger").find("tr").prop("id")==variable){
+        let td = " <td>" + variable + "</td>    <td>" + result + "</td>";
+        $("#"+variable.trim()).html(td);
+        
         
     }else{
-        row= "<tr id='"+vari+"'>\
-        <td>"+vari+"</td>    <td>"+result+"</td>\
+        row= "<tr id="+variable+" data-node=#"+$(node).prop("id")+">\
+        <td>"+variable+"</td>    <td>"+result+"</td>\
         </tr>";
         $("#debugger").append(row);
     }

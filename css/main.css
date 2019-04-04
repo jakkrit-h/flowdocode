@@ -6,6 +6,7 @@ nav {
 div.con-fixed {
   position: fixed;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .con-design {
@@ -138,6 +139,11 @@ nav {
 #con-console #console {
   width: 100%;
   height: 70%;
+  position: absolute;
+  overflow-y: scroll !important;
+}
+
+table {
   position: absolute;
   overflow-y: scroll !important;
 }

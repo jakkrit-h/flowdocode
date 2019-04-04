@@ -1,254 +1,567 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <title>flowdocode</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css" />
-        <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />-->
-      <script src="js/jquery.js"></script> 
-      <script src="js/jquery-ui.min.js"></script> 
-      <!--  <script src="js/bootstrap.min.js"></script>
-        <script src="js/vue.js"></script>
-        <script src="js/flowdocode.js"></script>
-        <script src="js/svg.js"></script>
-        <script src="js/interact.js"></script> -->
 
-
-    </head>
-    <style>
-    html,body{width:100%;height:100%}
-html,body,div{margin:0px;padding:0px;}
-
-#ui-browser,#canvas,#property-browser{
-  height:100%;
-  display:inline-block;
-  box-sizing:border-box;
-  position:relative;
-}
-
-#ui-browser{
-  width:20%;
-  background-color:#eee;
-  float: left;
-  overflow:hidden;
-}
-
-#canvas{
-  width:60%;
-  right: 2;
-}
-
-#property-browser{
-  width:20%;
-  background-color:#eee;
-}
-
-
-/*Anchor CSS*/
-/* .anchor{
-  opacity:0.5;
-  width: 10px;
-  height: 100%;
-  background-color: #0ebeff;
-  position: absolute;
-  transition: width ease-in-out 0.2s;
-} */
-
-#ui-browser:hover > .anchor, #property-browser:hover > .anchor{
-  background-color: #ffbe00;
-  width: 10px;
-  opacity:1;
-}
-
-#ui-browser .anchor{
-  right:0px;
-}
-
-.ui-item{
-  /* position:absolute; */
-  width:50px;
-  height:50px;
-  background-color:#eef;
-  top:-2px;
-  left:-2px;
-}
-
-.con_anchor{
-    width: 8px;
-    height: 8px;
-    background-color: #47cf73;
-    border-radius: 50%;
-    z-index:5;
-}
-
-#connector_canvas{
-  position:absolute;
-  width:100%;
-  height:100%;
-  stroke:#5c96bc;
-  stroke-width:2
-}
-
-.library{
-  border-left:10px solid #5c96bc;
-  background-color:white;
-  color:#0ebeff;
-  padding-bottom: 1px;
-}
-
-.library ul{
-  list-style-type:none;
-}
-
-.library .name-title{
-  text-align:center;
-  padding-top:5px;
-}
-
-.library ul li{
-  border-bottom:1px solid #eee;
-  margin-right:20px;
-  color:#4c4545;
-  padding: 5px;
-  margin-left: 15px;
-  cursor: pointer;
-  transition: all ease-out 0.1s; 
-}
-
-.library ul li:hover{
-  background-color:#4c4545;
-  color:white;
-  text-align:center;
-  font-size:1.2em;
-}
-    </style>
-  <body>
-  
-<div id="canvas">
-    <svg id='connector_canvas'></svg>
-    <div class="ui-item item-1"><div class="con_anchor"></div></div>
-    <div class="ui-item item-2"><div class="con_anchor"></div></div>
-    <div class="ui-item item-3"><div class="con_anchor"></div></div>
-    <div class="ui-item item-1"><div class="con_anchor"></div></div>
-    <div class="ui-item item-2"><div class="con_anchor"></div></div>
-    <div class="ui-item item-3"><div class="con_anchor"></div></div>
-  </div>
-    </body>
-
-    <script>
-
-
-
-$('.anchor').on('click',function(){
-   var width = parseInt($(this).parent().css('width'));
-   if(width==10){
-     $(this).parent().css('width','20%');
-     $('#canvas').css('width','60%');
-   }else{
-      $(this).parent().css('width','10px');
-      $('#canvas').css('width','calc( 80% - 10px)');
-   }
-});
-
-$('.ui-item').draggable({
-  containment: "#canvas",
-  drag: function( event, ui ) {
-   
-           var lines = $(this).data('lines');
-           var con_item =$(this).data('connected-item');
-           var con_lines = $(this).data('connected-lines');
-          
-           if(lines) {
-             lines.forEach(function(line,id){
-             		$(line).attr('x1',$(this).position().left).attr('y1',$(this).position().top+1);  
-             }.bind(this));
-           }
-    
-           if(con_lines){
-               con_lines.forEach(function(con_line,id){
-                  $(con_line).attr('x2',$(this).position().left+5)
-                        .attr('y2',$(this).position().top+(parseInt($(this).css('height'))/2)+(id*5));
-               }.bind(this));
-              
-           }
-           
-	   }
-});
-
-$('.ui-item').droppable({
-  accept: '.con_anchor',
-  drop: function(event,ui){
-     var item = ui.draggable.closest('.ui-item');
-     $(this).data('connected-item',item);
-     ui.draggable.css({top:-2,left:-2});
-     item.data('lines').push(item.data('line'));
-    
-     if($(this).data('connected-lines')){
-        $(this).data('connected-lines').push(item.data('line'));
-        
-         var y2_ = parseInt(item.data('line').attr('y2'));
-         item.data('line').attr('y2',y2_+$(this).data('connected-lines').length*5);
-        
-     }else $(this).data('connected-lines',[item.data('line')]);
-    
-     item.data('line',null);
-    console.log('dropped');
-  }
-});
-
-
-$('.con_anchor').draggable({
-  
-     containment: "#canvas",
-     drag: function( event, ui ) {
+<head>
+  <title>FlowdoCode | FLOWDOCODE</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="css/jquery-ui.min.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome-all.min.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
+       
        
 
-       var _end = $(event.target).parent().position();
+  <script src="js/jquery.js"></script>
+  <script src="js/jquery-ui.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/flowdocode.js"></script>
+  <script src="js/compiler.js"></script>
+  <script src="js/debugger.js"></script>
+  <script src="js/font-awesome-all.min.js"></script>
+  <script src="js/vue.js"></script>
+
+
+
+
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg  p-0">
+      <div class="col-6">
+          <ul class="navbar-nav p-0" >
+              <li class="nav-item">
+                <a class="nav-link " >File</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link " >Edit</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link ">Help</a>
+              </li>
+            
+          </ul>
+      </div>
+      <div class="col-6 py-2 m-0">
+          <ul class="navbar-nav  m-0" >
+              <li class="nav-item ">
+                  <button class="btn btn-sm btn-flowdocode px-2"id="play"><i class='fas fa-play'></i></button>
+              </li>
+          </ul>
+      </div>
+
+    
+     
+
+
+
+  </nav>
+  <svg id="canvas">
+    <defs>
+      <marker id="arrowhead" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#fff" />
+      </marker>
+    </defs>
+    <g marker-end="url(#arrowhead)" stroke-width="2">
+      <line id="line_start" class="start process0" x1="961" y1="150" x2="961" y2="220" data-from="#start"
+        data-anchorfrom="bottom" data-to="#process0" data-anchorto="top"></line>
+    </g>
+    <g marker-end="url(#arrowhead)" stroke-width="2">
+      <line id="line_process0" class="process0 decision0" x1="961" y1="270" x2="961" y2="350" data-from="#process0"
+        data-anchorfrom="bottom" data-to="#decision0" data-anchorto="top"></line>
+    </g>
+    <g marker-end="url(#arrowhead)" stroke-width="2">
+      <line id="line_decision0-yes" class="decision0 display0" x1="860" y1="375" x2="697" y2="375" data-from="#decision0"
+        data-anchorfrom="left" data-to="#display0" data-anchorto="right" data-label="line_decision0-yes-YES"></line>
+    </g>
+    <g marker-end="url(#arrowhead)" stroke-width="2">
+      <line id="line_decision0-no" class="decision0 end" x1="961" y1="400" x2="961" y2="500" data-from="#decision0"
+        data-anchorfrom="bottom" data-to="#end" data-anchorto="top" data-label="line_decision0-no-NO"></line>
+    </g>
+    <g marker-end="url(#arrowhead)" stroke-width="2">
+      <line id="line_display0" class="display0 process1" x1="601" y1="350" x2="601" y2="270" data-from="#display0"
+        data-anchorfrom="top" data-to="#process1" data-anchorto="bottom"></line>
+    </g>
+    <g marker-end="url(#arrowhead)" stroke-width="2">
+      <line id="line_process1" class="process1 decision0" x1="697" y1="245" x2="961" y2="350" data-from="#process1"
+        data-anchorfrom="right" data-to="#decision0" data-anchorto="top"></line>
+    </g>
+
+
+  </svg>
+  <div class="col-2 con-fixed h-100 pb-5 "id="con-toolbox">
+    <div class="my-5  toolbox start-end " id="start-end" draggable="true" ondragstart="drag(event)">
+      <svg >
+        <path d="M 25 1 C -5,1 -5,49 25,49 L 120 49 C 155,49 155,0 120,1 Z" />
+      </svg>
+      <!-- <div class="text text-center col-7  text-truncate mx-auto" >
+                  End
+                </div> -->
+    </div>
+    <div class="my-5 toolbox process" id="process" draggable="true" ondragstart="drag(event)">
+      <svg>
+        <path d="M 1 1 L 149 1 L 149 49 L 1 49 Z" />
+      </svg>
+      <!-- <div class="text text-center col-7  text-truncate mx-auto"  >
+                  Process
+                </div> -->
+    </div>
+    <div class="my-5  toolbox input" id="input" draggable="true" ondragstart="drag(event)">
+      <svg>
+        <path d="M 1 15 L 149 1 L 149 49 L 1 49 Z" />
+      </svg>
+      <!-- <div class="text text-center col-7  text-truncate mx-auto"  >
+                  Input
+                </div> -->
+    </div>
+    <div class="my-5  toolbox decision" id="decision" draggable="true" ondragstart="drag(event)">
+      <svg>
+        <path d="M 75 1 L 150 25 L 75 50 L 1 25 Z " />
+      </svg>
+      <!-- <div class="text text-center  col-7 text-truncate mx-auto"  >
+                  Decision
+                </div> -->
+    </div>
+    <div class="my-5 toolbox display" id="display" draggable="true" ondragstart="drag(event)">
+      <svg>
+        <path d="M 1 25 L 15 49 H 120 C 155 49 ,155 1, 120 1 H 15 L 1,25  " />
+      </svg>
+      <!-- <div class="text text-center col-7  text-truncate mx-auto"  >
+                  Display
+                </div> -->
+    </div>
+
+
+  </div>
+
+  <div class="offset-2 col-8 h-75  p-0  con-fixed con-design  "  ondragover="allowDrop(event)" ondrop="dropItem(event)">
+    <div id="design" >
+      <div class=" shape start-end " id="start" data-connector="#line_start">
+        <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
+        <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
+        <div class="con_anchor anchor_start anchor_bottom" data-point="bottom"></div>
+        <div class="con_anchor anchor_start anchor_left" data-point="left"></div>
+        <svg>
+    
+          <path d="M 25 1 C -5,1 -5,49 25,49 L 180 49 C 205,49 205,1 180,1 Z" />
+        </svg>
+        <div class="text text-center col-12  text-truncate mx-auto">
+          Start
+        </div>
+      </div>
+      <div class=" shape process " id="process0" data-connector="#line_process0" data-s="process" data-x="860" data-y="220">
+        <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
+        <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
+        <div class="con_anchor anchor_start anchor_bottom" data-point="bottom"></div>
+        <div class="con_anchor anchor_start anchor_left" data-point="left"></div>
+        <svg>
+    
+          <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z" />
+        </svg>
+        <div class="text text-center col-12  text-truncate mx-auto">
+          i=10
+        </div>
+      </div>
+
+      <div class=" shape decision " id="decision0"data-yes="#line_decision0-yes" data-no="#line_decision0-no"data-s="decision" data-x="860" data-y="350">
+        <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
+        <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
+        <div class="con_anchor anchor_start anchor_bottom" data-point="bottom"></div>
+        <div class="con_anchor anchor_start anchor_left" data-point="left"></div>
+        <svg>
+    
+          <path d="M 100 1 L 199 25 L 100 49 L 1 25 Z " />
+        </svg>
+        <div class="text text-center col-12  text-truncate mx-auto">
+          i<=15
+        </div>
+      </div>
+
+      <div class=" shape display " id="display0"data-connector="#line_display0" data-s="display" data-x="500" data-y="350">
+        <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
+        <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
+        <div class="con_anchor anchor_start anchor_bottom" data-point="bottom"></div>
+        <div class="con_anchor anchor_start anchor_left" data-point="left"></div>
+        <svg>
+    
+          <path d="M 1 25 L 15 49 H 180 C 205 49 ,205 1, 180 1 H 15 L 1,25  " />
+        </svg>
+        <div class="text text-center col-12  text-truncate mx-auto">
+          i+"&lt;br&gt;"
+        </div>
+      </div>
+
+      <div class=" shape process " id="process1"data-connector="#line_process1" data-s="process" data-x="500" data-y="220">
+        <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
+        <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
+        <div class="con_anchor anchor_start anchor_bottom" data-point="bottom"></div>
+        <div class="con_anchor anchor_start anchor_left" data-point="left"></div>
+        <svg>
+    
+          <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z" />
+        </svg>
+        <div class="text text-center col-12  text-truncate mx-auto">
+          i++
+        </div>
+      </div>
+
+      <div class=" shape start-end " id="end" data-s="start-end" data-x="860" data-y="500">
+        <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
+        <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
+        <div class="con_anchor anchor_start anchor_bottom" data-point="bottom"></div>
+        <div class="con_anchor anchor_start anchor_left" data-point="left"></div>
+        <svg>
+    
+          <path d="M 25 1 C -5,1 -5,49 25,49 L 180 49 C 205,49 205,1 180,1 Z" />
+        </svg>
+        <div class="text text-center col-12  text-truncate mx-auto">
+          End
+        </div>
+      </div>
       
-       var end = $(event.target).position();
+      
+    </div>
 
-       if(_end&&end) 	{
-       $(event.target).parent().data('line')
-                                .attr('x2',end.left+_end.left+20).attr('y2',end.top+_end.top+2);
-                      
-       }
-			},
-  	 stop: function(event,ui) {
-        console.log(ui.helper);
-        console.log(ui.helper.closest('.ui-item'));
-        if(!ui.helper.closest('.ui-item').data('line')) {
-          console.log("SOPP");
-          return;
 
-        }
-        ui.helper.css({top:-2,left:-2});
-        ui.helper.closest('.ui-item').data('line').remove();
-        ui.helper.closest('.ui-item').data('line',null);
-        console.log('stopped');
+  
+  
+  </div>
+
+  <div class="col-8  h-25 p-0 offset-2 fixed-bottom  " id="con-console" >
+    <p class="header py-1 m-0 "> Output</p>
+    <div class="my-2 mb-5 m-0 px-4"id="console" >
+
+    </div>
+
+
+  </div>
+
+  <div class="offset-10 col-2 p-0 con-fixed h-100 "style="overflow-y: hidden !important;">
+    <p class="header py-1 m-0"> Debugger</p>
+
+    <div class="col-12 h-50  p-0 m-0" style="overflow-y: scroll !important;" >
+        <table class="table table-striped m-0" >
+          <thead class="text-center">
+              <tr>
+                <!-- <th>#</th> -->
+
+                <th>Variable</th>
+                <th>Value</th>
+
+              </tr>
+              
+          </thead>
+          <tbody id="debugger" class="text-center">
+            
+     
+        
+          </tbody>
+        </table>
+    </div>
+    <div class="col-12 p-0 h-50 m-0" style="background:#fff; ">
+      <p class="header py-1 m-0"> Properties</p>
+      <div class="row p-0 con-property">
+          <div class="col-6 pl-4 font-weight-bold">Name</div>
+          <input class="col-6" id="name" v-model="name">
+
+          <div class="col-6 pl-4 font-weight-bold">Type</div>
+          <input class="col-6" id="type" v-model="name">
+
+          <div class="col-6 pl-4 font-weight-bold">Code</div>
+          <input class="col-6" id="code" value="aaad">
+
+          <div class="col-6 pl-4 font-weight-bold">Width</div>
+          <input class="col-6" id="width" value="aaad">
+
+          <div class="col-6 pl-4 font-weight-bold">Height</div>
+          <input class="col-6" id="Height" value="aaad">
+
+          <div class="col-6 pl-4 font-weight-bold">Location</div>
+          <input class="col-6" id="location" value="aaad">
+    
+
+      
+      </div>
+ 
+    </div>
+  </div>
+
+
+
+
+</body>
+
+
+<script>
+
+  $(function () {
+
+    // $( "#content" ).selectable();
+    $(".shape").each(function () {
+
+       let x=$(this).attr("data-x");//ใช้ในช่วง tester
+       let y=$(this).attr("data-y");//ใช้ในช่วง tester
+
+       let s=$(this).attr("data-s");//ใช้ในช่วง tester
+
+      $(this).find(".con_anchor").draggable(conAnchorDraggableProperty());
+      $(this).find(".con_anchor").droppable(conAnchorDroppableProperty());
+      $(this).draggable(nodeDraggableProperty());
+      $(this).resizable(nodeResizableProperty(s));//ใช้ในช่วง tester เปลี่ยน s เป็น start-end ตอนจริง
+      updateAnchorPosition($(this));
+      updateTextboxPosition($(this));
+      let p={ //ใช้ในช่วง tester
+        top:y,
+        left:x
       }
+      $(this).offset(p);//ใช้ในช่วง tester
+
+    
+    });
+    let p = {
+      top: 100,
+      left:$(document).width()/2-100
+
+    }
+    $("#start").offset(p);
+    $(".shape").draggable();
+
+  });
+
+  function allowDrop(event) {
+    event.preventDefault();
+  }
+  function drag(ev) {
+
+    // ev.dataTransfer.setData("text", ev.target.getAttribute('data-type'));
+    ev.dataTransfer.setData("text", ev.target.id);
+
+
+  }  
+  function dropItem(event) {
+
+
+    event.preventDefault();
+    try {
+
+      var type = event.dataTransfer.getData("text");
+      onDropItemSuccess(type);
+    } catch (event) {
+      var type = "";
+    }
+
+
+
+
+
+
+  }
+  
+$(document).on("mouseenter","tr",function(){
+  let node=$(this).attr("data-node");
+  $($(node).find("svg")).css("stroke","red");
+
+});
+$(document).on("mouseleave","tr",function(){
+  let node=$(this).attr("data-node");
+  $($(node).find("svg")).css("stroke","#4f7df9");
 });
 
 
-$('.con_anchor').on('mousedown',function(e){
-    var cur_ui_item = $(this).closest('.ui-item');
-    var connector = $('#connector_canvas');
-    var cur_con;
-  
-  if(!$(cur_ui_item).data('lines')) $(cur_ui_item).data('lines',[]);
-  
-  if(!$(cur_ui_item).data('line')){
-         cur_con = $(document.createElementNS('http://www.w3.org/2000/svg','line'));
-         cur_ui_item.data('line',cur_con);
-    } else cur_con = cur_ui_item.data('line');
-  
-    connector.append(cur_con);
-    var start = cur_ui_item.position();
-     cur_con.attr('x1',start.left).attr('y1',start.top+1);
-     cur_con.attr('x2',start.left+1).attr('y2',start.top+1);
-});
-    </script>
+  $("div").on("click", ".shape", function () {
+    if ($(selectedEl).prop("id") != $(this).prop("id")) {
+      shapeUnSelectedStyle();
+    }
+    selectedEl = $(this);
+
+    shapeSelectedStyle();
+    $(document).keydown(function (event) {
+
+      if ((event.keyCode == 8 || event.keyCode == 46) && $(selectedEl).find("div.text").prop("contenteditable") != "true") {
+        if ($(selectedEl).prop("id") != "start"){
+          $(selectedEl).remove();
+          checkConnectorOnNodeDelete(selectedEl);
+        }
+      }
+      if (event.keyCode == 13) {
+        disContentEdit();
+        shapeUnSelectedStyle();
+      }
+    });
+
+
+
+    $("div").on("dblclick", ".text", function () {
+      if (!$(selectedEl).hasClass("start-end")) {
+        document.body.style.cursor = "";
+        $(selectedEl).find("div.text").prop("contenteditable", true);
+        $(selectedEl).draggable({ disabled: true });
+
+      }
+
+    });
+    $("div").on("blur", ".text", function () {
+
+      disContentEdit();
+
+    });
+
+
+
+
+  });
+
+
+  $("#design").on("mouseup", function (event) {
+    if (event.target === this) {
+      shapeUnSelectedStyle();
+
+    }
+
+  });
+
+
+  $(document).on("mouseenter", ".shape", function () {
+    document.body.style.cursor = "grab";
+    if($(selectedEl).prop("id") != $(this).prop("id")){
+      $(this).find(".con_anchor").css("opacity", "1");
+      $(document).on("mousedown", function () {
+        mouseDown = true;
+     
+
+      });
+    }
+ });
+  $(document).on("mouseleave", ".shape", function () {
+    document.body.style.cursor = "";
+    if (!mouseDown) {
+      $(this).find(".con_anchor").css("opacity", "0");
+    }
+    $(document).on("mouseup", function () {
+      mouseDown = false;
+    });
+  });
+
+
+  $(document).on("mouseup", ".shape", function () {
+    if (selectedEl == undefined) {
+      selectedEl = $(this);
+
+    }
+    shapeSelectedStyle();
+    document.body.style.cursor = "grab";
+  });
+
+  $(document).on("mousedown", ".con_anchor", function () {
+
+      originalPosition = $(this).offset();
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g = $(g).attr("marker-end", "url(#arrowhead)");
+      g = $(g).attr("stroke-width", "2");
+
+      $("#canvas").append($(g));
+
+  });
+
+  $(document).on("focus",".consoleInput",function(){
+    $(this).on("keydown",function(){
+      if(event.keyCode==13){
+        $(this).prop("contenteditable","false");
+        inputSuccess=true;
+        compileContinue()
+       
+      }
+    });
+  });
+  $(".con-design").on("scroll",function(){
+    $("line").each(function () {
+          updateConnectorPosition($(this));
+
+    });
+  });
+
+</script>
+
+<scrip type="text/template">
+
+  <template id="start-end">
+    <div class="shape start-end ">
+      <div class="con_anchor  anchor_top" data-point="top"></div>
+      <div class="con_anchor  anchor_right" data-point="right"></div>
+      <div class="con_anchor  anchor_bottom" data-point="bottom"></div>
+      <div class="con_anchor  anchor_left" data-point="left"></div>
+
+      <svg>
+        <path d="M 25 1 C -5,1 -5,49 25,49 L 180 49 C 205,49 205,1 180,1 Z" />
+      </svg>
+      <div class="text text-center col-12  text-truncate mx-auto ">
+        End
+      </div>
+    </div>
+  </template>
+  <template id="process">
+    <div class="shape process ">
+      <div class="con_anchor  anchor_top" data-point="top"></div>
+      <div class="con_anchor  anchor_right" data-point="right"></div>
+      <div class="con_anchor  anchor_bottom" data-point="bottom"></div>
+      <div class="con_anchor  anchor_left" data-point="left"></div>
+      <svg>
+        <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z" />
+      </svg>
+      <div class="text text-center col-12  text-truncate mx-auto" contenteditable=false>
+        Process
+      </div>
+    </div>
+  </template>
+  <template id="input">
+    <div class="shape input">
+      <div class="con_anchor  anchor_top" data-point="top"></div>
+      <div class="con_anchor  anchor_right" data-point="right"></div>
+      <div class="con_anchor  anchor_bottom" data-point="bottom"></div>
+      <div class="con_anchor  anchor_left" data-point="left"></div>
+      <svg>
+        <path d="M 1 15 L 199 1 L 199 49 L 1 49 Z" />
+      </svg>
+      <div class="text text-center col-12  text-truncate mx-auto" contenteditable=false>
+        Input
+      </div>
+    </div>
+  </template>
+  <template id="decision">
+    <div class=" shape decision ">
+      <div class="con_anchor  anchor_top" data-point="top"></div>
+      <div class="con_anchor  anchor_right" data-point="right"></div>
+      <div class="con_anchor  anchor_bottom" data-point="bottom"></div>
+      <div class="con_anchor  anchor_left" data-point="left"></div>
+      <svg>
+        <path d="M 100 1 L 199 25 L 100 49 L 1 25 Z " />
+      </svg>
+      <div class="text text-center col-12  text-truncate mx-auto" contenteditable="false">
+        Decision
+      </div>
+    </div>
+  </template>
+  <template id="display">
+    <div class=" shape display ">
+      <div class="con_anchor  anchor_top" data-point="top"></div>
+      <div class="con_anchor  anchor_right" data-point="right"></div>
+      <div class="con_anchor  anchor_bottom" data-point="bottom"></div>
+      <div class="con_anchor  anchor_left" data-point="left"></div>
+      <svg>
+        <path d="M 1 25 L 15 49 H 180 C 205 49 ,205 1, 180 1 H 15 L 1,25  " />
+      </svg>
+      <div class="text text-center col-12  text-truncate mx-auto" contenteditable="false">
+        Display
+      </div>
+    </div>
+  </template>
+
+
+
+
+
+</scrip>
+
 </html>
-
-

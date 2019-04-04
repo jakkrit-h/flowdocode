@@ -4,6 +4,9 @@ var connectorPointer=undefined;
 var inputSuccess=false;
 
 $(document).on("click","button",function(){
+
+    $("tbody").empty();
+
     $(this).html("<i class='fas fa-pause'></i>");
     $("#console").empty();
     controller($("#start").attr("data-connector"));
@@ -37,8 +40,13 @@ $(document).on("click","button",function(){
 function controller(starterConnector){
      connectorPointer=starterConnector;
     let str="";
+    var a=1
     while(true){
-        if($(connectorPointer).attr("data-to")==undefined ){
+
+
+        if($(connectorPointer).attr("data-to")==undefined||$(connectorPointer).attr("data-to")=="#end" ){
+            
+
             $("#play").html("<i class='fas fa-play'></i>");
             break;
         }else{
@@ -48,6 +56,7 @@ function controller(starterConnector){
                 break;
             connectorPointer=$(nodePointer).attr("data-connector");
         }
+        a++;
     }
     
    
@@ -58,11 +67,12 @@ function compiler(str){
 }
 
 function classify(node){
+
     let result
     if(!$(node).hasClass("input")){
         let text =$(node).find(".text").text();
         result=compiler(text);
-        Debugger(text,result);
+        Debugger(node,text,result);
     }
     if($(node).hasClass("display")){
          displayConsole(result);
