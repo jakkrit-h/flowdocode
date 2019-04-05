@@ -361,12 +361,17 @@
   
 $(document).on("mouseenter","tr",function(){
   let node=$(this).attr("data-node");
-  $($(node).find("svg")).css("stroke","red");
-
+  $(node).find("svg").css("stroke","red");
+  $(node).addClass("font-weight-bold");
+  $(this).addClass("font-weight-bold");
+  alert($(this).attr("data-node"));
 });
 $(document).on("mouseleave","tr",function(){
   let node=$(this).attr("data-node");
-  $($(node).find("svg")).css("stroke","#4f7df9");
+  $(node).find("svg").css("stroke","#4f7df9");
+  $(node).removeClass("font-weight-bold");
+  $(this).removeClass("font-weight-bold");
+
 });
 
 

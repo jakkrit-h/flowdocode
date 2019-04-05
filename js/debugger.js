@@ -16,7 +16,7 @@ function Debugger(node,text,result){
 
 function show(node,variable,result){
     let row=undefined;
-    
+
     if($("#debugger").find("tr").prop("id")==variable){
         let td = " <td>" + variable + "</td>    <td>" + result + "</td>";
         $("#"+variable.trim()).html(td);
@@ -27,6 +27,7 @@ function show(node,variable,result){
         <td>"+variable+"</td>    <td>"+result+"</td>\
         </tr>";
         $("#debugger").append(row);
+      
     }
 
    

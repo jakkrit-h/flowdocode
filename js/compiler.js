@@ -67,7 +67,7 @@ function compiler(str){
 }
 
 function classify(node){
-
+    console.log(node);
     let result
     if(!$(node).hasClass("input")){
         let text =$(node).find(".text").text();
