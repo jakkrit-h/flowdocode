@@ -554,3 +554,17 @@ function updateTextLabelPosition(connector){
 
 
 }
+
+function hightLight(node,color){
+    $(node).find("svg").css("stroke",color); 
+    $(node).find("svg").addClass("hightlight"); 
+    // $(node).find("svg").css("fill",color); 
+    $(node).addClass("font-weight-bold");
+}
+function unHightLight(node){
+    $(node).find("svg").css("stroke","#4f7df9"); 
+    $(node).find("svg").removeClass("hightlight"); 
+
+    // $(node).find("svg").css("fill","#fff"); 
+    $(node).removeClass("font-weight-bold");
+}

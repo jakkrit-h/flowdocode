@@ -23,9 +23,12 @@ function show(node,variable,result){
         
         
     }else{
-        row= "<tr id="+variable+" data-node=#"+$(node).prop("id")+">\
-        <td>"+variable+"</td>    <td>"+result+"</td>\
-        </tr>";
+
+            row= "<tr id=debug-"+$(node).prop("id")+" data-node=#"+$(node).prop("id")+">\
+            <td>"+variable+"</td>    <td>"+result+"</td>\
+            </tr>";
+        
+      
         $("#debugger").append(row);
       
     }

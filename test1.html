@@ -10,9 +10,6 @@
   <link rel="stylesheet" type="text/css" media="screen" href="css/jquery-ui.min.css" />
   <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome-all.min.css" />
   <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
-       
-       
-
   <script src="js/jquery.js"></script>
   <script src="js/jquery-ui.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
@@ -27,22 +24,20 @@
 
 
 </head>
-
+<style>
+@keyframes example {
+  from { filter: drop-shadow(0px 0px 0px 0px rgba(39,174,9,0.6)); }
+  to {filter: drop-shadow(0px 0px 100px 100px rgba(39,174,9,0.0));}
+}
+button{
+  left:50%;
+  top:50%;
+  animation-name: example;
+  animation-duration: 0.5s;
+}
+</style>
 <body>
- <div id="test" class="bow babe" data-bow="12456">Start</div>
-<div id="bow">BOWBOW</div>
+<button class="btn btn-primary m-5">sada</button>
 </body>
-<script>
 
-  $(function(){
-    getText();
-  });
-
-  function getText(){
- 
-    // postAt datetime 2019/12/12 0:0:0
-
-    // select * from news where postAt <= now();
-  }
-</script>
 </html>

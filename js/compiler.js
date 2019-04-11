@@ -2,8 +2,8 @@
 var nodePointer=undefined;
 var connectorPointer=undefined;
 var inputSuccess=false;
-
-$(document).on("click","button",function(){
+var onDebug=false;
+$(document).on("click","#play",function(){
 
     $("tbody").empty();
 
@@ -11,8 +11,33 @@ $(document).on("click","button",function(){
     $("#console").empty();
     controller($("#start").attr("data-connector"));
     
+});
+$(document).on("click","#debug",function(){
+  
+        $("tbody").empty();
+        $("#console").empty();
+
+        $("#debug").html("<i class='fas fa-pause'></i>");
+        connectorPointer=$("#start").attr("data-connector");
+        onDebug=true;
+        controllerOnDebug();
+        $(".ondebug").removeClass("d-none");
+        hightLight(nodePointer,"#27ae60");
+        $("tr").last().addClass("font-weight-bold");
+
+
     
- 
+});
+$(document).on("click","#next",function () { 
+    unHightLight(nodePointer);
+    $("tr").last().removeClass("font-weight-bold");
+
+    controllerOnDebug();
+    hightLight(nodePointer,"#27ae60");
+    $("tr").last().addClass("font-weight-bold");
+    let obj    = $('#con-debugger');
+    let height = obj[0].scrollHeight;
+    obj.scrollTop(height);
 });
 // function collectPath(){
 //     var nodePointer=$("#start").attr("data-next");
@@ -38,12 +63,8 @@ $(document).on("click","button",function(){
 
 // }
 function controller(starterConnector){
-     connectorPointer=starterConnector;
-    let str="";
-    var a=1
+     connectorPointer=starterConnector;  
     while(true){
-
-
         if($(connectorPointer).attr("data-to")==undefined||$(connectorPointer).attr("data-to")=="#end" ){
             
 
@@ -56,18 +77,37 @@ function controller(starterConnector){
                 break;
             connectorPointer=$(nodePointer).attr("data-connector");
         }
-        a++;
+
+        
     }
     
    
    
 }
+function controllerOnDebug(){
+
+    if($(connectorPointer).attr("data-to")==undefined||$(connectorPointer).attr("data-to")=="#end" ){
+            
+
+        $("#play").html("<i class='fas fa-play'></i>");
+        $(".ondebug").removeClass("d-none");
+
+        onDebug=false;
+    }else{
+        nodePointer=$(connectorPointer).attr("data-to");
+        let result=classify(nodePointer);
+        connectorPointer=$(nodePointer).attr("data-connector");
+    }
+}
 function compiler(str){
+    if(str.trim().match(/^[A-Za-z$_]+[\+\-\*\/]{2}$/)){
+        let temp =str.split("++");
+        str="++"+temp[0];
+    }
     return eval(str);
 }
 
 function classify(node){
-    console.log(node);
     let result
     if(!$(node).hasClass("input")){
         let text =$(node).find(".text").text();
@@ -125,7 +165,7 @@ function compileContinue(){
 
 function displayConsole(rsCompile){
  
-    $("#console").append(rsCompile);
+    $("#console").append(rsCompile+"<br>");
 }
 // function start(){
 //     var text= "";
@@ -140,7 +180,6 @@ function displayConsole(rsCompile){
 // function process(shape){
 //     alert(eval(shape.text));
 // }
-
 
 
    

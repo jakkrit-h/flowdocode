@@ -48,6 +48,10 @@
           <ul class="navbar-nav  m-0" >
               <li class="nav-item ">
                   <button class="btn btn-sm btn-flowdocode px-2"id="play"><i class='fas fa-play'></i></button>
+                  <button class="btn btn-sm btn-flowdocode px-2"id="debug"><i class="fas fa-bug"></i></button>
+                  <button class="btn btn-sm btn-flowdocode px-2 d-none ondebug"id="next"><i class="fas fa-arrow-right"></i></button>
+
+
               </li>
           </ul>
       </div>
@@ -189,7 +193,7 @@
           <path d="M 1 25 L 15 49 H 180 C 205 49 ,205 1, 180 1 H 15 L 1,25  " />
         </svg>
         <div class="text text-center col-12  text-truncate mx-auto">
-          i+"&lt;br&gt;"
+          i
         </div>
       </div>
 
@@ -241,7 +245,7 @@
   <div class="offset-10 col-2 p-0 con-fixed h-100 "style="overflow-y: hidden !important;">
     <p class="header py-1 m-0"> Debugger</p>
 
-    <div class="col-12 h-50  p-0 m-0" style="overflow-y: scroll !important;" >
+    <div class="col-12 h-50  p-0 m-0"id="con-debugger" style="overflow-y: scroll !important;" >
         <table class="table table-striped m-0" >
           <thead class="text-center">
               <tr>
@@ -360,18 +364,22 @@
   }
   
 $(document).on("mouseenter","tr",function(){
-  let node=$(this).attr("data-node");
-  $(node).find("svg").css("stroke","red");
-  $(node).addClass("font-weight-bold");
-  $(this).addClass("font-weight-bold");
-  alert($(this).attr("data-node"));
-});
-$(document).on("mouseleave","tr",function(){
-  let node=$(this).attr("data-node");
-  $(node).find("svg").css("stroke","#4f7df9");
-  $(node).removeClass("font-weight-bold");
-  $(this).removeClass("font-weight-bold");
+  if (!onDebug) {
+    let node = $(this).attr("data-node");
+    $(node).find("svg").css("stroke", "#f1c40f");
+    $(node).addClass("font-weight-bold");
+    $(this).addClass("font-weight-bold");
+  }
 
+});
+    $(document).on("mouseleave", "tr", function () {
+      if (!onDebug) {
+
+        let node = $(this).attr("data-node");
+        $(node).find("svg").css("stroke", "#4f7df9");
+        $(node).removeClass("font-weight-bold");
+        $(this).removeClass("font-weight-bold");
+      }
 });
 
 
