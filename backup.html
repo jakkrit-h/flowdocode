@@ -48,10 +48,6 @@
           <ul class="navbar-nav  m-0" >
               <li class="nav-item ">
                   <button class="btn btn-sm btn-flowdocode px-2"id="play"><i class='fas fa-play'></i></button>
-                  <button class="btn btn-sm btn-flowdocode px-2"id="debug"><i class="fas fa-bug"></i></button>
-                  <button class="btn btn-sm btn-flowdocode px-2 d-none ondebug"id="next"><i class="fas fa-arrow-right"></i></button>
-
-
               </li>
           </ul>
       </div>
@@ -68,30 +64,6 @@
         <path d="M 0 0 L 10 5 L 0 10 z" fill="#fff" />
       </marker>
     </defs>
-    <g marker-end="url(#arrowhead)" stroke-width="2">
-      <line id="line_start" class="start process0" x1="961" y1="150" x2="961" y2="220" data-from="#start"
-        data-anchorfrom="bottom" data-to="#process0" data-anchorto="top"></line>
-    </g>
-    <g marker-end="url(#arrowhead)" stroke-width="2">
-      <line id="line_process0" class="process0 decision0" x1="961" y1="270" x2="961" y2="350" data-from="#process0"
-        data-anchorfrom="bottom" data-to="#decision0" data-anchorto="top"></line>
-    </g>
-    <g marker-end="url(#arrowhead)" stroke-width="2">
-      <line id="line_decision0-yes" class="decision0 display0" x1="860" y1="375" x2="697" y2="375" data-from="#decision0"
-        data-anchorfrom="left" data-to="#display0" data-anchorto="right" data-label="line_decision0-yes-YES"></line>
-    </g>
-    <g marker-end="url(#arrowhead)" stroke-width="2">
-      <line id="line_decision0-no" class="decision0 end" x1="961" y1="400" x2="961" y2="500" data-from="#decision0"
-        data-anchorfrom="bottom" data-to="#end" data-anchorto="top" data-label="line_decision0-no-NO"></line>
-    </g>
-    <g marker-end="url(#arrowhead)" stroke-width="2">
-      <line id="line_display0" class="display0 process1" x1="601" y1="350" x2="601" y2="270" data-from="#display0"
-        data-anchorfrom="top" data-to="#process1" data-anchorto="bottom"></line>
-    </g>
-    <g marker-end="url(#arrowhead)" stroke-width="2">
-      <line id="line_process1" class="process1 decision0" x1="697" y1="245" x2="961" y2="350" data-from="#process1"
-        data-anchorfrom="right" data-to="#decision0" data-anchorto="top"></line>
-    </g>
 
 
   </svg>
@@ -142,7 +114,7 @@
 
   <div class="offset-2 col-8 h-75  p-0  con-fixed con-design  "  ondragover="allowDrop(event)" ondrop="dropItem(event)">
     <div id="design" >
-      <div class=" shape start-end " id="start" data-connector="#line_start">
+      <div class=" shape start-end "id="start">
         <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
         <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
         <div class="con_anchor anchor_start anchor_bottom" data-point="bottom"></div>
@@ -155,75 +127,7 @@
           Start
         </div>
       </div>
-      <div class=" shape process " id="process0" data-connector="#line_process0" data-s="process" data-x="860" data-y="220">
-        <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
-        <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
-        <div class="con_anchor anchor_start anchor_bottom" data-point="bottom"></div>
-        <div class="con_anchor anchor_start anchor_left" data-point="left"></div>
-        <svg>
-    
-          <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z" />
-        </svg>
-        <div class="text text-center col-12  text-truncate mx-auto">
-          i=10
-        </div>
-      </div>
-
-      <div class=" shape decision " id="decision0"data-yes="#line_decision0-yes" data-no="#line_decision0-no"data-s="decision" data-x="860" data-y="350">
-        <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
-        <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
-        <div class="con_anchor anchor_start anchor_bottom" data-point="bottom"></div>
-        <div class="con_anchor anchor_start anchor_left" data-point="left"></div>
-        <svg>
-    
-          <path d="M 100 1 L 199 25 L 100 49 L 1 25 Z " />
-        </svg>
-        <div class="text text-center col-12  text-truncate mx-auto">
-          i<=15
-        </div>
-      </div>
-
-      <div class=" shape display " id="display0"data-connector="#line_display0" data-s="display" data-x="500" data-y="350">
-        <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
-        <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
-        <div class="con_anchor anchor_start anchor_bottom" data-point="bottom"></div>
-        <div class="con_anchor anchor_start anchor_left" data-point="left"></div>
-        <svg>
-    
-          <path d="M 1 25 L 15 49 H 180 C 205 49 ,205 1, 180 1 H 15 L 1,25  " />
-        </svg>
-        <div class="text text-center col-12  text-truncate mx-auto">
-          i
-        </div>
-      </div>
-
-      <div class=" shape process " id="process1"data-connector="#line_process1" data-s="process" data-x="500" data-y="220">
-        <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
-        <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
-        <div class="con_anchor anchor_start anchor_bottom" data-point="bottom"></div>
-        <div class="con_anchor anchor_start anchor_left" data-point="left"></div>
-        <svg>
-    
-          <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z" />
-        </svg>
-        <div class="text text-center col-12  text-truncate mx-auto">
-          i++
-        </div>
-      </div>
-
-      <div class=" shape start-end " id="end" data-s="start-end" data-x="860" data-y="500">
-        <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
-        <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
-        <div class="con_anchor anchor_start anchor_bottom" data-point="bottom"></div>
-        <div class="con_anchor anchor_start anchor_left" data-point="left"></div>
-        <svg>
-    
-          <path d="M 25 1 C -5,1 -5,49 25,49 L 180 49 C 205,49 205,1 180,1 Z" />
-        </svg>
-        <div class="text text-center col-12  text-truncate mx-auto">
-          End
-        </div>
-      </div>
+      
       
       
     </div>
@@ -245,7 +149,7 @@
   <div class="offset-10 col-2 p-0 con-fixed h-100 "style="overflow-y: hidden !important;">
     <p class="header py-1 m-0"> Debugger</p>
 
-    <div class="col-12 h-50  p-0 m-0"id="con-debugger" style="overflow-y: scroll !important;" >
+    <div class="col-12 h-50  p-0 m-0" style="overflow-y: scroll !important;" >
         <table class="table table-striped m-0" >
           <thead class="text-center">
               <tr>
@@ -305,23 +209,13 @@
     // $( "#content" ).selectable();
     $(".shape").each(function () {
 
-       let x=$(this).attr("data-x");//ใช้ในช่วง tester
-       let y=$(this).attr("data-y");//ใช้ในช่วง tester
-
-       let s=$(this).attr("data-s");//ใช้ในช่วง tester
-
       $(this).find(".con_anchor").draggable(conAnchorDraggableProperty());
       $(this).find(".con_anchor").droppable(conAnchorDroppableProperty());
       $(this).draggable(nodeDraggableProperty());
-      $(this).resizable(nodeResizableProperty(s));//ใช้ในช่วง tester เปลี่ยน s เป็น start-end ตอนจริง
+      $(this).resizable(nodeResizableProperty("start-end"));//ใช้ในช่วง tester เปลี่ยน s เป็น start-end ตอนจริง
       updateAnchorPosition($(this));
       updateTextboxPosition($(this));
-      let p={ //ใช้ในช่วง tester
-        top:y,
-        left:x
-      }
-      $(this).offset(p);//ใช้ในช่วง tester
-
+    
     
     });
     let p = {
@@ -364,22 +258,13 @@
   }
   
 $(document).on("mouseenter","tr",function(){
-  if (!onDebug) {
-    let node = $(this).attr("data-node");
-    $(node).find("svg").css("stroke", "#f1c40f");
-    $(node).addClass("font-weight-bold");
-    $(this).addClass("font-weight-bold");
-  }
+  let node=$(this).attr("data-node");
+  $($(node).find("svg")).css("stroke","red");
 
 });
-    $(document).on("mouseleave", "tr", function () {
-      if (!onDebug) {
-
-        let node = $(this).attr("data-node");
-        $(node).find("svg").css("stroke", "#4f7df9");
-        $(node).removeClass("font-weight-bold");
-        $(this).removeClass("font-weight-bold");
-      }
+$(document).on("mouseleave","tr",function(){
+  let node=$(this).attr("data-node");
+  $($(node).find("svg")).css("stroke","#4f7df9");
 });
 
 

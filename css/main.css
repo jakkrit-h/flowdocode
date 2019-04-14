@@ -112,7 +112,7 @@ g {
 }
 
 nav {
-  z-index: 9;
+  z-index: 99 !important;
 }
 
 .btn-flowdocode {
@@ -194,12 +194,18 @@ table {
 
 @keyframes hightlight {
   from {
-    filter: drop-shadow(0px 0px 0px rgba(39, 174, 9, 0.6));
+    filter: drop-shadow(0px 0px 0px rgba(39, 174, 9, 0.5));
   }
   to {
     filter: drop-shadow(0px 0px 100px rgba(39, 174, 9, 0));
   }
 }
-/*# sourceMappingURL=main.css.map */
+input[type=file] {
+  display: "none" !important;
+}
+
+.is-invalid {
+  border-width: 2px;
+}
 
 /*# sourceMappingURL=main.css.map */

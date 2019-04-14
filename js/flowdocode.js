@@ -286,8 +286,10 @@ function shapeSelectedStyle(){    // ไว้กำหนด ว่า Node น
       selectedEl.find("svg").css({
         "stroke-dasharray":"5,5"
       });
-   
-      $(selectedEl).resizable({disabled:false});//ห้าม resize ตอนโดนเลือก
+
+        $(selectedEl).resizable({disabled:false});// resize ตอนโดนเลือก
+
+       
       $(selectedEl).find(".con_anchor").addClass("hide");//ซ่อน Anchor ตอนโดนเลือก
     } catch (error) {
   
@@ -306,7 +308,11 @@ function shapeUnSelectedStyle(){    // ไว้ยกเลิก Node ที�
       selectedEl.find("svg").css({
         "stroke-dasharray":"0,0"
       });
-      $(selectedEl).resizable({disabled:true});
+
+        $(selectedEl).resizable({disabled:true});
+        // resize ตอนโดนเลือก
+
+     
       $(selectedEl).find(".con_anchor").removeClass("hide");
   
     } catch (error) {
@@ -325,7 +331,10 @@ function shapeUnSelectedStyle(){    // ไว้ยกเลิก Node ที�
 function disContentEdit(){  //ไว้ปิดไม่ให้ textbox แก้ไขได้กรณีไม่ได้ถูกเลือก ถ้าถูกเลือกจะเปิดให้แก้ไขโค๊ดได้
 
   $(selectedEl).find(".text").prop("contenteditable","false");
-  $(selectedEl).draggable({ disabled: false });
+
+    $(selectedEl).draggable({ disabled: false });
+
+  
   document.body.style.cursor="";
   }
 function checkConnectorOnNodeDelete(node){ /*ไว้เมื่อมี Node โดนลบ จะค้นหาว่าเส้นนั้นมีความเกี่ยวข้องมั้ยโดยเอา idของ Node มาเทียบกับ class 
@@ -365,7 +374,7 @@ function onDropItemSuccess(type) {    //เมื่อมีการลาก�
         top: event.clientY - 25
       }
       let node = $("template#" + type).html();//สร้าง node โดยอิงจาก template Id ประเภทของ shape
-
+      node=$(node).css("position","absolute");
       node = $(node).draggable(nodeDraggableProperty());//ใส่ความสามารถ Draggableให้กับ Node
       node = $(node).resizable(nodeResizableProperty(type));//ใส่ความสามารถ Resizable Node
 
@@ -562,9 +571,87 @@ function hightLight(node,color){
     $(node).addClass("font-weight-bold");
 }
 function unHightLight(node){
+    console.log(node);
     $(node).find("svg").css("stroke","#4f7df9"); 
     $(node).find("svg").removeClass("hightlight"); 
 
     // $(node).find("svg").css("fill","#fff"); 
     $(node).removeClass("font-weight-bold");
 }
+
+$(document).on("click","#save",function(){
+    if($("#assignment").val()==""|| $("#assignment").val()=="Assignment"){
+        $("#assignment").addClass("is-invalid");
+    }else{
+        save($("#assignment").val());
+
+    }
+    // $(this).parent().dropdown('toggle');
+
+});
+$(document).on("change","#open",function(){
+    open();
+
+
+});
+function save(fileName){
+    let canvas = $("#canvas").html();
+
+    let design = $("#design").html();
+    let text ={"canvas":canvas,"design":design};
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(text)));
+    //JSON.stringify(text)
+    element.setAttribute('download', fileName+".fdc");
+  
+    element.style.display = 'none';
+    document.body.appendChild(element);
+  
+    element.click();
+  
+    document.body.removeChild(element);
+   
+}
+function open() {
+    if ($("#openfile").val().lastIndexOf(".fdc") == -1) {
+      alert("ชนิดของไฟล์ไม่ถูกต้อง");
+      return false;
+    } else {
+
+      var file = document.querySelector('input[type=file]').files[0];
+      let fileName=file.name.split(".");
+      $("#assignment").val(fileName[0]);
+      var reader = new FileReader();
+
+        reader.onload = function (event) {
+          let text=JSON.parse(event.target.result);
+          $("#canvas").html(text.canvas);
+          $("#design").html(text.design);
+          $(".shape").each(function(){
+            $(this).removeClass("ui-draggable ui-draggable-handle ui-resizable ui-resizable-disabled");
+            $(this).find(".con_anchor").removeClass("ui-draggable ui-draggable-handle ui-droppable ui-draggable-disabled");
+            $(this).find("ui-resizable-handle").remove();
+            $(this).draggable(nodeDraggableProperty());
+            $(this).find(".con_anchor").draggable(conAnchorDraggableProperty());
+            $(this).find(".con_anchor").droppable(conAnchorDroppableProperty());
+            if($(this).hasClass("start-end")){
+                $(this).resizable(nodeResizableProperty("start-end"));
+            }else if($(this).hasClass("process")){
+                $(this).resizable(nodeResizableProperty("process"));
+            }else if($(this).hasClass("input")){
+                $(this).resizable(nodeResizableProperty("input"));
+            }else if($(this).hasClass("decision")){
+                $(this).resizable(nodeResizableProperty("decision"));
+            }else if($(this).hasClass("display")){
+                $(this).resizable(nodeResizableProperty("display"));
+            }
+          });
+        
+
+        }
+   
+      reader.readAsText(file);
+    }
+    $("#openfile").val("");
+    
+  }

@@ -4,41 +4,51 @@ var connectorPointer=undefined;
 var inputSuccess=false;
 var onDebug=false;
 $(document).on("click","#play",function(){
+    clearOnDebug();
 
-    $("tbody").empty();
-
+    onButtonClick();
     $(this).html("<i class='fas fa-pause'></i>");
-    $("#console").empty();
     controller($("#start").attr("data-connector"));
     
 });
 $(document).on("click","#debug",function(){
   
-        $("tbody").empty();
-        $("#console").empty();
-
-        $("#debug").html("<i class='fas fa-pause'></i>");
+    onButtonClick();
+        $("#debug").html("<i class='fas fa-stop'></i>");
+        nodePointer=$("#start");
         connectorPointer=$("#start").attr("data-connector");
         onDebug=true;
-        controllerOnDebug();
-        $(".ondebug").removeClass("d-none");
-        hightLight(nodePointer,"#27ae60");
+        // controllerOnDebug();
+        $(".ondebug").show();
+        hightLight($("#start"),"#27ae60");
         $("tr").last().addClass("font-weight-bold");
 
 
     
 });
 $(document).on("click","#next",function () { 
+
     unHightLight(nodePointer);
     $("tr").last().removeClass("font-weight-bold");
-
     controllerOnDebug();
-    hightLight(nodePointer,"#27ae60");
-    $("tr").last().addClass("font-weight-bold");
+
     let obj    = $('#con-debugger');
     let height = obj[0].scrollHeight;
     obj.scrollTop(height);
 });
+function clearOnDebug(){
+    $("#debug").html("<i class='fas fa-bug'></i>");
+    $(".ondebug").hide();
+    onDebug=false;
+}
+function onButtonClick(){
+    $("tbody").empty();
+    $("#console").empty(); 
+    unHightLight($(".shape"));
+
+
+
+}
 // function collectPath(){
 //     var nodePointer=$("#start").attr("data-next");
 //     var continues=true;
@@ -86,17 +96,18 @@ function controller(starterConnector){
 }
 function controllerOnDebug(){
 
-    if($(connectorPointer).attr("data-to")==undefined||$(connectorPointer).attr("data-to")=="#end" ){
-            
-
-        $("#play").html("<i class='fas fa-play'></i>");
-        $(".ondebug").removeClass("d-none");
-
+    if($(connectorPointer).attr("data-to")==undefined||connectorPointer==undefined){
+        clearOnDebug();
+        
         onDebug=false;
     }else{
         nodePointer=$(connectorPointer).attr("data-to");
-        let result=classify(nodePointer);
+        if(nodePointer!="#end"){
+            let result=classify(nodePointer);
+        }
         connectorPointer=$(nodePointer).attr("data-connector");
+        hightLight(nodePointer,"#27ae60");
+        $("tr").last().addClass("font-weight-bold");
     }
 }
 function compiler(str){
