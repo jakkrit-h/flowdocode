@@ -15,7 +15,10 @@
 
   <script src="js/jquery.js"></script>
   <script src="js/jquery-ui.min.js"></script>
+  <script src="js/popper.min.js"></script>
+
   <script src="js/bootstrap.min.js"></script>
+
   <script src="js/flowdocode.js"></script>
   <script src="js/compiler.js"></script>
   <script src="js/debugger.js"></script>
@@ -42,7 +45,7 @@ $(document).on("click",".shape",function(){
                 <div class="dropdown-menu" >
                   <a class="dropdown-item" id="save" data-toggle="dropdown">Save</a>
                   <a class="dropdown-item" id="open" >  
-                    <input type="file" id="openfile" >
+                    <input type="file" id="openfile" accept="text/*,.fdc">
                     Open
                   </a>
                 </div>
@@ -110,7 +113,7 @@ $(document).on("click",".shape",function(){
         data-anchorfrom="right" data-to="#decision0" data-anchorto="top"></line>
     </g> -->
   <div class="col-2 con-fixed h-100 pb-5 "id="con-toolbox">
-    <div class="my-5  toolbox start-end " id="start-end" draggable="true" ondragstart="drag(event)">
+    <div class="my-5  toolbox start-end " id="start-end" draggable="true" ondragstart="drag(event)"  data-toggle="tooltip" data-placement="bottom" title="End">
       <svg >
         <path d="M 25 1 C -5,1 -5,49 25,49 L 120 49 C 155,49 155,0 120,1 Z" />
       </svg>
@@ -118,7 +121,7 @@ $(document).on("click",".shape",function(){
                   End
                 </div> -->
     </div>
-    <div class="my-5 toolbox process" id="process" draggable="true" ondragstart="drag(event)">
+    <div class="my-5 toolbox process" id="process" draggable="true" ondragstart="drag(event)"data-toggle="tooltip" data-placement="bottom" title="Process">
       <svg>
         <path d="M 1 1 L 149 1 L 149 49 L 1 49 Z" />
       </svg>
@@ -126,7 +129,7 @@ $(document).on("click",".shape",function(){
                   Process
                 </div> -->
     </div>
-    <div class="my-5  toolbox input" id="input" draggable="true" ondragstart="drag(event)">
+    <div class="my-5  toolbox input" id="input" draggable="true" ondragstart="drag(event)"data-toggle="tooltip" data-placement="bottom" title="input">
       <svg>
         <path d="M 1 15 L 149 1 L 149 49 L 1 49 Z" />
       </svg>
@@ -134,7 +137,7 @@ $(document).on("click",".shape",function(){
                   Input
                 </div> -->
     </div>
-    <div class="my-5  toolbox decision" id="decision" draggable="true" ondragstart="drag(event)">
+    <div class="my-5  toolbox decision" id="decision" draggable="true" ondragstart="drag(event)"data-toggle="tooltip" data-placement="bottom" title="decision">
       <svg>
         <path d="M 75 1 L 150 25 L 75 50 L 1 25 Z " />
       </svg>
@@ -142,7 +145,7 @@ $(document).on("click",".shape",function(){
                   Decision
                 </div> -->
     </div>
-    <div class="my-5 toolbox display" id="display" draggable="true" ondragstart="drag(event)">
+    <div class="my-5 toolbox display" id="display" draggable="true" ondragstart="drag(event)"data-toggle="tooltip" data-placement="bottom" title="display">
       <svg>
         <path d="M 1 25 L 15 49 H 120 C 155 49 ,155 1, 120 1 H 15 L 1,25  " />
       </svg>
@@ -276,7 +279,7 @@ $(document).on("click",".shape",function(){
         <table class="table table-striped m-0" >
           <thead class="text-center">
               <tr>
-                <!-- <th>#</th> -->
+                <th>Action</th>
 
                 <th>Variable</th>
                 <th>Value</th>
@@ -328,37 +331,27 @@ $(document).on("click",".shape",function(){
 <script>
 
   $(function () {
-
+    //ปรับ resolution ตามขนาดจอที่เปิด อันนี้เอาค่าจากเครื่องต้นทาง
+    console.log(window.screen.availHeight,
+window.screen.availWidth);
     // $( "#content" ).selectable();
     $(".ondebug").hide();
-    $(".shape").each(function () {
-
-       let x=$(this).attr("data-x");//ใช้ในช่วง tester
-       let y=$(this).attr("data-y");//ใช้ในช่วง tester
-
-       let s=$(this).attr("data-s");//ใช้ในช่วง tester
-
-      $(this).find(".con_anchor").draggable(conAnchorDraggableProperty());
-      $(this).find(".con_anchor").droppable(conAnchorDroppableProperty());
-      $(this).draggable(nodeDraggableProperty());
-      $(this).resizable(nodeResizableProperty("start-end"));//ใช้ในช่วง tester เปลี่ยน s เป็น start-end ตอนจริง
-      updateAnchorPosition($(this));
-      updateTextboxPosition($(this));
-      let p={ //ใช้ในช่วง tester
-        top:y,
-        left:x
-      }
-      $(this).offset(p);//ใช้ในช่วง tester
+    $('[data-toggle="tooltip"]').tooltip();
 
     
-    });
+      $("#start").find(".con_anchor").draggable(conAnchorDraggableProperty());
+      $("#start").find(".con_anchor").droppable(conAnchorDroppableProperty());
+      $("#start").draggable(nodeDraggableProperty());
+      $("#start").resizable(nodeResizableProperty("start-end"));//ใช้ในช่วง tester เปลี่ยน s เป็น start-end ตอนจริง
+      updateAnchorPosition($("#start"));
+      updateTextboxPosition($("#start"));
+
     let p = {
       top: 100,
       left:$(document).width()/2-100
 
     }
     $("#start").offset(p);
-    $(".shape").draggable();
 
   });
 
@@ -513,9 +506,11 @@ $(document).on("mouseenter","tr",function(){
   $(document).on("focus",".consoleInput",function(){
     $(this).on("keydown",function(){
       if(event.keyCode==13){
+        document.execCommand('insertHTML', false, '<br><br>');
         $(this).prop("contenteditable","false");
         inputSuccess=true;
-        compileContinue()
+        compileContinue();
+        return false;
        
       }
     });

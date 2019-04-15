@@ -598,7 +598,7 @@ function save(fileName){
     let canvas = $("#canvas").html();
 
     let design = $("#design").html();
-    let text ={"canvas":canvas,"design":design};
+    let text ={"canvas":canvas,"design":design,"resolution":""};
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(text)));
     //JSON.stringify(text)
@@ -620,7 +620,9 @@ function open() {
 
       var file = document.querySelector('input[type=file]').files[0];
       let fileName=file.name.split(".");
-      $("#assignment").val(fileName[0]);
+      fileName=fileName[0];
+      $("#assignment").val(fileName);
+      $("title").html(fileName+" | FLOWDOCODE");
       var reader = new FileReader();
 
         reader.onload = function (event) {
@@ -628,23 +630,17 @@ function open() {
           $("#canvas").html(text.canvas);
           $("#design").html(text.design);
           $(".shape").each(function(){
+          
             $(this).removeClass("ui-draggable ui-draggable-handle ui-resizable ui-resizable-disabled");
             $(this).find(".con_anchor").removeClass("ui-draggable ui-draggable-handle ui-droppable ui-draggable-disabled");
             $(this).find("ui-resizable-handle").remove();
             $(this).draggable(nodeDraggableProperty());
             $(this).find(".con_anchor").draggable(conAnchorDraggableProperty());
             $(this).find(".con_anchor").droppable(conAnchorDroppableProperty());
-            if($(this).hasClass("start-end")){
-                $(this).resizable(nodeResizableProperty("start-end"));
-            }else if($(this).hasClass("process")){
-                $(this).resizable(nodeResizableProperty("process"));
-            }else if($(this).hasClass("input")){
-                $(this).resizable(nodeResizableProperty("input"));
-            }else if($(this).hasClass("decision")){
-                $(this).resizable(nodeResizableProperty("decision"));
-            }else if($(this).hasClass("display")){
-                $(this).resizable(nodeResizableProperty("display"));
-            }
+            $(this).resizable(nodeResizableProperty(getNodeType(this)));
+            $(this).find(".ui-resizable-w").get(1).remove();
+            $(this).find(".ui-resizable-e").get(1).remove();
+
           });
         
 
@@ -655,3 +651,17 @@ function open() {
     $("#openfile").val("");
     
   }
+
+  function getNodeType(node){
+    if($(node).hasClass("start-end")){         
+        return "start-end";
+      }else if($(node).hasClass("process")){
+        return "process";
+      }else if($(node).hasClass("input")){
+        return "input";
+      }else if($(node).hasClass("decision")){
+        return "decision";
+      }else if($(node).hasClass("display")){
+        return "display";
+      }
+}

@@ -16,16 +16,16 @@ function Debugger(node,text,result){
 
 function show(node,variable,result){
     let row=undefined;
-
+    let type =getNodeType(node);
     if($("#debugger").find("tr").prop("id")==variable){
-        let td = " <td>" + variable + "</td>    <td>" + result + "</td>";
+        let td = "<td>"+type+"</td> <td>" + variable + "</td>    <td>" + result + "</td>";
         $("#"+variable.trim()).html(td);
         
         
     }else{
 
             row= "<tr id=debug-"+$(node).prop("id")+" data-node=#"+$(node).prop("id")+">\
-            <td>"+variable+"</td>    <td>"+result+"</td>\
+            <td>"+type+"</td> <td>"+variable+"</td>    <td>"+result+"</td>\
             </tr>";
         
       

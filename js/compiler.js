@@ -7,7 +7,7 @@ $(document).on("click","#play",function(){
     clearOnDebug();
 
     onButtonClick();
-    $(this).html("<i class='fas fa-pause'></i>");
+    $(this).html("<i class='fas fa-stop'></i>");
     controller($("#start").attr("data-connector"));
     
 });
@@ -139,15 +139,21 @@ function classify(node){
     if($(node).hasClass("input")){
         if(!inputSuccess){
             let input=document.createElement("div");
+            
             $(input).attr("contenteditable","true");
             $(input).addClass("consoleInput");
             $("#console").append(input);
             $(input).focus();
+            $(input).empty();
+            console.log(input);
             return true;
         }else{
 
             let source=$(node).find(".text").text()+"="+$(".consoleInput").text();
             result=compiler(source);
+            $(".consoleInput").find("br").remove();
+            $(".consoleInput").prepend("Input : ");
+
             $(".consoleInput").removeClass("consoleInput");
             inputSuccess=false;
         }
