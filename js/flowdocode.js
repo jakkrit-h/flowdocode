@@ -400,7 +400,7 @@ function nodeDraggableProperty(){// returnความสามารถขอ�
         grid: [ 10, 10 ], 
         scroll: true,
         stack: ".shape",
-        scrollSensitivity: 100,
+        scrollSensitivity: 50,
         scrollSpeed: 50,
         drag: function () {
           shapeUnSelectedStyle();
@@ -581,8 +581,11 @@ function unHightLight(node){
 
 $(document).on("click","#save",function(){
     if($("#assignment").val()==""|| $("#assignment").val()=="Assignment"){
+
+
         $("#assignment").addClass("is-invalid");
     }else{
+      $("#assignment").removeClass("is-invalid");
         save($("#assignment").val());
 
     }

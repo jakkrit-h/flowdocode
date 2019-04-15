@@ -200,8 +200,9 @@ table {
     filter: drop-shadow(0px 0px 100px rgba(39, 174, 9, 0));
   }
 }
-input[type=file] {
-  display: "none" !important;
+#openfile {
+  width: 0.1px;
+  opacity: 0;
 }
 
 .is-invalid {

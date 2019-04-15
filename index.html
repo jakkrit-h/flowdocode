@@ -10,7 +10,8 @@
   <link rel="stylesheet" type="text/css" media="screen" href="css/jquery-ui.min.css" />
   <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome-all.min.css" />
   <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
-       
+  <!-- <link rel="stylesheet" type="text/css" media="screen" href="css/darktheme.css" /> -->
+   
        
 
   <script src="js/jquery.js"></script>
@@ -43,10 +44,11 @@ $(document).on("click",".shape",function(){
               <li class="nav-item dropdown">
                 <a class="nav-link " href="#" data-toggle="dropdown" >File</a>
                 <div class="dropdown-menu" >
-                  <a class="dropdown-item" id="save" data-toggle="dropdown">Save</a>
+                  <a class="dropdown-item" id="save" ><label>Save</label></a>
                   <a class="dropdown-item" id="open" >  
-                    <input type="file" id="openfile" accept="text/*,.fdc">
-                    Open
+                      <label>  Open
+                    <input type="file" id="openfile" accept="text/*,.fdc"></label>
+                   
                   </a>
                 </div>
               </li>
@@ -294,7 +296,7 @@ $(document).on("click",".shape",function(){
           </tbody>
         </table>
     </div>
-    <div class="col-12 p-0 h-50 m-0" style="background:#fff; ">
+    <div class="col-12 p-0 h-50 m-0" >
       <p class="header py-1 m-0"> Properties</p>
       <div class="row p-0 con-property">
           <div class="col-6 pl-4 font-weight-bold">Name</div>
