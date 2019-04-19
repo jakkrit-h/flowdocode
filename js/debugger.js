@@ -23,7 +23,6 @@ function show(node,variable,result){
         
         
     }else{
-
             row= "<tr id=debug-"+$(node).prop("id")+" data-node=#"+$(node).prop("id")+">\
             <td>"+type+"</td> <td>"+variable+"</td>    <td>"+result+"</td>\
             </tr>";

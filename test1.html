@@ -28,11 +28,131 @@
 
 
 
-
+//0,0  150,150
 </script>
 <body>
-  <textarea id="textbox">Type something here</textarea> <button id="create">Create file</button>
+ x1 <input type=textbox id="x1" value="100"> y1 <input type=textbox id="y1" value="100">
+ ตำแหน่ง
+ <select  id="po1">
+   <option value="top">top</option>
+   <option value="right">right</option>
+   <option value="bottom">bottom</option>
+   <option value="left">left</option>
 
+ </select><br>
+ x2 <input type=textbox id="x2" value="300"> y2 <input type=textbox id="y2" value="300">
+ ตำแหน่ง<select  id="po2">
+    <option value="top">top</option>
+    <option value="right">right</option>
+    <option value="bottom">bottom</option>
+    <option value="left">left</option>
+ 
+  </select>
+<button>plot</button><br><br>
+<svg style="height:800px;">
+    <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#000" />
+        </marker>
+      </defs>
+      <g>
+          <polyline points="20,20 40,25 60,40 80,120 120,140 200,180"
+          style="fill:none;stroke:none;stroke-width:3" />
+      </g>
+</svg>
 </body>
+<script>
+$(function(){
 
+  
+});
+$(document).on('click','button',function(){
+  let j={
+  x1:$("#x1").val(),
+   y1:$("#y1").val(),
+   x2:$("#x2").val(),
+   y2:$("#y2").val(),
+   po1:$("#po1").val(),
+   po2:$("#po2").val()
+  }
+
+  let polyLine=document.createElementNS("http://www.w3.org/1999/xhtml", 'polyline');
+  let point=  test(j) ;
+  $(polyLine).attr("points",point);
+  $(polyLine).attr("style","fill:none;stroke:black;stroke-width:1;");
+  $(polyLine).attr("marker-end","url(#arrowhead)");
+
+  $("g").html(polyLine);
+  console.log($("g").html());
+  $("svg").html($("svg").html());
+  let g= $("g").html();
+});
+function getPolyLine(j){
+  let distanceX = j.x2-j.x1;
+
+  let distanceY = j.y2-j.y1;
+  let p0=j.x1+","+j.y1;
+
+  let p1=j.x1+","+j.y1;
+  let p2=j.x1+","+j.y1;
+  let p3=j.x1+","+j.y1;
+  let p4=j.x2+","+j.y2;
+
+    p1=parseInt(j.x1)+","+(j.y1-(j.y1*25/100)),
+    p2=parseInt(j.x1)+(distanceX*50/100)+","+(j.y1-(j.y1*25/100));
+    p3=j.x2+","+(j.y1-(j.y1*25/100));
+
+
+
+ 
+ 
+  return p0+" "+p1+" "+p2+" "+p3+" "+p4;
+}
+
+function test(j){
+  let p0=j.x1+","+j.y1;
+  let distanceX = j.y2-j.y1;
+  let distanceY = j.y2-j.y1;
+  let p25=line25_75(j.x1,j.y1,j.po1,distanceX,distanceY);
+  let p75=line25_75(j.x2,j.y2,j.po2,distanceX,distanceY);
+  let p100=j.x2+","+j.y2;
+  let p50=line50(p25,p75,distanceX,distanceY,j.po2);
+  return p0+" "+jsonToPoint(p25)+" "+jsonToPoint(p50)+" "+jsonToPoint(p75)+" "+p100;
+
+}
+function line50(p25,p75,distanceX,distanceY,destinationPosition){
+  let x= 0;
+  let y=0;
+  if(destinationPosition =="top" || destinationPosition =="right"){
+     x= p75.x;
+     y= p25.y;
+  }else{
+     x= p25.x;
+     y= p75.y;
+  }
+
+  return {x,y};
+}
+function jsonToPoint(json){
+  return json.x+","+json.y;
+}
+function line25_75(x,y,po,distanceX,distanceY){
+  switch(po){
+    case "top":
+      return {x:parseInt(x),y:y-(distanceY*25/100)};
+
+    case "right":
+      return  {x:parseInt(x)+(distanceX*25/100),y:y} ;
+  
+    case "bottom":
+      return  {x:parseInt(x),y:parseInt(y)+(distanceY*25/100)};
+    
+    case "left":
+      return  {x:parseInt(x)-(distanceX*25/100),y:y} ;
+     
+
+  }
+}
+
+</script>
 </html>

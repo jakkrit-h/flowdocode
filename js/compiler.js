@@ -8,12 +8,15 @@ $(document).on("click","#play",function(){
 
     onButtonClick();
     $(this).html("<i class='fas fa-stop'></i>");
+    $("#debug").html("<i class='fas fa-bug'></i>");
     controller($("#start").attr("data-connector"));
     
 });
 $(document).on("click","#debug",function(){
   
     onButtonClick();
+        $("#play").html("<i class='fas fa-play'></i>");
+
         $("#debug").html("<i class='fas fa-stop'></i>");
         nodePointer=$("#start");
         connectorPointer=$("#start").attr("data-connector");
@@ -139,9 +142,10 @@ function classify(node){
     if($(node).hasClass("input")){
         if(!inputSuccess){
             let input=document.createElement("div");
-            
+
             $(input).attr("contenteditable","true");
             $(input).addClass("consoleInput");
+
             $("#console").append(input);
             $(input).focus();
             $(input).empty();

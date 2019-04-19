@@ -208,6 +208,8 @@ function updateConnectorPosition(connector) {    //ไว้ใช้เปล�
     let pointTo = $(connector).attr("data-anchorto");//เก็บ ตำแหน่งที่ชี้ ของ Node ปลายทาง
     positionFromNode = getPositionByPoint(fromNode, pointFrom);
     positionToNode = getPositionByPoint(toNode, pointTo);
+
+
     
 
     if($(toNode).hasClass("input") && pointTo=="top"){
@@ -217,11 +219,19 @@ function updateConnectorPosition(connector) {    //ไว้ใช้เปล�
         positionFromNode.y+=7;
     }
 
+    let p0={x:positionFromNode.x,y:positionFromNode.y};
+    let p100={x:positionToNode.x+3 ,y:positionToNode.y};
+    let distanceX = p100.x-p0.x;
+    let distanceY = p100.y-p0.y;
+    let p25=linePlot25_75(p0.x,p0.y,pointFrom,distanceX,distanceY);
+    let p75=linePlot25_75(p100.x,p100.y,pointTo,distanceX,distanceY);
+    let p50=line50(p25,p75,distanceX,distanceY,pointTo);
+    console.log(pointFrom);
+    console.log(pointTo);
+
     let linePosition = {
-        x1: positionFromNode.x-3,
-        y1: positionFromNode.y,
-        x2: positionToNode.x-3,
-        y2: positionToNode.y
+      "points":jsonToPoint(p0)+" "+jsonToPoint(p25)+" "+jsonToPoint(p50)+" "+jsonToPoint(p75)+" "+jsonToPoint(p100),
+
 
     }
 
@@ -263,14 +273,16 @@ function getPositionByPoint(node, point) {// ไว้ให้ updateConnectorP
 
     }
 }
+function getLinePosition(position){
 
+}
 function updateConnectorPositionOnAction(node){    //เอาไว้ตอนที่ Node draggable หรือ resizeโดยจะอิงเมื่อมี Node นั้นมีความเกี่ยวข้องกับ connector นั้นๆ จาก class ของ connector จะตรงกับ Id ของ Node นั้นๆ
 
     let nodeId = $(node).prop("id");
   
 
 
-    $("line").each(function () {
+    $("polyline").each(function () {
         
 
         if ($(this).hasClass(nodeId)) {
@@ -340,7 +352,7 @@ function disContentEdit(){  //ไว้ปิดไม่ให้ textbox แ�
 function checkConnectorOnNodeDelete(node){ /*ไว้เมื่อมี Node โดนลบ จะค้นหาว่าเส้นนั้นมีความเกี่ยวข้องมั้ยโดยเอา idของ Node มาเทียบกับ class 
     ใน connector ถ้ามีเส้นนั้นจะโดนลบออกไป และ ให้ Node ต้นทางของเส้นไม่มีเส้นเป็นของตัวเอง*/
    
-   $("line").each(function(){
+   $("polyline").each(function(){
         if($(this).hasClass($(node).prop("id"))){
             let parent= $(this).attr("data-from");  
             $(parent).removeAttr("data-connector");//ให้ Node ต้นทางของเส้นไม่มีเส้นเป็นของตัวเอง  
@@ -432,15 +444,26 @@ function conAnchorDraggableProperty(){// returnความสามารถข
           $(".con_anchor").css("opacity", "1");// ให้ Anchor ทั้งหมด แสดงขึ้นมาเพื่อ ให้Dragไปหาได้
           let currentPosition = $(this).offset();// get ตำแหน่งปัจจุบันตอน Anchor โดน Drag
 
-          lineDraw = document.createElementNS("http://www.w3.org/2000/svg", "line");// สร้าง connector
+          lineDraw = document.createElementNS("http://www.w3.org/2000/svg", "polyline");// สร้าง connector
           $(lineDraw).attr("id", "line_" + $(this).parent().prop("id"));//เพิ่ม id ให้ connector
+
+          let p0={x:originalPosition.left + 4,y:originalPosition.top + 3};
+          let p100={x:currentPosition.left + 5 ,y:currentPosition.top};
+
+          let distanceX = p100.x-p0.x;
+
+          let distanceY = p100.y-p0.y;
+
+          let p25=linePlot25_75(p0.x,p0.y,$(this).attr("data-point"),distanceX,distanceY);
+
+          let p75=linePlot25_75(p100.x,p100.y,"top",distanceX,distanceY);
+
+          
+          let p50=line50(p25,p75,distanceX,distanceY,"top");
 
           let lineProperty = {//เพิ่มตำแหน่งของ connector ว่าจากไหนไปไหน และ เพิ่ม Node ต้นทาง
 
-            x1: originalPosition.left + 4,
-            y1: originalPosition.top + 3,
-            x2: currentPosition.left + 5,
-            y2: currentPosition.top,
+            "points":jsonToPoint(p0)+" "+jsonToPoint(p25)+" "+jsonToPoint(p50)+" "+jsonToPoint(p75)+" "+jsonToPoint(p100),
 
             "data-from": "#" + $(this).parent().prop("id"),//ใช้บอกว่ามาจาก Node ไหน โดยใช้ id ของ Node
             "data-anchorfrom": $(this).attr("data-point")//ใช้บอกว่ามาจาก หมุด ตำแหน่งไหนของ Node ต้นทาง
@@ -667,4 +690,36 @@ function open() {
       }else if($(node).hasClass("display")){
         return "display";
       }
+}
+function jsonToPoint(json){
+  return json.x+","+json.y;
+}
+function linePlot25_75(x,y,po,distanceX,distanceY){
+  switch(po){
+    case "top":
+      return {x:parseInt(x),y:y-(distanceY*25/100)};
+
+    case "right":
+      return  {x:parseInt(x)+(distanceX*25/100),y:y} ;
+  
+    case "bottom":
+      return  {x:parseInt(x),y:parseInt(y)+(distanceY*25/100)};
+    
+    case "left":
+      return  {x:parseInt(x)-(distanceX*25/100),y:y} ;
+     
+  }
+}
+function line50(p25,p75,destinationPosition){
+  let x= 0;
+  let y=0;
+  if(destinationPosition =="top" || destinationPosition =="right"){
+     x= p75.x;
+     y= p25.y;
+  }else{
+     x= p25.x;
+     y= p75.y;
+  }
+
+  return {x,y};
 }
