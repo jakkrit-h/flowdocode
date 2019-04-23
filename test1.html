@@ -120,9 +120,11 @@ function test(j){
   return p0+" "+jsonToPoint(p25)+" "+jsonToPoint(p50)+" "+jsonToPoint(p75)+" "+p100;
 
 }
+
 function line50(p25,p75,distanceX,distanceY,destinationPosition){
   let x= 0;
   let y=0;
+  console.log(destinationPosition);
   if(destinationPosition =="top" || destinationPosition =="right"){
      x= p75.x;
      y= p25.y;

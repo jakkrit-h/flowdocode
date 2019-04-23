@@ -160,7 +160,7 @@ function updateAnchorTop(node) {    // เพื่อเปลี่ยนต�
     }
     let position = {
         top:topP ,
-        left: nodeProperty.left + (nodeProperty.width / 2) - 5
+        left: nodeProperty.left + (nodeProperty.width / 2) 
     }
     $(anchor).offset(position);
 }
@@ -183,7 +183,7 @@ function updateAnchorBottom(node) {    // เพื่อเปลี่ยน�
     let nodeProperty = getPropertyNode(node);
     let position = {
         top: nodeProperty.top + (nodeProperty.height) - 5,
-        left: (nodeProperty.left + (nodeProperty.width / 2)) - 5
+        left: (nodeProperty.left + (nodeProperty.width / 2)) 
     }
     $(anchor).offset(position);
 
@@ -207,10 +207,7 @@ function updateConnectorPosition(connector) {    //ไว้ใช้เปล�
     let pointFrom = $(connector).attr("data-anchorfrom");//เก็บ ตำแหน่งที่ชี้ ของ Node ต้นทาง
     let pointTo = $(connector).attr("data-anchorto");//เก็บ ตำแหน่งที่ชี้ ของ Node ปลายทาง
     positionFromNode = getPositionByPoint(fromNode, pointFrom);
-    positionToNode = getPositionByPoint(toNode, pointTo);
-
-
-    
+    positionToNode = getPositionByPoint(toNode, pointTo);    
 
     if($(toNode).hasClass("input") && pointTo=="top"){
         positionToNode.y+=5;
@@ -220,28 +217,123 @@ function updateConnectorPosition(connector) {    //ไว้ใช้เปล�
     }
 
     let p0={x:positionFromNode.x,y:positionFromNode.y};
-    let p100={x:positionToNode.x+3 ,y:positionToNode.y};
+    let p100={x:positionToNode.x ,y:positionToNode.y};
     let distanceX = p100.x-p0.x;
     let distanceY = p100.y-p0.y;
     let p25=linePlot25_75(p0.x,p0.y,pointFrom,distanceX,distanceY);
     let p75=linePlot25_75(p100.x,p100.y,pointTo,distanceX,distanceY);
-    let p50=line50(p25,p75,distanceX,distanceY,pointTo);
-    console.log(pointFrom);
-    console.log(pointTo);
-
-    let linePosition = {
-      "points":jsonToPoint(p0)+" "+jsonToPoint(p25)+" "+jsonToPoint(p50)+" "+jsonToPoint(p75)+" "+jsonToPoint(p100),
+    let jsonData={
+        p0,p25,p75,p100,pointFrom,pointTo,distanceX,distanceY
 
 
     }
+  
+    let linePosition={"points":line50(jsonData)};
+   
+    // let linePosition = {
+    //   "points":jsonToPoint(p0)+" "+jsonToPoint(p25)+" "+jsonToPoint(p50)+" "+jsonToPoint(p75)+" "+jsonToPoint(p100)
+
+
+    // }
 
     g = $(connector).parent("g");
     connector = $(connector).attr(linePosition);
     $(g).html($(connector));
     updateTextLabelPosition(connector);
 
-
 }
+function linePlot25_75(x,y,po,distanceX,distanceY){
+  let distanceXRaito=(distanceX*25/100<30?30:(distanceX*25/100));
+  let distanceYRaito=(distanceY*25/100<30?50:(distanceY*25/100));
+switch(po){
+  case "top":
+    return {x:parseInt(x),y:y-distanceYRaito};
+
+  case "right":
+ 
+      return  {x:parseInt(x)+distanceXRaito,y:y} ;
+
+
+  case "bottom":
+    return  {x:parseInt(x),y:parseInt(y)+distanceYRaito};
+  
+  case "left": 
+      return  {x:parseInt(x)-distanceXRaito,y:y} ;
+    
+}
+}
+function line50(json){
+  let p50={x:0,y:0};
+  switch (json.pointTo) {
+    case "top":
+
+        p50.x = json.p25.x;
+        p50.y = json.p75.y;
+        json.p25.y= json.p75.y;
+      
+      break;
+    case "right":
+      if (json.p25.x > json.p75.x) {
+        p50.x = json.p25.x;
+        p50.y = json.p75.y;
+      } else {
+        p50.x = json.p75.x;
+        p50.y = json.p25.y;
+      }
+      break;
+    case "left":
+      if (json.p25.x < json.p75.x) {
+        p50.x = json.p25.x;
+        p50.y = json.p75.y;
+      } else {
+        p50.x = json.p75.x;
+        p50.y = json.p25.y;
+      }
+    break;
+    case "bottom":
+    if (json.p25.y > json.p75.y) {
+      p50.x = json.p25.x;
+      p50.y = json.p75.y;
+    } else {
+      json.p25.y=json.p75.y;
+      p50.x = json.p75.x;
+      p50.y = json.p25.y;
+    }
+  break;
+    // default:
+    //   p50.x = json.p75.x;
+    //   p50.y = json.p25.y;
+    //   break;
+  }
+ 
+
+  return jsonToPoint(json.p0)+" "+jsonToPoint(json.p25)+" "+jsonToPoint(p50)+" "+jsonToPoint(json.p75)+" "+jsonToPoint(json.p100);
+}
+// function line50(p25,p75,destinationPosition){
+// let x= 0;
+// let y=0;
+// if(destinationPosition =="top" || destinationPosition =="right"){
+//   if(p25.x>p75.x){
+//     x= p25.x;
+//     y= p75.y;
+
+//   }else{
+//     x= p75.x;
+//     y=p25.y;
+
+//   } 
+ 
+
+
+  
+  
+// }else{
+//    x= (p25.x>p75.x ? p75.x:p25.x) ;
+//    y= (p25.x>p75.x ? p25.y:p75.y) ;
+// }
+
+// return {x,y};
+// }
 function getPositionByPoint(node, point) {// ไว้ให้ updateConnectorPosition เรียกเพื่อ return  ตำแหน่ง ให้ connector โดย อ้างอิงจาก ตำแหน่งของ Node และ ตำแหน่งของ Anchor เพื่อจะได้ชี้ไปถูกว่ามาจากทางไหน(บน,ล่าง,ซ้าย,ขวา)
     
     let positionNode = $(node).offset();
@@ -273,9 +365,7 @@ function getPositionByPoint(node, point) {// ไว้ให้ updateConnectorP
 
     }
 }
-function getLinePosition(position){
 
-}
 function updateConnectorPositionOnAction(node){    //เอาไว้ตอนที่ Node draggable หรือ resizeโดยจะอิงเมื่อมี Node นั้นมีความเกี่ยวข้องกับ connector นั้นๆ จาก class ของ connector จะตรงกับ Id ของ Node นั้นๆ
 
     let nodeId = $(node).prop("id");
@@ -457,14 +547,17 @@ function conAnchorDraggableProperty(){// returnความสามารถข
           let p25=linePlot25_75(p0.x,p0.y,$(this).attr("data-point"),distanceX,distanceY);
 
           let p75=linePlot25_75(p100.x,p100.y,"top",distanceX,distanceY);
-
+          let jsonData={
+            p0,p25,p75,p100,pointFrom:$(this).attr("data-point"),pointTo:"top",distanceX,distanceY
+    
+    
+          }
           
-          let p50=line50(p25,p75,distanceX,distanceY,"top");
-
+          let p50= line50(jsonData);
+          console.log(p50);
           let lineProperty = {//เพิ่มตำแหน่งของ connector ว่าจากไหนไปไหน และ เพิ่ม Node ต้นทาง
-
-            "points":jsonToPoint(p0)+" "+jsonToPoint(p25)+" "+jsonToPoint(p50)+" "+jsonToPoint(p75)+" "+jsonToPoint(p100),
-
+            
+            "points":p50,
             "data-from": "#" + $(this).parent().prop("id"),//ใช้บอกว่ามาจาก Node ไหน โดยใช้ id ของ Node
             "data-anchorfrom": $(this).attr("data-point")//ใช้บอกว่ามาจาก หมุด ตำแหน่งไหนของ Node ต้นทาง
 
@@ -572,15 +665,13 @@ function addTextLabelForDecision(connector,word){
 }
 function updateTextLabelPosition(connector){
     let label="#"+$(connector).attr("data-label");
-    let connectorPosition={
-        x1:$(connector).attr("x1"),
-        y1:$(connector).attr("y1"),
-        x2:$(connector).attr("x2"),
-        y2:$(connector).attr("y2")
-    }
+    let points =$(connector).attr("points");
+    let temp = points.split(" ");
+    let tempStart=temp[0].split(",");
+    let tempEnd=temp[4].split(",");
      labelPosition={
-        top:(parseInt(connectorPosition.y1)+parseInt(connectorPosition.y2))/2,
-        left:(parseInt(connectorPosition.x1)+parseInt(connectorPosition.x2))/2
+        top:(parseFloat(tempStart[1])+parseFloat(tempEnd[1]))/2,
+        left:(parseFloat(tempStart[0])+parseFloat(tempEnd[0]))/2
     }
     $(label).offset(labelPosition);
 
@@ -594,7 +685,6 @@ function hightLight(node,color){
     $(node).addClass("font-weight-bold");
 }
 function unHightLight(node){
-    console.log(node);
     $(node).find("svg").css("stroke","#4f7df9"); 
     $(node).find("svg").removeClass("hightlight"); 
 
@@ -678,7 +768,7 @@ function open() {
     
   }
 
-  function getNodeType(node){
+function getNodeType(node){
     if($(node).hasClass("start-end")){         
         return "start-end";
       }else if($(node).hasClass("process")){
@@ -691,35 +781,18 @@ function open() {
         return "display";
       }
 }
+function getAnchorType(anchor){
+  if($(anchor).hasClass("anchor_top")){         
+    return "top";
+  }else if($(anchor).hasClass("anchor_right")){
+    return "right";
+  }else if($(anchor).hasClass("anchor_left")){
+    return "left";
+  }else if($(anchor).hasClass("anchor_bottom")){
+    return "bottom";
+  }
+}
 function jsonToPoint(json){
   return json.x+","+json.y;
 }
-function linePlot25_75(x,y,po,distanceX,distanceY){
-  switch(po){
-    case "top":
-      return {x:parseInt(x),y:y-(distanceY*25/100)};
 
-    case "right":
-      return  {x:parseInt(x)+(distanceX*25/100),y:y} ;
-  
-    case "bottom":
-      return  {x:parseInt(x),y:parseInt(y)+(distanceY*25/100)};
-    
-    case "left":
-      return  {x:parseInt(x)-(distanceX*25/100),y:y} ;
-     
-  }
-}
-function line50(p25,p75,destinationPosition){
-  let x= 0;
-  let y=0;
-  if(destinationPosition =="top" || destinationPosition =="right"){
-     x= p75.x;
-     y= p25.y;
-  }else{
-     x= p25.x;
-     y= p75.y;
-  }
-
-  return {x,y};
-}
