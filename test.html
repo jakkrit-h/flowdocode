@@ -25,19 +25,17 @@
 
 </head>
 <script>
-
-$(function(){
-  let p0={x:50,y:80};
-  let p25={x:25,y:25};
-  let json = {
-    p0,p25
-  }
-  json.p0.x=777;
-  console.log(json);
+  
+$(document).on("click","button",function () {  
+  this=$("#but2");
+  console.log(this);
 });
 
 //0,0  150,150
 </script>
 <body>
+  <button id="but1">but1</button>
+  <button id="but2">but2</button>
+
 </body>
 </html>

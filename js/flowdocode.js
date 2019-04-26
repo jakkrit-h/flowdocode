@@ -239,6 +239,8 @@ function updateConnectorPosition(connector) {    //ไว้ใช้เปล�
     g = $(connector).parent("g");
     connector = $(connector).attr(linePosition);
     $(g).html($(connector));
+    console.log(linePosition);
+
     updateTextLabelPosition(connector);
 
 }
@@ -263,14 +265,14 @@ switch(po){
 }
 }
 function line50(json){
-  let p50={x:0,y:0};
+  let p50 = { x: 0, y: 0 };
   switch (json.pointTo) {
     case "top":
 
-        p50.x = json.p25.x;
-        p50.y = json.p75.y;
-        json.p25.y= json.p75.y;
-      
+      p50.x = json.p25.x;
+      p50.y = json.p75.y;
+      json.p25.y = json.p75.y;
+
       break;
     case "right":
       if (json.p25.x > json.p75.x) {
@@ -286,20 +288,28 @@ function line50(json){
         p50.x = json.p25.x;
         p50.y = json.p75.y;
       } else {
+        
         p50.x = json.p75.x;
         p50.y = json.p25.y;
       }
-    break;
+      break;
     case "bottom":
-    if (json.p25.y > json.p75.y) {
-      p50.x = json.p25.x;
-      p50.y = json.p75.y;
-    } else {
-      json.p25.y=json.p75.y;
-      p50.x = json.p75.x;
-      p50.y = json.p25.y;
-    }
-  break;
+      if (json.p25.y > json.p75.y) {
+        json.p75.y = json.p25.y;
+        p50.x = json.p25.x;
+        p50.y = json.p25.y;
+      } else {
+        if (json.pointFrom == "top" || json.pointFrom == "bottom") {
+          json.p25.y = json.p75.y;
+          p50.x = json.p75.x;
+          p50.y = json.p25.y;
+        } else {
+          p50.x = json.p25.x;
+          p50.y = json.p75.y;
+        }
+
+      }
+      break;
     // default:
     //   p50.x = json.p75.x;
     //   p50.y = json.p25.y;
@@ -528,12 +538,12 @@ function nodeResizableProperty(type){// returnความสามารถข�
 }
 function conAnchorDraggableProperty(){// returnความสามารถของ Anchor ในการ Draggable
     return{
-        snap: ".con_anchor", opacity: 0.01, drag: function () {//ตอนกำลังโดน Drag
+        snap: ".con_anchor",grid: [ 10, 10 ], opacity: 0.01, drag: function () {//ตอนกำลังโดน Drag
          
           $(this).addClass("hide");// ให้ Anchorที่กำลังโดน Drag ถูกซ่อนเพื่อไม่ให้บังหัวลูกศร
           $(".con_anchor").css("opacity", "1");// ให้ Anchor ทั้งหมด แสดงขึ้นมาเพื่อ ให้Dragไปหาได้
           let currentPosition = $(this).offset();// get ตำแหน่งปัจจุบันตอน Anchor โดน Drag
-
+          console.log(currentPosition);
           lineDraw = document.createElementNS("http://www.w3.org/2000/svg", "polyline");// สร้าง connector
           $(lineDraw).attr("id", "line_" + $(this).parent().prop("id"));//เพิ่ม id ให้ connector
 
@@ -543,18 +553,18 @@ function conAnchorDraggableProperty(){// returnความสามารถข
           let distanceX = p100.x-p0.x;
 
           let distanceY = p100.y-p0.y;
-
+          let pointTo=          getTypePosition(originalPosition);
+          console.log(pointTo);
           let p25=linePlot25_75(p0.x,p0.y,$(this).attr("data-point"),distanceX,distanceY);
-
-          let p75=linePlot25_75(p100.x,p100.y,"top",distanceX,distanceY);
+          
+          let p75=linePlot25_75(p100.x,p100.y,pointTo,distanceX,distanceY);
           let jsonData={
-            p0,p25,p75,p100,pointFrom:$(this).attr("data-point"),pointTo:"top",distanceX,distanceY
+            p0,p25,p75,p100,pointFrom:$(this).attr("data-point"),pointTo,distanceX,distanceY
     
     
           }
           
           let p50= line50(jsonData);
-          console.log(p50);
           let lineProperty = {//เพิ่มตำแหน่งของ connector ว่าจากไหนไปไหน และ เพิ่ม Node ต้นทาง
             
             "points":p50,
@@ -630,6 +640,19 @@ function conAnchorDraggableProperty(){// returnความสามารถข
       
         }
     }
+}
+function getTypePosition(position){
+
+  if(event.clientX>(position.left+25)&&(event.clientY>=position.top+25||event.clientY<=position.top-25)){
+    return "left";
+  }else if(event.clientX<(position.left-25)){
+    return "right";
+  }else if(event.clientY>(position.top+30)){
+    return "top";
+  }else if(event.clientY<(position.top-30)){
+    return "bottom";
+  }
+
 }
 function conAnchorDroppableProperty(){// returnความสามารถของ Anchor ในการ Droppable
     return{

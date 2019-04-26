@@ -80,16 +80,7 @@ $(document).on("click",".shape",function(){
 
 
   </nav>
-  <svg id="canvas" >
-    <defs>
-      <marker id="arrowhead" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-        <path d="M 0 0 L 10 5 L 0 10 z" fill="#fff" />
-      </marker>
-    </defs>
-   
 
-
-  </svg>
    <!-- <g marker-end="url(#arrowhead)" stroke-width="2">
       <line id="line_start" class="start process0" x1="961" y1="150" x2="961" y2="220" data-from="#start"
         data-anchorfrom="bottom" data-to="#process0" data-anchorto="top"></line>
@@ -114,7 +105,7 @@ $(document).on("click",".shape",function(){
       <line id="line_process1" class="process1 decision0" x1="697" y1="245" x2="961" y2="350" data-from="#process1"
         data-anchorfrom="right" data-to="#decision0" data-anchorto="top"></line>
     </g> -->
-  <div class="col-2 con-fixed h-100 pb-5 "id="con-toolbox">
+  <div class="col-2 con-fixed h-100 pb-5  "id="con-toolbox">
     <div class="my-5  toolbox start-end " id="start-end" draggable="true" ondragstart="drag(event)"  data-toggle="tooltip" data-placement="bottom" title="End">
       <svg >
         <path d="M 25 1 C -5,1 -5,49 25,49 L 120 49 C 155,49 155,0 120,1 Z" />
@@ -158,9 +149,21 @@ $(document).on("click",".shape",function(){
 
 
   </div>
-
+  
   <div class="offset-2 col-8 h-75  p-0  con-fixed con-design  "  ondragover="allowDrop(event)" ondrop="dropItem(event)">
+     
+    
     <div id="design" >
+        <svg id="canvas" >
+            <defs>
+              <marker id="arrowhead" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#fff" />
+              </marker>
+            </defs>
+           
+        
+        
+        </svg>
         <div class=" shape start-end "id="start">
             <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
             <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
@@ -174,10 +177,12 @@ $(document).on("click",".shape",function(){
               Start
             </div>
         </div>
-     
+ 
       
       
     </div> 
+    
+  
  <!-- <div class=" shape start-end " id="start" data-connector="#line_start">
         <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
         <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
@@ -334,9 +339,13 @@ $(document).on("click",".shape",function(){
 
   $(function () {
     //ปรับ resolution ตามขนาดจอที่เปิด อันนี้เอาค่าจากเครื่องต้นทาง
-    console.log(window.screen.availHeight,
-window.screen.availWidth);
+//     console.log(window.screen.availHeight,
+// window.screen.availWidth);
     // $( "#content" ).selectable();
+   
+
+    $("#canvas").offset({top:0,left:0});
+
     $(".ondebug").hide();
     $('[data-toggle="tooltip"]').tooltip();
 
@@ -450,9 +459,14 @@ $(document).on("mouseenter","tr",function(){
 
 
   });
+  
 
-
-  $("#design").on("mouseup", function (event) {
+ 
+  $(document).on("click","g",function(){
+    alert("asd");
+  });
+ 
+  $("#canvas").on("mouseup", function (event) {
     if (event.target === this) {
 
       shapeUnSelectedStyle();
