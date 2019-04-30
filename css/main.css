@@ -19,10 +19,10 @@ div.con-fixed {
 }
 
 #design {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 10000px;
+  /*   //  position: absolute;
+    // left: 0;
+    // top:0; */
+  overflow: hidden;
   height: 10000px;
 }
 
@@ -41,7 +41,6 @@ div.con-fixed {
   z-index: 1;
   position: absolute;
   border: 0px solid;
-  pointer-events: auto;
 }
 
 svg {
@@ -74,8 +73,7 @@ path {
 
 #canvas {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 150%;
 }
 
 g {
@@ -139,6 +137,12 @@ nav {
   overflow-y: hidden !important;
   border-right: 1px solid rgba(0, 0, 0, 0.08);
   z-index: 9;
+}
+
+#con-right {
+  position: fixed;
+  top: 0px;
+  right: 0px;
 }
 
 #con-console {

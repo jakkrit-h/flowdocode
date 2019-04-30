@@ -239,8 +239,8 @@ function updateConnectorPosition(connector) {    //ไว้ใช้เปล�
     g = $(connector).parent("g");
     connector = $(connector).attr(linePosition);
     $(g).html($(connector));
-    console.log(linePosition);
-
+/*     console.log(linePosition);
+ */
     updateTextLabelPosition(connector);
 
 }
@@ -395,14 +395,19 @@ function updateConnectorPositionOnAction(node){    //เอาไว้ตอน
 function shapeSelectedStyle(){    // ไว้กำหนด ว่า Node นั้นกำลังถูกเลือก ให้เกิด effect และเปลี่ยน function บางอย่าง
 
     try {
-      selectedEl.find("svg").css({
-        "stroke-dasharray":"5,5"
-      });
-
-        $(selectedEl).resizable({disabled:false});// resize ตอนโดนเลือก
-
-       
-      $(selectedEl).find(".con_anchor").addClass("hide");//ซ่อน Anchor ตอนโดนเลือก
+      if(selectedEl.hasClass("shape")){
+        selectedEl.find("svg").css({
+          "stroke-dasharray":"5,5"
+        });
+  
+          $(selectedEl).resizable({disabled:false});// resize ตอนโดนเลือก
+  
+         
+        $(selectedEl).find(".con_anchor").addClass("hide");//ซ่อน Anchor ตอนโดนเลือก
+      }else{
+        selectedEl.css({"stroke-dasharray":"5,5"});
+      }
+      
     } catch (error) {
   
   
@@ -416,6 +421,7 @@ function shapeUnSelectedStyle(){    // ไว้ยกเลิก Node ที�
 
 
     try {
+      if(selectedEl.hasClass("shape")){
 
       selectedEl.find("svg").css({
         "stroke-dasharray":"0,0"
@@ -426,7 +432,10 @@ function shapeUnSelectedStyle(){    // ไว้ยกเลิก Node ที�
 
      
       $(selectedEl).find(".con_anchor").removeClass("hide");
-  
+      }else{   
+         selectedEl.css({"stroke-dasharray":"0,0"});
+      }
+
     } catch (error) {
   
   
@@ -451,17 +460,41 @@ function disContentEdit(){  //ไว้ปิดไม่ให้ textbox แ�
   }
 function checkConnectorOnNodeDelete(node){ /*ไว้เมื่อมี Node โดนลบ จะค้นหาว่าเส้นนั้นมีความเกี่ยวข้องมั้ยโดยเอา idของ Node มาเทียบกับ class 
     ใน connector ถ้ามีเส้นนั้นจะโดนลบออกไป และ ให้ Node ต้นทางของเส้นไม่มีเส้นเป็นของตัวเอง*/
-   
    $("polyline").each(function(){
         if($(this).hasClass($(node).prop("id"))){
-            let parent= $(this).attr("data-from");  
-            $(parent).removeAttr("data-connector");//ให้ Node ต้นทางของเส้นไม่มีเส้นเป็นของตัวเอง  
+            let nodeFrom= $(this).attr("data-from");  
+            let connectorId="#"+$(this).attr("id");
+            if($(nodeFrom).attr("data-yes")==connectorId){
+
+              $(nodeFrom).removeAttr("data-yes");
+            }else if($(nodeFrom).attr("data-no")==connectorId){
+              $(nodeFrom).removeAttr("data-no");
+            }
+            $(nodeFrom).removeAttr("data-connector");//ให้ Node ต้นทางของเส้นไม่มีเส้นเป็นของตัวเอง  
             let label="#"+$(this).attr("data-label");
             $(label).remove();
             $(this).parent("g").remove();
             
         }
    });
+}
+function onConnectorDelete(connector){
+
+
+  let fromNode=$(connector).attr("data-from");
+  let connectorId="#"+$(connector).attr("id");
+  if($(fromNode).hasClass("decision")){
+    let label="#"+$(connector).attr("data-label");
+    $(label).remove();
+    if($(fromNode).attr("data-yes")==connectorId){
+
+      $(fromNode).removeAttr("data-yes");
+    }else if($(fromNode).attr("data-no")==connectorId){
+      $(fromNode).removeAttr("data-no");
+    }
+  }
+
+  $(fromNode).removeAttr("data-connector");
 }
 
 
@@ -496,10 +529,12 @@ function onDropItemSuccess(type) {    //เมื่อมีการลาก�
       $(node).offset(mousePoint);//set ตำแหน่งให้ Node โดยใช้ตำแหน่งของ mouse
       if(type =="start-end")
         $(node).prop("id","end");// set property ให้ Node
-      else
+      else{
         $(node).prop(attrObj);// set property ให้ Node
+        $(node).find(".con_anchor").draggable(conAnchorDraggableProperty());//ใส่ความสามารถ Draggableให้กับ Anchor ใน Node
 
-      $(node).find(".con_anchor").draggable(conAnchorDraggableProperty());//ใส่ความสามารถ Draggableให้กับ Anchor ใน Node
+      }
+
       $(node).find(".con_anchor").droppable(conAnchorDroppableProperty());//ใส่ความสามารถ Resizableให้กับ Anchor ใน Node
       updateTextboxPosition(node);
       updateAnchorPosition(node);
@@ -510,6 +545,9 @@ function nodeDraggableProperty(){// returnความสามารถขอ�
         containment:"#design",
         opacity: 0.5,
         grid: [ 10, 10 ], 
+        snap: true,
+        snapTolerance: 10,
+        snapMode: "inner",
         scroll: true,
         stack: ".shape",
         scrollSensitivity: 50,
@@ -540,10 +578,19 @@ function conAnchorDraggableProperty(){// returnความสามารถข
     return{
         snap: ".con_anchor",grid: [ 10, 10 ], opacity: 0.01, drag: function () {//ตอนกำลังโดน Drag
          
-          $(this).addClass("hide");// ให้ Anchorที่กำลังโดน Drag ถูกซ่อนเพื่อไม่ให้บังหัวลูกศร
-          $(".con_anchor").css("opacity", "1");// ให้ Anchor ทั้งหมด แสดงขึ้นมาเพื่อ ให้Dragไปหาได้
+          let parent="#"+$(this).parent().prop("id");// ให้ Anchorที่กำลังโดน Drag ถูกซ่อนเพื่อไม่ให้บังหัวลูกศร
+          $(parent).find(".con_anchor").addClass("hide");
+            if($(this).parents().prop("id")!="start"){
+              $("#start").find(".con_anchor").addClass("hide");
+              
+            }
+              $(".con_anchor").css("opacity", "1");// ให้ Anchor ทั้งหมด แสดงขึ้นมาเพื่อ ให้Dragไปหาได้
+
+            
+            $(".hide").droppable({disabled: true});
+
+          
           let currentPosition = $(this).offset();// get ตำแหน่งปัจจุบันตอน Anchor โดน Drag
-          console.log(currentPosition);
           lineDraw = document.createElementNS("http://www.w3.org/2000/svg", "polyline");// สร้าง connector
           $(lineDraw).attr("id", "line_" + $(this).parent().prop("id"));//เพิ่ม id ให้ connector
 
@@ -554,7 +601,6 @@ function conAnchorDraggableProperty(){// returnความสามารถข
 
           let distanceY = p100.y-p0.y;
           let pointTo=          getTypePosition(originalPosition);
-          console.log(pointTo);
           let p25=linePlot25_75(p0.x,p0.y,$(this).attr("data-point"),distanceX,distanceY);
           
           let p75=linePlot25_75(p100.x,p100.y,pointTo,distanceX,distanceY);
@@ -634,8 +680,11 @@ function conAnchorDraggableProperty(){// returnความสามารถข
             $(g).remove();
             $(".con_anchor").css("opacity", "0");
           }
-          $(this).removeClass("hide");// ลบ class hide ออกให้เป็น Anchor ปกติ
-
+          $(".hide").droppable({
+            disabled: false
+          })
+          $(".hide").removeClass("hide");// ลบ class hide ออกให้เป็น Anchor ปกติ
+        
           $(this).offset(originalPosition);//ให้ Anchor กลับไปอยู่ที่เดิมของตัวเองก่อนถูก Drag
       
         }
@@ -715,29 +764,11 @@ function unHightLight(node){
     $(node).removeClass("font-weight-bold");
 }
 
-$(document).on("click","#save",function(){
-    if($("#assignment").val()==""|| $("#assignment").val()=="Assignment"){
 
-
-        $("#assignment").addClass("is-invalid");
-    }else{
-      $("#assignment").removeClass("is-invalid");
-        save($("#assignment").val());
-
-    }
-    // $(this).parent().dropdown('toggle');
-
-});
-$(document).on("change","#open",function(){
-    open();
-
-
-});
 function save(fileName){
-    let canvas = $("#canvas").html();
 
     let design = $("#design").html();
-    let text ={"canvas":canvas,"design":design,"resolution":""};
+    let text ={"design":design,"resolution":""};
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(text)));
     //JSON.stringify(text)
@@ -766,7 +797,6 @@ function open() {
 
         reader.onload = function (event) {
           let text=JSON.parse(event.target.result);
-          $("#canvas").html(text.canvas);
           $("#design").html(text.design);
           $(".shape").each(function(){
           
