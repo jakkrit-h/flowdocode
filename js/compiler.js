@@ -141,22 +141,23 @@ function classify(node){
     }
     if($(node).hasClass("input")){
         if(!inputSuccess){
+            let container=document.createElement("div");
+            $(container).addClass("col-12 row p-0 m-0");
+            $(container).html("<div class='mr-1 font-weight-bold'>Input "+$(node).find(".text").text()+" : </div>");
             let input=document.createElement("div");
 
             $(input).attr("contenteditable","true");
-            $(input).addClass("consoleInput");
-
-            $("#console").append(input);
+            $(input).addClass("consoleInput col");
+            $(container).append(input);
+            $("#console").append(container);
             $(input).focus();
             $(input).empty();
-            console.log(input);
             return true;
         }else{
 
-            let source=$(node).find(".text").text()+"="+$(".consoleInput").text();
+            let source=$(node).find(".text").text()+"="+$(".consoleInput").text()+"";
             result=compiler(source);
             $(".consoleInput").find("br").remove();
-            $(".consoleInput").prepend("Input : ");
 
             $(".consoleInput").removeClass("consoleInput");
             inputSuccess=false;

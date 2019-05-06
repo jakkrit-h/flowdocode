@@ -54,7 +54,7 @@
           </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link ">Edit</a>
+          <a class="nav-link " href="test.html" target="_blank">Edit</a>
         </li>
         <li class="nav-item">
           <a class="nav-link ">Help</a>
@@ -364,7 +364,7 @@
 
   });
 
-  $("#canvas").on("mouseup", function (event) {
+  $(document).on("mouseup","#canvas", function (event) {
     if (event.target === this) {
 
       shapeUnSelectedStyle();

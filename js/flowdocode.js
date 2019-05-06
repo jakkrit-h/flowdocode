@@ -202,13 +202,12 @@ function updateAnchorLeft(node) {    // เพื่อเปลี่ยนต�
 }
 function updateConnectorPosition(connector) {    //ไว้ใช้เปลี่ยนตำแหน่งของ เส้น connector ตอน node มีการ drag และ resize โดยใช้ค่า from to เพื่อบอก ว่า จาก Node ไหนไป Node ไหน
 
-    let fromNode = $($(connector).attr("data-from"));//เก็บ Id ของ Node ต้นทาง
-    let toNode = $($(connector).attr("data-to"));//เก็บ Id ของ Node ปลายทาง
+    let fromNode = $(connector).attr("data-from");//เก็บ Id ของ Node ต้นทาง
+    let toNode = $(connector).attr("data-to");//เก็บ Id ของ Node ปลายทาง
     let pointFrom = $(connector).attr("data-anchorfrom");//เก็บ ตำแหน่งที่ชี้ ของ Node ต้นทาง
     let pointTo = $(connector).attr("data-anchorto");//เก็บ ตำแหน่งที่ชี้ ของ Node ปลายทาง
     positionFromNode = getPositionByPoint(fromNode, pointFrom);
     positionToNode = getPositionByPoint(toNode, pointTo);    
-
     if($(toNode).hasClass("input") && pointTo=="top"){
         positionToNode.y+=5;
     }else if($(fromNode).hasClass("input") && pointFrom=="top"){
@@ -218,14 +217,12 @@ function updateConnectorPosition(connector) {    //ไว้ใช้เปล�
 
     let p0={x:positionFromNode.x,y:positionFromNode.y};
     let p100={x:positionToNode.x ,y:positionToNode.y};
-    let distanceX = p100.x-p0.x;
-    let distanceY = p100.y-p0.y;
+    let distanceX = Math.abs(p100.x-p0.x);
+    let distanceY = Math.abs(p100.y-p0.y);
     let p25=linePlot25_75(p0.x,p0.y,pointFrom,distanceX,distanceY);
     let p75=linePlot25_75(p100.x,p100.y,pointTo,distanceX,distanceY);
     let jsonData={
-        p0,p25,p75,p100,pointFrom,pointTo,distanceX,distanceY
-
-
+        p0,p25,p75,p100,fromNode,toNode,pointFrom,pointTo,distanceX,distanceY,connector
     }
   
     let linePosition={"points":line50(jsonData)};
@@ -264,61 +261,158 @@ switch(po){
     
 }
 }
-function line50(json){
-  let p50 = { x: 0, y: 0 };
+function line50(json,noswapAnchor){
+  let p1 = { x: 0, y: 0 };
+  let p2;
+  if(noswapAnchor!=true){
+  json.pointTo=swapAnchor(json);
+  }
   switch (json.pointTo) {
     case "top":
+      if(json.p0.y>=json.p75.y){
 
-      p50.x = json.p25.x;
-      p50.y = json.p75.y;
-      json.p25.y = json.p75.y;
-
+        p1.x = json.p25.x;
+        p1.y = json.p75.y;
+      }else{
+        if(json.p75.y<json.p25.y){
+          json.p25.y=json.p75.y;
+        }
+        p1.x = json.p75.x;
+        p1.y = json.p25.y;
+      }
+     
       break;
     case "right":
       if (json.p25.x > json.p75.x) {
-        p50.x = json.p25.x;
-        p50.y = json.p75.y;
+        p1.x = json.p25.x;
+        p1.y = json.p75.y;
       } else {
-        p50.x = json.p75.x;
-        p50.y = json.p25.y;
+       
+        p1.x = json.p75.x;
+        p1.y = json.p25.y;
       }
       break;
     case "left":
       if (json.p25.x < json.p75.x) {
-        p50.x = json.p25.x;
-        p50.y = json.p75.y;
+        p1.x = json.p25.x;
+        p1.y = json.p75.y;
       } else {
         
-        p50.x = json.p75.x;
-        p50.y = json.p25.y;
+        p1.x = json.p75.x;
+        p1.y = json.p25.y;
       }
       break;
     case "bottom":
       if (json.p25.y > json.p75.y) {
         json.p75.y = json.p25.y;
-        p50.x = json.p25.x;
-        p50.y = json.p25.y;
+        p1.x = json.p25.x;
+        p1.y = json.p25.y;
       } else {
         if (json.pointFrom == "top" || json.pointFrom == "bottom") {
           json.p25.y = json.p75.y;
-          p50.x = json.p75.x;
-          p50.y = json.p25.y;
+          p1.x = json.p75.x;
+          p1.y = json.p25.y;
         } else {
-          p50.x = json.p25.x;
-          p50.y = json.p75.y;
+          p1.x = json.p25.x;
+          p1.y = json.p75.y;
         }
 
       }
       break;
-    // default:
-    //   p50.x = json.p75.x;
-    //   p50.y = json.p25.y;
-    //   break;
+
   }
+
+ p2=p1;
+
+  return jsonToPoint(json.p0)+" "+jsonToPoint(json.p25)+" "+jsonToPoint(p1)+" "+jsonToPoint(p2)+" "+jsonToPoint(json.p75)+" "+jsonToPoint(json.p100);
+}
+function swapAnchor(json){
+  let fromNode=$(json.fromNode).offset();
+
+  fromNode.left+=$(json.fromNode).outerWidth();
+  fromNode.top+=$(json.fromNode).outerHeight();
+  fromNode['width']=$(json.fromNode).outerWidth();
+  fromNode['height']=$(json.fromNode).outerHeight();
+
+  let toNode=$(json.toNode).offset();
+  toNode.left+=$(json.toNode).outerWidth();
+  toNode.top+=$(json.toNode).outerHeight();
+  toNode['width']=$(json.toNode).outerWidth();
+  toNode['height']=$(json.toNode).outerHeight();
+  let forReturn="";
  
 
-  return jsonToPoint(json.p0)+" "+jsonToPoint(json.p25)+" "+jsonToPoint(p50)+" "+jsonToPoint(json.p75)+" "+jsonToPoint(json.p100);
+
+  if(toNode.top>fromNode.top+fromNode.height){
+    forReturn="top";
+  }else if(toNode.top<fromNode.top-fromNode.height){
+    forReturn="bottom";
+  }
+  else if(fromNode.left<toNode.left ){
+    forReturn="left";
+  }else if(fromNode.left>toNode.left){
+    forReturn="right";
+  }
+  swapAnchorNodeFrom(json.connector,fromNode,toNode,forReturn)
+  $(json.connector).attr("data-anchorto",forReturn);
+  return forReturn;
 }
+function swapAnchorNodeFrom(connector,fromNode,toNode,toAnchorResult){
+  switch (toAnchorResult) {
+    case "top":
+      swapAnchorNodeFromOnRsTop(connector,fromNode,toNode);
+      break;
+    case "right":
+      swapAnchorNodeFromOnRsRight(connector,fromNode,toNode);
+    case "bottom":
+      swapAnchorNodeFromOnRsBottom(connector,fromNode,toNode);
+      break;
+    case "left":
+      swapAnchorNodeFromOnRsLeft(connector,fromNode,toNode);
+      break;
+  }
+ 
+  
+
+}
+function swapAnchorNodeFromOnRsTop(connector,fromNode,toNode){
+
+  if(toNode.left<fromNode.left-fromNode.width/2-40){
+    $(connector).attr("data-anchorfrom","left");
+  }else if(toNode.left>fromNode.left+fromNode.width/2+40){
+    $(connector).attr("data-anchorfrom","right");
+
+  }else {
+      $(connector).attr("data-anchorfrom","bottom");
+
+   
+
+  }
+
+}
+function swapAnchorNodeFromOnRsRight(connector,fromNode,toNode){
+  if(fromNode.left>toNode.left){
+    $(connector).attr("data-anchorfrom","left");
+
+  }
+}
+function swapAnchorNodeFromOnRsBottom(connector,fromNode,toNode) {
+  if(toNode.left<fromNode.left-fromNode.width/2-40){
+    $(connector).attr("data-anchorfrom","left");
+  }else if(toNode.left>fromNode.left+fromNode.width/2+40){
+    $(connector).attr("data-anchorfrom","right");
+
+  }else{
+    $(connector).attr("data-anchorfrom","top");
+
+  }
+}
+function swapAnchorNodeFromOnRsLeft(connector,fromNode,toNode){
+  if(fromNode.left+200<toNode.left){
+    $(connector).attr("data-anchorfrom","right");
+  }
+} 
+
 // function line50(p25,p75,destinationPosition){
 // let x= 0;
 // let y=0;
@@ -577,7 +671,7 @@ function nodeResizableProperty(type){// returnความสามารถข�
 function conAnchorDraggableProperty(){// returnความสามารถของ Anchor ในการ Draggable
     return{
         snap: ".con_anchor",grid: [ 10, 10 ], opacity: 0.01, drag: function () {//ตอนกำลังโดน Drag
-         
+          shapeUnSelectedStyle();
           let parent="#"+$(this).parent().prop("id");// ให้ Anchorที่กำลังโดน Drag ถูกซ่อนเพื่อไม่ให้บังหัวลูกศร
           $(parent).find(".con_anchor").addClass("hide");
             if($(this).parents().prop("id")!="start"){
@@ -600,7 +694,8 @@ function conAnchorDraggableProperty(){// returnความสามารถข
           let distanceX = p100.x-p0.x;
 
           let distanceY = p100.y-p0.y;
-          let pointTo=          getTypePosition(originalPosition);
+          let pointTo=getTypePosition(originalPosition,$(this).attr("data-point"));
+          
           let p25=linePlot25_75(p0.x,p0.y,$(this).attr("data-point"),distanceX,distanceY);
           
           let p75=linePlot25_75(p100.x,p100.y,pointTo,distanceX,distanceY);
@@ -609,8 +704,7 @@ function conAnchorDraggableProperty(){// returnความสามารถข
     
     
           }
-          
-          let p50= line50(jsonData);
+          let p50= line50(jsonData,true);
           let lineProperty = {//เพิ่มตำแหน่งของ connector ว่าจากไหนไปไหน และ เพิ่ม Node ต้นทาง
             
             "points":p50,
@@ -690,9 +784,48 @@ function conAnchorDraggableProperty(){// returnความสามารถข
         }
     }
 }
-function getTypePosition(position){
+function getTypePosition(position,pointFrom){
+  switch(pointFrom) {
+    case "top":
+      if(event.clientX<position.left-150){
+        return "right";
+      }else if(event.clientX>position.left+150){
+        return "left";
+      }else{
+        return "bottom";
+      }
+    break;
+    case "right":
+      if(event.clientY<position.top-30){
+        return "bottom";
 
-  if(event.clientX>(position.left+25)&&(event.clientY>=position.top+25||event.clientY<=position.top-25)){
+      }else if(event.clientY>position.top+30){
+        return "top";
+      }else{
+        return "left";
+      }
+    break;
+    case "bottom":
+      if (event.clientX < position.left - 150) {
+        return "right";
+      } else if (event.clientX > position.left + 150) {
+        return "left";
+      } else {
+        return "top";
+      }
+    break;
+    case "left":
+      if (event.clientY < position.top - 30) {
+        return "bottom";
+
+      } else if (event.clientY > position.top + 30) {
+        return "top";
+      } else {
+        return "right";
+      }
+  }
+  /* if(event.clientX>(position.left+25)&&(event.clientY>(position.top+50)||(event.clientY)){
+    
     return "left";
   }else if(event.clientX<(position.left-25)){
     return "right";
@@ -700,7 +833,9 @@ function getTypePosition(position){
     return "top";
   }else if(event.clientY<(position.top-30)){
     return "bottom";
-  }
+  }else{
+    return "top";
+  } */
 
 }
 function conAnchorDroppableProperty(){// returnความสามารถของ Anchor ในการ Droppable
