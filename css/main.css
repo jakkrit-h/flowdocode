@@ -1,3 +1,11 @@
+html, body {
+  height: 100%;
+}
+
+body {
+  overflow: hidden;
+}
+
 nav {
   background: #fff;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
@@ -73,7 +81,8 @@ path {
 
 #canvas {
   position: absolute;
-  width: 150%;
+  left: 0;
+  top: 0;
 }
 
 g {
@@ -140,9 +149,9 @@ nav {
 }
 
 #con-right {
-  position: fixed;
   top: 0px;
   right: 0px;
+  position: fixed;
 }
 
 #con-console {
@@ -220,6 +229,23 @@ table {
 
 .is-invalid {
   border-width: 2px;
+}
+
+#pagination label {
+  background: #fff;
+  width: auto;
+  border-radius: 0px;
+  text-overflow: ellipsis;
+  margin: 0px !important;
+}
+#pagination label:hover {
+  background: #4f7df9;
+  color: #fff;
+}
+#pagination label.active {
+  background: #4f7df9;
+  color: #fff;
+  font-weight: bold;
 }
 
 /*# sourceMappingURL=main.css.map */

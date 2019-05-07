@@ -132,7 +132,6 @@ function updateTextboxPosition(parent){//ทำให้ textbox อยู่ใ
 
 }
 function updateAnchorPosition(node) {    // เพื่อเรียก function เปลี่ยนที่อยู่ของ Anchor ตอน Resize กับ Drag ให้ไปตาม Parent Node ของตัวเอง
-
     updateAnchorTop(node);
     updateAnchorRight(node);
     updateAnchorBottom(node);
@@ -141,6 +140,7 @@ function updateAnchorPosition(node) {    // เพื่อเรียก funct
 function getPropertyNode(node) {    //ไว้ใช้ get width,height,top,left,ของ node เพื่อนำไปใช้งาน
 
     let nodePosition = $(node).offset();
+
     return {
         width: $(node).outerWidth(),
         height: $(node).outerHeight(),
@@ -180,6 +180,7 @@ function updateAnchorBottom(node) {    // เพื่อเปลี่ยน�
 
 
     let anchor = $(node).find(".anchor_bottom");
+    let scroll=$("#con-design").scrollTop();
     let nodeProperty = getPropertyNode(node);
     let position = {
         top: nodeProperty.top + (nodeProperty.height) - 5,
@@ -200,7 +201,7 @@ function updateAnchorLeft(node) {    // เพื่อเปลี่ยนต�
     $(anchor).offset(position);
 
 }
-function updateConnectorPosition(connector) {    //ไว้ใช้เปลี่ยนตำแหน่งของ เส้น connector ตอน node มีการ drag และ resize โดยใช้ค่า from to เพื่อบอก ว่า จาก Node ไหนไป Node ไหน
+function updateConnectorPosition(connector,noswapAnchor) {    //ไว้ใช้เปลี่ยนตำแหน่งของ เส้น connector ตอน node มีการ drag และ resize โดยใช้ค่า from to เพื่อบอก ว่า จาก Node ไหนไป Node ไหน
 
     let fromNode = $(connector).attr("data-from");//เก็บ Id ของ Node ต้นทาง
     let toNode = $(connector).attr("data-to");//เก็บ Id ของ Node ปลายทาง
@@ -214,9 +215,9 @@ function updateConnectorPosition(connector) {    //ไว้ใช้เปล�
 
         positionFromNode.y+=7;
     }
-
-    let p0={x:positionFromNode.x,y:positionFromNode.y};
-    let p100={x:positionToNode.x ,y:positionToNode.y};
+    let scroll=$("#con-design").scrollTop();
+    let p0={x:positionFromNode.x,y:positionFromNode.y+scroll};
+    let p100={x:positionToNode.x ,y:positionToNode.y+scroll};
     let distanceX = Math.abs(p100.x-p0.x);
     let distanceY = Math.abs(p100.y-p0.y);
     let p25=linePlot25_75(p0.x,p0.y,pointFrom,distanceX,distanceY);
@@ -225,7 +226,7 @@ function updateConnectorPosition(connector) {    //ไว้ใช้เปล�
         p0,p25,p75,p100,fromNode,toNode,pointFrom,pointTo,distanceX,distanceY,connector
     }
   
-    let linePosition={"points":line50(jsonData)};
+    let linePosition={"points":line50(jsonData,noswapAnchor)};
    
     // let linePosition = {
     //   "points":jsonToPoint(p0)+" "+jsonToPoint(p25)+" "+jsonToPoint(p50)+" "+jsonToPoint(p75)+" "+jsonToPoint(p100)
@@ -254,6 +255,8 @@ switch(po){
 
 
   case "bottom":
+
+
     return  {x:parseInt(x),y:parseInt(y)+distanceYRaito};
   
   case "left": 
@@ -470,7 +473,7 @@ function getPositionByPoint(node, point) {// ไว้ให้ updateConnectorP
     }
 }
 
-function updateConnectorPositionOnAction(node){    //เอาไว้ตอนที่ Node draggable หรือ resizeโดยจะอิงเมื่อมี Node นั้นมีความเกี่ยวข้องกับ connector นั้นๆ จาก class ของ connector จะตรงกับ Id ของ Node นั้นๆ
+function updateConnectorPositionOnAction(node,noswapAnchor){    //เอาไว้ตอนที่ Node draggable หรือ resizeโดยจะอิงเมื่อมี Node นั้นมีความเกี่ยวข้องกับ connector นั้นๆ จาก class ของ connector จะตรงกับ Id ของ Node นั้นๆ
 
     let nodeId = $(node).prop("id");
   
@@ -480,7 +483,7 @@ function updateConnectorPositionOnAction(node){    //เอาไว้ตอน
         
 
         if ($(this).hasClass(nodeId)) {
-            updateConnectorPosition($(this));
+            updateConnectorPosition($(this),noswapAnchor);
         }
 
     });
@@ -608,16 +611,16 @@ function onDropItemSuccess(type) {    //เมื่อมีการลาก�
       let attrObj = {
         id: (type + "-" + index),// set id ของ node โดยใช้ ประเภทของ shape - index ที่ process มาจาก if
       }
+      let modX=event.clientX%10;
+      let modY=event.clientY%10;
       let mousePoint = {// get ตำแหน่งของ cursor mouse เพื่อจะได้ set ตำแหน่งให้ Node ลงถูกจุด
-        left: event.clientX - 100,
-        top: event.clientY - 25
+        left: event.clientX - 100-modX,
+        top: event.clientY -30-modY
       }
       let node = $("template#" + type).html();//สร้าง node โดยอิงจาก template Id ประเภทของ shape
       node=$(node).css("position","absolute");
       node = $(node).draggable(nodeDraggableProperty());//ใส่ความสามารถ Draggableให้กับ Node
       node = $(node).resizable(nodeResizableProperty(type));//ใส่ความสามารถ Resizable Node
-
-
 
       $("#design").append($(node));//เพิ่ม node ที่สร้างลงในส่วน Design 
       $(node).offset(mousePoint);//set ตำแหน่งให้ Node โดยใช้ตำแหน่งของ mouse
@@ -638,19 +641,30 @@ function nodeDraggableProperty(){// returnความสามารถขอ�
     return{
         containment:"#design",
         opacity: 0.5,
-        grid: [ 10, 10 ], 
+        grid: [ 20, 20 ], 
         snap: true,
-        snapTolerance: 10,
+        snapTolerance: 20,
         snapMode: "inner",
         scroll: true,
         stack: ".shape",
         scrollSensitivity: 50,
-        scrollSpeed: 50,
+        scrollSpeed: 20,
         drag: function () {
           shapeUnSelectedStyle();
           updateConnectorPositionOnAction(this);
           updateAnchorPosition(this);
           selectedEl = $(this);
+        }
+        , stop: function () {//ตอนหยุด Drag จะทำงานหลังตอนโดน Drop
+          let position=$(this).offset();
+          let top=position.top%20;
+          let left=position.left%20;
+          position.top-=top;
+          position.left-=left;
+          console.log(position.top);
+          console.log(position.left);
+          $(this).offset();
+      
         }
       }
     
@@ -687,9 +701,9 @@ function conAnchorDraggableProperty(){// returnความสามารถข
           let currentPosition = $(this).offset();// get ตำแหน่งปัจจุบันตอน Anchor โดน Drag
           lineDraw = document.createElementNS("http://www.w3.org/2000/svg", "polyline");// สร้าง connector
           $(lineDraw).attr("id", "line_" + $(this).parent().prop("id"));//เพิ่ม id ให้ connector
-
+          let scroll=$("#con-design").scrollTop();
           let p0={x:originalPosition.left + 4,y:originalPosition.top + 3};
-          let p100={x:currentPosition.left + 5 ,y:currentPosition.top};
+          let p100={x:currentPosition.left + 5 ,y:currentPosition.top+scroll};
 
           let distanceX = p100.x-p0.x;
 
@@ -901,9 +915,10 @@ function unHightLight(node){
 
 
 function save(fileName){
-
+    let width =$(window).width();
+    let height=$(window).height();
     let design = $("#design").html();
-    let text ={"design":design,"resolution":""};
+    let text ={"design":design,"resolution":{"width":width,"height":height}};
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(text)));
     //JSON.stringify(text)
@@ -931,21 +946,8 @@ function open() {
       var reader = new FileReader();
 
         reader.onload = function (event) {
-          let text=JSON.parse(event.target.result);
-          $("#design").html(text.design);
-          $(".shape").each(function(){
-          
-            $(this).removeClass("ui-draggable ui-draggable-handle ui-resizable ui-resizable-disabled");
-            $(this).find(".con_anchor").removeClass("ui-draggable ui-draggable-handle ui-droppable ui-draggable-disabled");
-            $(this).find("ui-resizable-handle").remove();
-            $(this).draggable(nodeDraggableProperty());
-            $(this).find(".con_anchor").draggable(conAnchorDraggableProperty());
-            $(this).find(".con_anchor").droppable(conAnchorDroppableProperty());
-            $(this).resizable(nodeResizableProperty(getNodeType(this)));
-            $(this).find(".ui-resizable-w").get(1).remove();
-            $(this).find(".ui-resizable-e").get(1).remove();
-
-          });
+          addToStorageCache(fileName,event.target.result);
+          writeCodeToDesign(event.target.result);
         
 
         }
@@ -956,6 +958,51 @@ function open() {
     
   }
 
+function writeCodeToDesign(text) { 
+  text=JSON.parse(text);
+  $("#design").html(text.design);
+  let width=$(window).width();
+  let height=$(window).height();
+  let oldResolution=text.resolution;
+  
+
+  $("#canvas").css("width",width);
+  $("#canvas").css("height",height);
+  $("#canvas").offset({ top: 0, left: 0 });
+
+
+  $(".shape").each(function(){
+    let position=$(this).offset();
+
+    if(oldResolution.width!=width&&oldResolution.height!=height){              
+     let topRatio=position.top*100/oldResolution.height;
+      let leftRatio=position.left*100/oldResolution.width;
+      position.top=(height*topRatio/100)-((height*topRatio/100)%20);
+      position.left=(width*leftRatio/100)-((width*leftRatio/100)%20);
+      $(this).offset(position);
+      updateConnectorPositionOnAction(this,true);
+
+    }
+  
+    $(this).removeClass("ui-draggable ui-draggable-handle ui-resizable ui-resizable-disabled");
+    $(this).find(".con_anchor").removeClass("ui-draggable ui-draggable-handle ui-droppable ui-draggable-disabled");
+    $(this).find("ui-resizable-handle").remove();
+    $(this).draggable(nodeDraggableProperty());
+    $(this).find(".con_anchor").draggable(conAnchorDraggableProperty());
+    $(this).find(".con_anchor").droppable(conAnchorDroppableProperty());
+    $(this).resizable(nodeResizableProperty(getNodeType(this)));
+    $(this).find(".ui-resizable-w").get(1).remove();
+    $(this).find(".ui-resizable-e").get(1).remove();
+  });
+ }
+function addToStorageCache(name,text){
+  sessionStorage.setItem(name,text);
+  let label=document.createElement("label");
+  $(label).addClass("btn border");
+  $(label).text(name);
+  $(label).attr("data-page",name);
+  $(pagination).find("button").before($(label));
+}
 function getNodeType(node){
     if($(node).hasClass("start-end")){         
         return "start-end";

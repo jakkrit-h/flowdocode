@@ -1,4 +1,7 @@
-
+html,body{height: 100%;
+}body{
+  overflow: hidden;
+}
 nav{
   background: #fff;
   // box-shadow:0px 2px 1px rgba(0, 0, 0, 0.05);
@@ -93,7 +96,8 @@ path{
 }
 #canvas{
   position: absolute;
-  width: 150%;
+  left:0;
+  top:0;
 }
 g {
   fill: "none";
@@ -159,9 +163,9 @@ nav{
   z-index: 9;
 }
 #con-right{
-  position: fixed;
   top: 0px;
   right: 0px;
+  position: fixed;
 }
 #con-console{
   #console{
@@ -245,4 +249,23 @@ input[type=file] {
 .is-invalid{
   
   border-width:2px;
+}
+#pagination{
+  label{
+    background:#fff;
+
+    width: auto;
+    border-radius: 0px;
+    text-overflow: ellipsis;
+    margin: 0px !important;
+  }
+  label:hover{
+    background: #4f7df9;
+    color:#fff;
+  }
+  label.active{
+    background: #4f7df9;
+    color:#fff;
+    font-weight: bold;
+  }
 }
