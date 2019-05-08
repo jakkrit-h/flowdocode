@@ -1,84 +1,65 @@
-<!DOCTYPE html>
-
-<html>
-
+<!doctype html>
+<html lang="en">
 <head>
-  <title>FlowdoCode | FLOWDOCODE</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Droppable - Accept</title>
+
+  <style>
+  #droppable { width: 150px; height: 150px; padding: 0.5em; float: left; margin: 10px; }
+  #draggable, #draggable-nonvalid { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 10px 10px 10px 0; }
+  </style>
+ <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" media="screen" href="css/jquery-ui.min.css" />
   <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome-all.min.css" />
   <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
+  <!-- <link rel="stylesheet" type="text/css" media="screen" href="css/darktheme.css" /> -->
+
+
+
   <script src="js/jquery.js"></script>
   <script src="js/jquery-ui.min.js"></script>
+  <script src="js/popper.min.js"></script>
+
   <script src="js/bootstrap.min.js"></script>
+
   <script src="js/flowdocode.js"></script>
   <script src="js/compiler.js"></script>
   <script src="js/debugger.js"></script>
-  <script src="js/syntaxchecker.js"></script>
   <script src="js/font-awesome-all.min.js"></script>
   <script src="js/vue.js"></script>
-
-
-
-
+  <script>
+  $( function() {
+    $( "#draggable, #draggable-nonvalid" ).draggable();
+    $( "#droppable" ).droppable({
+      accept: "#draggable",
+      classes: {
+        "ui-droppable-active": "ui-state-active"
+      },
+      drop: function( event, ui ) {
+        $( this )
+          .addClass( "ui-state-highlight" )
+          .find( "p" )
+            .html( "Dropped!" );
+      }
+    });
+  } );
+  </script>
 </head>
-<style>
-html {
-  height: 100%;
-}</style>
-<body style="height:100%;" >
-    <nav class="navbar navbar-expand-lg   p-0">
-        <div class="col-6 flex-column">
-          <ul class="navbar-nav p-0">
-            <li class="nav-item dropdown">
-              <a class="nav-link " href="#" data-toggle="dropdown">File</a>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" id="save"><label>Save</label></a>
-                <a class="dropdown-item" id="open">
-                  <label> Open
-                    <input type="file" id="openfile" accept="text/*,.fdc"></label>
-    
-                </a>
-              </div>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link " href="test.html" target="_blank">Edit</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link ">Help</a>
-            </li>
-            <input class="form-control col-4" id="assignment" placeholder="Assignment" value="Assignment">
-            <div class="col-6 py-2 m-0">
-                <ul class="navbar-nav  m-0">
-                  <li class="nav-item ">
-                    <button class="btn btn-sm btn-flowdocode px-2" id="play"><i class='fas fa-play'></i></button>
-                    <button class="btn btn-sm btn-flowdocode px-2" id="debug"><i class="fas fa-bug"></i></button>
-                    <button class="btn btn-sm btn-flowdocode px-2 ondebug" id="next"><i class="fas fa-arrow-right"></i></button>
-          
-          
-                  </li>
-                </ul>
-            </div>
-          </ul>
-        
-          <ul class="navbar-nav flex-row mb-2">
-         
-          </ul>
-        </div>
-    
-    
-    
-    
-    
-    
-    
-      </nav>
-      <div class=" w-100 h-100 border" style="background:red;">
-        sadsada
-        
-      </div>
+<body>
+ 
+<div id="draggable-nonvalid" class="ui-widget-content">
+  <p>I'm draggable but can't be dropped</p>
+</div>
+ 
+<div id="draggable" class="ui-widget-content">
+  <p>Drag me to my target</p>
+</div>
+ 
+<div id="droppable" class="ui-widget-header">
+  <p>accept: '#draggable'</p>
+</div>
+ 
+ 
 </body>
-
 </html>

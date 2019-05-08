@@ -59,7 +59,7 @@
         <li class="nav-item">
           <a class="nav-link ">Help</a>
         </li>
-        <input class="form-control col-4" id="assignment" placeholder="Assignment" value="Assignment">
+        <input class="form-control col-4" id="assignment" placeholder="Assignment" value="untitled">
         <div class="col-6 py-2 m-0">
             <ul class="navbar-nav  m-0">
               <li class="nav-item ">
@@ -127,13 +127,13 @@
 
   </div>
   <div class="offset-2 col-8 p-0 btn-group "id="pagination"style="overflow:hidden;">
-    <button class="btn bg-white" ><i class="fas fa-plus-circle"></i></button>
+    <button class="btn bg-white"id="addpage" ><i class="fas fa-plus-circle"></i></button>
 
   </div>
-<div class="offset-2 col-8 p-0 pb-5  mb-5 h-75"id="con-design"style="position: absolute;overflow:scroll;">
+<div class="offset-2 col-8 p-0 pb-5  mb-5 h-75"id="con-design"style="position: fixed;overflow:scroll;">
  
   <div id="design" class=" col-12 p-0 con-design" ondragover="allowDrop(event)" ondrop="dropItem(event)">
-    <svg id="canvas">
+     <svg id="canvas">
       <defs>
         <marker id="arrowhead" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
           <path d="M 0 0 L 10 5 L 0 10 z" fill="#fff" />
@@ -152,7 +152,7 @@
       <div class="text text-center col-12  text-truncate mx-auto">
         Start
       </div>
-    </div>
+    </div> 
 
 
 
@@ -238,30 +238,8 @@
     //     console.log(window.screen.availHeight,
     // window.screen.availWidth);
     // $( "#content" ).selectable();
-    $("#canvas").offset({ top: 0, left: 0 });
-   
-    $("#con-right").css("top",$("nav").outerHeight());
-    $("#canvas").css("width",$(window).width());
-    $("#canvas").css("height",$(window).height());
-    
-    $(".ondebug").hide();
-    $('[data-toggle="tooltip"]').tooltip();
-
-
-    $("#start").find(".con_anchor").draggable(conAnchorDraggableProperty());
-    $("#start").find(".con_anchor").droppable(conAnchorDroppableProperty());
-    $("#start").draggable(nodeDraggableProperty());
-    $("#start").resizable(nodeResizableProperty("start-end"));//ใช้ในช่วง tester เปลี่ยน s เป็น start-end ตอนจริง
-    updateAnchorPosition($("#start"));
-    updateTextboxPosition($("#start"));
-    let modX=($(document).width()/2)%10;
-    let p = {
-      top: 150,
-      left: ($(document).width() / 2-modX) - 100
-
-    }
-    $("#start").offset(p);
-
+    init();
+ 
   });
 
   function allowDrop(event) {
@@ -401,14 +379,22 @@
   $(document).on("mouseenter", ".shape", function () {//event mouse hover on shape show anchor
 
     document.body.style.cursor = "grab";
+ 
+
     if ($(selectedEl).prop("id") != $(this).prop("id")) {
+      
+
       updateAnchorPosition($(this));
       $(this).find(".con_anchor").css("opacity", "1");
       $(document).on("mousedown", function () {
+
         mouseDown = true;
 
 
       });
+    }
+    if(selectedEl==undefined){
+      mouseDown=false;
     }
   });
 
@@ -416,6 +402,7 @@
 
     document.body.style.cursor = "";
     if (!mouseDown) {
+      console.log("asd");
       $(this).find(".con_anchor").css("opacity", "0");
     }
     $(document).on("mouseup", function () {
@@ -475,6 +462,50 @@
 
 
   });
+  $(document).on("click",".page",function(){
+    if(!$(this).hasClass("active")){      
+      let width = $(window).width();
+      let height = $(window).height();
+
+      let text = { "design":  $("#design").html(), "resolution": { "width": width, "height": height } };
+
+      let page=$(".active").attr("data-page");
+      sessionStorage.setItem(page,JSON.stringify(text));
+      $("")
+
+      $(".active").removeClass("active");
+      $(this).addClass("active");
+      console.log($(this).attr("data-page"));
+      $("#assignment").val($(this).attr("data-page"));
+       text = sessionStorage.getItem($(this).attr("data-page"));
+      writeCodeToDesign(text);
+    }
+  });
+  $(document).on("click", "#addpage", function () {
+      if($(".page").length>=10){
+
+        return false;
+      }else{
+        
+      }
+      let width = $(window).width();
+      let height = $(window).height();
+      let text = { "design":  $("#design").html(), "resolution": { "width": width, "height": height } };
+      let page=$(".active").attr("data-page");
+      sessionStorage.setItem(page,JSON.stringify(text));
+      $("#design").html($("#newpage").html());
+      init(true);
+      addNewPage();
+  });
+  $(document).on("mouseenter",".fa-times-circle",function(){
+    $(this).addClass("fas");
+    $(this).removeClass("far");
+  });
+  $(document).on("mouseleave",".fa-times-circle",function(){
+    console.log("E");
+    $(this).addClass("far");
+    $(this).removeClass("fas");  });
+
 </script>
 
 <scrip type="text/template">
@@ -550,7 +581,28 @@
       </div>
     </div>
   </template>
+  <template id="newpage">
+      <svg id="canvas">
+          <defs>
+            <marker id="arrowhead" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#fff" />
+            </marker>
+          </defs>
+        </svg>
+    <div class=" shape start-end " id="start">
+      <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
+      <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
+      <div class="con_anchor anchor_start anchor_bottom" data-point="bottom"></div>
+      <div class="con_anchor anchor_start anchor_left" data-point="left"></div>
+      <svg>
 
+        <path d="M 25 1 C -5,1 -5,49 25,49 L 180 49 C 205,49 205,1 180,1 Z" />
+      </svg>
+      <div class="text text-center col-12  text-truncate mx-auto">
+        Start
+      </div>
+    </div>
+  </template>
 
 
 

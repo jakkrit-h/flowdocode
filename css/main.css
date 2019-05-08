@@ -27,6 +27,7 @@ div.con-fixed {
 }
 
 #design {
+  position: absolute;
   /*   //  position: absolute;
     // left: 0;
     // top:0; */
@@ -77,6 +78,10 @@ path {
   z-index: 5;
   position: absolute;
   opacity: 0;
+}
+
+.anchor-accept {
+  background-color: #4f7df9;
 }
 
 #canvas {
@@ -233,6 +238,7 @@ table {
 
 #pagination label {
   background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   width: auto;
   border-radius: 0px;
   text-overflow: ellipsis;
@@ -246,6 +252,17 @@ table {
   background: #4f7df9;
   color: #fff;
   font-weight: bold;
+}
+
+button:hover {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #4f7df9 !important;
+  color: #fff;
+}
+
+button:active, button:focus, button:hover {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: none !important;
 }
 
 /*# sourceMappingURL=main.css.map */

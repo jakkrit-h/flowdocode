@@ -120,15 +120,15 @@ function updateSvgPath(node,name){    //ปรับขนาดของ shape 
        
     }
 }
-function updateTextboxPosition(parent){//ทำให้ textbox อยู่ใน shape (ถ้าไม่ทำจะเคลือนไปอยู่ใต้ shpae อาจเป็นเพราะ position แบบ relative)
+function updateTextboxPosition(node){//ทำให้ textbox อยู่ใน shape (ถ้าไม่ทำจะเคลือนไปอยู่ใต้ shpae อาจเป็นเพราะ position แบบ relative)
 
-    let position=$(parent).offset();
-    let textbox=$(parent).find(".text").outerHeight(); 
+    let position=$(node).offset();
+    let textbox=$(node).find(".text").outerHeight(); 
      p={
-        top:position.top+(($(parent).outerHeight()/2)-(textbox/2)),
+        top:position.top+(($(node).outerHeight()/2)-(textbox/2)),
         left:position.left
     }   
-    $(parent).find(".text").offset(p);
+    $(node).find(".text").offset(p);
 
 }
 function updateAnchorPosition(node) {    // เพื่อเรียก function เปลี่ยนที่อยู่ของ Anchor ตอน Resize กับ Drag ให้ไปตาม Parent Node ของตัวเอง
@@ -642,7 +642,7 @@ function nodeDraggableProperty(){// returnความสามารถขอ�
         containment:"#design",
         opacity: 0.5,
         grid: [ 20, 20 ], 
-        snap: true,
+        snap: false,
         snapTolerance: 20,
         snapMode: "inner",
         scroll: true,
@@ -661,8 +661,7 @@ function nodeDraggableProperty(){// returnความสามารถขอ�
           let left=position.left%20;
           position.top-=top;
           position.left-=left;
-          console.log(position.top);
-          console.log(position.left);
+     
           $(this).offset();
       
         }
@@ -855,6 +854,9 @@ function getTypePosition(position,pointFrom){
 function conAnchorDroppableProperty(){// returnความสามารถของ Anchor ในการ Droppable
     return{
         accept: ".con_anchor",
+        classes: {
+          "ui-droppable-hover": "anchor-accept"
+        },
         drop: function () {// เมื่อ  Anchor โดน Drop 
           successStatus = true;// set ว่าได้ถูกเชื่อมเรียบร้อยแล้ว
 
@@ -959,7 +961,10 @@ function open() {
   }
 
 function writeCodeToDesign(text) { 
+
   text=JSON.parse(text);
+
+
   $("#design").html(text.design);
   let width=$(window).width();
   let height=$(window).height();
@@ -983,25 +988,54 @@ function writeCodeToDesign(text) {
       updateConnectorPositionOnAction(this,true);
 
     }
-  
+    $(this).find("svg").css( "stroke-dasharray","0,0");
     $(this).removeClass("ui-draggable ui-draggable-handle ui-resizable ui-resizable-disabled");
     $(this).find(".con_anchor").removeClass("ui-draggable ui-draggable-handle ui-droppable ui-draggable-disabled");
     $(this).find("ui-resizable-handle").remove();
     $(this).draggable(nodeDraggableProperty());
+    updateTextboxPosition(this);
     $(this).find(".con_anchor").draggable(conAnchorDraggableProperty());
     $(this).find(".con_anchor").droppable(conAnchorDroppableProperty());
     $(this).resizable(nodeResizableProperty(getNodeType(this)));
-    $(this).find(".ui-resizable-w").get(1).remove();
-    $(this).find(".ui-resizable-e").get(1).remove();
+    if($(this).find(".ui-resizable-w").get(1)!=undefined){
+     
+      $(this).find(".ui-resizable-w").get(1).remove();
+      $(this).find(".ui-resizable-e").get(1).remove();
+    }else{
+      init(true);
+    }
+
   });
  }
 function addToStorageCache(name,text){
-  sessionStorage.setItem(name,text);
+
   let label=document.createElement("label");
-  $(label).addClass("btn border");
-  $(label).text(name);
+  $(".active").removeClass("active");
+
+
+  $(label).addClass("btn  page active");
+  if(name=="untitled"){
+ 
+
+    if($(".page[data-untitled]").last().attr("data-untitled")!=undefined){
+      let num=parseInt($(".page[data-untitled]").last().attr("data-untitled"))+1;
+      $(label).attr("data-untitled",num);
+      $(label).attr("data-page",name+num);
+      name+=num;
+
+    }else{
+      $(label).attr("data-untitled",0);
+  
+    }
+  }
+  $(label).html(name+"<i class='far mx-2  fa-times-circle'></i>");
   $(label).attr("data-page",name);
-  $(pagination).find("button").before($(label));
+
+  $("#assignment").val(name);
+
+  $("#addpage").before($(label));
+  sessionStorage.setItem(name,text);
+
 }
 function getNodeType(node){
     if($(node).hasClass("start-end")){         
@@ -1029,5 +1063,51 @@ function getAnchorType(anchor){
 }
 function jsonToPoint(json){
   return json.x+","+json.y;
+}
+function addNewPage(design){
+  let width =$(window).width();
+  let height=$(window).height();
+  if(design==undefined){
+    design=$("#newpage").html();
+  
+  }
+  let text ={"design":design,"resolution":{"width":width,"height":height}};
+  if(design==undefined){
+    writeCodeToDesign(JSON.stringify(text));
+  }
+  addToStorageCache("untitled",JSON.stringify(text));
+}
+function init(noRisize){
+  if(!noRisize){
+
+    let design = $("#design").html();
+    addNewPage(design);
+    $("#start").resizable(nodeResizableProperty("start-end"));
+    
+  }
+  $("#canvas").offset({ top: 0, left: 0 });
+   
+    $("#con-right").css("top",$("nav").outerHeight());
+    $("#canvas").css("width",$(window).width());
+ 
+    $("#canvas").css("height","10000px" );
+    
+    $(".ondebug").hide();
+    $('[data-toggle="tooltip"]').tooltip();
+
+
+    $("#start").find(".con_anchor").draggable(conAnchorDraggableProperty());
+    $("#start").find(".con_anchor").droppable(conAnchorDroppableProperty());
+    $("#start").draggable(nodeDraggableProperty());
+  
+    updateAnchorPosition($("#start"));
+    updateTextboxPosition($("#start"));
+    let modX=($(document).width()/2)%10;
+    let p = {
+      top: 150,
+      left: ($(document).width() / 2-modX) - 100
+
+    }
+    $("#start").offset(p);
 }
 

@@ -37,9 +37,11 @@ linear-gradient(90deg, transparent 9%,
   z-index: 0;
 }
 #design{
+  position: absolute;
   /*   //  position: absolute;
     // left: 0;
     // top:0; */
+
    overflow: hidden;
     height: 10000px;
   
@@ -93,6 +95,13 @@ path{
   z-index: 5;
   position: absolute;
   opacity: 0;
+}
+.anchor-accept{
+
+  background-color: #4f7df9;
+
+
+
 }
 #canvas{
   position: absolute;
@@ -253,7 +262,7 @@ input[type=file] {
 #pagination{
   label{
     background:#fff;
-
+    border: 1px solid rgba(0, 0, 0, 0.08);
     width: auto;
     border-radius: 0px;
     text-overflow: ellipsis;
@@ -268,4 +277,16 @@ input[type=file] {
     color:#fff;
     font-weight: bold;
   }
+}
+button:hover{
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #4f7df9 !important;
+  color: #fff;
+
+}
+button:active,button:focus,button:hover{
+  
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: none !important; 
+  
 }
