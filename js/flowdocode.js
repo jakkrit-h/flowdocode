@@ -611,11 +611,12 @@ function onDropItemSuccess(type) {    //เมื่อมีการลาก�
       let attrObj = {
         id: (type + "-" + index),// set id ของ node โดยใช้ ประเภทของ shape - index ที่ process มาจาก if
       }
-      let modX=event.clientX%10;
-      let modY=event.clientY%10;
+      let modX=event.clientX%20;
+      let modY=event.clientY%20;
       let mousePoint = {// get ตำแหน่งของ cursor mouse เพื่อจะได้ set ตำแหน่งให้ Node ลงถูกจุด
+        top: event.clientY -modY,
         left: event.clientX - 100-modX,
-        top: event.clientY -30-modY
+       
       }
       let node = $("template#" + type).html();//สร้าง node โดยอิงจาก template Id ประเภทของ shape
       node=$(node).css("position","absolute");
@@ -662,8 +663,7 @@ function nodeDraggableProperty(){// returnความสามารถขอ�
           position.top-=top;
           position.left-=left;
      
-          $(this).offset();
-      
+          $(this).offset(position);
         }
       }
     
@@ -1104,7 +1104,7 @@ function init(noRisize){
     updateTextboxPosition($("#start"));
     let modX=($(document).width()/2)%10;
     let p = {
-      top: 150,
+      top: 160,
       left: ($(document).width() / 2-modX) - 100
 
     }
