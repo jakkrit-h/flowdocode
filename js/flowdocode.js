@@ -23,7 +23,7 @@ var lineDraw = undefined;// connector ตอนกำลังถูกสร้
 var successStatus = undefined;// สถานะเมื่อมีการ Drag เส้นไป หา Node ได้สำเร็จ
 var g = undefined;// container ของ connector
 var mouseDown=undefined;//สถานะว่ากำลัง mousedown อยู่จริง
-
+var onClose=undefined;
 function updateSvgPathProcess(node){    //ปรับขนาดของ shape Process ตอน Resize
 
 
@@ -878,6 +878,8 @@ function addTextLabelForDecision(connector,word){
 
     let label=document.createElement("label");// สร้าง text  yes,no
     let labelId=$(connector).prop("id")+"-"+word;
+    $(label).addClass("connector-description");
+
     $(label).text(word);
     $(label).prop("id",labelId);
     $("#design").append(label);
@@ -917,22 +919,41 @@ function unHightLight(node){
 
 
 function save(fileName){
+  
     let width =$(window).width();
     let height=$(window).height();
     let design = $("#design").html();
     let text ={"design":design,"resolution":{"width":width,"height":height}};
-    var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(text)));
-    //JSON.stringify(text)
-    element.setAttribute('download', fileName+".fdc");
-  
-    element.style.display = 'none';
-    document.body.appendChild(element);
-  
-    element.click();
-  
-    document.body.removeChild(element);
    
+
+    createDownloadFile(fileName,text);
+   
+}
+function saveAll(){
+  
+
+
+  for(let i =0;i<sessionStorage.length;i++){
+    let name=sessionStorage.key(i);
+
+      text =JSON.parse(sessionStorage.getItem(name));
+      console.log(text);
+
+    createDownloadFile(name,text); 
+  }
+}
+function createDownloadFile(fileName,text){
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(text)));
+  //JSON.stringify(text)
+  element.setAttribute('download', fileName+".fdc");
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
 }
 function open() {
     if ($("#openfile").val().lastIndexOf(".fdc") == -1) {
@@ -961,15 +982,13 @@ function open() {
   }
 
 function writeCodeToDesign(text) { 
-
+ 
   text=JSON.parse(text);
-
-
   $("#design").html(text.design);
   let width=$(window).width();
   let height=$(window).height();
   let oldResolution=text.resolution;
-  
+ 
 
   $("#canvas").css("width",width);
   $("#canvas").css("height",height);
@@ -1009,18 +1028,17 @@ function writeCodeToDesign(text) {
  }
 function addToStorageCache(name,text){
 
-  let label=document.createElement("label");
+  let label=document.createElement("div");
   $(".active").removeClass("active");
 
 
-  $(label).addClass("btn  page active");
+  $(label).addClass("btn  page active row  pr-0");
   if(name=="untitled"){
  
 
     if($(".page[data-untitled]").last().attr("data-untitled")!=undefined){
       let num=parseInt($(".page[data-untitled]").last().attr("data-untitled"))+1;
       $(label).attr("data-untitled",num);
-      $(label).attr("data-page",name+num);
       name+=num;
 
     }else{
@@ -1028,7 +1046,8 @@ function addToStorageCache(name,text){
   
     }
   }
-  $(label).html(name+"<i class='far mx-2  fa-times-circle'></i>");
+  $(label).html(name+"<div class='close p-0'><i class='far mx-2 py-auto  fa-times-circle'></i></div>");
+  $(label).prop("id",name);
   $(label).attr("data-page",name);
 
   $("#assignment").val(name);
@@ -1109,5 +1128,25 @@ function init(noRisize){
 
     }
     $("#start").offset(p);
+}
+function readPage(page,action){
+ 
+
+  let width = $(window).width();
+  let height = $(window).height();
+
+  let text = { "design":  $("#design").html(), "resolution": { "width": width, "height": height } };
+
+  let presentPage=$(".active").attr("data-page");
+  sessionStorage.setItem(presentPage,JSON.stringify(text));
+  if(action=="switch"){
+    $(".active").removeClass("active");
+
+  }
+
+ 
+  $(page).addClass("active");
+  text = sessionStorage.getItem($(page).attr("data-page"));
+  writeCodeToDesign(text); 
 }
 

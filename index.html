@@ -35,47 +35,52 @@
 
     console.log(this);
   });
+
 </script>
 
 <body>
 
   <nav class="navbar navbar-expand-lg   p-0">
-    <div class="col-6 flex-column">
+    <div class="col-12 m-0 p-0"><!-- flex-column -->
+<!--         <input class="form-control col-4 mt-2" id="assignment" placeholder="Assignment" value="untitled">
+ -->
       <ul class="navbar-nav p-0">
-        <li class="nav-item dropdown">
-          <a class="nav-link " href="#" data-toggle="dropdown">File</a>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" id="save"><label>Save</label></a>
-            <a class="dropdown-item" id="open">
-              <label> Open
-                <input type="file" id="openfile" accept="text/*,.fdc"></label>
+          <li class="nav-item dropdown">
+              <a class="nav-link " href="#" data-toggle="dropdown">File</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" id="save"><label>Save</label></a>
+                <a class="dropdown-item" id="saveall"><label>Save All</label></a>
 
-            </a>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link " href="test.html" target="_blank">Edit</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link ">Help</a>
-        </li>
-        <input class="form-control col-4" id="assignment" placeholder="Assignment" value="untitled">
-        <div class="col-6 py-2 m-0">
-            <ul class="navbar-nav  m-0">
-              <li class="nav-item ">
-                <button class="btn btn-sm btn-flowdocode px-2" id="play"><i class='fas fa-play'></i></button>
-                <button class="btn btn-sm btn-flowdocode px-2" id="debug"><i class="fas fa-bug"></i></button>
-                <button class="btn btn-sm btn-flowdocode px-2 ondebug" id="next"><i class="fas fa-arrow-right"></i></button>
-      
-      
-              </li>
-            </ul>
-        </div>
+                <a class="dropdown-item" id="open">
+                  <label> Open
+                    <input type="file" id="openfile" accept="text/*,.fdc"></label>
+    
+                </a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="test.html" target="_blank">Edit</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link ">Help</a>
+            </li>
+            <div class="col-1 py-2 px-0 mx-auto">
+                <ul class="navbar-nav  p-0 justify-content-center">
+                  <li class="nav-item ">
+                    <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="play"><i class='fas fa-play'></i></button>
+                    <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="debug"><i class="fas fa-bug"></i></button>
+                    <button class="btn btn-sm btn-flowdocode px-2 ondebug mt-1" id="next"><i class="fas fa-arrow-right"></i></button>
+                    <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="i">ee</button>
+
+          
+                  </li>
+                </ul>
+            </div>
       </ul>
     
-      <ul class="navbar-nav flex-row mb-2">
-     
-      </ul>
+  <!--     <ul class="navbar-nav flex-row mb-2">
+        
+      </ul> -->
     </div>
 
 
@@ -127,7 +132,7 @@
 
   </div>
   <div class="offset-2 col-8 p-0 btn-group "id="pagination"style="overflow:hidden;">
-    <button class="btn bg-white"id="addpage" ><i class="fas fa-plus-circle"></i></button>
+    <button class="btn btn-flowdocode"id="addpage" ><i class="fas fa-plus-circle"></i></button>
 
   </div>
 <div class="offset-2 col-8 p-0 pb-5  mb-5 h-75"id="con-design"style="position: fixed;overflow:scroll;">
@@ -136,7 +141,7 @@
      <svg id="canvas">
       <defs>
         <marker id="arrowhead" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="#fff" />
+          <path d="M 0 0 L 10 5 L 0 10 z"  />
         </marker>
       </defs>
     </svg>
@@ -179,7 +184,7 @@
   <div class="offset-10  h-100 " id="con-right" style="overflow: hidden !important;">
     <p class="header py-1  m-0 col-12"> Debugger</p>
     <div class="col-12 h-50 p-0 " id="con-debugger" style="overflow-y: scroll !important;">
-      <table class="table table-striped m-0">
+      <table class="table table-dark table-striped m-0">
         <thead class="text-center">
           <tr>
             <th>Action</th>
@@ -198,7 +203,7 @@
     </div>
    
     <div class="col-12 p-0  h-50 m-0  ">
-      <p class="header py-1 m-0"> Properties</p>
+      <p class="header py-1 m-0 "> Properties</p>
       <div class="row p-0 con-property">
         <div class="col-6 pl-4 font-weight-bold">Name</div>
         <input class="col-6" id="name" v-model="name">
@@ -232,14 +237,18 @@
 
 
 <script>
-
+  $("#i").click(function(){
+    for(let i=0;i<sessionStorage.length;i++)
+    console.log(sessionStorage.key(i));
+  });
   $(function () {
+    sessionStorage.clear();
+
     //ปรับ resolution ตามขนาดจอที่เปิด อันนี้เอาค่าจากเครื่องต้นทาง
     //     console.log(window.screen.availHeight,
     // window.screen.availWidth);
     // $( "#content" ).selectable();
     init();
-    console.log($("#start").offset());
   });
 
   function allowDrop(event) {
@@ -402,7 +411,6 @@
 
     document.body.style.cursor = "";
     if (!mouseDown) {
-      console.log("asd");
       $(this).find(".con_anchor").css("opacity", "0");
     }
     $(document).on("mouseup", function () {
@@ -443,43 +451,33 @@
       }
     });
   });
+  $(document).on("click", "#saveall", function () {
+   
+    saveAll();
 
-  $(document).on("click", "#save", function () {
-    if ($("#assignment").val() == "" || $("#assignment").val() == "Assignment") {
 
 
-      $("#assignment").addClass("is-invalid");
-    } else {
-      $("#assignment").removeClass("is-invalid");
-      save($("#assignment").val());
+    // $(this).parent().dropdown('toggle');
 
-    }
+  });
+   $(document).on("click", "#save", function () {
+    let fileName=$(".active").attr("data-page");
+
+      save(fileName);
+
     // $(this).parent().dropdown('toggle');
 
   });
   $(document).on("change", "#open", function () {
     open();
-
-
   });
   $(document).on("click",".page",function(){
-    if(!$(this).hasClass("active")){      
-      let width = $(window).width();
-      let height = $(window).height();
+    if(!$(this).hasClass("active")&&onClose!=true){     
 
-      let text = { "design":  $("#design").html(), "resolution": { "width": width, "height": height } };
-
-      let page=$(".active").attr("data-page");
-      sessionStorage.setItem(page,JSON.stringify(text));
-      $("")
-
-      $(".active").removeClass("active");
-      $(this).addClass("active");
-      console.log($(this).attr("data-page"));
-      $("#assignment").val($(this).attr("data-page"));
-       text = sessionStorage.getItem($(this).attr("data-page"));
-      writeCodeToDesign(text);
+     readPage($(this),"switch");
     }
+    onClose=false;
+
   });
   $(document).on("click", "#addpage", function () {
       if($(".page").length>=10){
@@ -497,15 +495,60 @@
       init(true);
       addNewPage();
   });
-  $(document).on("mouseenter",".fa-times-circle",function(){
-    $(this).addClass("fas");
-    $(this).removeClass("far");
-  });
-  $(document).on("mouseleave",".fa-times-circle",function(){
-    console.log("E");
-    $(this).addClass("far");
-    $(this).removeClass("fas");  });
+  $(document).on("click",".close",function(){
+    onClose=true;
+    if($(".page").length==1||$(this).parent(".page").hasClass("page-edit")){
+      return false;
+    }
+    let nextPage="#";
+    let index=$(this).parent(".page").last().index();
+    if(index== $(".page").length-1){
+      nextPage+=$(".page").eq(index-1).prop("id");
+    }else{
+      nextPage+=$(".page").eq(index+1).prop("id");
 
+    }
+    if($(this).parent(".page").hasClass("active")){
+      readPage(nextPage);
+
+    }
+      sessionStorage.removeItem($(this).parent(".page").attr("data-page"));
+     $(this).parent(".page").remove();
+  });
+  $(document).on("dblclick",".page",function(){
+
+    $(this).attr("contenteditable","true");
+
+    $(this).addClass("page-edit");
+    $(this).focus();
+
+
+  });
+  $(document).on("keydown",".page",function(){
+    if(event.keyCode==13){
+     
+      changePageName(this);
+      return false;
+    }
+  });
+  $(document).on("blur",".page",function(){
+      changePageName(this);
+    
+  });
+
+  function changePageName(page){
+    $(page).attr("contenteditable","false");
+    $(page).removeClass("page-edit");
+    let storage=sessionStorage.getItem($(page).attr("data-page"));
+    sessionStorage.setItem($(page).text(),storage);
+    sessionStorage.removeItem($(page).attr("data-page"));
+    $(page).attr("data-page",$(page).text());
+    $(page).attr("id",$(page).text());
+    if($(page).text()!="untitled"){
+      $(page).removeAttr("data-untitled");
+    }
+
+  }
 </script>
 
 <scrip type="text/template">
@@ -585,7 +628,7 @@
       <svg id="canvas">
           <defs>
             <marker id="arrowhead" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="#fff" />
+              <path d="M 0 0 L 10 5 L 0 10 z" />
             </marker>
           </defs>
         </svg>
