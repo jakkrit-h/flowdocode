@@ -1,15 +1,12 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>jQuery UI Droppable - Accept</title>
+<!DOCTYPE html>
 
-  <style>
-  #droppable { width: 150px; height: 150px; padding: 0.5em; float: left; margin: 10px; }
-  #draggable, #draggable-nonvalid { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 10px 10px 10px 0; }
-  </style>
- <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css" />
+<html>
+
+<head>
+  <title>FlowdoCode | FLOWDOCODE</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" media="screen" href="css/jquery-ui.min.css" />
   <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome-all.min.css" />
   <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
@@ -28,38 +25,41 @@
   <script src="js/debugger.js"></script>
   <script src="js/font-awesome-all.min.js"></script>
   <script src="js/vue.js"></script>
-  <script>
-  $( function() {
-    $( "#draggable, #draggable-nonvalid" ).draggable();
-    $( "#droppable" ).droppable({
-      accept: "#draggable",
-      classes: {
-        "ui-droppable-active": "ui-state-active"
-      },
-      drop: function( event, ui ) {
-        $( this )
-          .addClass( "ui-state-highlight" )
-          .find( "p" )
-            .html( "Dropped!" );
-      }
-    });
-  } );
-  </script>
+
+
+
+
 </head>
+<script>
+
+
+</script>
+
 <body>
- 
-<div id="draggable-nonvalid" class="ui-widget-content">
-  <p>I'm draggable but can't be dropped</p>
-</div>
- 
-<div id="draggable" class="ui-widget-content">
-  <p>Drag me to my target</p>
-</div>
- 
-<div id="droppable" class="ui-widget-header">
-  <p>accept: '#draggable'</p>
-</div>
- 
- 
+
+  
+
+<button id="i">s</button>
+
+
+
+
+
+
+
 </body>
+
+<script>
+ $("#i").click(function(){
+  window.open("test.fdc","ttt","menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes");
+
+  });
+  $(function () {
+
+
+
+  });
+</script>
+
+
 </html>

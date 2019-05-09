@@ -21,6 +21,7 @@
   <script src="js/bootstrap.min.js"></script>
 
   <script src="js/flowdocode.js"></script>
+  <script src="js/pseudocode.js"></script>
   <script src="js/compiler.js"></script>
   <script src="js/debugger.js"></script>
   <script src="js/font-awesome-all.min.js"></script>
@@ -33,7 +34,6 @@
 <script>
   $(document).on("click", ".shape", function () {
 
-    console.log(this);
   });
 
 </script>
@@ -56,6 +56,7 @@
                     <input type="file" id="openfile" accept="text/*,.fdc"></label>
     
                 </a>
+                <a class="dropdown-item" id="pseudoCode"><label>PseudoCode</label></a>
               </div>
             </li>
             <li class="nav-item">
@@ -238,8 +239,7 @@
 
 <script>
   $("#i").click(function(){
-    for(let i=0;i<sessionStorage.length;i++)
-    console.log(sessionStorage.key(i));
+    pseudocodeController();
   });
   $(function () {
     sessionStorage.clear();
@@ -469,7 +469,7 @@
 
   });
   $(document).on("change", "#open", function () {
-    open();
+    openFile();
   });
   $(document).on("click",".page",function(){
     if(!$(this).hasClass("active")&&onClose!=true){     
@@ -477,7 +477,8 @@
      readPage($(this),"switch");
     }
     onClose=false;
-
+    $("#console").empty();
+    $("#debugger").empty();
   });
   $(document).on("click", "#addpage", function () {
       if($(".page").length>=10){
@@ -551,7 +552,6 @@
   }
 </script>
 
-<scrip type="text/template">
 
   <template id="start-end">
     <div class="shape start-end ">
@@ -648,8 +648,5 @@
   </template>
 
 
-
-
-</scrip>
 
 </html>

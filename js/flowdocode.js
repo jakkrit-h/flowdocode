@@ -955,7 +955,7 @@ function createDownloadFile(fileName,text){
 
   document.body.removeChild(element);
 }
-function open() {
+function openFile() {
     if ($("#openfile").val().lastIndexOf(".fdc") == -1) {
       alert("ชนิดของไฟล์ไม่ถูกต้อง");
       return false;
