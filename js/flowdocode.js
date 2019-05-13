@@ -242,9 +242,12 @@ function updateConnectorPosition(connector,noswapAnchor) {    //ไว้ใช�
     updateTextLabelPosition(connector);
 
 }
+function drawConnector(zzz){
+  
+}
 function linePlot25_75(x,y,po,distanceX,distanceY){
-  let distanceXRaito=(distanceX*25/100<30?30:(distanceX*25/100));
-  let distanceYRaito=(distanceY*25/100<30?50:(distanceY*25/100));
+  let distanceXRaito=40;
+  let distanceYRaito=40;
 switch(po){
   case "top":
     return {x:parseInt(x),y:y-distanceYRaito};
@@ -267,9 +270,9 @@ switch(po){
 function line50(json,noswapAnchor){
   let p1 = { x: 0, y: 0 };
   let p2;
-  if(noswapAnchor!=true){
-  json.pointTo=swapAnchor(json);
-  }
+  // if(noswapAnchor!=true){
+  // json.pointTo=swapAnchor(json);
+  // }
   switch (json.pointTo) {
     case "top":
       if(json.p0.y>=json.p75.y){
@@ -329,92 +332,92 @@ function line50(json,noswapAnchor){
 
   return jsonToPoint(json.p0)+" "+jsonToPoint(json.p25)+" "+jsonToPoint(p1)+" "+jsonToPoint(p2)+" "+jsonToPoint(json.p75)+" "+jsonToPoint(json.p100);
 }
-function swapAnchor(json){
-  let fromNode=$(json.fromNode).offset();
+// function swapAnchor(json){
+//   let fromNode=$(json.fromNode).offset();
 
-  fromNode.left+=$(json.fromNode).outerWidth();
-  fromNode.top+=$(json.fromNode).outerHeight();
-  fromNode['width']=$(json.fromNode).outerWidth();
-  fromNode['height']=$(json.fromNode).outerHeight();
+//   fromNode.left+=$(json.fromNode).outerWidth();
+//   fromNode.top+=$(json.fromNode).outerHeight();
+//   fromNode['width']=$(json.fromNode).outerWidth();
+//   fromNode['height']=$(json.fromNode).outerHeight();
 
-  let toNode=$(json.toNode).offset();
-  toNode.left+=$(json.toNode).outerWidth();
-  toNode.top+=$(json.toNode).outerHeight();
-  toNode['width']=$(json.toNode).outerWidth();
-  toNode['height']=$(json.toNode).outerHeight();
-  let forReturn="";
+//   let toNode=$(json.toNode).offset();
+//   toNode.left+=$(json.toNode).outerWidth();
+//   toNode.top+=$(json.toNode).outerHeight();
+//   toNode['width']=$(json.toNode).outerWidth();
+//   toNode['height']=$(json.toNode).outerHeight();
+//   let forReturn="";
  
 
 
-  if(toNode.top>fromNode.top+fromNode.height){
-    forReturn="top";
-  }else if(toNode.top<fromNode.top-fromNode.height){
-    forReturn="bottom";
-  }
-  else if(fromNode.left<toNode.left ){
-    forReturn="left";
-  }else if(fromNode.left>toNode.left){
-    forReturn="right";
-  }
-  swapAnchorNodeFrom(json.connector,fromNode,toNode,forReturn)
-  $(json.connector).attr("data-anchorto",forReturn);
-  return forReturn;
-}
-function swapAnchorNodeFrom(connector,fromNode,toNode,toAnchorResult){
-  switch (toAnchorResult) {
-    case "top":
-      swapAnchorNodeFromOnRsTop(connector,fromNode,toNode);
-      break;
-    case "right":
-      swapAnchorNodeFromOnRsRight(connector,fromNode,toNode);
-    case "bottom":
-      swapAnchorNodeFromOnRsBottom(connector,fromNode,toNode);
-      break;
-    case "left":
-      swapAnchorNodeFromOnRsLeft(connector,fromNode,toNode);
-      break;
-  }
+//   if(toNode.top>fromNode.top+fromNode.height){
+//     forReturn="top";
+//   }else if(toNode.top<fromNode.top-fromNode.height){
+//     forReturn="bottom";
+//   }
+//   else if(fromNode.left<toNode.left ){
+//     forReturn="left";
+//   }else if(fromNode.left>toNode.left){
+//     forReturn="right";
+//   }
+//   swapAnchorNodeFrom(json.connector,fromNode,toNode,forReturn)
+//   $(json.connector).attr("data-anchorto",forReturn);
+//   return forReturn;
+// }
+// function swapAnchorNodeFrom(connector,fromNode,toNode,toAnchorResult){
+//   switch (toAnchorResult) {
+//     case "top":
+//       swapAnchorNodeFromOnRsTop(connector,fromNode,toNode);
+//       break;
+//     case "right":
+//       swapAnchorNodeFromOnRsRight(connector,fromNode,toNode);
+//     case "bottom":
+//       swapAnchorNodeFromOnRsBottom(connector,fromNode,toNode);
+//       break;
+//     case "left":
+//       swapAnchorNodeFromOnRsLeft(connector,fromNode,toNode);
+//       break;
+//   }
  
   
 
-}
-function swapAnchorNodeFromOnRsTop(connector,fromNode,toNode){
+// }
+// function swapAnchorNodeFromOnRsTop(connector,fromNode,toNode){
 
-  if(toNode.left<fromNode.left-fromNode.width/2-40){
-    $(connector).attr("data-anchorfrom","left");
-  }else if(toNode.left>fromNode.left+fromNode.width/2+40){
-    $(connector).attr("data-anchorfrom","right");
+//   if(toNode.left<fromNode.left-fromNode.width/2-40){
+//     $(connector).attr("data-anchorfrom","left");
+//   }else if(toNode.left>fromNode.left+fromNode.width/2+40){
+//     $(connector).attr("data-anchorfrom","right");
 
-  }else {
-      $(connector).attr("data-anchorfrom","bottom");
+//   }else {
+//       $(connector).attr("data-anchorfrom","bottom");
 
    
 
-  }
+//   }
 
-}
-function swapAnchorNodeFromOnRsRight(connector,fromNode,toNode){
-  if(fromNode.left>toNode.left){
-    $(connector).attr("data-anchorfrom","left");
+// }
+// function swapAnchorNodeFromOnRsRight(connector,fromNode,toNode){
+//   if(fromNode.left>toNode.left){
+//     $(connector).attr("data-anchorfrom","left");
 
-  }
-}
-function swapAnchorNodeFromOnRsBottom(connector,fromNode,toNode) {
-  if(toNode.left<fromNode.left-fromNode.width/2-40){
-    $(connector).attr("data-anchorfrom","left");
-  }else if(toNode.left>fromNode.left+fromNode.width/2+40){
-    $(connector).attr("data-anchorfrom","right");
+//   }
+// }
+// function swapAnchorNodeFromOnRsBottom(connector,fromNode,toNode) {
+//   if(toNode.left<fromNode.left-fromNode.width/2-40){
+//     $(connector).attr("data-anchorfrom","left");
+//   }else if(toNode.left>fromNode.left+fromNode.width/2+40){
+//     $(connector).attr("data-anchorfrom","right");
 
-  }else{
-    $(connector).attr("data-anchorfrom","top");
+//   }else{
+//     $(connector).attr("data-anchorfrom","top");
 
-  }
-}
-function swapAnchorNodeFromOnRsLeft(connector,fromNode,toNode){
-  if(fromNode.left+200<toNode.left){
-    $(connector).attr("data-anchorfrom","right");
-  }
-} 
+//   }
+// }
+// function swapAnchorNodeFromOnRsLeft(connector,fromNode,toNode){
+//   if(fromNode.left+200<toNode.left){
+//     $(connector).attr("data-anchorfrom","right");
+//   }
+// } 
 
 // function line50(p25,p75,destinationPosition){
 // let x= 0;
@@ -625,9 +628,10 @@ function onDropItemSuccess(type) {    //เมื่อมีการลาก�
 
       $("#design").append($(node));//เพิ่ม node ที่สร้างลงในส่วน Design 
       $(node).offset(mousePoint);//set ตำแหน่งให้ Node โดยใช้ตำแหน่งของ mouse
-      if(type =="start-end")
+      if(type =="start-end"){
         $(node).prop("id","end");// set property ให้ Node
-      else{
+        $("#con-toolbox").find("#start-end").attr("draggable","false");
+      }else{
         $(node).prop(attrObj);// set property ให้ Node
         $(node).find(".con_anchor").draggable(conAnchorDraggableProperty());//ใส่ความสามารถ Draggableให้กับ Anchor ใน Node
 
@@ -982,7 +986,6 @@ function openFile() {
   }
 
 function writeCodeToDesign(text) { 
- 
   text=JSON.parse(text);
   $("#design").html(text.design);
   let width=$(window).width();
@@ -991,13 +994,14 @@ function writeCodeToDesign(text) {
  
 
   $("#canvas").css("width",width);
-  $("#canvas").css("height",height);
+  $("#canvas").css("height","10000px");
+  $("#con-design").scrollTop("0");
   $("#canvas").offset({ top: 0, left: 0 });
 
 
   $(".shape").each(function(){
     let position=$(this).offset();
-
+ 
     if(oldResolution.width!=width&&oldResolution.height!=height){              
      let topRatio=position.top*100/oldResolution.height;
       let leftRatio=position.left*100/oldResolution.width;
@@ -1025,6 +1029,7 @@ function writeCodeToDesign(text) {
     }
 
   });
+  hasEnd();
  }
 function addToStorageCache(name,text){
 
@@ -1050,10 +1055,10 @@ function addToStorageCache(name,text){
   $(label).prop("id",name);
   $(label).attr("data-page",name);
 
-  $("#assignment").val(name);
 
-  $("#addpage").before($(label));
+  $("#pagination").append($(label));
   sessionStorage.setItem(name,text);
+  $("title").html(name+" | FLOWDOCODE");
 
 }
 function getNodeType(node){
@@ -1081,19 +1086,17 @@ function getAnchorType(anchor){
   }
 }
 function jsonToPoint(json){
-  return json.x+","+json.y;
+  return json.x+","+json.y+" ";
 }
 function addNewPage(design){
   let width =$(window).width();
   let height=$(window).height();
   if(design==undefined){
     design=$("#newpage").html();
-  
+
+
   }
   let text ={"design":design,"resolution":{"width":width,"height":height}};
-  if(design==undefined){
-    writeCodeToDesign(JSON.stringify(text));
-  }
   addToStorageCache("untitled",JSON.stringify(text));
 }
 function init(noRisize){
@@ -1104,14 +1107,13 @@ function init(noRisize){
     $("#start").resizable(nodeResizableProperty("start-end"));
     
   }
-  $("#canvas").offset({ top: 0, left: 0 });
-   
-    $("#con-right").css("top",$("nav").outerHeight());
-    $("#canvas").css("width",$(window).width());
- 
-    $("#canvas").css("height","10000px" );
-    
+
     $(".ondebug").hide();
+    $("#con-right").css("top",$("nav").outerHeight());
+  
+ 
+    
+
     $('[data-toggle="tooltip"]').tooltip();
 
 
@@ -1128,6 +1130,12 @@ function init(noRisize){
 
     }
     $("#start").offset(p);
+    $("#canvas").css("width",$(window).width());
+ 
+    $("#canvas").css("height","10000px" );
+    $("#canvas").offset({ top: 0, left: 0 });
+    hasEnd();
+
 }
 function readPage(page,action){
  
@@ -1147,6 +1155,18 @@ function readPage(page,action){
  
   $(page).addClass("active");
   text = sessionStorage.getItem($(page).attr("data-page"));
+  $("title").html($(page).attr("data-page")+" | FLOWDOCODE");
+
   writeCodeToDesign(text); 
 }
+function hasEnd(){
+  
+  if($("#end").prop("id")=="end"){
+    console.log("false");
+    $("#con-toolbox").find("#start-end").attr("draggable","false");
 
+  }else{
+    $("#con-toolbox").find("#start-end").attr("draggable","true");
+
+  }
+}

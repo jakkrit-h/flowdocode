@@ -1,3 +1,4 @@
+$borderDark:rgba(0, 0, 0, 0.08);
 html,body{height: 100%;
 }body{
   overflow: hidden;
@@ -6,7 +7,7 @@ html,body{height: 100%;
 nav{
   background: #2d3035;
   // box-shadow:0px 2px 1px rgba(0, 0, 0, 0.05);
-  border-bottom: 3px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 3px solid $borderDark;
   .dropdown-menu{
     .dropdown-item:hover{
       background: #33363b;
@@ -25,13 +26,13 @@ div.con-fixed {
 
 .con-design{
   background-image:linear-gradient(0deg, transparent 9%, 
-  rgba(119, 133, 135, .2) 10%, rgba(119, 133, 135, .2) 12%, transparent 13%, transparent 29%, 
+  rgba(119, 133, 135, .5) 10%, rgba(119, 133, 135, .5) 12%, transparent 13%, transparent 29%, 
   rgba(119, 133, 135, .1) 30%, rgba(119, 133, 135, .1) 31%, transparent 32%, transparent 49%, 
   rgba(119, 133, 135, .1) 50%, rgba(119, 133, 135, .1) 51%, transparent 52%, transparent 69%, 
   rgba(119, 133, 135, .1) 70%, rgba(119, 133, 135, .1) 71%, transparent 72%, transparent 89%,
   rgba(119, 133, 135, .1) 90%, rgba(119, 133, 135, .1) 91%, transparent 92%, transparent),
 linear-gradient(90deg, transparent 9%, 
-  rgba(119, 133, 135, .2) 10%, rgba(119, 133, 135, .2) 12%, transparent 13%, transparent 29%, 
+  rgba(119, 133, 135, .5) 10%, rgba(119, 133, 135, .5) 12%, transparent 13%, transparent 29%, 
   rgba(119, 133, 135, .1) 30%, rgba(119, 133, 135, .1) 31%, transparent 32%, transparent 49%, 
   rgba(119, 133, 135, .1) 50%, rgba(119, 133, 135, .1) 51%, transparent 52%, transparent 69%, 
   rgba(119, 133, 135, .1) 70%, rgba(119, 133, 135, .1) 71%, transparent 72%, transparent 89%,
@@ -189,7 +190,7 @@ nav{
 #con-toolbox{
   background: #24272c;
   overflow-y: hidden !important;
-  border-right: 3px solid rgba(0, 0, 0, 0.08);
+  border-right: 3px solid $borderDark;
   // box-shadow:2px 0px 1px rgba(0, 0, 0, 0.2);
   z-index: 9;
 }
@@ -271,7 +272,7 @@ table{
   border-top: 3px solid;
   border-bottom:3px solid;
   background: #24272c;
-  border-color:  rgba(0, 0, 0, 0.08);
+  border-color:  $borderDark;
 }
 
 .con-property{
@@ -281,7 +282,7 @@ table{
     border-top: 0px;
     border-right:0px solid;
     border-left:3px solid;
-    border-color:  rgba(0, 0, 0, 0.08);
+    border-color:  $borderDark;
     color:#fff;
   
     // background: #fafafa;
@@ -316,12 +317,13 @@ opacity: 0;
 }
 #pagination{
   background: #2d3035;
-  border-bottom:3px solid rgba(0, 0, 0, 0.08);
+  border-bottom:3px solid $borderDark;
+  overflow: scroll;
   div{
     color:#fff;
     background:#2d3035;
     border: 1px solid #4f7df9;
-   
+    text-wrap: nowrap; 
     border-radius: 0px;
     text-overflow: ellipsis;
     margin: 0px !important;
@@ -339,6 +341,7 @@ opacity: 0;
     background: none;
   }
   .close{
+
     font-size: 0.9em;
     background: none;
     border:none !important;

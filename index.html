@@ -243,12 +243,15 @@
   });
   $(function () {
     sessionStorage.clear();
+   
 
     //ปรับ resolution ตามขนาดจอที่เปิด อันนี้เอาค่าจากเครื่องต้นทาง
     //     console.log(window.screen.availHeight,
     // window.screen.availWidth);
-    // $( "#content" ).selectable();
+    // $( "#content" ).selectable();    
+
     init();
+
   });
 
   function allowDrop(event) {
@@ -315,8 +318,9 @@
       if ($(selectedEl).prop("id") != "start") {
         if ($(selectedEl).hasClass("shape")) {
           checkConnectorOnNodeDelete(selectedEl);
+        
           $(selectedEl).remove();
-
+          hasEnd();
         } else {
           onConnectorDelete(selectedEl);
           $(selectedEl).parent("g").remove();
@@ -481,20 +485,20 @@
     $("#debugger").empty();
   });
   $(document).on("click", "#addpage", function () {
-      if($(".page").length>=10){
+ /*      if($(".page").length>=7){
 
         return false;
       }else{
         
-      }
+      } */
       let width = $(window).width();
       let height = $(window).height();
       let text = { "design":  $("#design").html(), "resolution": { "width": width, "height": height } };
       let page=$(".active").attr("data-page");
       sessionStorage.setItem(page,JSON.stringify(text));
       $("#design").html($("#newpage").html());
-      init(true);
-      addNewPage();
+      init();
+    
   });
   $(document).on("click",".close",function(){
     onClose=true;

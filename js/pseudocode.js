@@ -41,5 +41,6 @@ function generateCode(node){
 function pseudoCodePage(pseudoCode){
     let strWindowFeatures = "menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes,width=500,height=700,left=500";
     let myWindow = window.open('','',strWindowFeatures);
+
     myWindow.document.write(pseudoCode);
 }
