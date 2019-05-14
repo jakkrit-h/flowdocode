@@ -240,7 +240,6 @@ function updateConnectorPosition(connector,noswapAnchor) {    //ไว้ใช�
 /*     console.log(linePosition);
  */
     updateTextLabelPosition(connector);
-
 }
 function drawConnector(zzz){
   
@@ -499,14 +498,14 @@ function shapeSelectedStyle(){    // ไว้กำหนด ว่า Node น
         selectedEl.find("svg").css({
           "stroke-dasharray":"5,5"
         });
-  
-          $(selectedEl).resizable({disabled:false});// resize ตอนโดนเลือก
+        $(selectedEl).resizable({disabled:false});// resize ตอนโดนเลือก
   
          
         $(selectedEl).find(".con_anchor").addClass("hide");//ซ่อน Anchor ตอนโดนเลือก
       }else{
         selectedEl.css({"stroke-dasharray":"5,5"});
       }
+
       
     } catch (error) {
   
@@ -687,7 +686,8 @@ function nodeResizableProperty(type){// returnความสามารถข�
 }
 function conAnchorDraggableProperty(){// returnความสามารถของ Anchor ในการ Draggable
     return{
-        snap: ".con_anchor",grid: [ 10, 10 ], opacity: 0.01, drag: function () {//ตอนกำลังโดน Drag
+        snap: ".con_anchor",snapTolerance: 40,snapMode: "inner",grid: [ 20, 20 ],  scrollSensitivity: 20,
+        scrollSpeed: 5, opacity: 0.01, drag: function () {//ตอนกำลังโดน Drag
           shapeUnSelectedStyle();
           let parent="#"+$(this).parent().prop("id");// ให้ Anchorที่กำลังโดน Drag ถูกซ่อนเพื่อไม่ให้บังหัวลูกศร
           $(parent).find(".con_anchor").addClass("hide");
@@ -705,7 +705,13 @@ function conAnchorDraggableProperty(){// returnความสามารถข
           lineDraw = document.createElementNS("http://www.w3.org/2000/svg", "polyline");// สร้าง connector
           $(lineDraw).attr("id", "line_" + $(this).parent().prop("id"));//เพิ่ม id ให้ connector
           let scroll=$("#con-design").scrollTop();
-          let p0={x:originalPosition.left + 4,y:originalPosition.top + 3};
+          let p0;
+          if($(this).parent().offset().top<=0){
+            p0={x:originalPosition.left + 4,y:originalPosition.top + 3};
+          }else{
+            p0={x:originalPosition.left + 4,y:originalPosition.top + 3+scroll};
+          }
+
           let p100={x:currentPosition.left + 5 ,y:currentPosition.top+scroll};
 
           let distanceX = p100.x-p0.x;
@@ -896,14 +902,19 @@ function updateTextLabelPosition(connector){
     let label="#"+$(connector).attr("data-label");
     let points =$(connector).attr("points");
     let temp = points.split(" ");
-    let tempStart=temp[0].split(",");
+    let tempStart=temp[2].split(",");
     let tempEnd=temp[4].split(",");
+    let scroll=$("#con-design").scrollTop();
      labelPosition={
-        top:(parseFloat(tempStart[1])+parseFloat(tempEnd[1]))/2,
+        top:((parseFloat(tempStart[1])+parseFloat(tempEnd[1]))/2)-scroll,
         left:(parseFloat(tempStart[0])+parseFloat(tempEnd[0]))/2
     }
+    console.log(temp);
+    console.log(((parseFloat(tempStart[1])+parseFloat(tempEnd[1]))/2));
+    console.log(scroll);
+    console.log(labelPosition);
     $(label).offset(labelPosition);
-
+    console.log( $(label).offset());
 
 }
 

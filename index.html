@@ -241,6 +241,8 @@
   $("#i").click(function(){
     pseudocodeController();
   });
+ $("#con-design").scroll(function(){
+ });
   $(function () {
     sessionStorage.clear();
    
@@ -341,16 +343,29 @@
   $("div").on("dblclick", ".text", function () {
     if (!$(selectedEl).hasClass("start-end")) {
       document.body.style.cursor = "";
+      if(getNodeType(selectedEl)==$(selectedEl).find("div.text").text().trim().toLowerCase()){
+        $(selectedEl).find("div.text").empty();
+
+      }
       $(selectedEl).find("div.text").prop("contenteditable", true);
       $(selectedEl).find("div.text").focus();
+/*       console.log($(selectedEl).find("div.text").text().trim());
+      console.log(getNodeType(selectedEl)); */
+
+   
+      
       $(selectedEl).draggable({ disabled: true });
 
     }
 
   });
   $("div").on("blur", ".text", function () {
+    if($(selectedEl).find("div.text").text().trim().toLowerCase()==""){
+      $(selectedEl).find("div.text").text(getNodeType(selectedEl));
 
+    }
     disContentEdit();
+    $(this).find(".con_anchor").css("opacity", "0");
 
   });
   function actionOnSelectElement(el) {
@@ -464,7 +479,7 @@
     // $(this).parent().dropdown('toggle');
 
   });
-   $(document).on("click", "#save", function () {
+  $(document).on("click", "#save", function () {
     let fileName=$(".active").attr("data-page");
 
       save(fileName);
@@ -582,7 +597,7 @@
         <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z" />
       </svg>
       <div class="text text-center col-12  text-truncate mx-auto" contenteditable=false>
-        Process
+        process
       </div>
     </div>
   </template>
@@ -596,7 +611,7 @@
         <path d="M 1 15 L 199 1 L 199 49 L 1 49 Z" />
       </svg>
       <div class="text text-center col-12  text-truncate mx-auto" contenteditable=false>
-        Input
+        input
       </div>
     </div>
   </template>
@@ -610,7 +625,7 @@
         <path d="M 100 1 L 199 25 L 100 49 L 1 25 Z " />
       </svg>
       <div class="text text-center col-12  text-truncate mx-auto" contenteditable="false">
-        Decision
+        decision
       </div>
     </div>
   </template>
@@ -624,7 +639,7 @@
         <path d="M 1 25 L 15 49 H 180 C 205 49 ,205 1, 180 1 H 15 L 1,25  " />
       </svg>
       <div class="text text-center col-12  text-truncate mx-auto" contenteditable="false">
-        Display
+        display
       </div>
     </div>
   </template>

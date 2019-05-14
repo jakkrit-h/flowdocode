@@ -113,8 +113,10 @@ path{
   opacity: 0;
 }
 .anchor-accept{
-
+  width: 10px;
+  height: 10px;
   background-color: #4f7df9;
+  box-shadow: 0px 0px 10px 2px #27ae60;
 
 
 
@@ -158,13 +160,16 @@ polyline{
 
   }
 }
-.text{
+.text,.text:focus{
     position: absolute;
     z-index:2;
     height: 30px;
     padding-top:5px; 
+   outline: none;
+
 
 }
+
 .connect{
   width:100px;
   height:100px;
@@ -300,6 +305,7 @@ table{
         }
   to {    filter: drop-shadow(0px 0px 100px rgba(39,174,9,0));  }
       }
+
 #openfile{
   width: 0.1px;
 opacity: 0;
