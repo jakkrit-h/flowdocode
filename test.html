@@ -37,7 +37,7 @@
 
 <body>
 <svg id="#canvas" style="top:0;left:0;">
-  <polyline points="1,1 100,100" id="test"></polyline>
+  <path d="M 1613 1169 L 1613 1303 Q 1613 1313 1623 1313 L 2012 1313 Q 2022 1313 2022 1303 L 2022 1236.37" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"></path>
 
 </svg>
 
@@ -48,88 +48,7 @@
 
 </body>
 
-<script>
-  $(function(){
-    let from={x:100,y:100,anchor:"top"};
-    let to={x:100,y:300,anchor:"top"};
-    drawConnector(from,to);
-  });
-  function drawConnector(from,to){
-    let distanceX=Math.abs(from.x-to.x);
-    let distanceY=Math.abs(from.y-to.y);
-    let rootStart=roots(from);
-    let axis=(from.anchor=="top"||from.anchor=="bottom"?"horizontal":"vertical");
-    let rootEnd=roots(to);
-    let start =getToPoint(from.x,from.y)+jsonToPoint(rootStart);
-    points=start;
 
-      rootStart=findPath(rootStart,rootEnd,axis,distanceX,distanceY);
-      axis=(axis=="vertical"?"horizontal":"vertical");
-      points+=jsonToPoint(rootStart);
-
-      rootStart=findPath(rootStart,rootEnd,axis,distanceX,distanceY);
-      axis=(axis=="vertical"?"horizontal":"vertical");
-      points+=jsonToPoint(rootStart);
-
-      rootStart=findPath(rootStart,rootEnd,axis,distanceX,distanceY);
-      axis=(axis=="vertical"?"horizontal":"vertical");
-      points+=jsonToPoint(rootStart);
-
-    
-    
-
-    let end =getToPoint(to.x,to.y)+jsonToPoint(rootEnd);
-    points+=end;
-    $("#test").attr("points",points);
-  }
-  function getToPoint(x,y){
-    return x+","+y+" ";
-  }
-  function findPath(cp,to,axis,distanceX,distanceY){
-    let x,y;
-    console.log(axis);
-    if(axis=="horizontal"){
-      if(cp.x>=to.x){
-        rs=cp.x+distanceX;
-      }else{
-        rs=cp.x-distanceX;
-      }
-      x=rs;
-      y=cp.y;
-   
-    }else{
-      if(cp.y>=to.y){
-        rs=cp.y-distanceY;
-      }else{
-        rs=cp.y+distanceY;
-      }
-      x=cp.x;
-      y=rs;
-    }
-    console.log({x,y});
-    return {x,y};
-  }
-  function roots(json){
-    switch (json.anchor) {
-      case "top":
-        return { x:json.x, y: json.y - 40 };
-
-      case "right":
-
-        return { x: json.x + 40, y: json.y };
-
-      case "bottom":
-
-
-        return { x: json.x, y: json.y + 40 };
-
-      case "left":
-        return { x:json.x - 40, y: json.y };
-
-    }
-  }
-
-</script>
 
 
 </html>

@@ -492,7 +492,6 @@
   });
   $(document).on("click",".page",function(){
     if(!$(this).hasClass("active")&&onClose!=true){     
-
      readPage($(this),"switch");
     }
     onClose=false;
@@ -521,18 +520,19 @@
       return false;
     }
     let nextPage="#";
-    let index=$(this).parent(".page").last().index();
-    if(index== $(".page").length-1){
-      nextPage+=$(".page").eq(index-1).prop("id");
+    let index=$(this).parent(".page").index();
+ 
+    if(index== $(".page").length){
+      nextPage+=$(".page").eq(index-2).prop("id");
     }else{
-      nextPage+=$(".page").eq(index+1).prop("id");
+      nextPage+=$(".page").eq(index).prop("id");
 
     }
+
     if($(this).parent(".page").hasClass("active")){
       readPage(nextPage);
-
     }
-      sessionStorage.removeItem($(this).parent(".page").attr("data-page"));
+    sessionStorage.removeItem($(this).parent(".page").attr("data-page"));
      $(this).parent(".page").remove();
   });
   $(document).on("dblclick",".page",function(){

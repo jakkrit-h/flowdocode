@@ -32,7 +32,6 @@ function updateSvgPathProcess(node){    //ปรับขนาดของ shap
     let width=$(node).outerWidth()-1;
     let d= "M 1 1 L "+width+" 1 L "+width+" 49 L 1 49 Z";
     $(path).attr("d",d);
-    updateTextboxPosition(node,0);
 }
 function updateSvgPathStartEnd(node){        //ปรับขนาดของ shape Start-End ตอน Resize
 
@@ -46,7 +45,7 @@ function updateSvgPathStartEnd(node){        //ปรับขนาดของ
     else
         d= "M 25 1 C -5,1 -5,49 25,49 L "+(width*90/100)+" 49 C "+(width+5)+",49 "+(width+5)+",1 "+(width*90/100)+",1 Z";
     $(path).attr("d",d);
-    updateTextboxPosition(node,0);
+
 
 }
 function updateSvgPathInput(node){        //ปรับขนาดของ shape Input ตอน Resize
@@ -58,7 +57,7 @@ function updateSvgPathInput(node){        //ปรับขนาดของ sh
     let width=$(node).outerWidth()-1;          
     let d= "M 1 15 L "+width+" 1 L "+width+" 49 L 1 49 Z";
     $(path).attr("d",d);
-    updateTextboxPosition(node,0);
+
 }
 function updateSvgPathDecision(node){        //ปรับขนาดของ shape Decision ตอน Resize
 
@@ -74,7 +73,7 @@ function updateSvgPathDecision(node){        //ปรับขนาดของ
      let d= "M "+ratio.hw+" 1 L "+ratio.width+" "+ratio.hH+" L "+ratio.hw+" "+ratio.height+
     " L 1 "+ratio.hH+" Z ";
     $(path).attr("d",d);
-    updateTextboxPosition(node,0);
+ 
    
 }
 function updateSvgPathDisplay(node){    //ปรับขนาดของ shape Display ตอน Resize
@@ -95,7 +94,7 @@ function updateSvgPathDisplay(node){    //ปรับขนาดของ shap
     }
 
     $(path).attr("d",d);
-    updateTextboxPosition(node,0);
+
 
 }
 function updateSvgPath(node,name){    //ปรับขนาดของ shape ตอน Resize โดย คัดจาก class แล้วเรียกไปที่ function เฉพาะของ shape นั้นๆ
@@ -120,7 +119,7 @@ function updateSvgPath(node,name){    //ปรับขนาดของ shape 
        
     }
 }
-function updateTextboxPosition(node){//ทำให้ textbox อยู่ใน shape (ถ้าไม่ทำจะเคลือนไปอยู่ใต้ shpae อาจเป็นเพราะ position แบบ relative)
+function setTextboxPosition(node){//ทำให้ textbox อยู่ใน shape (ถ้าไม่ทำจะเคลือนไปอยู่ใต้ shpae อาจเป็นเพราะ position แบบ relative)
 
     let position=$(node).offset();
     let textbox=$(node).find(".text").outerHeight(); 
@@ -128,6 +127,7 @@ function updateTextboxPosition(node){//ทำให้ textbox อยู่ใ�
         top:position.top+(($(node).outerHeight()/2)-(textbox/2)),
         left:position.left
     }   
+    
     $(node).find(".text").offset(p);
 
 }
@@ -637,7 +637,7 @@ function onDropItemSuccess(type) {    //เมื่อมีการลาก�
       }
 
       $(node).find(".con_anchor").droppable(conAnchorDroppableProperty());//ใส่ความสามารถ Resizableให้กับ Anchor ใน Node
-      updateTextboxPosition(node);
+      setTextboxPosition(node);
       updateAnchorPosition(node);
     }
 }
@@ -685,19 +685,20 @@ function nodeResizableProperty(type){// returnความสามารถข�
       }
 }
 function conAnchorDraggableProperty(){// returnความสามารถของ Anchor ในการ Draggable
-    return{
-        snap: ".con_anchor",snapTolerance: 40,snapMode: "inner",grid: [ 20, 20 ],  scrollSensitivity: 20,
-        scrollSpeed: 5, opacity: 0.01, drag: function () {//ตอนกำลังโดน Drag
+    return{   
+     
+        snap: ".con_anchor",snapTolerance: 40, scrollSensitivity: 20,
+        scrollSpeed: 5, drag: function () {//ตอนกำลังโดน Drag
+          document.body.style.cursor = "";
           shapeUnSelectedStyle();
           let parent="#"+$(this).parent().prop("id");// ให้ Anchorที่กำลังโดน Drag ถูกซ่อนเพื่อไม่ให้บังหัวลูกศร
-          $(parent).find(".con_anchor").addClass("hide");
+        
+           $(parent).find(".con_anchor").addClass("hide"); 
             if($(this).parents().prop("id")!="start"){
               $("#start").find(".con_anchor").addClass("hide");
               
             }
-              $(".con_anchor").css("opacity", "1");// ให้ Anchor ทั้งหมด แสดงขึ้นมาเพื่อ ให้Dragไปหาได้
-
-            
+            $(".con_anchor").css("opacity", "1");// ให้ Anchor ทั้งหมด แสดงขึ้นมาเพื่อ ให้Dragไปหาได้
             $(".hide").droppable({disabled: true});
 
           
@@ -909,12 +910,7 @@ function updateTextLabelPosition(connector){
         top:((parseFloat(tempStart[1])+parseFloat(tempEnd[1]))/2)-scroll,
         left:(parseFloat(tempStart[0])+parseFloat(tempEnd[0]))/2
     }
-    console.log(temp);
-    console.log(((parseFloat(tempStart[1])+parseFloat(tempEnd[1]))/2));
-    console.log(scroll);
-    console.log(labelPosition);
     $(label).offset(labelPosition);
-    console.log( $(label).offset());
 
 }
 
@@ -1027,7 +1023,7 @@ function writeCodeToDesign(text) {
     $(this).find(".con_anchor").removeClass("ui-draggable ui-draggable-handle ui-droppable ui-draggable-disabled");
     $(this).find("ui-resizable-handle").remove();
     $(this).draggable(nodeDraggableProperty());
-    updateTextboxPosition(this);
+    setTextboxPosition(this);
     $(this).find(".con_anchor").draggable(conAnchorDraggableProperty());
     $(this).find(".con_anchor").droppable(conAnchorDroppableProperty());
     $(this).resizable(nodeResizableProperty(getNodeType(this)));
@@ -1133,7 +1129,7 @@ function init(noRisize){
     $("#start").draggable(nodeDraggableProperty());
   
     updateAnchorPosition($("#start"));
-    updateTextboxPosition($("#start"));
+    setTextboxPosition($("#start"));
     let modX=($(document).width()/2)%10;
     let p = {
       top: 160,
