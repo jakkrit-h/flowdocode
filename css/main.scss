@@ -39,7 +39,8 @@ linear-gradient(90deg, transparent 9%,
   rgba(119, 133, 135, .1) 90%, rgba(119, 133, 135, .1) 91%, transparent 92%, transparent);
 
   height:100%;
-  background-size:50px 50px;
+  background-size:60px 60px;
+  left:-10px;
   padding: 50px;
   
   overflow: scroll;
@@ -361,5 +362,11 @@ opacity: 0;
     .close{
       opacity: 0;
     }
+  }
+}
+.invalid{
+  svg{
+    stroke: #ff3d50 !important;
+
   }
 }

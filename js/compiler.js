@@ -3,9 +3,12 @@ var nodePointer=undefined;
 var connectorPointer=undefined;
 var inputSuccess=false;
 var onDebug=false;
+var listOfVar=undefined;
 $(document).on("click","#play",function(){
     clearOnDebug();
-
+    if(!checkSyntax()){
+        return false;
+    }
     onButtonClick();
     $(this).html("<i class='fas fa-stop'></i>");
     $("#debug").html("<i class='fas fa-bug'></i>");
@@ -13,7 +16,9 @@ $(document).on("click","#play",function(){
     
 });
 $(document).on("click","#debug",function(){
-  
+    if(!checkSyntax()){
+        return false;
+    }
     onButtonClick();
         $("#play").html("<i class='fas fa-play'></i>");
 
@@ -114,9 +119,12 @@ function controllerOnDebug(){
     }
 }
 function compiler(str){
-    if(str.trim().match(/^[A-Za-z$_]+[\+\-\*\/]{2}$/)){
+    if(str.trim().match(/^[A-Za-z$_]+[\+]{2}$/)){
         let temp =str.split("++");
         str="++"+temp[0];
+    }else if(str.trim().match(/^[A-Za-z$_]+[\-]{2}$/)){
+        let temp =str.split("--");
+        str="--"+temp[0];
     }
     return eval(str);
 }

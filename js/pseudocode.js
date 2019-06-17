@@ -1,16 +1,30 @@
 var pseudoCode;
 var row;
+var decision="yes";
 function pseudocodeController(){
   pseudoCode="";
- row=1;
+  row=1;
     let node ="#start";
     let connector=$("#start").attr("data-connector");
+   
     while($(connector).attr("data-to")!=undefined){
         generateCode(node);
         node=$(connector).attr("data-to");
-       
-        connector=$(node).attr("data-connector");
+        if($(node).hasClass("decision")){
+            if(decision=="yes"){
+                connector=$(node).attr("data-yes");
+                discision="no";
+            }else{
+                connector=$(node).attr("data-no");
+                discision="yes";
+            }
+        }else{
+            connector=$(node).attr("data-connector");
+
+        }
         row++;
+        console.log(connector);
+
     }
     pseudoCodePage(pseudoCode);
 }
@@ -29,7 +43,11 @@ function generateCode(node){
             code="INPUT( "+text+")";
         break;
         case "decision":
-            code="INPUT( "+text+")";
+            if(decision=="yes"){
+                code="IF( "+text+") {";
+            }else{
+                code="ELSE( "+text+") }";
+            }
         break;
         case "display":
             code="DISPLAY("+text+")";
@@ -43,4 +61,14 @@ function pseudoCodePage(pseudoCode){
     let myWindow = window.open('','',strWindowFeatures);
 
     myWindow.document.write(pseudoCode);
+}
+function explorer(node){
+    let connectorYes=$(node).attr("data-yes");
+    let connectorNo=$(node).attr("data-no");
+    let connector=connectorYes;
+    let endOfYes="";
+    let endOfNo="";
+    while($(connector).attr("data-to")!=undefined||$(connector).attr("data-to")=="#end"){
+        11
+    }
 }

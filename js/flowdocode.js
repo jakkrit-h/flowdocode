@@ -155,12 +155,14 @@ function updateAnchorTop(node) {    // เพื่อเปลี่ยนต�
 
     let nodeProperty = getPropertyNode(node);
     let topP=nodeProperty.top - 5;
+   
     if($(node).hasClass("input")){
        topP= nodeProperty.top + 3
     }
+ 
     let position = {
         top:topP ,
-        left: nodeProperty.left + (nodeProperty.width / 2) 
+        left: nodeProperty.left + (nodeProperty.width / 2) -5
     }
     $(anchor).offset(position);
 }
@@ -182,10 +184,16 @@ function updateAnchorBottom(node) {    // เพื่อเปลี่ยน�
     let anchor = $(node).find(".anchor_bottom");
     let scroll=$("#con-design").scrollTop();
     let nodeProperty = getPropertyNode(node);
+
+
+   /*  if($(node).hasClass("decision")){
+      leftP=leftP-4;
+    } */
     let position = {
         top: nodeProperty.top + (nodeProperty.height) - 5,
-        left: (nodeProperty.left + (nodeProperty.width / 2)) 
+        left: nodeProperty.left + (nodeProperty.width / 2) -5
     }
+
     $(anchor).offset(position);
 
 }
@@ -196,7 +204,7 @@ function updateAnchorLeft(node) {    // เพื่อเปลี่ยนต�
     let nodeProperty = getPropertyNode(node);
     let position = {
         top: nodeProperty.top + (nodeProperty.height / 2) - 5,
-        left: nodeProperty.left - 5
+        left: nodeProperty.left - 4
     }
     $(anchor).offset(position);
 
@@ -207,6 +215,7 @@ function updateConnectorPosition(connector,noswapAnchor) {    //ไว้ใช�
     let toNode = $(connector).attr("data-to");//เก็บ Id ของ Node ปลายทาง
     let pointFrom = $(connector).attr("data-anchorfrom");//เก็บ ตำแหน่งที่ชี้ ของ Node ต้นทาง
     let pointTo = $(connector).attr("data-anchorto");//เก็บ ตำแหน่งที่ชี้ ของ Node ปลายทาง
+    let margin=0;
     positionFromNode = getPositionByPoint(fromNode, pointFrom);
     positionToNode = getPositionByPoint(toNode, pointTo);    
     if($(toNode).hasClass("input") && pointTo=="top"){
@@ -215,9 +224,12 @@ function updateConnectorPosition(connector,noswapAnchor) {    //ไว้ใช�
 
         positionFromNode.y+=7;
     }
+    if(pointTo=="top"||pointTo=="bottom"){
+      margin=4;
+    }
     let scroll=$("#con-design").scrollTop();
-    let p0={x:positionFromNode.x,y:positionFromNode.y+scroll};
-    let p100={x:positionToNode.x ,y:positionToNode.y+scroll};
+    let p0={x:positionFromNode.x-margin,y:positionFromNode.y+scroll};
+    let p100={x:positionToNode.x-margin,y:positionToNode.y+scroll};
     let distanceX = Math.abs(p100.x-p0.x);
     let distanceY = Math.abs(p100.y-p0.y);
     let p25=linePlot25_75(p0.x,p0.y,pointFrom,distanceX,distanceY);
@@ -241,9 +253,7 @@ function updateConnectorPosition(connector,noswapAnchor) {    //ไว้ใช�
  */
     updateTextLabelPosition(connector);
 }
-function drawConnector(zzz){
-  
-}
+
 function linePlot25_75(x,y,po,distanceX,distanceY){
   let distanceXRaito=40;
   let distanceYRaito=40;
@@ -687,8 +697,7 @@ function nodeResizableProperty(type){// returnความสามารถข�
 function conAnchorDraggableProperty(){// returnความสามารถของ Anchor ในการ Draggable
     return{   
      
-        snap: ".con_anchor",snapTolerance: 40, scrollSensitivity: 20,
-        scrollSpeed: 5, drag: function () {//ตอนกำลังโดน Drag
+        snap: ".con_anchor", drag: function () {//ตอนกำลังโดน Drag
           document.body.style.cursor = "";
           shapeUnSelectedStyle();
           let parent="#"+$(this).parent().prop("id");// ให้ Anchorที่กำลังโดน Drag ถูกซ่อนเพื่อไม่ให้บังหัวลูกศร
@@ -1169,7 +1178,6 @@ function readPage(page,action){
 function hasEnd(){
   
   if($("#end").prop("id")=="end"){
-    console.log("false");
     $("#con-toolbox").find("#start-end").attr("draggable","false");
 
   }else{

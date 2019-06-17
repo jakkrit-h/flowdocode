@@ -24,6 +24,7 @@
   <script src="js/pseudocode.js"></script>
   <script src="js/compiler.js"></script>
   <script src="js/debugger.js"></script>
+  <script src="js/syntaxchecker.js"></script>
   <script src="js/font-awesome-all.min.js"></script>
   <script src="js/vue.js"></script>
 
@@ -239,7 +240,8 @@
 
 <script>
   $("#i").click(function(){
-    pseudocodeController();
+
+    // pseudocodeController();
   });
  $("#con-design").scroll(function(){
  });
@@ -273,6 +275,7 @@
     try {
 
       var type = event.dataTransfer.getData("text");
+   
       onDropItemSuccess(type);
     } catch (event) {
       var type = "";
@@ -363,7 +366,10 @@
     if($(selectedEl).find("div.text").text().trim().toLowerCase()==""){
       $(selectedEl).find("div.text").text(getNodeType(selectedEl));
 
+    }else if($(selectedEl).hasClass("process")){
+
     }
+
     disContentEdit();
     $(this).find(".con_anchor").css("opacity", "0");
 
