@@ -1,39 +1,26 @@
-var processSyntax=  [
-    /^[A-Za-z$_]+[\+\-\*\/]*=([\w\(\)]+([\+\-\*\/]?[\w\(\)]*))+$/,
-    /^[A-Za-z$_]+[\+\-\*\/]{2}$/,
-];
+var listOfVar=new Array;
 
-function testSyntax(str){
-    if (str.match(/(\w[^\+\-*\/\<\>\=]*)([\+\-*\/\<\>\=]*)/))
-        return true;
-    else
-        return false;
-    console.log(str.match(/(\w[^\+\-*\/\<\>\=]*)([\+\-*\/\<\>\=]*)/));
-}
-function processSyntax(str){
-    if(str.match(processSyntax))
-        return true;
-    else
-        return false;
-}
+const processSyntax=/^[A-Za-z$_][A-Za-z$_0-9]*([ ]*=[ ]*[0-9]+|[ ]*=[ ]*['].+[']|[ ]*=[ ]*["].+["])?(([ ]*[,][ ]*[A-Za-z$_][A-Za-z$_0-9]*)([ ]*=[ ]*[0-9]+|[ ]*=[ ]*['].+[']|[ ]*=[ ]*["].+["])?)*$/;
+const decisionSyntax=/(^\([A-Za-z$_][A-Za-z$_0-9]*[ ]*(<=|>=|==|!=|<|>|===|!==){1}[A-Za-z$_0-9]+\)|^[A-Za-z$_][A-Za-z$_0-9]*[ ]*(<=|>=|==|!=|<|>|===|!==){1}[A-Za-z$_0-9]+)((&&|\|\|)([(]*[A-Za-z$_][A-Za-z$_0-9]*[ ]*(<=|>=|==|!=|<|>|===|!==){1}.+[)]|[A-Za-z$_][A-Za-z$_0-9]*[ ]*(<=|>=|==|!=|<|>|===|!==){1}[^\(\)]))*$/;
+const inputSyntax=/^[A-Za-z$_][A-Za-z$_0-9]*$/;
+
 function checkSyntax(){
     let result=true;
-    let processSyntax=/^[A-Za-z$_][A-Za-z$_0-9]*([ ]*=[ ]*[0-9]+|[ ]*=[ ]*['].+[']|[ ]*=[ ]*["].+["])?(([ ]*[,][ ]*[A-Za-z$_][A-Za-z$_0-9]*)([ ]*=[ ]*[0-9]+|[ ]*=[ ]*['].+[']|[ ]*=[ ]*["].+["])?)*$/;
-    let decisionSyntax=/(^\([A-Za-z$_][A-Za-z$_0-9]*[ ]*(<=|>=|==|!=|<|>|===|!==){1}[A-Za-z$_0-9]+\)|^[A-Za-z$_][A-Za-z$_0-9]*[ ]*(<=|>=|==|!=|<|>|===|!==){1}[A-Za-z$_0-9]+)((&&|\|\|)([(]*[A-Za-z$_][A-Za-z$_0-9]*[ ]*(<=|>=|==|!=|<|>|===|!==){1}.+[)]|[A-Za-z$_][A-Za-z$_0-9]*[ ]*(<=|>=|==|!=|<|>|===|!==){1}[^\(\)]))*$/;
-    let inputSyntax=/^[A-Za-z$_][A-Za-z$_0-9]*$/
+    listVariable();
+    
     $(".shape").each(function(){
         let text=$(this).find(".text").text();
         let type=getNodeType(this);
         let match=true;
         switch(type){
             case "process":
-                match=processSyntax.test(text);
+                match=(checkProcessAssignVar&&processSyntax.test(text))?true:false;
             break;
             case "decision":
                 match=decisionSyntax.test(text);
             break;
             case "input":
-                match=inputSyntax.test(text);
+                match=(listOfVar.includes(text)&&inputSyntax.test(text))?true:false; 
             break;
         }
         if(!match){
@@ -44,6 +31,38 @@ function checkSyntax(){
         }
     });
     return result;
+}
+function checkProcessAssignVar(text){
+    const syntax=/([A-Za-z$_][A-Za-z$_0-9]*(?=,)|(?<=\=)[A-Za-z$_][A-Za-z$_0-9]*)/gm;
+    
+    
+    let list=new Array;
+    while((listVar=syntax.exec(text) )!== null){
+        list.push(listVar[0]);
+
+        
+    }
+    return  list.some(r=>listOfVar.indexOf(r) >= 0);
+}
+function listVariable(){
+     let listVar;
+     listOfVar=[];
+     $(".process").each(function(){ 
+        
+         let text= $(this).find(".text").text(); 
+      
+        const syntax=/([A-Za-z$_][A-Za-z$_0-9]*(?=\=)|(?<=,)[A-Za-z$_][A-Za-z$_0-9]*)/gm;
+        
+        while((listVar=syntax.exec(text) )!== null){
+            listOfVar.push(listVar[0]);
+   
+            
+        }
+        
+        
+     }); 
+     
+    
 }
 // function findVariable(str){
 //     let regex=/[A-Za-z$_][A-Za-z$_0-9]*/;

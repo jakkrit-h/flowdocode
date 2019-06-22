@@ -3,7 +3,6 @@ var nodePointer=undefined;
 var connectorPointer=undefined;
 var inputSuccess=false;
 var onDebug=false;
-var listOfVar=undefined;
 $(document).on("click","#play",function(){
     clearOnDebug();
     if(!checkSyntax()){
