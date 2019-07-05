@@ -118,10 +118,10 @@ function controllerOnDebug(){
     }
 }
 function compiler(str){
-    if(str.trim().match(/^[A-Za-z$_]+[\+]{2}$/)){
+    if(str.trim().match(/^[A-Za-z$_][A-Za-z$_0-9]*(\+\+|\-\-)$/)){
         let temp =str.split("++");
         str="++"+temp[0];
-    }else if(str.trim().match(/^[A-Za-z$_]+[\-]{2}$/)){
+    }else if(str.trim().match(/^[A-Za-z$_][A-Za-z$_0-9]*(\+\+|\-\-)$/)){
         let temp =str.split("--");
         str="--"+temp[0];
     }
