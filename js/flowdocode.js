@@ -23,6 +23,7 @@ var lineDraw = undefined;// connector ตอนกำลังถูกสร้
 var successStatus = undefined;// สถานะเมื่อมีการ Drag เส้นไป หา Node ได้สำเร็จ
 var g = undefined;// container ของ connector
 var mouseDown=undefined;//สถานะว่ากำลัง mousedown อยู่จริง
+var onHoverAnchor=undefined;
 var onClose=undefined;
 function updateSvgPathProcess(node){    //ปรับขนาดของ shape Process ตอน Resize
 

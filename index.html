@@ -410,12 +410,31 @@
 
   });
 
+  $(document).on("mouseenter",".con_anchor",function(){
+    document.body.style.cursor = "grab";
+
+    onHoverAnchor=true;
+  });
+  $(document).on("mouseleave",".con_anchor",function(){
+    document.body.style.cursor = "move";
+    onHoverAnchor=undefined;
+  });
+  $(document).on("mousemove",".text",function(){
+      if($(this).prop("contenteditable")==true){
+        document.body.style.cursor = "text";
+
+      }
+
+  });
+  $(document).on("mouseleave",".text",function(){
+    document.body.style.cursor = "move";
+  });
 
 
   $(document).on("mouseenter", ".shape", function () {//event mouse hover on shape show anchor
+    if(onHoverAnchor==undefined)
+      document.body.style.cursor = "move";
 
-    document.body.style.cursor = "grab";
- 
 
     if ($(selectedEl).prop("id") != $(this).prop("id")) {
       
@@ -433,6 +452,7 @@
       mouseDown=false;
     }
   });
+
 
   $(document).on("mouseleave", ".shape", function () {  //event mouse leave on shape hide anchor
 

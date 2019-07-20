@@ -163,6 +163,7 @@ function classify(node){
         }else{
 
             let source=$(node).find(".text").text()+"="+$(".consoleInput").text()+"";
+       
             result=compiler(source);
             $(".consoleInput").find("br").remove();
 
