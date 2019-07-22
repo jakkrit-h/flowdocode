@@ -125,7 +125,7 @@ function setTextboxPosition(node){//ทำให้ textbox อยู่ใน s
     let position=$(node).offset();
     let textbox=$(node).find(".text").outerHeight(); 
      p={
-        top:position.top+(($(node).outerHeight()/2)-(textbox/2)),
+        top:position.top+(($(node).outerHeight()/2)-(textbox/2))-($(node).hasClass("decision")?5:0),
         left:position.left
     }   
     
@@ -750,7 +750,7 @@ function conAnchorDraggableProperty(){// returnความสามารถข
           $(lineDraw).addClass($(this).parent().prop("id"));
           //เพิ่ม class เพื่อบอก ว่า connector นี้ มีส่วนเชื่อมยังกับ Node(ต้นทาง) ใช้ check ตอน Node เกิดการเปลี่ยนแปลง
 
-
+          console.log(lineProperty);
           $(lineDraw).attr(lineProperty);
           //เพิ่ม attr position ให้ กับ line connector
 

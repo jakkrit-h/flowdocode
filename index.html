@@ -49,15 +49,15 @@
           <li class="nav-item dropdown">
               <a class="nav-link " href="#" data-toggle="dropdown">File</a>
               <div class="dropdown-menu">
-                <a class="dropdown-item" id="save"><label>Save</label></a>
-                <a class="dropdown-item" id="saveall"><label>Save All</label></a>
+                <label> <a class="dropdown-item" id="save">Save</a></label>
+                <label><a class="dropdown-item" id="saveall">Save All</a></label>
 
-                <a class="dropdown-item" id="open">
-                  <label> Open
-                    <input type="file" id="openfile" accept="text/*,.fdc"></label>
+                <label><a class="dropdown-item" id="open">
+                   Open
+                    <input type="file" id="openfile" accept="text/*,.fdc">
     
-                </a>
-                <a class="dropdown-item" id="pseudoCode"><label>PseudoCode</label></a>
+                </a></label>
+                <label> <a class="dropdown-item" id="pseudoCode"><label>PseudoCode</label></a></label>
               </div>
             </li>
             <li class="nav-item">
@@ -208,22 +208,28 @@
       <p class="header py-1 m-0 "> Properties</p>
       <div class="row p-0 con-property">
         <div class="col-6 pl-4 font-weight-bold">Name</div>
-        <input class="col-6" id="name" v-model="name">
+        <input class="col-6" id="name" v-model="name" readonly>
 
         <div class="col-6 pl-4 font-weight-bold">Type</div>
-        <input class="col-6" id="type" v-model="name">
+        <select class="col-6" id="type" v-model="name">
+          <option value="process">Process</option>
+          <option value="input">Input</option>
+          <option value="decision">Decision</option>
+          <option value="display">Display</option>
 
-        <div class="col-6 pl-4 font-weight-bold">Code</div>
-        <input class="col-6" id="code" value="aaad">
+        </select>
 
-        <div class="col-6 pl-4 font-weight-bold">Width</div>
-        <input class="col-6" id="width" value="aaad">
+        <div class="col-6 pl-4 font-weight-bold"  >Code</div>
+        <input class="col-6" id="code" value="aaad"readonly>
 
-        <div class="col-6 pl-4 font-weight-bold">Height</div>
-        <input class="col-6" id="Height" value="aaad">
+        <div class="col-6 pl-4 font-weight-bold"  >Width</div>
+        <input class="col-6" id="width" value="aaad" readonly>
 
-        <div class="col-6 pl-4 font-weight-bold">Location</div>
-        <input class="col-6" id="location" value="aaad">
+        <div class="col-6 pl-4 font-weight-bold"  >Height</div>
+        <input class="col-6" id="Height" value="aaad" readonly>
+
+        <div class="col-6 pl-4 font-weight-bold" >Location</div>
+        <input class="col-6" id="location" value="aaad" readonly >
 
 
 
@@ -233,7 +239,26 @@
   </div>
 
 
-
+  <div class="modal fade" id="InputDialog"data-backdrop="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" >Input Box</h5>
+        
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label id="inputtitle"></label>
+            <input type="text" class="form-control" id="inputBox">
+           <small id="emailHelp" class="form-text text-muted">If value is string you must assign in " " Or ' '</small>
+         </div>
+        </div>
+        <div class="modal-footer">
+      
+        </div>
+      </div>
+    </div>
+  </div>
 
 </body>
 
@@ -249,7 +274,6 @@
  });
   $(function () {
     sessionStorage.clear();
-   
 
     //ปรับ resolution ตามขนาดจอที่เปิด อันนี้เอาค่าจากเครื่องต้นทาง
     //     console.log(window.screen.availHeight,
@@ -486,17 +510,19 @@
 
   });
 
-  $(document).on("focus", ".consoleInput", function () {
-    $(this).on("keydown", function () {
-      if (event.keyCode == 13) {
-        document.execCommand('insertHTML', false, '<br><br>');
-        $(this).prop("contenteditable", "false");
-        inputSuccess = true;
-        compileContinue();
-        return false;
+  $(document).on("keypress", "#inputBox", function () {
+      if (event.keyCode == 13&&$(this).val()!="") {
 
+        
+        inputSuccess = true;
+        console.log("513")
+          compileContinue();
+
+    
+        $("#InputDialog").modal("hide");
+/*         return false;
+ */
       }
-    });
   });
   $(document).on("click", "#saveall", function () {
    

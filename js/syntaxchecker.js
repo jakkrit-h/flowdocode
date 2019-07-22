@@ -5,6 +5,7 @@ const decisionSyntax=/(^\([A-Za-z$_][A-Za-z$_0-9]*[ ]*(<=|>=|==|!=|<|>|===|!==){
 const inputSyntax=/^[A-Za-z$_][A-Za-z$_0-9]*$/;
 
 function checkSyntax(){
+    return true;
     let result=true;
     listVariable();
     
@@ -30,6 +31,7 @@ function checkSyntax(){
             $(this).removeClass("invalid");
         }
     });
+    
     return result;
 }
 function checkProcessAssignVar(text){

@@ -9,6 +9,9 @@ nav{
   // box-shadow:0px 2px 1px rgba(0, 0, 0, 0.05);
   border-bottom: 3px solid $borderDark;
   .dropdown-menu{
+    label{
+      width: 100%;
+    }
     .dropdown-item:hover{
       background: #33363b;
     }
@@ -282,7 +285,7 @@ table{
 }
 
 .con-property{
-  div,input{
+  div,input,select{
     background: #24272c;
     border-bottom:3px solid;
     border-top: 0px;
@@ -290,8 +293,10 @@ table{
     border-left:3px solid;
     border-color:  $borderDark;
     color:#fff;
-  
     // background: #fafafa;
+  }
+  select{
+    padding: 0 10px;
   }
 
 
@@ -325,12 +330,14 @@ opacity: 0;
 #pagination{
   background: #2d3035;
   border-bottom:3px solid $borderDark;
-  overflow: scroll;
+  overflow-x: scroll;
+  display: flex;
+
   div{
     color:#fff;
     background:#2d3035;
     border: 1px solid #4f7df9;
-    text-wrap: nowrap; 
+
     border-radius: 0px;
     text-overflow: ellipsis;
     margin: 0px !important;
@@ -368,5 +375,8 @@ opacity: 0;
   svg{
     stroke: #ff3d50 !important;
 
+  }
+  .con_anchor{
+    border-color: #ff3d50;
   }
 }

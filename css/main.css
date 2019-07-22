@@ -15,6 +15,9 @@ nav .dropdown-menu {
   color: #fff;
   background: #292c32;
 }
+nav .dropdown-menu label {
+  width: 100%;
+}
 nav .dropdown-menu .dropdown-item:hover {
   background: #33363b;
 }
@@ -256,7 +259,7 @@ table thead td {
   border-color: rgba(0, 0, 0, 0.08);
 }
 
-.con-property div, .con-property input {
+.con-property div, .con-property input, .con-property select {
   background: #24272c;
   border-bottom: 3px solid;
   border-top: 0px;
@@ -264,6 +267,9 @@ table thead td {
   border-left: 3px solid;
   border-color: rgba(0, 0, 0, 0.08);
   color: #fff;
+}
+.con-property select {
+  padding: 0 10px;
 }
 
 .hightlight {
@@ -297,13 +303,13 @@ table thead td {
 #pagination {
   background: #2d3035;
   border-bottom: 3px solid rgba(0, 0, 0, 0.08);
-  overflow: scroll;
+  overflow-x: scroll;
+  display: flex;
 }
 #pagination div {
   color: #fff;
   background: #2d3035;
   border: 1px solid #4f7df9;
-  text-wrap: nowrap;
   border-radius: 0px;
   text-overflow: ellipsis;
   margin: 0px !important;
@@ -336,6 +342,9 @@ table thead td {
 
 .invalid svg {
   stroke: #ff3d50 !important;
+}
+.invalid .con_anchor {
+  border-color: #ff3d50;
 }
 
 /*# sourceMappingURL=main.css.map */

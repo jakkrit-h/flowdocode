@@ -3,22 +3,26 @@ var nodePointer=undefined;
 var connectorPointer=undefined;
 var inputSuccess=false;
 var onDebug=false;
+var onAction=undefined;
 $(document).on("click","#play",function(){
     clearOnDebug();
     if(!checkSyntax()){
+
         return false;
     }
     onButtonClick();
+    onAction="compile";
     $(this).html("<i class='fas fa-stop'></i>");
     $("#debug").html("<i class='fas fa-bug'></i>");
     controller($("#start").attr("data-connector"));
-    
 });
 $(document).on("click","#debug",function(){
     if(!checkSyntax()){
         return false;
     }
     onButtonClick();
+    onAction="debug";
+
         $("#play").html("<i class='fas fa-play'></i>");
 
         $("#debug").html("<i class='fas fa-stop'></i>");
@@ -52,7 +56,8 @@ function onButtonClick(){
     $("tbody").empty();
     $("#console").empty(); 
     unHightLight($(".shape"));
-
+    inputSuccess=false;
+    onAction=undefined;
 
 
 }
@@ -129,11 +134,25 @@ function compiler(str){
 }
 
 function classify(node){
-    let result
+    let result;
+    let text;
+    
     if(!$(node).hasClass("input")){
-        let text =$(node).find(".text").text();
-        result=compiler(text);
-        Debugger(node,text,result);
+         text=$(node).find(".text").text();
+        if($(node).hasClass("process")){
+            text = text.split(",");
+            text.forEach(element => {
+                result=compiler(element);
+                Debugger(node,element,result);
+            });
+            return null;
+        }else{
+            
+            result=compiler(text);
+        }
+
+       
+    
     }
     if($(node).hasClass("display")){
          displayConsole(result);
@@ -148,36 +167,37 @@ function classify(node){
     }
     if($(node).hasClass("input")){
         if(!inputSuccess){
-            let container=document.createElement("div");
-            $(container).addClass("col-12 row p-0 m-0");
-            $(container).html("<div class='mr-1 font-weight-bold'>Input "+$(node).find(".text").text()+" : </div>");
-            let input=document.createElement("div");
 
-            $(input).attr("contenteditable","true");
-            $(input).addClass("consoleInput col");
-            $(container).append(input);
-            $("#console").append(container);
-            $(input).focus();
-            $(input).empty();
+            $("#InputDialog").modal("show");
+            $("#inputtitle").html("Assign Value Variable <strong>"+$(node).find(".text").text()+"</strong>");
+            $("#inputBox").focus();
+            $("#inputBox").val("");
             return true;
         }else{
 
-            let source=$(node).find(".text").text()+"="+$(".consoleInput").text()+"";
+             text=$(node).find(".text").text()+"="+$("#inputBox").val()+"";
        
-            result=compiler(source);
-            $(".consoleInput").find("br").remove();
-
-            $(".consoleInput").removeClass("consoleInput");
+            result=compiler(text);
             inputSuccess=false;
+
         }
        
     }
-   
+    Debugger(node,text,result);
+
+
     
 
 }
 function compileContinue(){
-    controller(connectorPointer);
+    if(onAction=="compile"){
+        controller(connectorPointer);
+
+      }else{
+        classify(nodePointer);
+      }
+
+
 }
 // function synthetic(obj){
 //     var str="if("+obj.text()+")";
