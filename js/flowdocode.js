@@ -25,6 +25,7 @@ var g = undefined;// container ของ connector
 var mouseDown=undefined;//สถานะว่ากำลัง mousedown อยู่จริง
 var onHoverAnchor=undefined;
 var onClose=undefined;
+var currentPageName=undefined;
 function updateSvgPathProcess(node){    //ปรับขนาดของ shape Process ตอน Resize
 
 
@@ -608,9 +609,10 @@ function onConnectorDelete(connector){
 }
 
 
-function onDropItemSuccess(type) {    //เมื่อมีการลากวางNode จาก Toolbox ลงมาในส่วนของ Design
+function onDropItemSuccess(type,posX,posY) {    //เมื่อมีการลากวางNode จาก Toolbox ลงมาในส่วนของ Design
 
     if (type != null) {
+      
 
       if ($("#design").find("." + type + "").last().index() == -1) {
         var index = 0;
@@ -624,13 +626,18 @@ function onDropItemSuccess(type) {    //เมื่อมีการลาก�
       let attrObj = {
         id: (type + "-" + index),// set id ของ node โดยใช้ ประเภทของ shape - index ที่ process มาจาก if
       }
-      let modX=event.clientX%20;
-      let modY=event.clientY%20;
-      let mousePoint = {// get ตำแหน่งของ cursor mouse เพื่อจะได้ set ตำแหน่งให้ Node ลงถูกจุด
-        top: event.clientY -modY,
-        left: event.clientX - 100-modX,
-       
+      console.log(posX+'  '+posY);
+      if(posX==undefined||posY==undefined){
+        posX=event.clientX ;
+        posY=event.clientY;
       }
+     let modX=posX%20;
+     let modY=posY%20;
+     let mousePoint = {// get ตำแหน่งของ cursor mouse เพื่อจะได้ set ตำแหน่งให้ Node ลงถูกจุด
+       top: posY -modY,
+       left:posX - 100-modX,
+      
+     }
       let node = $("template#" + type).html();//สร้าง node โดยอิงจาก template Id ประเภทของ shape
       node=$(node).css("position","absolute");
       node = $(node).draggable(nodeDraggableProperty());//ใส่ความสามารถ Draggableให้กับ Node
@@ -750,7 +757,6 @@ function conAnchorDraggableProperty(){// returnความสามารถข
           $(lineDraw).addClass($(this).parent().prop("id"));
           //เพิ่ม class เพื่อบอก ว่า connector นี้ มีส่วนเชื่อมยังกับ Node(ต้นทาง) ใช้ check ตอน Node เกิดการเปลี่ยนแปลง
 
-          console.log(lineProperty);
           $(lineDraw).attr(lineProperty);
           //เพิ่ม attr position ให้ กับ line connector
 
@@ -985,6 +991,7 @@ function openFile() {
       var file = document.querySelector('input[type=file]').files[0];
       let fileName=file.name.split(".");
       fileName=fileName[0];
+      fileName=this.checkSamePageNameAndChangeName(fileName);
       $("#assignment").val(fileName);
       $("title").html(fileName+" | FLOWDOCODE");
       var reader = new FileReader();
@@ -1068,7 +1075,7 @@ function addToStorageCache(name,text){
   
     }
   }
-  $(label).html(name+"<div class='close p-0'><i class='far mx-2 py-auto  fa-times-circle'></i></div>");
+  $(label).html("<div class='page-text'>"+name+"</div><div class='close p-0'><i class='far mx-2 py-auto  fa-times-circle'></i></div>");
   $(label).prop("id",name);
   $(label).attr("data-page",name);
 
@@ -1117,6 +1124,7 @@ function addNewPage(design){
   addToStorageCache("untitled",JSON.stringify(text));
 }
 function init(noRisize){
+  $("#stop").hide();
   if(!noRisize){
 
     let design = $("#design").html();
@@ -1185,4 +1193,50 @@ function hasEnd(){
     $("#con-toolbox").find("#start-end").attr("draggable","true");
 
   }
+}
+function getLatestNode(){
+  let node =$("#start");
+  let connector=$(node).attr("data-connector");  
+  while(true){
+      if($(connector).attr("data-to")==undefined||$(connector).attr("data-to")=="#end" ){        
+          break;
+      }else{
+        node=$(connector).attr("data-to");
+
+        connector=$(node).attr("data-connector");
+      }
+
+      
+  }
+  return node;
+  
+}
+function checkSamePageNameAndChangeName(fileName){
+  for(let i =0;i<sessionStorage.length;i++){
+    let sessionKey=sessionStorage.key(i);
+    if(sessionKey==fileName){
+      fileName=fileName+'(copy)';
+    }
+  }
+  return fileName;
+}
+function changePageName(page) {
+  let page_text = $(page).find('.page-text');
+  let text = $(page_text).text();
+  if (text == '') {
+    $(page_text).text(currentPageName);
+  }
+  $(page_text).text(checkSamePageNameAndChangeName(text));
+  $(page).attr("contenteditable", "false");
+  $(page).removeClass("page-edit");
+  let storage = sessionStorage.getItem($(page).attr("data-page"));
+ 
+  sessionStorage.setItem($(page).text(), storage);
+  sessionStorage.removeItem($(page).attr("data-page"));
+  $(page).attr("data-page", $(page).text());
+  $(page).attr("id", $(page).text());
+  if ($(page).text() != "untitled") {
+    $(page).removeAttr("data-untitled");
+  }
+
 }

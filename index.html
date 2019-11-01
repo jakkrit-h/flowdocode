@@ -32,55 +32,53 @@
 
 
 </head>
-<script>
-  $(document).on("click", ".shape", function () {
-
-  });
-
-</script>
 
 <body>
 
   <nav class="navbar navbar-expand-lg   p-0">
-    <div class="col-12 m-0 p-0"><!-- flex-column -->
-<!--         <input class="form-control col-4 mt-2" id="assignment" placeholder="Assignment" value="untitled">
+    <div class="col-12 m-0 p-0">
+      <!-- flex-column -->
+      <!--         <input class="form-control col-4 mt-2" id="assignment" placeholder="Assignment" value="untitled">
  -->
       <ul class="navbar-nav p-0">
-          <li class="nav-item dropdown">
-              <a class="nav-link " href="#" data-toggle="dropdown">File</a>
-              <div class="dropdown-menu">
-                <label> <a class="dropdown-item" id="save">Save</a></label>
-                <label><a class="dropdown-item" id="saveall">Save All</a></label>
+        <li class="nav-item dropdown">
+          <a class="nav-link " href="#" data-toggle="dropdown">File</a>
+          <div class="dropdown-menu">
+            <label> <a class="dropdown-item" id="save">Save</a></label>
+            <label><a class="dropdown-item" id="saveall">Save All</a></label>
 
-                <label><a class="dropdown-item" id="open">
-                   Open
-                    <input type="file" id="openfile" accept="text/*,.fdc">
-    
-                </a></label>
-                <label> <a class="dropdown-item" id="pseudoCode"><label>PseudoCode</label></a></label>
-              </div>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link " href="test.html" target="_blank">Edit</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link ">Help</a>
-            </li>
-            <div class="col-1 py-2 px-0 mx-auto">
-                <ul class="navbar-nav  p-0 justify-content-center">
-                  <li class="nav-item ">
-                    <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="play"><i class='fas fa-play'></i></button>
-                    <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="debug"><i class="fas fa-bug"></i></button>
-                    <button class="btn btn-sm btn-flowdocode px-2 ondebug mt-1" id="next"><i class="fas fa-arrow-right"></i></button>
-                    <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="i">ee</button>
+            <label><a class="dropdown-item" id="open">
+                Open
+                <input type="file" id="openfile" accept="text/*,.fdc">
 
-          
-                  </li>
-                </ul>
-            </div>
+              </a></label>
+            <label> <a class="dropdown-item" id="pseudoCode"><label>PseudoCode</label></a></label>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="test.html" target="_blank">Edit</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link ">Help</a>
+        </li>
+        <div class="col-1 py-2 px-0 mx-auto">
+          <ul class="navbar-nav  p-0 justify-content-center">
+            <li class="nav-item ">
+              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="play"><i class='fas fa-play'></i></button>
+              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="debug"><i class="fas fa-bug"></i></button>
+              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="stop"><i class='fas fa-stop'></i></button>
+
+              <button class="btn btn-sm btn-flowdocode px-2 ondebug mt-1" id="next"><i
+                  class="fas fa-arrow-right"></i></button>
+              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="i">ee</button>
+
+
+            </li>
+          </ul>
+        </div>
       </ul>
-    
-  <!--     <ul class="navbar-nav flex-row mb-2">
+
+      <!--     <ul class="navbar-nav flex-row mb-2">
         
       </ul> -->
     </div>
@@ -133,40 +131,40 @@
 
 
   </div>
-  <div class="offset-2 col-8 p-0 btn-group "id="pagination"style="overflow:hidden;">
-    <button class="btn btn-flowdocode"id="addpage" ><i class="fas fa-plus-circle"></i></button>
+  <div class="offset-2 col-8 p-0 btn-group " id="pagination">
+    <button class="btn btn-flowdocode" id="addpage"><i class="fas fa-plus-circle"></i></button>
 
   </div>
-<div class="offset-2 col-8 p-0 pb-5  mb-5 h-75"id="con-design"style="position: fixed;overflow:scroll;">
- 
-  <div id="design" class=" col-12 p-0 con-design" ondragover="allowDrop(event)" ondrop="dropItem(event)">
-     <svg id="canvas">
-      <defs>
-        <marker id="arrowhead" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-          <path d="M 0 0 L 10 5 L 0 10 z"  />
-        </marker>
-      </defs>
-    </svg>
-    <div class=" shape start-end " id="start">
-      <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
-      <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
-      <div class="con_anchor anchor_start anchor_bottom" data-point="bottom"></div>
-      <div class="con_anchor anchor_start anchor_left" data-point="left"></div>
-      <svg>
+  <div class="offset-2 col-8 p-0 pb-5  mb-5 h-75" id="con-design" style="position: fixed;overflow:scroll;">
 
-        <path d="M 25 1 C -5,1 -5,49 25,49 L 180 49 C 205,49 205,1 180,1 Z" />
+    <div id="design" class=" col-12 p-0 con-design" ondragover="allowDrop(event)" ondrop="dropItem(event)">
+      <svg id="canvas">
+        <defs>
+          <marker id="arrowhead" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" />
+          </marker>
+        </defs>
       </svg>
-      <div class="text text-center col-12  text-truncate mx-auto">
-        Start
+      <div class=" shape start-end " id="start">
+        <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
+        <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
+        <div class="con_anchor anchor_start anchor_bottom" data-point="bottom"></div>
+        <div class="con_anchor anchor_start anchor_left" data-point="left"></div>
+        <svg>
+
+          <path d="M 25 1 C -5,1 -5,49 25,49 L 180 49 C 205,49 205,1 180,1 Z" />
+        </svg>
+        <div class="text text-center col-12  text-truncate mx-auto">
+          Start
+        </div>
       </div>
-    </div> 
 
 
 
 
 
+    </div>
   </div>
-</div>
 
 
 
@@ -174,14 +172,14 @@
 
 
 
-  <div class="col-8  h-25 p-0 offset-2 fixed-bottom  " id="con-console" >
+  <div class="col-8  h-25 p-0 offset-2 fixed-bottom  " id="con-console">
     <p class="header py-1 m-0 "> Output</p>
-    <div class="my-2 mb-5 m-0 px-4 " id="console" >
+    <div class="my-2 mb-5 m-0 px-4 " id="console">
 
     </div>
 
 
-     
+
   </div>
   <div class="offset-10  h-100 " id="con-right" style="overflow: hidden !important;">
     <p class="header py-1  m-0 col-12"> Debugger</p>
@@ -198,12 +196,12 @@
 
         </thead>
         <tbody id="debugger" class="text-center">
-         
+
 
         </tbody>
       </table>
     </div>
-   
+
     <div class="col-12 p-0  h-50 m-0  ">
       <p class="header py-1 m-0 "> Properties</p>
       <div class="row p-0 con-property">
@@ -219,17 +217,17 @@
 
         </select>
 
-        <div class="col-6 pl-4 font-weight-bold"  >Code</div>
-        <input class="col-6" id="code" value="aaad"readonly>
+        <div class="col-6 pl-4 font-weight-bold">Code</div>
+        <input class="col-6" id="code" value="aaad" readonly>
 
-        <div class="col-6 pl-4 font-weight-bold"  >Width</div>
+        <div class="col-6 pl-4 font-weight-bold">Width</div>
         <input class="col-6" id="width" value="aaad" readonly>
 
-        <div class="col-6 pl-4 font-weight-bold"  >Height</div>
+        <div class="col-6 pl-4 font-weight-bold">Height</div>
         <input class="col-6" id="Height" value="aaad" readonly>
 
-        <div class="col-6 pl-4 font-weight-bold" >Location</div>
-        <input class="col-6" id="location" value="aaad" readonly >
+        <div class="col-6 pl-4 font-weight-bold">Location</div>
+        <input class="col-6" id="location" value="aaad" readonly>
 
 
 
@@ -239,23 +237,21 @@
   </div>
 
 
-  <div class="modal fade" id="InputDialog"data-backdrop="false" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal fade" id="InputDialog" data-backdrop="false" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" >Input Box</h5>
-        
+          <h5 class="modal-title">Input Box</h5>
+
         </div>
         <div class="modal-body">
           <div class="form-group">
             <label id="inputtitle"></label>
             <input type="text" class="form-control" id="inputBox">
-           <small id="emailHelp" class="form-text text-muted">If value is string you must assign in " " Or ' '</small>
-         </div>
+            <small id="emailHelp" class="form-text text-muted">If value is string you must assign in " " Or ' '</small>
+          </div>
         </div>
-        <div class="modal-footer">
-      
-        </div>
+     
       </div>
     </div>
   </div>
@@ -264,23 +260,51 @@
 
 
 <script>
-  $("#i").click(function(){
+  $("#i").click(function () {
     /* listVariable();
     checkSyntax(); */
     checkProcessAssignVar();
     // pseudocodeController();
   });
- $("#con-design").scroll(function(){
- });
+  $("#con-design").scroll(function () {
+  });
   $(function () {
-    sessionStorage.clear();
+    for(let i =0;i<sessionStorage.length;i++){
+      let sessionKey = sessionStorage.key(i);
+      let sessionVal=sessionStorage.getItem(sessionKey);
+      let size=3 + ((sessionVal.length*16)/(8*1024)) + ' KB'
+      console.log(size);
+      try{
+        sessionVal=JSON.parse(sessionVal);
+
+      }catch(e){
+        console.log('can\'t Convert Json');
+        console.log(e);
+        continue;
+      }
+      if(sessionVal.design==undefined||sessionVal.resolution==undefined){
+        console.log(sessionKey+'   Data Incomplete');
+        continue;
+
+      }
+    
+
+      addToStorageCache(sessionKey,sessionStorage.getItem(sessionKey));
+      writeCodeToDesign(sessionStorage.getItem(sessionKey));
+    }
+    if(sessionStorage.length<=1){
+      init();
+    }else{
+      init(true);
+    }
+    // sessionStorage.clear();
 
     //ปรับ resolution ตามขนาดจอที่เปิด อันนี้เอาค่าจากเครื่องต้นทาง
     //     console.log(window.screen.availHeight,
     // window.screen.availWidth);
     // $( "#content" ).selectable();    
 
-    init();
+   
 
   });
 
@@ -301,7 +325,7 @@
     try {
 
       var type = event.dataTransfer.getData("text");
-   
+
       onDropItemSuccess(type);
     } catch (event) {
       var type = "";
@@ -313,7 +337,11 @@
 
 
   }
-
+  $(document).on("dblclick",".toolbox",function(){
+    let node =getLatestNode() ;
+    let position=$(node).offset();
+    onDropItemSuccess($(this).prop("id"),position.left+100,position.top+120);
+  });
   $(document).on("mouseenter", "tr", function () {
     if (!onDebug) {
       let node = $(this).attr("data-node");
@@ -349,7 +377,7 @@
       if ($(selectedEl).prop("id") != "start") {
         if ($(selectedEl).hasClass("shape")) {
           checkConnectorOnNodeDelete(selectedEl);
-        
+
           $(selectedEl).remove();
           hasEnd();
         } else {
@@ -372,27 +400,27 @@
   $("div").on("dblclick", ".text", function () {
     if (!$(selectedEl).hasClass("start-end")) {
       document.body.style.cursor = "";
-      if(getNodeType(selectedEl)==$(selectedEl).find("div.text").text().trim().toLowerCase()){
+      if (getNodeType(selectedEl) == $(selectedEl).find("div.text").text().trim().toLowerCase()) {
         $(selectedEl).find("div.text").empty();
 
       }
       $(selectedEl).find("div.text").prop("contenteditable", true);
       $(selectedEl).find("div.text").focus();
-/*       console.log($(selectedEl).find("div.text").text().trim());
-      console.log(getNodeType(selectedEl)); */
+      /*       console.log($(selectedEl).find("div.text").text().trim());
+            console.log(getNodeType(selectedEl)); */
 
-   
-      
+
+
       $(selectedEl).draggable({ disabled: true });
 
     }
 
   });
   $("div").on("blur", ".text", function () {
-    if($(selectedEl).find("div.text").text().trim().toLowerCase()==""){
+    if ($(selectedEl).find("div.text").text().trim().toLowerCase() == "") {
       $(selectedEl).find("div.text").text(getNodeType(selectedEl));
 
-    }else if($(selectedEl).hasClass("process")){
+    } else if ($(selectedEl).hasClass("process")) {
 
     }
 
@@ -414,7 +442,7 @@
 
   });
 
-  $(document).on("mouseup","#canvas", function (event) {
+  $(document).on("mouseup", "#canvas", function (event) {
     if (event.target === this) {
 
       shapeUnSelectedStyle();
@@ -434,34 +462,34 @@
 
   });
 
-  $(document).on("mouseenter",".con_anchor",function(){
+  $(document).on("mouseenter", ".con_anchor", function () {
     document.body.style.cursor = "grab";
 
-    onHoverAnchor=true;
+    onHoverAnchor = true;
   });
-  $(document).on("mouseleave",".con_anchor",function(){
+  $(document).on("mouseleave", ".con_anchor", function () {
     document.body.style.cursor = "move";
-    onHoverAnchor=undefined;
+    onHoverAnchor = undefined;
   });
-  $(document).on("mousemove",".text",function(){
-      if($(this).prop("contenteditable")==true){
-        document.body.style.cursor = "text";
+  $(document).on("mousemove", ".text", function () {
+    if ($(this).prop("contenteditable") == true) {
+      document.body.style.cursor = "text";
 
-      }
+    }
 
   });
-  $(document).on("mouseleave",".text",function(){
+  $(document).on("mouseleave", ".text", function () {
     document.body.style.cursor = "move";
   });
 
 
   $(document).on("mouseenter", ".shape", function () {//event mouse hover on shape show anchor
-    if(onHoverAnchor==undefined)
+    if (onHoverAnchor == undefined)
       document.body.style.cursor = "move";
 
 
     if ($(selectedEl).prop("id") != $(this).prop("id")) {
-      
+
 
       updateAnchorPosition($(this));
       $(this).find(".con_anchor").css("opacity", "1");
@@ -472,8 +500,8 @@
 
       });
     }
-    if(selectedEl==undefined){
-      mouseDown=false;
+    if (selectedEl == undefined) {
+      mouseDown = false;
     }
   });
 
@@ -510,22 +538,28 @@
 
   });
 
-  $(document).on("keypress", "#inputBox", function () {
-      if (event.keyCode == 13&&$(this).val()!="") {
+  $(document).on("keyup", "#inputBox", function (e) {
+    let regex = /(^[0-9]+|^\'[^\\\/\;\'\"]+\'|^\"[^\\\/\;\'\"]+\")$/gm;
+    if ($(this).val() != "" && regex.test($(this).val())) {
+      $(this).removeClass('input_invalid');
+      if (event.keyCode == 13 ) {
 
-        
+
         inputSuccess = true;
-        console.log("513")
-          compileContinue();
 
-    
+        compileContinue();
+
+
         $("#InputDialog").modal("hide");
-/*         return false;
- */
+        /*         return false;
+        */
       }
+    } else {
+      $(this).addClass('input_invalid');
+    }
   });
   $(document).on("click", "#saveall", function () {
-   
+
     saveAll();
 
 
@@ -534,9 +568,9 @@
 
   });
   $(document).on("click", "#save", function () {
-    let fileName=$(".active").attr("data-page");
+    let fileName = $(".active").attr("data-page");
 
-      save(fileName);
+    save(fileName);
 
     // $(this).parent().dropdown('toggle');
 
@@ -544,181 +578,169 @@
   $(document).on("change", "#open", function () {
     openFile();
   });
-  $(document).on("click",".page",function(){
-    if(!$(this).hasClass("active")&&onClose!=true){     
-     readPage($(this),"switch");
+  $(document).on("click", ".page", function () {
+    if (!$(this).hasClass("active") && onClose != true) {
+      readPage($(this), "switch");
     }
-    onClose=false;
+    onClose = false;
     $("#console").empty();
     $("#debugger").empty();
   });
   $(document).on("click", "#addpage", function () {
- /*      if($(".page").length>=7){
+    /*      if($(".page").length>=7){
+   
+           return false;
+         }else{
+           
+         } */
+    let width = $(window).width();
+    let height = $(window).height();
+    let text = { "design": $("#design").html(), "resolution": { "width": width, "height": height } };
+    let page = $(".active").attr("data-page");
+    sessionStorage.setItem(page, JSON.stringify(text));
+    $("#design").html($("#newpage").html());
+    init();
 
-        return false;
-      }else{
-        
-      } */
-      let width = $(window).width();
-      let height = $(window).height();
-      let text = { "design":  $("#design").html(), "resolution": { "width": width, "height": height } };
-      let page=$(".active").attr("data-page");
-      sessionStorage.setItem(page,JSON.stringify(text));
-      $("#design").html($("#newpage").html());
-      init();
-    
   });
-  $(document).on("click",".close",function(){
-    onClose=true;
-    if($(".page").length==1||$(this).parent(".page").hasClass("page-edit")){
+  $(document).on("click", ".close", function () {
+    onClose = true;
+    if ($(".page").length == 1 || $(this).parent(".page").hasClass("page-edit")) {
       return false;
     }
-    let nextPage="#";
-    let index=$(this).parent(".page").index();
- 
-    if(index== $(".page").length){
-      nextPage+=$(".page").eq(index-2).prop("id");
-    }else{
-      nextPage+=$(".page").eq(index).prop("id");
+    let nextPage = "#";
+    let index = $(this).parent(".page").index();
+
+    if (index == $(".page").length) {
+      nextPage += $(".page").eq(index - 2).prop("id");
+    } else {
+      nextPage += $(".page").eq(index).prop("id");
 
     }
 
-    if($(this).parent(".page").hasClass("active")){
+    if ($(this).parent(".page").hasClass("active")) {
       readPage(nextPage);
     }
     sessionStorage.removeItem($(this).parent(".page").attr("data-page"));
-     $(this).parent(".page").remove();
+    $(this).parent(".page").remove();
   });
-  $(document).on("dblclick",".page",function(){
-
-    $(this).attr("contenteditable","true");
+  $(document).on("dblclick", ".page", function () {
+    currentPageName = $(this).find('.page-text').text();
+    $(this).attr("contenteditable", "true");
 
     $(this).addClass("page-edit");
     $(this).focus();
 
 
   });
-  $(document).on("keydown",".page",function(){
-    if(event.keyCode==13){
-     
+  $(document).on("keydown", ".page", function () {
+    if (event.keyCode == 13) {
+
       changePageName(this);
       return false;
     }
   });
-  $(document).on("blur",".page",function(){
-      changePageName(this);
-    
+  $(document).on("blur", ".page", function () {
+    changePageName(this);
+
   });
 
-  function changePageName(page){
-    $(page).attr("contenteditable","false");
-    $(page).removeClass("page-edit");
-    let storage=sessionStorage.getItem($(page).attr("data-page"));
-    sessionStorage.setItem($(page).text(),storage);
-    sessionStorage.removeItem($(page).attr("data-page"));
-    $(page).attr("data-page",$(page).text());
-    $(page).attr("id",$(page).text());
-    if($(page).text()!="untitled"){
-      $(page).removeAttr("data-untitled");
-    }
-
-  }
+ 
 </script>
 
 
-  <template id="start-end">
-    <div class="shape start-end ">
-      <div class="con_anchor  anchor_top" data-point="top"></div>
-      <div class="con_anchor  anchor_right" data-point="right"></div>
-      <div class="con_anchor  anchor_bottom" data-point="bottom"></div>
-      <div class="con_anchor  anchor_left" data-point="left"></div>
+<template id="start-end">
+  <div class="shape start-end ">
+    <div class="con_anchor  anchor_top" data-point="top"></div>
+    <div class="con_anchor  anchor_right" data-point="right"></div>
+    <div class="con_anchor  anchor_bottom" data-point="bottom"></div>
+    <div class="con_anchor  anchor_left" data-point="left"></div>
 
-      <svg>
-        <path d="M 25 1 C -5,1 -5,49 25,49 L 180 49 C 205,49 205,1 180,1 Z" />
-      </svg>
-      <div class="text text-center col-12  text-truncate mx-auto ">
-        End
-      </div>
+    <svg>
+      <path d="M 25 1 C -5,1 -5,49 25,49 L 180 49 C 205,49 205,1 180,1 Z" />
+    </svg>
+    <div class="text text-center col-12  text-truncate mx-auto ">
+      End
     </div>
-  </template>
-  <template id="process">
-    <div class="shape process ">
-      <div class="con_anchor  anchor_top" data-point="top"></div>
-      <div class="con_anchor  anchor_right" data-point="right"></div>
-      <div class="con_anchor  anchor_bottom" data-point="bottom"></div>
-      <div class="con_anchor  anchor_left" data-point="left"></div>
-      <svg>
-        <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z" />
-      </svg>
-      <div class="text text-center col-12  text-truncate mx-auto" contenteditable=false>
-        process
-      </div>
+  </div>
+</template>
+<template id="process">
+  <div class="shape process ">
+    <div class="con_anchor  anchor_top" data-point="top"></div>
+    <div class="con_anchor  anchor_right" data-point="right"></div>
+    <div class="con_anchor  anchor_bottom" data-point="bottom"></div>
+    <div class="con_anchor  anchor_left" data-point="left"></div>
+    <svg>
+      <path d="M 1 1 L 199 1 L 199 49 L 1 49 Z" />
+    </svg>
+    <div class="text text-center col-12  text-truncate mx-auto" contenteditable=false>
+      process
     </div>
-  </template>
-  <template id="input">
-    <div class="shape input">
-      <div class="con_anchor  anchor_top" data-point="top"></div>
-      <div class="con_anchor  anchor_right" data-point="right"></div>
-      <div class="con_anchor  anchor_bottom" data-point="bottom"></div>
-      <div class="con_anchor  anchor_left" data-point="left"></div>
-      <svg>
-        <path d="M 1 15 L 199 1 L 199 49 L 1 49 Z" />
-      </svg>
-      <div class="text text-center col-12  text-truncate mx-auto" contenteditable=false>
-        input
-      </div>
+  </div>
+</template>
+<template id="input">
+  <div class="shape input">
+    <div class="con_anchor  anchor_top" data-point="top"></div>
+    <div class="con_anchor  anchor_right" data-point="right"></div>
+    <div class="con_anchor  anchor_bottom" data-point="bottom"></div>
+    <div class="con_anchor  anchor_left" data-point="left"></div>
+    <svg>
+      <path d="M 1 15 L 199 1 L 199 49 L 1 49 Z" />
+    </svg>
+    <div class="text text-center col-12  text-truncate mx-auto" contenteditable=false>
+      input
     </div>
-  </template>
-  <template id="decision">
-    <div class=" shape decision ">
-      <div class="con_anchor  anchor_top" data-point="top"></div>
-      <div class="con_anchor  anchor_right" data-point="right"></div>
-      <div class="con_anchor  anchor_bottom" data-point="bottom"></div>
-      <div class="con_anchor  anchor_left" data-point="left"></div>
-      <svg>
-        <path d="M 100 1 L 199 25 L 100 49 L 1 25 Z " />
-      </svg>
-      <div class="text text-center col-12  text-truncate mx-auto" contenteditable="false">
-        decision
-      </div>
+  </div>
+</template>
+<template id="decision">
+  <div class=" shape decision ">
+    <div class="con_anchor  anchor_top" data-point="top"></div>
+    <div class="con_anchor  anchor_right" data-point="right"></div>
+    <div class="con_anchor  anchor_bottom" data-point="bottom"></div>
+    <div class="con_anchor  anchor_left" data-point="left"></div>
+    <svg>
+      <path d="M 100 1 L 199 25 L 100 49 L 1 25 Z " />
+    </svg>
+    <div class="text text-center col-12  text-truncate mx-auto" contenteditable="false">
+      decision
     </div>
-  </template>
-  <template id="display">
-    <div class=" shape display ">
-      <div class="con_anchor  anchor_top" data-point="top"></div>
-      <div class="con_anchor  anchor_right" data-point="right"></div>
-      <div class="con_anchor  anchor_bottom" data-point="bottom"></div>
-      <div class="con_anchor  anchor_left" data-point="left"></div>
-      <svg>
-        <path d="M 1 25 L 15 49 H 180 C 205 49 ,205 1, 180 1 H 15 L 1,25  " />
-      </svg>
-      <div class="text text-center col-12  text-truncate mx-auto" contenteditable="false">
-        display
-      </div>
+  </div>
+</template>
+<template id="display">
+  <div class=" shape display ">
+    <div class="con_anchor  anchor_top" data-point="top"></div>
+    <div class="con_anchor  anchor_right" data-point="right"></div>
+    <div class="con_anchor  anchor_bottom" data-point="bottom"></div>
+    <div class="con_anchor  anchor_left" data-point="left"></div>
+    <svg>
+      <path d="M 1 25 L 15 49 H 180 C 205 49 ,205 1, 180 1 H 15 L 1,25  " />
+    </svg>
+    <div class="text text-center col-12  text-truncate mx-auto" contenteditable="false">
+      display
     </div>
-  </template>
-  <template id="newpage">
-      <svg id="canvas">
-          <defs>
-            <marker id="arrowhead" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-              <path d="M 0 0 L 10 5 L 0 10 z" />
-            </marker>
-          </defs>
-        </svg>
-    <div class=" shape start-end " id="start">
-      <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
-      <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
-      <div class="con_anchor anchor_start anchor_bottom" data-point="bottom"></div>
-      <div class="con_anchor anchor_start anchor_left" data-point="left"></div>
-      <svg>
+  </div>
+</template>
+<template id="newpage">
+  <svg id="canvas">
+    <defs>
+      <marker id="arrowhead" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" />
+      </marker>
+    </defs>
+  </svg>
+  <div class=" shape start-end " id="start">
+    <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
+    <div class="con_anchor anchor_start anchor_right" data-point="right"></div>
+    <div class="con_anchor anchor_start anchor_bottom" data-point="bottom"></div>
+    <div class="con_anchor anchor_start anchor_left" data-point="left"></div>
+    <svg>
 
-        <path d="M 25 1 C -5,1 -5,49 25,49 L 180 49 C 205,49 205,1 180,1 Z" />
-      </svg>
-      <div class="text text-center col-12  text-truncate mx-auto">
-        Start
-      </div>
+      <path d="M 25 1 C -5,1 -5,49 25,49 L 180 49 C 205,49 205,1 180,1 Z" />
+    </svg>
+    <div class="text text-center col-12  text-truncate mx-auto">
+      Start
     </div>
-  </template>
+  </div>
+</template>
 
 
 

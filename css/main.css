@@ -123,7 +123,7 @@ g {
 
 polyline {
   fill: none;
-  /*  stroke:#4f7df9;
+  /*  stroke:$primaryColor;
     */
 }
 
@@ -216,6 +216,7 @@ table {
   color: #fff;
   position: absolute;
   overflow-y: scroll !important;
+  table-layout: fixed;
 }
 table thead {
   border-color: #1b1e23 !important;
@@ -225,6 +226,9 @@ table thead tr {
 }
 table thead td {
   border-color: #1b1e23 !important;
+}
+table td {
+  word-break: break-word;
 }
 
 ::-webkit-scrollbar {
@@ -303,16 +307,45 @@ table thead td {
 #pagination {
   background: #2d3035;
   border-bottom: 3px solid rgba(0, 0, 0, 0.08);
-  overflow-x: scroll;
-  display: flex;
+  display: inline-flex;
+  overflow-y: hidden;
 }
 #pagination div {
   color: #fff;
   background: #2d3035;
   border: 1px solid #4f7df9;
+  max-width: 150px !important;
+  flex-grow: 3;
   border-radius: 0px;
-  text-overflow: ellipsis;
   margin: 0px !important;
+  padding: 0;
+  padding-left: 5px;
+  overflow: hidden;
+  flex-wrap: nowrap;
+  display: inline-flex;
+}
+#pagination div .page-text, #pagination div .page-text:hover {
+  position: relative;
+  max-width: 80% !important;
+  overflow: hidden;
+  text-overflow: hidden;
+  white-space: nowrap;
+  display: inline-flex;
+  align-self: center;
+  background: transparent;
+  border: none;
+}
+#pagination div .close {
+  align-self: center;
+  font-size: 0.9em;
+  background: none;
+  border: none !important;
+  min-width: 15px !important;
+  max-width: 15px !important;
+  opacity: 1;
+}
+#pagination div svg {
+  margin: 0 !important;
 }
 #pagination div:hover {
   background: #4f7df9;
@@ -322,18 +355,19 @@ table thead td {
   background: #4f7df9;
   color: #fff;
   font-weight: bold;
+  flex-shrink: 0;
+  min-width: 100px;
 }
 #pagination .page-name {
   background: none;
 }
-#pagination .close {
-  font-size: 0.9em;
-  background: none;
-  border: none !important;
-  opacity: 1;
-}
 #pagination .page-edit {
   background: #fff !important;
+  flex-grow: 0 !important;
+  flex-shrink: 0 !important;
+  width: 100% !important;
+}
+#pagination .page-edit .page-text {
   color: #1b1e23 !important;
 }
 #pagination .page-edit .close {
@@ -345,6 +379,34 @@ table thead td {
 }
 .invalid .con_anchor {
   border-color: #ff3d50;
+}
+.invalid .ui-resizable-handle {
+  border-color: #ff3d50;
+}
+
+.modal-content {
+  background: #24272C;
+  color: #fff;
+}
+.modal-content input, .modal-content input:active, .modal-content input:focus {
+  background: #24272C;
+  color: #fff;
+  border: 3px solid #212429;
+  box-shadow: none;
+}
+.modal-content input:focus {
+  border: 3px solid #4f7df9;
+}
+.modal-content .input_invalid {
+  border: 3px solid #ff3d50 !important;
+}
+
+.modal-header {
+  border-bottom: 3px solid #212429 !important;
+}
+
+.modal-footer {
+  border-top: 3px solid #212429 !important;
 }
 
 /*# sourceMappingURL=main.css.map */

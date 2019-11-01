@@ -12,20 +12,19 @@ $(document).on("click","#play",function(){
     }
     onButtonClick();
     onAction="compile";
-    $(this).html("<i class='fas fa-stop'></i>");
-    $("#debug").html("<i class='fas fa-bug'></i>");
+
     controller($("#start").attr("data-connector"));
+    stop();
 });
 $(document).on("click","#debug",function(){
     if(!checkSyntax()){
         return false;
     }
     onButtonClick();
+ 
     onAction="debug";
 
-        $("#play").html("<i class='fas fa-play'></i>");
-
-        $("#debug").html("<i class='fas fa-stop'></i>");
+    
         nodePointer=$("#start");
         connectorPointer=$("#start").attr("data-connector");
         onDebug=true;
@@ -37,6 +36,7 @@ $(document).on("click","#debug",function(){
 
     
 });
+$(document).on("click","#stop",function (){stop()});
 $(document).on("click","#next",function () { 
 
     unHightLight(nodePointer);
@@ -47,6 +47,17 @@ $(document).on("click","#next",function () {
     let height = obj[0].scrollHeight;
     obj.scrollTop(height);
 });
+function stop(){
+    $(".ondebug").hide();
+    $("#stop").hide();
+    $("#play").show();
+    $("#debug").show();
+    $(".shape").each(function(){
+        console.log(this);
+        unHightLight(this);
+    });
+}
+
 function clearOnDebug(){
     $("#debug").html("<i class='fas fa-bug'></i>");
     $(".ondebug").hide();
@@ -56,6 +67,9 @@ function onButtonClick(){
     $("tbody").empty();
     $("#console").empty(); 
     unHightLight($(".shape"));
+    $("#play").hide();
+    $("#debug").hide();
+    $("#stop").show();
     inputSuccess=false;
     onAction=undefined;
 
@@ -110,7 +124,7 @@ function controllerOnDebug(){
 
     if($(connectorPointer).attr("data-to")==undefined||connectorPointer==undefined){
         clearOnDebug();
-        
+        stop();
         onDebug=false;
     }else{
         nodePointer=$(connectorPointer).attr("data-to");
