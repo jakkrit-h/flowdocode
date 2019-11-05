@@ -626,7 +626,6 @@ function onDropItemSuccess(type,posX,posY) {    //เมื่อมีการ
       let attrObj = {
         id: (type + "-" + index),// set id ของ node โดยใช้ ประเภทของ shape - index ที่ process มาจาก if
       }
-      console.log(posX+'  '+posY);
       if(posX==undefined||posY==undefined){
         posX=event.clientX ;
         posY=event.clientY;
@@ -964,7 +963,6 @@ function saveAll(){
     let name=sessionStorage.key(i);
 
       text =JSON.parse(sessionStorage.getItem(name));
-      console.log(text);
 
     createDownloadFile(name,text); 
   }
@@ -1062,19 +1060,19 @@ function addToStorageCache(name,text){
 
 
   $(label).addClass("btn  page active row  pr-0");
-  if(name=="untitled"){
+  // if(name=="untitled"){
  
 
-    if($(".page[data-untitled]").last().attr("data-untitled")!=undefined){
-      let num=parseInt($(".page[data-untitled]").last().attr("data-untitled"))+1;
-      $(label).attr("data-untitled",num);
-      name+=num;
+  //   if($(".page[data-untitled]").last().attr("data-untitled")!=undefined){
+  //     let num=parseInt($(".page[data-untitled]").last().attr("data-untitled"))+1;
+  //     $(label).attr("data-untitled",num);
+  //     name+=num;
 
-    }else{
-      $(label).attr("data-untitled",0);
+  //   }else{
+  //     $(label).attr("data-untitled",0);
   
-    }
-  }
+  //   }
+  // }
   $(label).html("<div class='page-text'>"+name+"</div><div class='close p-0'><i class='far mx-2 py-auto  fa-times-circle'></i></div>");
   $(label).prop("id",name);
   $(label).attr("data-page",name);
@@ -1121,7 +1119,7 @@ function addNewPage(design){
 
   }
   let text ={"design":design,"resolution":{"width":width,"height":height}};
-  addToStorageCache("untitled",JSON.stringify(text));
+  addToStorageCache(checkSamePageNameAndChangeName("untitled-1"),JSON.stringify(text));
 }
 function init(noRisize){
   $("#stop").hide();
@@ -1177,7 +1175,7 @@ function readPage(page,action){
 
   }
 
- 
+
   $(page).addClass("active");
   text = sessionStorage.getItem($(page).attr("data-page"));
   $("title").html($(page).attr("data-page")+" | FLOWDOCODE");
@@ -1212,29 +1210,63 @@ function getLatestNode(){
   
 }
 function checkSamePageNameAndChangeName(fileName){
+
+  let list=[];
   for(let i =0;i<sessionStorage.length;i++){
-    let sessionKey=sessionStorage.key(i);
-    if(sessionKey==fileName){
-      fileName=fileName+'(copy)';
+    list.push(sessionStorage.key(i));
+  }
+  list.sort();
+  list.sort((a,b)=>{    
+    return compare(a,b);
+  });
+  for(let i =0;i<list.length;i++){
+    let temp =list[i].split('-');
+    let number;
+    if(temp[0]==fileName.split('-')[0]){
+      if(!temp[1]){
+        number=2;
+      }else{
+        number=parseInt( temp[1])+1;
+      }
+  
+ 
+    }
+  
+    if(list[i]==fileName){
+      fileName=temp[0]+'-'+number;
     }
   }
   return fileName;
+}
+function compare(a,b){
+  let tempA= a.split('-');
+  let tempB= b.split('-');
+  
+  if(tempA[0]==tempB[0]&&parseInt( tempA[1]) < parseInt(tempB[1])){
+    return -1;
+  }else{
+    return 1;
+  }
 }
 function changePageName(page) {
   let page_text = $(page).find('.page-text');
   let text = $(page_text).text();
   if (text == '') {
     $(page_text).text(currentPageName);
+  }else if(page_text.text()!=$(page).prop('id')){
+    $(page_text).text(checkSamePageNameAndChangeName(text));
   }
-  $(page_text).text(checkSamePageNameAndChangeName(text));
   $(page).attr("contenteditable", "false");
   $(page).removeClass("page-edit");
   let storage = sessionStorage.getItem($(page).attr("data-page"));
  
-  sessionStorage.setItem($(page).text(), storage);
   sessionStorage.removeItem($(page).attr("data-page"));
+  sessionStorage.setItem($(page).text(), storage);
+ 
   $(page).attr("data-page", $(page).text());
   $(page).attr("id", $(page).text());
+  $("title").html($(page).attr("data-page")+" | FLOWDOCODE");
+
   if ($(page).text() != "untitled") {
     $(page).removeAttr("data-untitled");
   }

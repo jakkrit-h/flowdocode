@@ -269,8 +269,16 @@
   $("#con-design").scroll(function () {
   });
   $(function () {
+    let list=[];
     for(let i =0;i<sessionStorage.length;i++){
-      let sessionKey = sessionStorage.key(i);
+      list.push(sessionStorage.key(i));
+    }
+    list.sort();
+    list.sort((a,b)=>{    
+    return compare(a,b);
+  });
+      for(let i =0;i<list.length;i++){
+      let sessionKey = list[i];
       let sessionVal=sessionStorage.getItem(sessionKey);
       let size=3 + ((sessionVal.length*16)/(8*1024)) + ' KB'
       console.log(size);
@@ -587,12 +595,7 @@
     $("#debugger").empty();
   });
   $(document).on("click", "#addpage", function () {
-    /*      if($(".page").length>=7){
-   
-           return false;
-         }else{
-           
-         } */
+
     let width = $(window).width();
     let height = $(window).height();
     let text = { "design": $("#design").html(), "resolution": { "width": width, "height": height } };
@@ -603,6 +606,7 @@
 
   });
   $(document).on("click", ".close", function () {
+
     onClose = true;
     if ($(".page").length == 1 || $(this).parent(".page").hasClass("page-edit")) {
       return false;
@@ -618,6 +622,7 @@
     }
 
     if ($(this).parent(".page").hasClass("active")) {
+      console.log(typeof nextPage);
       readPage(nextPage);
     }
     sessionStorage.removeItem($(this).parent(".page").attr("data-page"));
@@ -634,13 +639,15 @@
   });
   $(document).on("keydown", ".page", function () {
     if (event.keyCode == 13) {
-
-      changePageName(this);
+      $(this).trigger("blur");
+      // changePageName(this);
       return false;
     }
   });
   $(document).on("blur", ".page", function () {
-    changePageName(this);
+      changePageName(this);
+
+   
 
   });
 

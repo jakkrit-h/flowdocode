@@ -1,5 +1,7 @@
 $borderDark:rgba(0, 0, 0, 0.08);
 $primaryColor:#4f7df9;
+$inprogressColor:#f1c40f;
+$successColor:#27ae60;
 $invalidColor:#ff3d50;
 html,body{height: 100%;
 }body{
@@ -45,8 +47,8 @@ linear-gradient(90deg, transparent 9%,
 
   height:100%;
   background-size:60px 60px;
-  left:-10px;
-  padding: 50px;
+  left:0px;
+  padding: 50px 60px 50px 50px !important;
   
   overflow: scroll;
   z-index: 0;
@@ -397,11 +399,13 @@ opacity: 0;
     background: #fff !important;
     flex-grow: 0  !important;
     flex-shrink: 0 !important;
-    width: 100% !important;
- 
+    width: auto !important;
+    max-width: 100% !important;
     .page-text{
 
       color:#1b1e23 !important;
+      width: auto !important;
+      max-width: 100% !important;
     }
     .close{
       opacity: 0;
