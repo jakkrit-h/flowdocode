@@ -5,6 +5,8 @@ html, body {
 body {
   overflow: hidden;
   background: #292c32;
+  background-image: linear-gradient(0deg, transparent 9%, rgba(119, 133, 135, 0.6) 10%, rgba(119, 133, 135, 0.6) 12%, transparent 13%, transparent 29%, rgba(119, 133, 135, 0.1) 30%, rgba(119, 133, 135, 0.1) 31%, transparent 32%, transparent 49%, rgba(119, 133, 135, 0.1) 50%, rgba(119, 133, 135, 0.1) 51%, transparent 52%, transparent 69%, rgba(119, 133, 135, 0.1) 70%, rgba(119, 133, 135, 0.1) 71%, transparent 72%, transparent 89%, rgba(119, 133, 135, 0.1) 90%, rgba(119, 133, 135, 0.1) 91%, transparent 92%, transparent), linear-gradient(90deg, transparent 9%, rgba(119, 133, 135, 0.6) 10%, rgba(119, 133, 135, 0.6) 12%, transparent 13%, transparent 29%, rgba(119, 133, 135, 0.1) 30%, rgba(119, 133, 135, 0.1) 31%, transparent 32%, transparent 49%, rgba(119, 133, 135, 0.1) 50%, rgba(119, 133, 135, 0.1) 51%, transparent 52%, transparent 69%, rgba(119, 133, 135, 0.1) 70%, rgba(119, 133, 135, 0.1) 71%, transparent 72%, transparent 89%, rgba(119, 133, 135, 0.1) 90%, rgba(119, 133, 135, 0.1) 91%, transparent 92%, transparent);
+  background-size: 50px 50px;
 }
 
 nav {
@@ -29,9 +31,7 @@ div.con-fixed {
 }
 
 .con-design {
-  background-image: linear-gradient(0deg, transparent 9%, rgba(119, 133, 135, 0.5) 10%, rgba(119, 133, 135, 0.5) 12%, transparent 13%, transparent 29%, rgba(119, 133, 135, 0.1) 30%, rgba(119, 133, 135, 0.1) 31%, transparent 32%, transparent 49%, rgba(119, 133, 135, 0.1) 50%, rgba(119, 133, 135, 0.1) 51%, transparent 52%, transparent 69%, rgba(119, 133, 135, 0.1) 70%, rgba(119, 133, 135, 0.1) 71%, transparent 72%, transparent 89%, rgba(119, 133, 135, 0.1) 90%, rgba(119, 133, 135, 0.1) 91%, transparent 92%, transparent), linear-gradient(90deg, transparent 9%, rgba(119, 133, 135, 0.5) 10%, rgba(119, 133, 135, 0.5) 12%, transparent 13%, transparent 29%, rgba(119, 133, 135, 0.1) 30%, rgba(119, 133, 135, 0.1) 31%, transparent 32%, transparent 49%, rgba(119, 133, 135, 0.1) 50%, rgba(119, 133, 135, 0.1) 51%, transparent 52%, transparent 69%, rgba(119, 133, 135, 0.1) 70%, rgba(119, 133, 135, 0.1) 71%, transparent 72%, transparent 89%, rgba(119, 133, 135, 0.1) 90%, rgba(119, 133, 135, 0.1) 91%, transparent 92%, transparent);
   height: 100%;
-  background-size: 60px 60px;
   left: 0px;
   padding: 50px 60px 50px 50px !important;
   overflow: scroll;
@@ -369,6 +369,7 @@ table td {
   max-width: 100% !important;
 }
 #pagination .page-edit .page-text {
+  margin: 0px 10px !important;
   color: #1b1e23 !important;
   width: auto !important;
   max-width: 100% !important;
@@ -410,6 +411,18 @@ table td {
 
 .modal-footer {
   border-top: 3px solid #212429 !important;
+}
+
+.wall {
+  left: 500px;
+  top: 500px;
+  width: 100px;
+  height: 100px;
+  background-color: transparent;
+  border: 2px dashed #4f7df9;
+  z-index: 9;
+  position: absolute;
+  opacity: 1;
 }
 
 /*# sourceMappingURL=main.css.map */

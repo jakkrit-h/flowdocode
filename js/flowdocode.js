@@ -16,7 +16,6 @@
     */
 
 
-
 var selectedEl=undefined;// Node or Connector ที่กำลังถูก select อยู่
 var originalPosition = undefined;// ตำแหน่งของ Anchor ก่อนโดน Drag ไว้ใช้ตอนให้ Anchor กลับไปอยู่ที่เดิมหลัง Drag เสร็จ
 var lineDraw = undefined;// connector ตอนกำลังถูกสร้าง
@@ -26,6 +25,7 @@ var mouseDown=undefined;//สถานะว่ากำลัง mousedown อ�
 var onHoverAnchor=undefined;
 var onClose=undefined;
 var currentPageName=undefined;
+var wallsArea=[];
 function updateSvgPathProcess(node){    //ปรับขนาดของ shape Process ตอน Resize
 
 
@@ -41,11 +41,9 @@ function updateSvgPathStartEnd(node){        //ปรับขนาดของ
     // <path d="M 25 1 C -5,1 -5,49 25,49 L 175 49 C 200,49 200,1 175,1 Z"/>                
     let path=$(node).find("path");      
     let width=$(node).outerWidth();
-    let d
-    if(width>=356)
-        d= "M 25 1 C -5,1 -5,49 25,49 L "+(width*93/100)+" 49 C "+(width+8)+",49 "+(width+8)+",1 "+(width*93/100)+",1 Z";
-    else
-        d= "M 25 1 C -5,1 -5,49 25,49 L "+(width*90/100)+" 49 C "+(width+5)+",49 "+(width+5)+",1 "+(width*90/100)+",1 Z";
+    let widthByRation=width
+    let d;
+    d="M 25 1 C -5,1 -5,49 25,49 L "+(width-25)+" 49 C "+(width+5)+",49 "+(width+5)+",1 "+(width-25)+",1 Z";
     $(path).attr("d",d);
 
 
@@ -212,7 +210,7 @@ function updateAnchorLeft(node) {    // เพื่อเปลี่ยนต�
 
 }
 function updateConnectorPosition(connector,noswapAnchor) {    //ไว้ใช้เปลี่ยนตำแหน่งของ เส้น connector ตอน node มีการ drag และ resize โดยใช้ค่า from to เพื่อบอก ว่า จาก Node ไหนไป Node ไหน
-
+  
     let fromNode = $(connector).attr("data-from");//เก็บ Id ของ Node ต้นทาง
     let toNode = $(connector).attr("data-to");//เก็บ Id ของ Node ปลายทาง
     let pointFrom = $(connector).attr("data-anchorfrom");//เก็บ ตำแหน่งที่ชี้ ของ Node ต้นทาง
@@ -230,11 +228,13 @@ function updateConnectorPosition(connector,noswapAnchor) {    //ไว้ใช�
       margin=4;
     }
     let scroll=$("#con-design").scrollTop();
-    let p0={x:positionFromNode.x-margin,y:positionFromNode.y+scroll};
-    let p100={x:positionToNode.x-margin,y:positionToNode.y+scroll};
-    let distanceX = Math.abs(p100.x-p0.x);
-    let distanceY = Math.abs(p100.y-p0.y);
+    let p0={x:positionFromNode.x-margin,y:positionFromNode.y+scroll,point:pointFrom};
+    let p100={x:positionToNode.x-margin,y:positionToNode.y+scroll,point:pointTo};
+    prototypeDrawLine(p0,p100);
+    let distanceX =p100.x-p0.x;
+    let distanceY = p100.y-p0.y;
     let p25=linePlot25_75(p0.x,p0.y,pointFrom,distanceX,distanceY);
+
     let p75=linePlot25_75(p100.x,p100.y,pointTo,distanceX,distanceY);
     let jsonData={
         p0,p25,p75,p100,fromNode,toNode,pointFrom,pointTo,distanceX,distanceY,connector
@@ -256,46 +256,82 @@ function updateConnectorPosition(connector,noswapAnchor) {    //ไว้ใช�
     updateTextLabelPosition(connector);
 }
 
+function prototypeDrawLine(startPoint,endPoint){
+  
+
+  let pointer=[];
+  pointer.push(startPoint);
+  pointer.push(midPoint);
+  pointer.push(endPoint);
+  return pointer;
+}
+function generatePathForConnector(arr){
+  let str="";
+
+  arr.map(function (a) {  
+    str += a.x+","+a.y+" ";
+  });
+  return str;
+}
+function midPoint(startPosition,endPosition){
+  let midPoint= {x:(parseInt(startPoint.x)+parseInt(endPoint.x))/2,
+    y:(parseInt(startPoint.y)+parseInt(endPoint.y))/2};
+  return midPoint;
+}
 function linePlot25_75(x,y,po,distanceX,distanceY){
-  let distanceXRaito=40;
-  let distanceYRaito=40;
+  if(distanceX<0||distanceY<0){
+ 
+    distanceX=Math.abs(distanceX);
+    distanceY=Math.abs(distanceY);
+  }else{
+
+  }
+  
 switch(po){
   case "top":
-    return {x:parseInt(x),y:y-distanceYRaito};
+    return {x:parseInt(x),y:y-distanceY/2};
 
   case "right":
  
-      return  {x:parseInt(x)+distanceXRaito,y:y} ;
+      return  {x:parseInt(x)+distanceX/2,y:y} ;
 
 
   case "bottom":
 
 
-    return  {x:parseInt(x),y:parseInt(y)+distanceYRaito};
+    return  {x:parseInt(x),y:parseInt(y)+distanceY/2};
   
   case "left": 
-      return  {x:parseInt(x)-distanceXRaito,y:y} ;
+      return  {x:parseInt(x)-distanceX/2,y:y} ;
     
 }
 }
 function line50(json,noswapAnchor){
   let p1 = { x: 0, y: 0 };
-  let p2;
+  let p2={ x: 0, y: 0 };
   // if(noswapAnchor!=true){
   // json.pointTo=swapAnchor(json);
   // }
   switch (json.pointTo) {
     case "top":
       if(json.p0.y>=json.p75.y){
-
-        p1.x = json.p25.x;
-        p1.y = json.p75.y;
+     
+        p1.x = Math.floor(((json.p25.x+json.p75.x)/2));
+        p1.y = parseInt(json.p25.y);
+       
+        p2.x=p1.x;
+        p2.y=json.p75.y;
+       
+        // console.log(jsonToPoint(json.p0)+" "+jsonToPoint(json.p25)+" "+jsonToPoint(p1)+" "+jsonToPoint(p2)+" "+jsonToPoint(json.p75)+" "+jsonToPoint(json.p100))
       }else{
+     
         if(json.p75.y<json.p25.y){
           json.p25.y=json.p75.y;
+       
         }
         p1.x = json.p75.x;
         p1.y = json.p25.y;
+        p2=p1;
       }
      
       break;
@@ -308,6 +344,7 @@ function line50(json,noswapAnchor){
         p1.x = json.p75.x;
         p1.y = json.p25.y;
       }
+      p2=p1;
       break;
     case "left":
       if (json.p25.x < json.p75.x) {
@@ -318,6 +355,7 @@ function line50(json,noswapAnchor){
         p1.x = json.p75.x;
         p1.y = json.p25.y;
       }
+      p2=p1;
       break;
     case "bottom":
       if (json.p25.y > json.p75.y) {
@@ -335,11 +373,12 @@ function line50(json,noswapAnchor){
         }
 
       }
+      p2=p1;
       break;
 
   }
 
- p2=p1;
+ 
 
   return jsonToPoint(json.p0)+" "+jsonToPoint(json.p25)+" "+jsonToPoint(p1)+" "+jsonToPoint(p2)+" "+jsonToPoint(json.p75)+" "+jsonToPoint(json.p100);
 }
@@ -630,8 +669,8 @@ function onDropItemSuccess(type,posX,posY) {    //เมื่อมีการ
         posX=event.clientX ;
         posY=event.clientY;
       }
-     let modX=posX%20;
-     let modY=posY%20;
+     let modX=posX%10;
+     let modY=posY%10;
      let mousePoint = {// get ตำแหน่งของ cursor mouse เพื่อจะได้ set ตำแหน่งให้ Node ลงถูกจุด
        top: posY -modY,
        left:posX - 100-modX,
@@ -639,9 +678,9 @@ function onDropItemSuccess(type,posX,posY) {    //เมื่อมีการ
      }
       let node = $("template#" + type).html();//สร้าง node โดยอิงจาก template Id ประเภทของ shape
       node=$(node).css("position","absolute");
-      node = $(node).draggable(nodeDraggableProperty());//ใส่ความสามารถ Draggableให้กับ Node
+      node = $(node).draggable(nodeDraggableProperty(node));//ใส่ความสามารถ Draggableให้กับ Node
       node = $(node).resizable(nodeResizableProperty(type));//ใส่ความสามารถ Resizable Node
-
+     
       $("#design").append($(node));//เพิ่ม node ที่สร้างลงในส่วน Design 
       $(node).offset(mousePoint);//set ตำแหน่งให้ Node โดยใช้ตำแหน่งของ mouse
       if(type =="start-end"){
@@ -658,11 +697,14 @@ function onDropItemSuccess(type,posX,posY) {    //เมื่อมีการ
       updateAnchorPosition(node);
     }
 }
-function nodeDraggableProperty(){// returnความสามารถของ Node ในการ Draggable
-    return{
+function nodeDraggableProperty(node){// returnความสามารถของ Node ในการ Draggable
+  let oldPos;
+  return{
         containment:"#design",
+      
+        cursorAt:{left:$(node).outerWidth()/2,top:$(node).outerHeight()/2},
         opacity: 0.5,
-        grid: [ 20, 20 ], 
+        grid: [ 10, 10 ], 
         snap: false,
         snapTolerance: 20,
         snapMode: "inner",
@@ -670,20 +712,52 @@ function nodeDraggableProperty(){// returnความสามารถขอ�
         stack: ".shape",
         scrollSensitivity: 50,
         scrollSpeed: 20,
-        drag: function () {
+        start:function(){
+          createDistanceWalls(this);
+          oldPos=$(this).offset();
+        },
+        drag: function (event,ui) {
+          let result=calculateObstacle(this);
+          let currentPos=$(this).offset();
+          let width=$(this).outerWidth();
+          let height=$(this).outerHeight();
+          let boundaryLine=result.boundaryLine;
+
+          if(result.response){
+            console.log(boundaryLine.side=='left'&&currentPos.left+width>=boundaryLine.x1);
+            if(boundaryLine.side=='top'&&currentPos.top>oldPos.top){
+              console.log(boundaryLine);
+              ui.offset({top:boundaryLine.y1-5,left:currentPos.left});
+              // ui.position.top=190;
+             
+            }else if(boundaryLine.side=='left'&&currentPos.left+width>=boundaryLine.x1){
+              ui.position.left=190;
+
+            }
+
+        
+          }
+      
+         
+         
           shapeUnSelectedStyle();
           updateConnectorPositionOnAction(this);
           updateAnchorPosition(this);
+          $(".con_anchor").addClass("hide");
           selectedEl = $(this);
+
         }
         , stop: function () {//ตอนหยุด Drag จะทำงานหลังตอนโดน Drop
+        
           let position=$(this).offset();
-          let top=position.top%20;
-          let left=position.left%20;
+          let top=position.top%10;
+          let left=position.left%10;
           position.top-=top;
           position.left-=left;
-     
+      
           $(this).offset(position);
+          // $(".wall").remove();
+          wallsArea=[];
         }
       }
     
@@ -823,6 +897,105 @@ function conAnchorDraggableProperty(){// returnความสามารถข
         }
     }
 }
+function createDistanceWalls(node){
+  wallsArea=[]
+  $(".shape").each(function(){
+    if(node!=this){
+   
+    let nodeWidth=$(this).outerWidth()+200;
+    let nodeHeight=$(this).outerHeight()+200;
+
+    let wall = document.createElement("div");
+    $(wall).addClass("wall");
+    $(wall).outerWidth(nodeWidth);
+    $(wall).height(nodeHeight);
+    let offset = $(this).offset();
+    offset.top-=100;
+    offset.left-=100;
+    // let area ={x1:offset.left,y1:offset.top,x2:offset.left+nodeWidth,y2:offset.top+nodeHeight};
+    let area ={x:offset.left,y:offset.top,width:nodeWidth,height:nodeHeight,own:this};
+
+    wallsArea.push(area);
+    $("#design").append(wall);
+    $(wall).offset(offset);
+      $(wall).droppable({drop:function(event, ui){
+        let node =ui.draggable;
+        // $(node).draggable({
+          
+        //   revert:true,
+        //   revertDuration:0
+        // });
+        // setTimeout(() => {
+        //   updateConnectorPositionOnAction(node);
+        //   $(node).draggable({
+        //     revert:false,
+        //   });
+        // }, 0);
+        
+      }
+      });
+  }
+   
+  });
+}
+function calculateObstacle(node){
+  let nodePos= $(node).offset();
+  let width=$(node).outerWidth();
+  let height=$(node).outerHeight();
+
+  let clientX=event.clientX;
+  let clientY=event.clientY;
+ 
+    for(let i =0;i<wallsArea.length;i++){
+     
+      let area =wallsArea[i];
+     
+      if (!(nodePos.left > (area.x + area.width) ||
+        (nodePos.left + width) < area.x ||
+        nodePos.top > (area.y + area.height) ||
+        (nodePos.top + height) < area.y)) {
+          let boundaryLine;
+          if(nodePos.left<area.x&&
+            (nodePos.top+height>area.y)){
+              boundaryLine={
+                x1:area.x,
+                y1:area.y,
+                x2:area.x,
+                y2:area.y+area.height,
+                side:'left'};
+          } if((nodePos.left + width)>(area.x + area.width)&&
+          (nodePos.top>area.y)            ){
+            boundaryLine={
+              x1:area.x+area.width,
+              y1:area.y,
+              x2:area.x+area.width,
+              y2:area.y+area.height,
+              side:'right'};
+          } if( nodePos.top <area.y &&(nodePos.left>area.x)){
+            boundaryLine={
+              x1:area.x,
+              y1:area.y,
+              x2:area.x+area.width,
+              y2:area.y,
+              side:'top'};
+          } if((nodePos.top+height) > (area.y + area.height)){
+            boundaryLine={
+              x1:area.x,
+              y1:area.y+area.height,
+              x2:area.x+area.width,
+              y2:area.y+area.height,
+              side:'bottom'};
+          }
+        return {response :true,boundaryLine};
+      }
+  }
+    return {response:false};
+
+  
+}
+// function wallDroppableProperty(){
+
+// }
 function getTypePosition(position,pointFrom){
   switch(pointFrom) {
     case "top":
@@ -1027,8 +1200,8 @@ function writeCodeToDesign(text) {
     if(oldResolution.width!=width&&oldResolution.height!=height){              
      let topRatio=position.top*100/oldResolution.height;
       let leftRatio=position.left*100/oldResolution.width;
-      position.top=(height*topRatio/100)-((height*topRatio/100)%20);
-      position.left=(width*leftRatio/100)-((width*leftRatio/100)%20);
+      position.top=(height*topRatio/100)-((height*topRatio/100)%10);
+      position.left=(width*leftRatio/100)-((width*leftRatio/100)%10);
       $(this).offset(position);
       updateConnectorPositionOnAction(this,true);
 
@@ -1037,7 +1210,7 @@ function writeCodeToDesign(text) {
     $(this).removeClass("ui-draggable ui-draggable-handle ui-resizable ui-resizable-disabled");
     $(this).find(".con_anchor").removeClass("ui-draggable ui-draggable-handle ui-droppable ui-draggable-disabled");
     $(this).find("ui-resizable-handle").remove();
-    $(this).draggable(nodeDraggableProperty());
+    $(this).draggable(nodeDraggableProperty(this));
     setTextboxPosition(this);
     $(this).find(".con_anchor").draggable(conAnchorDraggableProperty());
     $(this).find(".con_anchor").droppable(conAnchorDroppableProperty());
@@ -1074,7 +1247,7 @@ function addToStorageCache(name,text){
   //   }
   // }
   $(label).html("<div class='page-text'>"+name+"</div><div class='close p-0'><i class='far mx-2 py-auto  fa-times-circle'></i></div>");
-  $(label).prop("id",name);
+  $(label).prop("id",name.replace(/\(|\)| /gm,'---'));
   $(label).attr("data-page",name);
 
 
@@ -1142,7 +1315,7 @@ function init(noRisize){
 
     $("#start").find(".con_anchor").draggable(conAnchorDraggableProperty());
     $("#start").find(".con_anchor").droppable(conAnchorDroppableProperty());
-    $("#start").draggable(nodeDraggableProperty());
+    $("#start").draggable(nodeDraggableProperty($("#start")));
   
     updateAnchorPosition($("#start"));
     setTextboxPosition($("#start"));
@@ -1174,8 +1347,10 @@ function readPage(page,action){
     $(".active").removeClass("active");
 
   }
+  let a="";
 
 
+  console.log(typeof page);
   $(page).addClass("active");
   text = sessionStorage.getItem($(page).attr("data-page"));
   $("title").html($(page).attr("data-page")+" | FLOWDOCODE");
