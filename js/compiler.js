@@ -53,7 +53,7 @@ function stop(){
     $("#play").show();
     $("#debug").show();
     $(".shape").each(function(){
-        console.log(this);
+    
         unHightLight(this);
     });
 }
@@ -181,8 +181,8 @@ function classify(node){
     }
     if($(node).hasClass("input")){
         if(!inputSuccess){
-
             $("#InputDialog").modal("show");
+          
             $("#inputtitle").html("Assign Value Variable <strong>"+$(node).find(".text").text()+"</strong>");
             $("#inputBox").focus();
             $("#inputBox").val("");

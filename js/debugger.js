@@ -25,7 +25,7 @@ function Debugger(node,text,result){
 }
 
 function show(node,variable,result){
-    console.log(variable);
+    // console.log(variable);
     let row=undefined;
     let type =getNodeType(node);
     if($("#debugger").find("tr").prop("id")==variable){

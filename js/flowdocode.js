@@ -250,6 +250,7 @@ function updateConnectorPosition(connector,noswapAnchor) {    //ไว้ใช�
 
     g = $(connector).parent("g");
     connector = $(connector).attr(linePosition);
+    
     $(g).html($(connector));
 /*     console.log(linePosition);
  */
@@ -278,6 +279,7 @@ function midPoint(startPosition,endPosition){
     y:(parseInt(startPoint.y)+parseInt(endPoint.y))/2};
   return midPoint;
 }
+
 function linePlot25_75(x,y,po,distanceX,distanceY){
   if(distanceX<0||distanceY<0){
  
@@ -702,7 +704,7 @@ function nodeDraggableProperty(node){// returnความสามารถข�
   return{
         containment:"#design",
       
-        cursorAt:{left:$(node).outerWidth()/2,top:$(node).outerHeight()/2},
+        // cursorAt:{left:$(node).outerWidth()/2,top:$(node).outerHeight()/2},
         opacity: 0.5,
         grid: [ 10, 10 ], 
         snap: false,
@@ -713,37 +715,37 @@ function nodeDraggableProperty(node){// returnความสามารถข�
         scrollSensitivity: 50,
         scrollSpeed: 20,
         start:function(){
-          createDistanceWalls(this);
+          // createDistanceWalls(this);
           oldPos=$(this).offset();
         },
         drag: function (event,ui) {
-          let result=calculateObstacle(this);
-          let currentPos=$(this).offset();
-          let width=$(this).outerWidth();
-          let height=$(this).outerHeight();
-          let boundaryLine=result.boundaryLine;
+          // let result=calculateObstacle(this);
+          // let currentPos=$(this).offset();
+          // let width=$(this).outerWidth();
+          // let height=$(this).outerHeight();
+          // let boundaryLine=result.boundaryLine;
 
-          if(result.response){
-            console.log(boundaryLine.side=='left'&&currentPos.left+width>=boundaryLine.x1);
-            if(boundaryLine.side=='top'&&currentPos.top>oldPos.top){
-              console.log(boundaryLine);
-              ui.offset({top:boundaryLine.y1-5,left:currentPos.left});
-              // ui.position.top=190;
+          // if(result.response){
+          //   console.log(boundaryLine.side=='left'&&currentPos.left+width>=boundaryLine.x1);
+          //   if(boundaryLine.side=='top'&&currentPos.top>oldPos.top){
+          //     console.log(boundaryLine);
+          //     ui.offset({top:boundaryLine.y1-5,left:currentPos.left});
+          //     // ui.position.top=190;
              
-            }else if(boundaryLine.side=='left'&&currentPos.left+width>=boundaryLine.x1){
-              ui.position.left=190;
+          //   }else if(boundaryLine.side=='left'&&currentPos.left+width>=boundaryLine.x1){
+          //     ui.position.left=190;
 
-            }
+          //   }
 
         
-          }
+          // }
       
          
          
           shapeUnSelectedStyle();
           updateConnectorPositionOnAction(this);
           updateAnchorPosition(this);
-          $(".con_anchor").addClass("hide");
+          $(".con_anchor").css("opacity","0");
           selectedEl = $(this);
 
         }
@@ -778,7 +780,8 @@ function nodeResizableProperty(type){// returnความสามารถข�
 function conAnchorDraggableProperty(){// returnความสามารถของ Anchor ในการ Draggable
     return{   
      
-        snap: ".con_anchor", drag: function () {//ตอนกำลังโดน Drag
+        snap: ".con_anchor",
+        grid: [ 10, 10 ], drag: function () {//ตอนกำลังโดน Drag
           document.body.style.cursor = "";
           shapeUnSelectedStyle();
           let parent="#"+$(this).parent().prop("id");// ให้ Anchorที่กำลังโดน Drag ถูกซ่อนเพื่อไม่ให้บังหัวลูกศร
@@ -819,6 +822,7 @@ function conAnchorDraggableProperty(){// returnความสามารถข
     
           }
           let p50= line50(jsonData,true);
+          console.log(p50);
           let lineProperty = {//เพิ่มตำแหน่งของ connector ว่าจากไหนไปไหน และ เพิ่ม Node ต้นทาง
             
             "points":p50,

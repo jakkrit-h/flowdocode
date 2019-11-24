@@ -31,11 +31,28 @@
 
 </head>
 <script>
+$(function () {
+  let i=0;
+  let inter=setInterval(()=>{
+    i+=10;
+    $('#dis').html(i);
+    if(i>=1000){
+   
+      clearInterval(inter);
+    }
+  },10);
+   setTimeout(() => {
+     console.log(i);
 
+  }, 100);
+
+
+  });
 
 </script>
 
 <body>
+  <div id='dis' style="font-size: 5em;color:#fff">0</div>
 <svg id="#canvas" style="top:0;left:0;">
   <path d="M 1613 1169 L 1613 1303 Q 1613 1313 1623 1313 L 2012 1313 Q 2022 1313 2022 1303 L 2022 1236.37" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"></path>
 
