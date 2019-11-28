@@ -1,12 +1,12 @@
 var listOfVar=new Array;
 // const processSyntax=/^[A-Za-z$_][A-Za-z$_0-9]*([ ]*=[ ]*[0-9]+|[ ]*=[ ]*['].+[']|[ ]*=[ ]*["].+["])?(([ ]*[,][ ]*[A-Za-z$_][A-Za-z$_0-9]*)([ ]*=[ ]*[0-9]+|[ ]*=[ ]*['].+[']|[ ]*=[ ]*["].+["])?)*$/;
 // let processSyntax=/^[A-Za-z$_][A-Za-z$_0-9]*(([ ]*=[ ]*)([0-9]+|['][^\'\"]+[']|["][^\'\"]+["])([\+\-\*\/][0-9]+|[+][ ]*(['][^\'\"]+[']|["].+["]))*)?$/;
-const decisionSyntax=/(^\([A-Za-z$_][A-Za-z$_0-9]*[ ]*(<=|>=|==|!=|<|>|===|!==){1}[A-Za-z$_0-9]+\)|^[A-Za-z$_][A-Za-z$_0-9]*[ ]*(<=|>=|==|!=|<|>|===|!==){1}[A-Za-z$_0-9]+)((&&|\|\|)([(]*[A-Za-z$_][A-Za-z$_0-9]*[ ]*(<=|>=|==|!=|<|>|===|!==){1}.+[)]|[A-Za-z$_][A-Za-z$_0-9]*[ ]*(<=|>=|==|!=|<|>|===|!==){1}[^\(\)]))*$/;
 const inputSyntax=/^[A-Za-z$_][A-Za-z$_0-9]*$/;
 
 function checkSyntax(){
     let result=true;
-    listVariable();
+      listOfVar=[];
+    // listVariable();
  
     $(".shape").each(function(){
         let text=$(this).find(".text").text();
@@ -14,13 +14,14 @@ function checkSyntax(){
         let match=true;
         switch(type){
             case "process":
+                    listVariable(text);
                 match=processChecker(text);
                  
 
               
             break;
             case "decision":
-                match=decisionSyntax.test(text);
+                match=decisionChecker(text);
             break;
             case "input":
                 match=(listOfVar.includes(text)&&inputSyntax.test(text))?true:false; 
@@ -37,31 +38,73 @@ function checkSyntax(){
     return result;
 }
 function processChecker(text){
-    temp=text.match(/(?<=\=).*/)[0];
-    console.log('---');
-  
-       
-    let allWord=temp.match(/[^\+\-\*\/]*|'.*'|".*"/gm).filter(s=>s.length>0);
-    
 
-    let wordIsString=[];
-    if(temp.match(/'.*'|".*"/gm)){
-        wordIsString=temp.match(/'.*'|".*"/gm).filter(s=>s.length>0);
+    let abstainWord=generateAbstainWordOfVar(text,'process');
 
-    }
-    let wordIsVariable= allWord.filter(s=>!wordIsString.includes(s)&&listOfVar.includes(s));
- 
-
-    let abstainWord="";
-    wordIsVariable.map(s=>abstainWord+='|'+s);
-   
     
 
     let processSyntax=new RegExp("^[A-Za-z$_][A-Za-z$_0-9]*(([ ]*=[ ]*)([0-9]+|['][^\'\"]+[']|[\"][^\'\"]+[\"]"+abstainWord+")([\+\\-\*\/][0-9]+|[+][ ]*(['][^\'\"]+[']|[\"].+[\"]"+abstainWord+"))*)?$");
-    console.log( processSyntax)
     return processSyntax.test(text);
 
 
+}
+function decisionChecker(text){
+      let openBacket=0,closeBacket=0;
+      let abstainWord=generateAbstainWordOfVar(text,'decision');
+       
+      try{      
+  
+        openBacket=text.match(/\(/gm).length;
+        closeBacket=text.match(/\)/gm).length;
+
+      }catch(e){} 
+   
+      console.log(abstainWord);
+      let result = false;
+      const decisionSyntax=new RegExp("^(([0-9(]+|['][a-zA-Z0-9()]+[']|[\"][a-zA-Z0-9(]+[\"]"+abstainWord+")(>|<|>=|<=|==|===|!=|!==)(([0-9()]+|['][a-zA-Z0-9()]+[']|[\"][a-zA-Z0-9()]+[\"]"+abstainWord+"))+)(((\&\&)|(\\|\\|))(([0-9()]+|['][a-zA-Z0-9()]+[']|[\"][a-zA-Z0-9()]+[\"]"+abstainWord+")(>|<|>=|<=|==|===|!=|!==)(([a-zA-Z0-9()]+|['][a-zA-Z0-9()]+[']|[\"][a-zA-Z0-9()]+[\"]"+abstainWord+"))+))*$");
+      console.log(decisionSyntax);
+      if(decisionSyntax.test(text)&&openBacket==closeBacket&&!/(\)[a-z0-9\>\<\=\!]*\()/.test(text)){
+        
+
+          result=true;
+      }
+ 
+    return result ;
+
+}
+function generateAbstainWordOfVar(text,type){
+    let allWord=[],wordIsString=[],wordIsVariable=[],abstainWord="";
+    try{
+        if(type=="process"){
+            let temp=text.match(/(?<=\=).*/)[0];
+           
+            allWord=temp.match(/[^\+\-\*\/]*|'.*'|".*"/gm).filter(s=>s.length>0);
+            if(temp.match(/'.*'|".*"/gm)){
+                wordIsString=temp.match(/'.*'|".*"/gm).filter(s=>s.length>0);
+        
+            }
+            
+            wordIsVariable= allWord.filter(s=>!wordIsString.includes(s)&&listOfVar.includes(s));
+            wordIsVariable.map(s=>abstainWord+='|'+s);
+       
+
+
+         
+    
+        }else{
+            allWord=text.match(/[a-zA-Z0-9]*/gm).filter(s=>s.length>0);
+            wordIsString=text.match(/'.*'|".*"/gm).filter(s=>s.length>0).map(s=>s.replace(/[\'\"]/gm,""));
+            wordIsVariable= allWord.filter(s=>!wordIsString.includes(s)&&listOfVar.includes(s));
+            wordIsVariable.map(s=>abstainWord+='|['+s+'()]+');
+
+        }
+
+
+    }catch(e){}finally{
+        return abstainWord;
+
+    }
+   
 }
 // function checkIsVar(text){
 //     const syntax=/([A-Za-z$_][A-Za-z$_0-9]*(?=,)|(?<=\=)[A-Za-z$_][A-Za-z$_0-9]*)/gm;
@@ -77,12 +120,12 @@ function processChecker(text){
 //     console.log(list.some(r=>listOfVar.indexOf(r) >= 0));
 //     return  list.some(r=>listOfVar.indexOf(r) >= 0);
 // }
-function listVariable(){
+function listVariable(text){
      let listVar;
-     listOfVar=[];
-     $(".process").each(function(){ 
+   
+    //  $(".process").each(function(){ 
         
-         let text= $(this).find(".text").text(); 
+        //  let text= $(this).find(".text").text(); 
       
         const syntax=/([A-Za-z$_][A-Za-z$_0-9]*(?=\=)|(?<=,)[A-Za-z$_][A-Za-z$_0-9]*)/gm;
         
@@ -93,8 +136,8 @@ function listVariable(){
         }
      
         listOfVar=[...new Set(listOfVar)];
-        
-     }); 
+        // console.log(listOfVar);
+    //  }); 
      
     
 }

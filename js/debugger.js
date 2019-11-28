@@ -42,6 +42,7 @@ function show(node,variable,result){
         $("#debugger").append(row);
       
     }
-
+    $("#con-debugger").scrollTop($("#con-debugger").prop('scrollHeight'));
+    // console.log();
    
 }

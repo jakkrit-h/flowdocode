@@ -249,7 +249,7 @@
         <div class="modal-body">
           <div class="form-group">
             <label id="inputtitle"></label>
-            <input type="text" class="form-control" id="inputBox">
+            <input type="text" class="form-control" id="inputBox" autofocus>
             <small id="emailHelp" class="form-text text-muted">If value is string you must assign in " " Or ' '</small>
           </div>
         </div>
@@ -347,6 +347,12 @@
 
 
   }
+  $(document).on("DOMSubtreeModified","#design",function(){
+    // let presentPage=$(".active").attr("data-page");
+    // sessionStorage.setItem(presentPage,$("#design").html())
+   
+    // readPage(presentPage, "switch");
+  });
   $(document).on("dblclick",".toolbox",function(){
     let node =getLatestNode() ;
     let position=$(node).offset();
@@ -557,11 +563,13 @@
 
 
         inputSuccess = true;
-
-        compileContinue();
-
-
         $("#InputDialog").modal("hide");
+       
+
+
+
+        
+
         /*         return false;
         */
       }
@@ -569,6 +577,9 @@
       $(this).addClass('input_invalid');
     }
   });
+  $('#InputDialog').on('hidden.bs.modal', function (e) {
+      compileContinue();
+    })
   $(document).on("click", "#saveall", function () {
 
     saveAll();

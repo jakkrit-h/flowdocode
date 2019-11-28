@@ -150,7 +150,7 @@ function compiler(str){
 function classify(node){
     let result;
     let text;
-    
+ 
     if(!$(node).hasClass("input")){
          text=$(node).find(".text").text();
         if($(node).hasClass("process")){
@@ -168,6 +168,7 @@ function classify(node){
        
     
     }
+  
     if($(node).hasClass("display")){
          displayConsole(result);
     }
@@ -180,12 +181,18 @@ function classify(node){
         }
     }
     if($(node).hasClass("input")){
+        // debugger;
         if(!inputSuccess){
             $("#InputDialog").modal("show");
-          
+           
             $("#inputtitle").html("Assign Value Variable <strong>"+$(node).find(".text").text()+"</strong>");
-            $("#inputBox").focus();
-            $("#inputBox").val("");
+            $('#InputDialog').on('shown.bs.modal', function (e) {
+                $("#inputBox").val("");
+                    $("#inputBox").focus();
+
+             
+              })
+
             return true;
         }else{
 
@@ -230,6 +237,7 @@ function compileContinue(){
 function displayConsole(rsCompile){
  
     $("#console").append(rsCompile+"<br>");
+    $("#console").scrollTop($("#console").prop('scrollHeight'));
 }
 // function start(){
 //     var text= "";

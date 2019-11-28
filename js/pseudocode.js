@@ -69,6 +69,6 @@ function explorer(node){
     let endOfYes="";
     let endOfNo="";
     while($(connector).attr("data-to")!=undefined||$(connector).attr("data-to")=="#end"){
-        11
+    
     }
 }
