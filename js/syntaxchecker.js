@@ -6,15 +6,15 @@ const inputSyntax=/^[A-Za-z$_][A-Za-z$_0-9]*$/;
 function checkSyntax(){
     let result=true;
       listOfVar=[];
-    // listVariable();
- 
+    listVariable();
     $(".shape").each(function(){
         let text=$(this).find(".text").text();
         let type=getNodeType(this);
         let match=true;
+
         switch(type){
             case "process":
-                    listVariable(text);
+                    // listVariable(text);
                 match=processChecker(text);
                  
 
@@ -49,6 +49,7 @@ function processChecker(text){
 
 }
 function decisionChecker(text){
+    console.log(listOfVar);
       let openBacket=0,closeBacket=0;
       let abstainWord=generateAbstainWordOfVar(text,'decision');
        
@@ -93,14 +94,22 @@ function generateAbstainWordOfVar(text,type){
     
         }else{
             allWord=text.match(/[a-zA-Z0-9]*/gm).filter(s=>s.length>0);
-            wordIsString=text.match(/'.*'|".*"/gm).filter(s=>s.length>0).map(s=>s.replace(/[\'\"]/gm,""));
+            // console.log(allWord);
+            
+            if(text.match(/'.*'|".*"/gm)){
+                wordIsString=text.match(/'.*'|".*"/gm).filter(s=>s.length>0).map(s=>s.replace(/[\'\"]/gm,""));
+        
+            }
+            // console.log(wordIsString);
             wordIsVariable= allWord.filter(s=>!wordIsString.includes(s)&&listOfVar.includes(s));
             wordIsVariable.map(s=>abstainWord+='|['+s+'()]+');
 
         }
 
 
-    }catch(e){}finally{
+    }catch(e){
+        console.log(e);
+    }finally{
         return abstainWord;
 
     }
@@ -120,12 +129,12 @@ function generateAbstainWordOfVar(text,type){
 //     console.log(list.some(r=>listOfVar.indexOf(r) >= 0));
 //     return  list.some(r=>listOfVar.indexOf(r) >= 0);
 // }
-function listVariable(text){
+function listVariable(t){
      let listVar;
    
-    //  $(".process").each(function(){ 
+     $(".process").each(function(){ 
         
-        //  let text= $(this).find(".text").text(); 
+         let text= $(this).find(".text").text(); 
       
         const syntax=/([A-Za-z$_][A-Za-z$_0-9]*(?=\=)|(?<=,)[A-Za-z$_][A-Za-z$_0-9]*)/gm;
         
@@ -136,9 +145,9 @@ function listVariable(text){
         }
      
         listOfVar=[...new Set(listOfVar)];
-        // console.log(listOfVar);
-    //  }); 
-     
+     }); 
+    //  console.log(listOfVar);
+
     
 }
 // function findVariable(str){

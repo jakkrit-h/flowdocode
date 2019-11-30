@@ -1354,7 +1354,6 @@ function readPage(page,action){
   let a="";
 
 
-  console.log(typeof page);
   $(page).addClass("active");
   text = sessionStorage.getItem($(page).attr("data-page"));
   $("title").html($(page).attr("data-page")+" | FLOWDOCODE");
