@@ -21,6 +21,7 @@
 
   <script src="js/bootstrap.min.js"></script>
 
+
   <script src="js/flowdocode.js"></script>
   <script src="js/pseudocode.js"></script>
   <script src="js/compiler.js"></script>
@@ -30,7 +31,6 @@
   <script src="js/vue.js"></script>
 
   <script src="js/jquery.md5.js"></script>
-
 
 
 </head>
@@ -63,16 +63,23 @@
         <li class="nav-item">
           <a class="nav-link ">Help</a>
         </li>
-        <div class="col-1 py-2 px-0 mx-auto">
+        <div class="col-2 py-2 px-0 mx-auto">
           <ul class="navbar-nav  p-0 justify-content-center">
             <li class="nav-item ">
               <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="play"><i class='fas fa-play'></i></button>
               <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="debug"><i class="fas fa-bug"></i></button>
               <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="stop"><i class='fas fa-stop'></i></button>
-
-              <button class="btn btn-sm btn-flowdocode px-2 ondebug mt-1" id="next"><i
-                  class="fas fa-arrow-right"></i></button>
-              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="i">ee</button>
+              <button class="btn btn-sm btn-flowdocode px-2 ondebug mt-1" id="refresh">
+                  <i class="fas fa-redo-alt"></i>
+                </button>
+              <button class="btn btn-sm btn-flowdocode px-2 ondebug mt-1" id="next">
+                <i class="fas fa-step-forward"></i>
+              </button>
+                <button class="btn btn-sm btn-flowdocode px-2 ondebug mt-1"id="skip">
+                  <i class="fas fa-fast-forward"></i>
+                </button>
+                 
+                    <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="i">ee</button>
 
 
             </li>
@@ -130,14 +137,14 @@
       </svg>
 
     </div>
-<div>v.1.0.0.1</div>
+<div style="color:#fff">v.1.0.0.2</div>
 
   </div>
   <div class="offset-2 col-8 p-0 btn-group " id="pagination">
     <button class="btn btn-flowdocode" id="addpage"><i class="fas fa-plus-circle"></i></button>
 
   </div>
-  <div class="offset-2 col-8 p-0 pb-5  mb-5 h-75" id="con-design" style="position: fixed;overflow:scroll;">
+  <div class="offset-2 col-8 p-0 pb-5  mb-5 " id="con-design" style="position: fixed;overflow-y:scroll;">
 
     <div id="design" class=" col-12 p-0 con-design" ondragover="allowDrop(event)" ondrop="dropItem(event)">
       <svg id="canvas">
@@ -263,10 +270,10 @@
 
 <script>
   $("#i").click(function () {
-    /* listVariable();
-    checkSyntax(); */
-    checkProcessAssignVar();
-    // pseudocodeController();
+    // /* listVariable();
+    // checkSyntax(); */
+    // checkProcessAssignVar();
+    pseudocodeController();
   });
   $("#con-design").scroll(function () {
   });

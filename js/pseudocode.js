@@ -2,6 +2,11 @@ var pseudoCode;
 var row;
 var decision="yes";
 function pseudocodeController(){
+    let nodeList = explorer();
+    console.log(nodeList)
+    pseudocodeController2()
+}
+function pseudocodeController2(){
   pseudoCode="";
   row=1;
     let node ="#start";
@@ -23,7 +28,7 @@ function pseudocodeController(){
 
         }
         row++;
-        console.log(connector);
+        // console.log(connector);
 
     }
     pseudoCodePage(pseudoCode);
@@ -62,13 +67,13 @@ function pseudoCodePage(pseudoCode){
 
     myWindow.document.write(pseudoCode);
 }
-function explorer(node){
-    let connectorYes=$(node).attr("data-yes");
-    let connectorNo=$(node).attr("data-no");
-    let connector=connectorYes;
-    let endOfYes="";
-    let endOfNo="";
-    while($(connector).attr("data-to")!=undefined||$(connector).attr("data-to")=="#end"){
+// function explorer(node){
+//     let connectorYes=$(node).attr("data-yes");
+//     let connectorNo=$(node).attr("data-no");
+//     let connector=connectorYes;
+//     let endOfYes="";
+//     let endOfNo="";
+//     while($(connector).attr("data-to")!=undefined||$(connector).attr("data-to")=="#end"){
     
-    }
-}
+//     }
+// }

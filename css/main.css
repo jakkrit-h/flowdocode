@@ -30,6 +30,10 @@ div.con-fixed {
   overflow-x: hidden;
 }
 
+#design-containment {
+  padding: 50px;
+}
+
 .con-design {
   height: 100%;
   left: 0px;
@@ -228,7 +232,7 @@ table thead td {
   border-color: #1b1e23 !important;
 }
 table td {
-  word-break: break-word;
+  word-break: break-all;
 }
 
 ::-webkit-scrollbar {

@@ -6,15 +6,15 @@ const inputSyntax=/^[A-Za-z$_][A-Za-z$_0-9]*$/;
 function checkSyntax(){
     let result=true;
       listOfVar=[];
-    listVariable();
-    $(".shape").each(function(){
+    let nodeList=explorer().map(s=>$(s.node));
+    $(nodeList).each(function(i){
         let text=$(this).find(".text").text();
         let type=getNodeType(this);
         let match=true;
-
+      
         switch(type){
             case "process":
-                    // listVariable(text);
+                    listVariable(text);
                 match=processChecker(text);
                  
 
@@ -43,13 +43,14 @@ function processChecker(text){
 
     
 
-    let processSyntax=new RegExp("^[A-Za-z$_][A-Za-z$_0-9]*(([ ]*=[ ]*)([0-9]+|['][^\'\"]+[']|[\"][^\'\"]+[\"]"+abstainWord+")([\+\\-\*\/][0-9]+|[+][ ]*(['][^\'\"]+[']|[\"].+[\"]"+abstainWord+"))*)?$");
+    let processSyntax=new RegExp("^([A-Za-z$_][A-Za-z$_0-9]*([ ]*=[ ]*)([0-9]+|['][^\'\"]*[']|[\"][^\'\"]*[\"]"+abstainWord+")([\+\\-\*\/][0-9]+|[+][ ]*(['][^\'\"]*[']|[\"][^\'\"]*[\"]"+abstainWord+"))*)?$");
+    // console.log(processSyntax);
     return processSyntax.test(text);
 
 
 }
 function decisionChecker(text){
-    console.log(listOfVar);
+    // console.log(listOfVar);
       let openBacket=0,closeBacket=0;
       let abstainWord=generateAbstainWordOfVar(text,'decision');
        
@@ -60,10 +61,10 @@ function decisionChecker(text){
 
       }catch(e){} 
    
-      console.log(abstainWord);
+    //   console.log(abstainWord);
       let result = false;
       const decisionSyntax=new RegExp("^(([0-9(]+|['][a-zA-Z0-9()]+[']|[\"][a-zA-Z0-9(]+[\"]"+abstainWord+")(>|<|>=|<=|==|===|!=|!==)(([0-9()]+|['][a-zA-Z0-9()]+[']|[\"][a-zA-Z0-9()]+[\"]"+abstainWord+"))+)(((\&\&)|(\\|\\|))(([0-9()]+|['][a-zA-Z0-9()]+[']|[\"][a-zA-Z0-9()]+[\"]"+abstainWord+")(>|<|>=|<=|==|===|!=|!==)(([a-zA-Z0-9()]+|['][a-zA-Z0-9()]+[']|[\"][a-zA-Z0-9()]+[\"]"+abstainWord+"))+))*$");
-      console.log(decisionSyntax);
+    //   console.log(decisionSyntax);
       if(decisionSyntax.test(text)&&openBacket==closeBacket&&!/(\)[a-z0-9\>\<\=\!]*\()/.test(text)){
         
 
@@ -108,7 +109,7 @@ function generateAbstainWordOfVar(text,type){
 
 
     }catch(e){
-        console.log(e);
+        // console.log(e);
     }finally{
         return abstainWord;
 
@@ -129,12 +130,12 @@ function generateAbstainWordOfVar(text,type){
 //     console.log(list.some(r=>listOfVar.indexOf(r) >= 0));
 //     return  list.some(r=>listOfVar.indexOf(r) >= 0);
 // }
-function listVariable(t){
+function listVariable(text){
      let listVar;
    
      $(".process").each(function(){ 
         
-         let text= $(this).find(".text").text(); 
+        //  let text= $(this).find(".text").text(); 
       
         const syntax=/([A-Za-z$_][A-Za-z$_0-9]*(?=\=)|(?<=,)[A-Za-z$_][A-Za-z$_0-9]*)/gm;
         

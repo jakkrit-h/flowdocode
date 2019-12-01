@@ -4,6 +4,8 @@ var connectorPointer=undefined;
 var inputSuccess=false;
 var onDebug=false;
 var onAction=undefined;
+var onSkip=false;
+var nodeOnSkip =false;
 $(document).on("click","#play",function(){
     clearOnDebug();
     if(!checkSyntax()){
@@ -17,28 +19,34 @@ $(document).on("click","#play",function(){
     stop();
 });
 $(document).on("click","#debug",function(){
-    if(!checkSyntax()){
+    if (!checkSyntax()) {
         return false;
     }
     onButtonClick();
- 
-    onAction="debug";
 
-    
-        nodePointer=$("#start");
-        connectorPointer=$("#start").attr("data-connector");
-        onDebug=true;
-        // controllerOnDebug();
-        $(".ondebug").show();
-        hightLight($("#start"),"#27ae60");
-        $("tr").last().addClass("font-weight-bold");
+    onAction = "debug";
+    nodePointer = $("#start");
+    connectorPointer = $("#start").attr("data-connector");
+    onDebug = true;
+    // controllerOnDebug();
+    $(".ondebug").show();
+    $("#skip").hide();
+    hightLight($("#start"), "#27ae60");
+    $("tr").last().addClass("font-weight-bold");
 
 
     
 });
 $(document).on("click","#stop",function (){stop()});
 $(document).on("click","#next",function () { 
+     nodeOnSkip =$(connectorPointer).attr('data-to');
+    if($(nodeOnSkip).hasClass("decision")){
+        $("#skip").show();
+      
+    }else{
+        $("#skip").hide();
 
+    }
     unHightLight(nodePointer);
     $("tr").last().removeClass("font-weight-bold");
     controllerOnDebug();
@@ -46,6 +54,28 @@ $(document).on("click","#next",function () {
     let obj    = $('#con-debugger');
     let height = obj[0].scrollHeight;
     obj.scrollTop(height);
+});
+$(document).on("click","#skip",function(){
+    connectorPointer=$(nodeOnSkip).attr("data-no");
+    let node=nodeOnSkip;
+    nodeOnSkip =$(connectorPointer).attr('data-to');
+
+    if($(nodeOnSkip).hasClass("decision")){
+        $("#skip").show();
+      
+    }else{
+        $("#skip").hide();
+
+    }
+    let  text=$(node).find(".text").text();
+    $("tr").last().removeClass("font-weight-bold");
+    Debugger(node,text,'false <br><span style="color:red;">(By Skip)</spn>')
+    unHightLight(nodePointer);
+    controllerOnDebug();
+});
+$(document).on("click","#refresh",function(){
+    stop();
+    $("#debug").trigger("click");
 });
 function stop(){
     $(".ondebug").hide();
@@ -121,7 +151,7 @@ function controller(starterConnector){
    
 }
 function controllerOnDebug(){
-
+    
     if($(connectorPointer).attr("data-to")==undefined||connectorPointer==undefined){
         clearOnDebug();
         stop();
@@ -143,6 +173,13 @@ function compiler(str){
     }else if(str.trim().match(/^[A-Za-z$_][A-Za-z$_0-9]*(\+\+|\-\-)$/)){
         let temp =str.split("--");
         str="--"+temp[0];
+    }
+    l=""
+ 
+    if(onSkip){
+        l='(By Skip)';
+        onSkip=false;
+
     }
     return eval(str);
 }
@@ -205,7 +242,6 @@ function classify(node){
        
     }
     Debugger(node,text,result);
-
 
     
 

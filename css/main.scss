@@ -45,9 +45,11 @@ div.con-fixed {
     overflow-x:hidden;
   }
 
+#design-containment{
+  padding: 50px;
+}
 .con-design{
   
-
   height:100%;
   left:0px;
   padding: 50px 60px 50px 50px !important;
@@ -254,7 +256,7 @@ table{
 
   }
   td{
-    word-break: break-word;
+    word-break: break-all;  
   }
 }
 

@@ -14,7 +14,7 @@
     data-anchorto= อยู่ใน connector เพื่อบอกว่าชี้ไปหา Anchor ตำแหน่งไหนของ Node ปลายทาง
     data-connector = อยู่ใน Node เพื่อบอกให้ Node รู้ว่าตัวเองได้มีการเชื่อมต่อ ไปหา Node อิ่นๆ
     */
-
+  
 
 var selectedEl=undefined;// Node or Connector ที่กำลังถูก select อยู่
 var originalPosition = undefined;// ตำแหน่งของ Anchor ก่อนโดน Drag ไว้ใช้ตอนให้ Anchor กลับไปอยู่ที่เดิมหลัง Drag เสร็จ
@@ -702,7 +702,7 @@ function onDropItemSuccess(type,posX,posY) {    //เมื่อมีการ
 function nodeDraggableProperty(node){// returnความสามารถของ Node ในการ Draggable
   let oldPos;
   return{
-        containment:"#design",
+        containment:"#design-containment",
       
         // cursorAt:{left:$(node).outerWidth()/2,top:$(node).outerHeight()/2},
         opacity: 0.5,
@@ -712,13 +712,14 @@ function nodeDraggableProperty(node){// returnความสามารถข�
         snapMode: "inner",
         scroll: true,
         stack: ".shape",
-        scrollSensitivity: 50,
+        scrollSensitivity: 100,
         scrollSpeed: 20,
         start:function(){
           // createDistanceWalls(this);
           oldPos=$(this).offset();
         },
         drag: function (event,ui) {
+      
           // let result=calculateObstacle(this);
           // let currentPos=$(this).offset();
           // let width=$(this).outerWidth();
@@ -1329,11 +1330,23 @@ function init(noRisize){
       left: ($(document).width() / 2-modX) - 100
 
     }
+   
+    // let conDesignHeight =$(document).outerHeight()-$("#con-console").outerHeight()-100;
+    $("#con-design").css("height",$("#con-console").offset().top-100);
+    $("#design").prepend("<div id='design-containment'style='position:fixed;'></div>");
+    $("#design-containment").offset($("#con-design").offset());
+
+    $("#design-containment").css('width',$("#con-design").outerWidth());
+
+    $("#design-containment").css('height',$("#con-design").outerHeight());
+   
     $("#start").offset(p);
     $("#canvas").css("width",$(window).width());
  
-    $("#canvas").css("height","10000px" );
+    $("#canvas").css("height","50000px" );
     $("#canvas").offset({ top: 0, left: 0 });
+    
+ 
     hasEnd();
 
 }
@@ -1448,5 +1461,67 @@ function changePageName(page) {
   if ($(page).text() != "untitled") {
     $(page).removeAttr("data-untitled");
   }
+
+}
+
+function explorer(){
+  let prevNode =undefined;
+  let currentNode="#start";
+  let connectorPointer=$(currentNode).attr("data-connector");
+  let list =[];
+  let indx=0;
+  list.push({node:currentNode,root:prevNode,status:'add'});
+
+
+  for(let i=0;i<=list.length;i++){
+    if(list.filter(s=>s.status=='add').length>0&&currentNode!=undefined){
+      if($(currentNode).hasClass("decision")){
+        let tempConnPointer =$(currentNode).attr("data-yes")
+        let tempConnPointer2=$(currentNode).attr("data-no");
+    
+
+        list[indx].to=$(tempConnPointer).attr("data-to");
+        list[indx].to2=$(tempConnPointer2).attr("data-to");
+
+      }else{
+        list[indx].to=$(connectorPointer).attr("data-to");
+      }
+
+      prevNode=currentNode;
+      indx=list.findIndex(s=>s.status=='add');
+      currentNode=list[indx].node;
+      list[indx].status='went';
+      if($(currentNode).hasClass("decision")){
+ 
+
+          let tempConnPointer =$(currentNode).attr("data-yes")
+          list.push({node:$(tempConnPointer).attr("data-to"),root:currentNode,status:'add'});
+    
+          tempConnPointer =$(currentNode).attr("data-no")
+          list.push({node:$(tempConnPointer).attr("data-to"),root:currentNode,status:'add'});
+
+    
+        }else{
+  
+          connectorPointer=$(currentNode).attr("data-connector");
+          temp=$(connectorPointer).attr("data-to");
+        
+          list.push({node:temp,root:currentNode,to:temp,status:'add'});
+   
+        }
+    
+    } else {
+      break;
+    }
+  
+
+   
+   
+  }
+  list =list.filter((s,i,arr)=>{
+    return arr.map(m=>m.node).indexOf(s.node)===i&&s.node!=undefined;
+  });
+  console.log(list)
+  return list;
 
 }
