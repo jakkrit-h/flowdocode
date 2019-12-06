@@ -266,6 +266,7 @@ function prototypeDrawLine(startPoint,endPoint){
   pointer.push(endPoint);
   return pointer;
 }
+
 function generatePathForConnector(arr){
   let str="";
 
@@ -712,7 +713,7 @@ function nodeDraggableProperty(node){// returnความสามารถข�
         snapMode: "inner",
         scroll: true,
         stack: ".shape",
-        scrollSensitivity: 100,
+        scrollSensitivity: 20,
         scrollSpeed: 20,
         start:function(){
           // createDistanceWalls(this);
@@ -1301,6 +1302,7 @@ function addNewPage(design){
 }
 function init(noRisize){
   $("#stop").hide();
+  $("#play-refresh").hide();
   if(!noRisize){
 
     let design = $("#design").html();
@@ -1464,7 +1466,8 @@ function changePageName(page) {
 
 }
 
-function explorer(){
+function explorer(distinct){
+  console.log(distinct);
   let prevNode =undefined;
   let currentNode="#start";
   let connectorPointer=$(currentNode).attr("data-connector");
@@ -1518,10 +1521,13 @@ function explorer(){
    
    
   }
-  list =list.filter((s,i,arr)=>{
-    return arr.map(m=>m.node).indexOf(s.node)===i&&s.node!=undefined;
-  });
-  console.log(list)
+ 
+  if(distinct){
+    list =list.filter((s,i,arr)=>{
+      return arr.map(m=>m.node).indexOf(s.node)===i&&s.node!=undefined;
+    });
+  }
+ 
   return list;
 
 }

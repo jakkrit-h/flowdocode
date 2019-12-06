@@ -29,6 +29,7 @@
   <script src="js/syntaxchecker.js"></script>
   <script src="js/font-awesome-all.min.js"></script>
   <script src="js/vue.js"></script>
+  <script src="js/events.js"></script>
 
   <script src="js/jquery.md5.js"></script>
 
@@ -69,6 +70,9 @@
               <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="play"><i class='fas fa-play'></i></button>
               <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="debug"><i class="fas fa-bug"></i></button>
               <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="stop"><i class='fas fa-stop'></i></button>
+              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="play-refresh">
+                <i class="fas fa-redo-alt"></i>
+              </button>
               <button class="btn btn-sm btn-flowdocode px-2 ondebug mt-1" id="refresh">
                   <i class="fas fa-redo-alt"></i>
                 </button>
@@ -137,7 +141,7 @@
       </svg>
 
     </div>
-<div style="color:#fff">v.1.0.0.2</div>
+<div id="version"style="color:#fff">v.1.0.0.3</div>
 
   </div>
   <div class="offset-2 col-8 p-0 btn-group " id="pagination">
@@ -278,6 +282,13 @@
   $("#con-design").scroll(function () {
   });
   $(function () {
+
+    // let w = new Worker("js/worker.js");
+    // w.postMessage('d');
+    // w.onmessage=function(e){
+      
+    //   console.log(e);
+    // }
     let list=[];
     for(let i =0;i<sessionStorage.length;i++){
       list.push(sessionStorage.key(i));

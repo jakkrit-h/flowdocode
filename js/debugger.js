@@ -14,6 +14,21 @@ function Debugger(node,text,result){
     }else{ */
 
         if($(node).hasClass("decision")){
+            let reg = /((\')?([A-Za-z$_][A-Za-z$_0-9]*)(\')?|(\")?([A-Za-z$_][A-Za-z$_0-9]*)(\")?)/gm;
+            let str=text.match(reg);
+            try{
+                let res=str.filter(s=>listOfVar.includes(s));
+                res =[...new Set(res)];
+                res.map(s=>{
+                    let reg2=new RegExp(s,'gm');
+                
+                    text= text.replace(reg2,s+'('+eval(s)+')');
+                });
+            }catch(e){}
+            text=text.replace(/(&&)/gm,'<br>$1<br>')
+             text=text.replace(/(\|\|)/gm,'<br>$1<br>')
+
+           
             show(node,text,result);
         }else{
 

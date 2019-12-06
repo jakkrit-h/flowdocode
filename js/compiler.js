@@ -6,86 +6,18 @@ var onDebug=false;
 var onAction=undefined;
 var onSkip=false;
 var nodeOnSkip =false;
-$(document).on("click","#play",function(){
-    clearOnDebug();
-    if(!checkSyntax()){
-
-        return false;
-    }
-    onButtonClick();
-    onAction="compile";
-
-    controller($("#start").attr("data-connector"));
-    stop();
-});
-$(document).on("click","#debug",function(){
-    if (!checkSyntax()) {
-        return false;
-    }
-    onButtonClick();
-
-    onAction = "debug";
-    nodePointer = $("#start");
-    connectorPointer = $("#start").attr("data-connector");
-    onDebug = true;
-    // controllerOnDebug();
-    $(".ondebug").show();
-    $("#skip").hide();
-    hightLight($("#start"), "#27ae60");
-    $("tr").last().addClass("font-weight-bold");
-
-
-    
-});
-$(document).on("click","#stop",function (){stop()});
-$(document).on("click","#next",function () { 
-     nodeOnSkip =$(connectorPointer).attr('data-to');
-    if($(nodeOnSkip).hasClass("decision")){
-        $("#skip").show();
-      
-    }else{
-        $("#skip").hide();
-
-    }
-    unHightLight(nodePointer);
-    $("tr").last().removeClass("font-weight-bold");
-    controllerOnDebug();
-
-    let obj    = $('#con-debugger');
-    let height = obj[0].scrollHeight;
-    obj.scrollTop(height);
-});
-$(document).on("click","#skip",function(){
-    connectorPointer=$(nodeOnSkip).attr("data-no");
-    let node=nodeOnSkip;
-    nodeOnSkip =$(connectorPointer).attr('data-to');
-
-    if($(nodeOnSkip).hasClass("decision")){
-        $("#skip").show();
-      
-    }else{
-        $("#skip").hide();
-
-    }
-    let  text=$(node).find(".text").text();
-    $("tr").last().removeClass("font-weight-bold");
-    Debugger(node,text,'false <br><span style="color:red;">(By Skip)</spn>')
-    unHightLight(nodePointer);
-    controllerOnDebug();
-});
-$(document).on("click","#refresh",function(){
-    stop();
-    $("#debug").trigger("click");
-});
+var interval=undefined;
 function stop(){
     $(".ondebug").hide();
     $("#stop").hide();
+    $("#play-refresh").hide();
     $("#play").show();
     $("#debug").show();
     $(".shape").each(function(){
     
         unHightLight(this);
     });
+    clearInterval(interval);
 }
 
 function clearOnDebug(){
@@ -130,22 +62,31 @@ function onButtonClick(){
 // }
 function controller(starterConnector){
      connectorPointer=starterConnector;  
-    while(true){
+      interval=setInterval(function(){
         if($(connectorPointer).attr("data-to")==undefined||$(connectorPointer).attr("data-to")=="#end" ){
             
 
             $("#play").html("<i class='fas fa-play'></i>");
-            break;
+            stop();
+            // break;
         }else{
             nodePointer=$(connectorPointer).attr("data-to");
             let result=classify(nodePointer);
-            if(result)
-                break;
+            if (result) {
+                // stop();
+
+                // break;        
+            }
+
+          
             connectorPointer=$(nodePointer).attr("data-connector");
         }
+     },0);
+    // while(true){
+       
 
         
-    }
+    // }
     
    
    

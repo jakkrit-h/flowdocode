@@ -44,7 +44,10 @@ div.con-fixed {
     overflow-y: scroll;
     overflow-x:hidden;
   }
-
+#version{
+  position: fixed;
+  bottom:10px;
+}
 #design-containment{
   padding: 50px;
 }
@@ -92,6 +95,7 @@ div.con-fixed {
     position: absolute;
     border:0px solid ;
     color:#fff;
+    // background: red;
   }
 
 svg{

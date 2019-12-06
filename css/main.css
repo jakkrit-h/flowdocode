@@ -30,6 +30,11 @@ div.con-fixed {
   overflow-x: hidden;
 }
 
+#version {
+  position: fixed;
+  bottom: 10px;
+}
+
 #design-containment {
   padding: 50px;
 }

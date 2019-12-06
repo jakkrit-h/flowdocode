@@ -4,7 +4,7 @@ var decision="yes";
 function pseudocodeController(){
     let nodeList = explorer();
     console.log(nodeList)
-    pseudocodeController2()
+    // pseudocodeController2()
 }
 function pseudocodeController2(){
   pseudoCode="";
