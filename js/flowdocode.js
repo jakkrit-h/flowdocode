@@ -1467,7 +1467,7 @@ function changePageName(page) {
 }
 
 function explorer(distinct){
-  console.log(distinct);
+  // console.log(distinct);
   let prevNode =undefined;
   let currentNode="#start";
   let connectorPointer=$(currentNode).attr("data-connector");
@@ -1521,7 +1521,7 @@ function explorer(distinct){
    
    
   }
- 
+  list =list.filter(s=>s.node!=undefined);
   if(distinct){
     list =list.filter((s,i,arr)=>{
       return arr.map(m=>m.node).indexOf(s.node)===i&&s.node!=undefined;

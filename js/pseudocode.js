@@ -2,9 +2,14 @@ var pseudoCode;
 var row;
 var decision="yes";
 function pseudocodeController(){
-    let nodeList = explorer();
-    console.log(nodeList)
+    let nodeList = explorer(true);
+    prototypeController(nodeList);
     // pseudocodeController2()
+}
+function prototypeController(nodeList){
+    
+    nodeList.map(s=>console.log(s));
+    
 }
 function pseudocodeController2(){
   pseudoCode="";
@@ -34,6 +39,10 @@ function pseudocodeController2(){
     pseudoCodePage(pseudoCode);
 }
 function generateCode(node){
+    console.log(node);
+   
+}
+function generateCode2(node){
     let type=getNodeType(node);
     let text=$(node).find(".text").text();
     let code;

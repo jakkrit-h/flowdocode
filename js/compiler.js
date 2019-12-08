@@ -72,14 +72,19 @@ function controller(starterConnector){
         }else{
             nodePointer=$(connectorPointer).attr("data-to");
             let result=classify(nodePointer);
+           
             if (result) {
-                // stop();
+                clearInterval(interval);
+                stop();
 
                 // break;        
+            }else{
+                connectorPointer=$(nodePointer).attr("data-connector");
             }
+            
 
-          
-            connectorPointer=$(nodePointer).attr("data-connector");
+         
+
         }
      },0);
     // while(true){
@@ -128,7 +133,6 @@ function compiler(str){
 function classify(node){
     let result;
     let text;
- 
     if(!$(node).hasClass("input")){
          text=$(node).find(".text").text();
         if($(node).hasClass("process")){

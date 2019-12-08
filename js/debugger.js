@@ -1,17 +1,6 @@
 
 
 function Debugger(node,text,result){
-/*     text = text.split(",");
-    if(text.length > 1 ){
-        text.forEach(element => {
-            console.log(element + "dsad  "+result);
-            let temp = element[0].split('=');
-            
-            show(node,temp[0],result);
-        });
-     
-        
-    }else{ */
 
         if($(node).hasClass("decision")){
             let reg = /((\')?([A-Za-z$_][A-Za-z$_0-9]*)(\')?|(\")?([A-Za-z$_][A-Za-z$_0-9]*)(\")?)/gm;
