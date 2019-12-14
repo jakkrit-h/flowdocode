@@ -1,15 +1,57 @@
-var pseudoCode;
+var pseudoCode='';
 var row;
+var endOfBacket;
 var decision="yes";
+var tab='';
 function pseudocodeController(){
     let nodeList = explorer(true);
-    prototypeController(nodeList);
+    let a = nodeList.map((s,i,arr)=>{
+        if($(s.node).hasClass("decision")){
+           let a=checkIsLoop(s,nodeList,s.node);
+
+           if(a){
+               s.decision = false;
+           }else{
+               s.decision = true;
+           }
+        }
+       
+    });
+    endOfBacket=endOfDecision(nodeList);
+    console.log(endOfBacket);
+    generateCode(nodeList);
     // pseudocodeController2()
 }
-function prototypeController(nodeList){
-    
-    nodeList.map(s=>console.log(s));
-    
+
+function checkIsLoop(nodeData,nodeList,decisionTarget) {
+
+    if(nodeData.to){
+        let resultFind = nodeList.find(s=>s.node == nodeData.to);
+        if(resultFind&&resultFind.node!= decisionTarget){
+          return checkIsLoop(resultFind,nodeList,decisionTarget);
+           
+        }else{
+            console.log('------ELSE--------');
+
+            return true;
+           
+
+        }
+    }else{
+        console.log('------UNDEFINED--------');
+    }
+   
+}
+function endOfDecision(nodeList) {
+    let value = nodeList.map(s=>s.to);
+ 
+    let result=nodeList.filter((s,i,arr)=>
+    value.filter(e=>{
+       
+
+        return (e==s.to)
+    }).length>1);
+    return result;
 }
 function pseudocodeController2(){
   pseudoCode="";
@@ -38,9 +80,84 @@ function pseudocodeController2(){
     }
     pseudoCodePage(pseudoCode);
 }
-function generateCode(node){
-    console.log(node);
+function generateCode(nodeList){
+    let decisionNode={node:undefined,status:false};
+    let currentNode = nodeList[0];
+ 
+     pseudoCode='START\n';
+     let i =0;
+     while( i<=nodeList.length*2){
+ 
+            if(currentNode==undefined){
+                if(nodeList.some(s=>s.status!='pseudoCode')){
+                    
+                    currentNode=nodeList.filter(s=>$(s.node).hasClass('decision'))[0];
+
+                }else{
+                    break;
+                }
+            }
+         
+         if(currentNode.status!='pseudoCode'){
+            console.log(decisionNode.node ==currentNode);
+            // &&!endOfBacket.map(s=>s.to).includes(currentNode.node)
+            gg(currentNode);
+          
+         }else if(currentNode.status=='pseudoCode'&&$(currentNode.node).hasClass('decision')){
+            decisionNode.node =currentNode;
+            decisionNode.status = 'yesIswent';
+            currentNode=nodeList.find(s=>s.node==currentNode.to2);
+            
+            tab+='\t';
+            continue;
+         }
+            currentNode.status='pseudoCode';
+      
+            currentNode=nodeList.find(s=>s.node==currentNode.to);
+
+      
+       
+        i++;
+     }
+    
+     pseudoCodePage(pseudoCode)
    
+}
+function gg(s) {
+         let type = getNodeType(s.node);
+        let text = $(s.node).find(".text").text();
+        let code='';
+  
+        
+        switch (type){
+           
+            case "process":
+                code=text;
+            break;
+            case "input":
+                code="INPUT( "+text+")";
+            break;
+            case "decision":
+                if(s.decision){
+                    code="IF( "+text+") {";
+                }else{
+                    code="LOOP( "+text+"){ ";
+                }
+            break;
+            case "display":
+                code="DISPLAY("+text+")";
+            break;
+        }
+        if(endOfBacket.includes(s)){
+            code+='\n}ELSE{'
+       
+        }
+        if(code!=''){
+            pseudoCode+=code+"\n";
+
+        }
+   
+    
 }
 function generateCode2(node){
     let type=getNodeType(node);
@@ -71,10 +188,12 @@ function generateCode2(node){
 
 }
 function pseudoCodePage(pseudoCode){
-    let strWindowFeatures = "menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes,width=500,height=700,left=500";
-    let myWindow = window.open('','',strWindowFeatures);
+    pseudoCode+="END";
+    console.log('\n\n\n'+pseudoCode);
+    // let strWindowFeatures = "menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes,width=500,height=700,left=500";
+    // let myWindow = window.open('','',strWindowFeatures);
 
-    myWindow.document.write(pseudoCode);
+    // myWindow.document.write(pseudoCode);
 }
 // function explorer(node){
 //     let connectorYes=$(node).attr("data-yes");

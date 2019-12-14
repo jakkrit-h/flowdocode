@@ -113,6 +113,7 @@ function controllerOnDebug(){
     }
 }
 function compiler(str){
+    // console.log(Function('"use strict";return (' + str + ')')());
     if(str.trim().match(/^[A-Za-z$_][A-Za-z$_0-9]*(\+\+|\-\-)$/)){
         let temp =str.split("++");
         str="++"+temp[0];
