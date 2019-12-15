@@ -1477,7 +1477,14 @@ function explorer(distinct){
 
 
   for(let i=0;i<=list.length;i++){
+ 
+    // console.log(i);
+    
+    // console.log(list.length);
+    // console.log(list);
+    // console.log('-------');
     if(list.filter(s=>s.status=='add').length>0&&currentNode!=undefined){
+     
       if($(currentNode).hasClass("decision")){
         let tempConnPointer =$(currentNode).attr("data-yes")
         let tempConnPointer2=$(currentNode).attr("data-no");
@@ -1487,11 +1494,14 @@ function explorer(distinct){
         list[indx].to2=$(tempConnPointer2).attr("data-to");
 
       }else{
+
         list[indx].to=$(connectorPointer).attr("data-to");
+        
       }
 
       prevNode=currentNode;
       indx=list.findIndex(s=>s.status=='add');
+   
       currentNode=list[indx].node;
       list[indx].status='went';
       if($(currentNode).hasClass("decision")){
@@ -1508,8 +1518,10 @@ function explorer(distinct){
   
           connectorPointer=$(currentNode).attr("data-connector");
           temp=$(connectorPointer).attr("data-to");
-        
-          list.push({node:temp,root:currentNode,to:temp,status:'add'});
+          // if(temp&&!list.map(s=>s.node).includes(temp)){
+            list.push({node:temp,root:currentNode,to:temp,status:'add'});
+
+          // }
    
         }
     
@@ -1521,6 +1533,7 @@ function explorer(distinct){
    
    
   }
+
   list =list.filter(s=>s.node!=undefined);
   if(distinct){
     list =list.filter((s,i,arr)=>{

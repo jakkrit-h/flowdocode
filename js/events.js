@@ -61,10 +61,10 @@ $(document).on("click","#skip",function(){
     nodeOnSkip =$(connectorPointer).attr('data-to');
 
     if($(nodeOnSkip).hasClass("decision")){
-        $("#skip").show();
+        $("#skip").attr("disabled",false);
       
     }else{
-        $("#skip").hide();
+        $("#skip").attr("disabled",true);
 
     }
     let  text=$(node).find(".text").text();
