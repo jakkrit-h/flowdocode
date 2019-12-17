@@ -121,13 +121,7 @@ function compiler(str){
         let temp =str.split("--");
         str="--"+temp[0];
     }
-    l=""
- 
-    if(onSkip){
-        l='(By Skip)';
-        onSkip=false;
 
-    }
     return eval(str);
 }
 
