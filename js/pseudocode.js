@@ -204,7 +204,7 @@ function getIfPath(nodeData,nodeList) {
    
 // }
 function generateCode(nodeList) {
- 
+
     let code = 'START<br>';
     let endOfIf = [];
     let decisionNode = { node: undefined, status: false };
@@ -214,7 +214,8 @@ function generateCode(nodeList) {
     let addElse=false;
     let tab ="";
     for (let i = 0; i <= nodeList.length; i++) {
-        
+        // console.log(currentNode);
+        // console.log(addElse);
         if(!pastWay.includes(currentNode.node)){
             if($(currentNode.root).hasClass('decision')&&!pastTab.includes(currentNode.root)){               
                 tab+="&emsp;";
@@ -238,6 +239,9 @@ function generateCode(nodeList) {
             }
   
             pastWay.push(currentNode.node);
+            // console.log(currentNode);
+            // console.log(currentNode.status);
+            // console.log('---------------')
             if($(currentNode.node).hasClass('decision')&&currentNode.status=='pseudocode'){
                 addElse=true;
                 currentNode=nodeList.find(s=>s.node==currentNode.to2);
@@ -262,22 +266,24 @@ function generateCode(nodeList) {
 
 }
 function getpseudoCode(node,addElse,tab,nodeList){
-
+    // debugger
     let code=tab;
     let type = getNodeType(node.node);
     
     let text = $(node.node).find(".text").text();
 
     if (addElse) {
-        
-        if(nodeList.find(s=>s.node==node.endnoof)){
-            code += '<br>}<br>';
-
-        }else{
+        let decisionNode=nodeList.find(s=>s.node==node.endnoof);
+        try{
+            if(decisionNode&&decisionNode.decision){
+                code += '<br>}<br>';
+            }else{
+                code += '<br>}ELSE{<br>'+tab;
+            }
+        }catch(e){
             code += '<br>}ELSE{<br>'+tab;
-
         }
-
+    
 
     }
    
