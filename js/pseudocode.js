@@ -7,7 +7,8 @@ function pseudocodeController(){
     let nodeList = explorerPseudoCode();
     let a = nodeList.map((s,i,arr)=>{
         if($(s.node).hasClass("decision")){
-           let a=checkIsLoop(s,nodeList,s.node);  
+           let a=checkIsLoop(s,nodeList,s.node,undefined,i);  
+      
            if(a){
                s.decision = true; //is LOOP
            }else{
@@ -19,32 +20,70 @@ function pseudocodeController(){
         }
        
     });
-    // endOfBacket=endOfDecision(nodeList);
-    console.log(nodeList);
+  
     generateCode(nodeList);
-    // pseudocodeController2()
+   
 }
+function checkIsLoop(nodeData,nodeList,decisionTarget,prevNode,indexTarget) {
 
-function checkIsLoop(nodeData,nodeList,decisionTarget,prevNode) {
-    
     if(nodeData.to){
-        let resultFind = nodeList.find(s=>s.node == nodeData.to);
-        //&&resultFind!=prevNode ใส่กัน stack overflow แต่คำตอบก็ยังผิด
-        if(resultFind&&resultFind.node!= decisionTarget&&resultFind!=prevNode){
-          return checkIsLoop(resultFind,nodeList,decisionTarget,resultFind);
+   
+        let index = nodeList.findIndex(s=>s.node == nodeData.to);
+        let resultFind =nodeList[index];
+        if($(resultFind.node).hasClass("decision")&&resultFind!=prevNode&&indexTarget<index){
+         
+            resultFind = nodeList.find(s=>s.node == resultFind.to2);
+ 
+        }else if($(resultFind.node).hasClass("decision")&&resultFind!=prevNode&&indexTarget>index){
+            return false;
+        }
+
+        if(resultFind&&resultFind.node!= decisionTarget){
+ 
+          return checkIsLoop(resultFind,nodeList,decisionTarget,resultFind,indexTarget);
            
         }else{
-            // console.log('------ELSE--------');
-
+  
             return true;
            
 
         }
     }else{
-        // console.log('------UNDEFINED--------');
+
     }
    
 }
+// function checkIsLoop(nodeData,nodeList,decisionTarget,indexTarget,prevNode,pastWay,n) {
+
+//     if(nodeData.to&&n<=20){
+//         n++;
+       
+      
+//         let resultFind = nodeList.find(s=>s.node == nodeData.to);
+
+//         //&&resultFind!=prevNode ใส่กัน stack overflow แต่คำตอบก็ยังผิด
+//         // console.log(decisionTarget);
+//         // console.log(resultFind.node);
+//         // console.log(pastWay);
+
+//         // console.log('-----------');
+
+//         if(resultFind&&resultFind.node!= decisionTarget&&resultFind!=prevNode){
+//            pastWay.push(resultFind)
+//           return checkIsLoop(resultFind,nodeList,decisionTarget,indexTarget,resultFind,pastWay,n);
+           
+//         }else{
+//             // console.log('------ELSE--------');
+
+//             return true;
+           
+
+//         }
+//     }else{
+//         // console.log('------UNDEFINED--------');
+//     }
+   
+// }
 function getEndOfDecision(nodeData,nodeList,decisionTarget,nodeIndex) {
     let currentNode;
     let index=0;
@@ -71,11 +110,13 @@ function getEndOfDecision(nodeData,nodeList,decisionTarget,nodeIndex) {
             }
         }
     }else{// IF
-      
+   
         let {yesPath,noPath}=getIfPath(nodeData,nodeList);
-       
+        
         let endOfAll = yesPath.filter(value => noPath.includes(value))[0];
-    
+        console.log(yesPath)
+        console.log(noPath)
+        console.log(endOfAll)
         let endOfYes = yesPath.find((s,i,arr)=>{if(s==endOfAll)return (i-1<0)?arr[0]:arr[i-1]})
         let endOfNo=noPath.find((s,i,arr)=>{if(s==endOfAll)return (i-1<0)?arr[0]:arr[i-1]})
         let endOfDecide =endOfYes;
@@ -85,6 +126,7 @@ function getEndOfDecision(nodeData,nodeList,decisionTarget,nodeIndex) {
         nodeList[nodeIndex].endno=endOfNo;
 
         let tempIndex = nodeList.findIndex(s=>s.node == endOfYes);
+       
         nodeList[tempIndex].endyesof=nodeData.node;
         tempIndex = nodeList.findIndex(s=>s.node == endOfNo);
         nodeList[tempIndex].endnoof=nodeData.node;
@@ -105,7 +147,13 @@ function getIfPath(nodeData,nodeList) {
   
     for(let i = 0; i<nodeList.length;i++){
         if(currentNode.to){
-            yesPath.push(currentNode.to);
+            if(!yesPath.includes(currentNode.to)){
+                yesPath.push(currentNode.to);
+                if(currentNode.to==nodeData.node){
+                    break;
+                }
+            }
+      
             currentNode=nodeList.find(s=>s.node == currentNode.to);
         }else{
             break;
@@ -116,7 +164,13 @@ function getIfPath(nodeData,nodeList) {
     noPath.push(nodeData.to2)
     for(let i = 0; i< nodeList.length;i++){
         if(currentNode.to){
+            if(!noPath.includes(currentNode.to)){
+
             noPath.push(currentNode.to);
+            if(currentNode.to==nodeData.node){
+                break;
+            }
+        }
             currentNode=nodeList.find(s=>s.node == currentNode.to);
         }else{
             break;
@@ -260,13 +314,14 @@ function generateCode(nodeList) {
 
 
     }
+   
     pseudoCodePage(code);
 
 
 
 }
 function getpseudoCode(node,addElse,tab,nodeList){
-    // debugger
+   
     let code=tab;
     let type = getNodeType(node.node);
     
@@ -297,9 +352,9 @@ function getpseudoCode(node,addElse,tab,nodeList){
             break;
         case "decision":
             if (node.decision) {
-                code += "LOOP( " + text + ") {";
+                code += "WHILE(" + text + ") {";
             } else {
-                code += "IF( " + text + "){ ";
+                code += "IF(" + text + "){ ";
             }
             break;
         case "display":

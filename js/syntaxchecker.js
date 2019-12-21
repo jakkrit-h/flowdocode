@@ -46,7 +46,7 @@ function processChecker(text){
 
     let abstainWord=generateAbstainWordOfVar(text,'process');
     console.log(abstainWord);
-    let processSyntax=new RegExp("^([A-Za-z$_][A-Za-z$_0-9]*([ ]*=[ ]*)[(]*((\-)?[0-9()]+|['][^\'\"]*[']|[\"][^\'\"]*[\"]"+abstainWord+")([\+\\-\*\/]((\\-)?[0-9()]+|"+abstainWord+")|[+][ ]*([()]*['][^\'\"]*['][()]*|[()]*[\"][^\'\"]*[\"][()]*"+abstainWord+"))*)?$");
+    let processSyntax=new RegExp("^([A-Za-z$_][A-Za-z$_0-9]*([ ]*=[ ]*)[(]*((\-)?[0-9()]+|['][^\'\"]*[']|[\"][^\'\"]*[\"]"+abstainWord+")([\+\\-\*\/\%]((\\-)?[0-9()]+|"+abstainWord+")|[+][ ]*([()]*['][^\'\"]*['][()]*|[()]*[\"][^\'\"]*[\"][()]*"+abstainWord+"))*)?$");
     let backet = checkCountOfBacket(text);
     let result =false;
     console.log('**************');
@@ -108,7 +108,7 @@ function generateAbstainWordOfVar(text,type){
         if(type=="process"){
             let temp=text.match(/(?<=\=).*/)[0];
            
-            allWord=temp.match(/[^\+\-\*\/\(\)]*|'[^\(\)]*'|"[^\(\)]*"/gm).filter(s=>s.length>0);
+            allWord=temp.match(/[^\+\-\*\/\(\)%]*|'[^\(\)]*'|"[^\(\)]*"/gm).filter(s=>s.length>0);
             if(temp.match(/'[^\(\)]*'|"[^\(\)]*"/gm)){
                 wordIsString=temp.match(/'[^\(\)]*'|"[^\(\)]*"/gm).filter(s=>s.length>0);
         
