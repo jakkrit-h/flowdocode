@@ -434,4 +434,9 @@ table td {
   opacity: 1;
 }
 
+.textHighLight {
+  color: #4f7df9;
+  font-weight: bold;
+}
+
 /*# sourceMappingURL=main.css.map */

@@ -11,7 +11,7 @@ function Debugger(node,text,result){
                 res.map(s=>{
                     let reg2=new RegExp(s,'gm');
                 
-                    text= text.replace(reg2,s+'('+eval(s)+')');
+                    text= text.replace(reg2,s+'(<span class="textHighLight"> '+eval(s)+' </span>)');
                 });
             }catch(e){}
             text=text.replace(/(&&)/gm,'<br>$1<br>')

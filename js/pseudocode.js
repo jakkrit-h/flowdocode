@@ -14,12 +14,20 @@ function pseudocodeController(){
            }else{
                s.decision = false; // is IF
            }
-      
-           let b=getEndOfDecision(s,nodeList,s.node,i);
            
+           getEndOfDecision(s,nodeList,s.node,i);
+     
         }
        
     });
+    nodeList.map((s,i,arr)=>{
+        if($(s.node).hasClass("decision")){            
+           getEndOfDecision(s,nodeList,s.node,i);
+     
+        }
+       
+    });
+  
   
     generateCode(nodeList);
    
@@ -89,9 +97,14 @@ function getEndOfDecision(nodeData,nodeList,decisionTarget,nodeIndex) {
     let index=0;
     if(nodeData.decision){ // LOOP
         currentNode=nodeList.find(s=>s.node == nodeData.to);
-        for(let i=0;i<nodeList.length;i++){
+     
+        for(let i=0;i<=nodeList.length;i++){
+            
             if(currentNode.to){
-                if(currentNode.to==nodeData.node){              
+              
+                if(currentNode.to==nodeData.node){  
+                   
+            
                     nodeList[index].endyesof=nodeData.node;
                     let tempIndex = nodeList.findIndex(s=>s.node == nodeData.to2);
                     nodeList[tempIndex].endnoof=nodeData.node;
@@ -101,9 +114,30 @@ function getEndOfDecision(nodeData,nodeList,decisionTarget,nodeIndex) {
              
                     break;
                 }else{
-                    index=nodeList.findIndex(s=>s.node == currentNode.to);
+                    let tempIndx =nodeList.findIndex(s=>s.node == currentNode.node);
+                    let temp=nodeList[tempIndx];
+                    if($(currentNode.node).hasClass("decision")&&temp.decision&&tempIndx>nodeIndex){
+                       
+             
+                     
+                            index=nodeList.findIndex(s=>s.node == currentNode.to2);
+                           
+                            currentNode=nodeList.find(s=>s.node == currentNode.to2);
+                      
+                     
+                  
+                     
+                       
+                    }else{
+                      
 
-                    currentNode=nodeList.find(s=>s.node == currentNode.to);
+                        index=nodeList.findIndex(s=>s.node == currentNode.to);
+                 
+                
+                        currentNode=nodeList[index]
+                    
+                    }
+                
                 }
             }else{
               
@@ -259,7 +293,7 @@ function getIfPath(nodeData,nodeList) {
 // }
 function generateCode(nodeList) {
 
-    let code = 'START<br>';
+    let code = "<span class='textHighLight'>START</span><br>";
     let endOfIf = [];
     let decisionNode = { node: undefined, status: false };
     let currentNode = nodeList[0];
@@ -267,11 +301,14 @@ function generateCode(nodeList) {
     let pastTab=[];
     let addElse=false;
     let tab ="";
-    for (let i = 0; i <= nodeList.length; i++) {
+    let countDecision=nodeList.filter(s=>$(s.node).hasClass('decision'));
+  
+    for (let i = 0; i < nodeList.length+countDecision.length; i++) {
         // console.log(currentNode);
         // console.log(addElse);
         if(!pastWay.includes(currentNode.node)){
-            if($(currentNode.root).hasClass('decision')&&!pastTab.includes(currentNode.root)){               
+            if($(currentNode.root).hasClass('decision')&&!pastTab.includes(currentNode.root)){        
+                   
                 tab+="&emsp;";
                 pastTab.push(currentNode.root);
             }else if(currentNode.endofif){
@@ -299,7 +336,6 @@ function generateCode(nodeList) {
             if($(currentNode.node).hasClass('decision')&&currentNode.status=='pseudocode'){
                 addElse=true;
                 currentNode=nodeList.find(s=>s.node==currentNode.to2);
-
             }else{
                 let index =nodeList.findIndex(s=>s.node==currentNode.node); 
                 nodeList[index].status='pseudocode';
@@ -314,29 +350,39 @@ function generateCode(nodeList) {
 
 
     }
-   
+
     pseudoCodePage(code);
 
 
 
 }
 function getpseudoCode(node,addElse,tab,nodeList){
-   
+//    console.log(node);
     let code=tab;
     let type = getNodeType(node.node);
     
     let text = $(node.node).find(".text").text();
-
+   
+    
     if (addElse) {
+     
         let decisionNode=nodeList.find(s=>s.node==node.endnoof);
         try{
+           
             if(decisionNode&&decisionNode.decision){
-                code += '<br>}<br>';
+                if(node.node=='#end'){
+                    code =  '<br>}<br>'+tab;
+  
+                }else{
+                    code =  '<br>'+tab.replace(/&emsp;/,'')+'}<br>'+tab.replace(/&emsp;/,'');
+
+                }
             }else{
-                code += '<br>}ELSE{<br>'+tab;
+                
+                code = '<br>'+tab.replace(/&emsp;/,'')+'}ELSE{<br>'+tab;
             }
         }catch(e){
-            code += '<br>}ELSE{<br>'+tab;
+            code = '<br>'+tab.replace(/&emsp;/,'')+'}ELSE{<br>'+tab;
         }
     
 
@@ -345,25 +391,27 @@ function getpseudoCode(node,addElse,tab,nodeList){
 
     switch (type) {
         case "process":
-            code += text;
+            code += text+';';
             break;
         case "input":
-            code += "INPUT( " + text + ")";
+            code += "<span class='textHighLight'> INPUT </span>( " + text + ")"+';';
             break;
         case "decision":
             if (node.decision) {
-                code += "WHILE(" + text + ") {";
+                code += "<span class='textHighLight'> WHILE </span>(" + text + ") {";
             } else {
-                code += "IF(" + text + "){ ";
+                code += "<span class='textHighLight'> IF </span>(" + text + "){ ";
             }
             break;
         case "display":
-            code += "DISPLAY(" + text + ")";
+            code += "<span class='textHighLight'> DISPLAY </span>(" + text + ")"+';';
             break;
     }
     if(node.endnoof){
+        
         if(!nodeList.find(s=>s.node==node.endnoof).decision){
-            code += '<br>}';
+       
+            code += '<br>'+tab.replace(/&emsp;/,'')+'}<br>';
 
         }
       
@@ -371,56 +419,7 @@ function getpseudoCode(node,addElse,tab,nodeList){
   
     return code+'<br>';
 }
-// function generateCode(nodeList) {
-//       console.log(nodeList);
-//         let code='START\n';
-//         let endOfIf=[];
-//         for(let i =0;i<nodeList.length;i++){
-//             let type = getNodeType(nodeList[i].node);
-//             let text = $(nodeList[i].node).find(".text").text();
-//             let rootIsDecision=false;
-//             if(nodeList[i].endofif){
-//                 code+='\n}ELSE{';
-//                 endOfIf.push(nodeList[i]);
-//                 continue;          
-                
-//             }
-            
-//             switch (type){
-           
-//                 case "process":
-//                     code+=text;
-//                 break;
-//                 case "input":
-//                     code+="INPUT( "+text+")";
-//                 break;
-//                 case "decision":
-//                     if(nodeList[i].decision){
-//                         code+="LOOP( "+text+") {";
-//                     }else{
-//                         code+="IF( "+text+"){ ";
-//                     }
-//                 break;
-//                 case "display":
-//                     code+="DISPLAY("+text+")";
-//                 break;
-//             }
-//             if(nodeList[i].endnoof){
-//                 code+='\n}\n';
-//                 if(endOfIf.map(s=>s.node).includes(nodeList[i].to)){
-              
-//                     let t = $(nodeList[i].to).find(".text").text();
-//                     console.log(t);
-//                     // code+=endOfIf.map(s=>s.node).includes(nodeList[i].to);
-//                 }
-//             }
-//             code+="\n";
-        
-//         }
-//         pseudoCodePage(code);
-   
-    
-// }
+
 function generateCode2(node){
     let type=getNodeType(node);
     let text=$(node).find(".text").text();
@@ -450,12 +449,29 @@ function generateCode2(node){
 
 }
 function pseudoCodePage(pseudoCode){
-    pseudoCode+="END";
-    console.log('\n\n\n'+pseudoCode);
+    pseudoCode+="<span class='textHighLight'>END</span>";
+    console.log(pseudoCode)
+
     let strWindowFeatures = "menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes,width=500,height=700,left=500";
     let myWindow = window.open('','',strWindowFeatures);
 
     myWindow.document.write(pseudoCode);
+    let bootstrap=myWindow.document.createElement('link');
+    let head=myWindow.document.getElementsByTagName('head')[0];
+
+    bootstrap.rel  = 'stylesheet';
+    bootstrap.type = 'text/css';
+    bootstrap.href = 'css/bootstrap.min.css';
+    bootstrap.media = 'all';
+    head.appendChild(bootstrap);
+    let style=myWindow.document.createElement('link');
+    style.rel  = 'stylesheet';
+    style.type = 'text/css';
+    style.href = 'css/pseudocode.css';
+    style.media = 'all';
+ 
+    head.appendChild(style);
+
 }
 function  explorerPseudoCode() {
     let prevNode =undefined;
