@@ -5,6 +5,7 @@ var decision="yes";
 var tab='';
 function pseudocodeController(){
     let nodeList = explorerPseudoCode();
+    console.log(nodeList)
     let a = nodeList.map((s,i,arr)=>{
         if($(s.node).hasClass("decision")){
            let a=checkIsLoop(s,nodeList,s.node,undefined,i);  
@@ -146,25 +147,30 @@ function getEndOfDecision(nodeData,nodeList,decisionTarget,nodeIndex) {
     }else{// IF
    
         let {yesPath,noPath}=getIfPath(nodeData,nodeList);
-        
+   
         let endOfAll = yesPath.filter(value => noPath.includes(value))[0];
-        console.log(yesPath)
-        console.log(noPath)
-        console.log(endOfAll)
+
         let endOfYes = yesPath.find((s,i,arr)=>{if(s==endOfAll)return (i-1<0)?arr[0]:arr[i-1]})
         let endOfNo=noPath.find((s,i,arr)=>{if(s==endOfAll)return (i-1<0)?arr[0]:arr[i-1]})
         let endOfDecide =endOfYes;
-        endOfYes=yesPath[yesPath.findIndex(s=>s==endOfYes)-1];
-        endOfNo=noPath[noPath.findIndex(s=>s==endOfNo)-1];
+
+        let tempYesPathIndex=yesPath.findIndex(s=>s==endOfYes);
+        endOfYes=yesPath[(tempYesPathIndex>0)?tempYesPathIndex-1:0 ];
+ 
+        let tempNoPathIndex=noPath.findIndex(s=>s==endOfNo);
+        endOfNo=noPath[(tempNoPathIndex>0)?tempNoPathIndex-1:0 ];
         nodeList[nodeIndex].endyes=endOfYes;
         nodeList[nodeIndex].endno=endOfNo;
 
         let tempIndex = nodeList.findIndex(s=>s.node == endOfYes);
        
         nodeList[tempIndex].endyesof=nodeData.node;
+      
         tempIndex = nodeList.findIndex(s=>s.node == endOfNo);
+      
         nodeList[tempIndex].endnoof=nodeData.node;
         tempIndex=nodeList.findIndex(s=>s.node==endOfDecide);
+
         nodeList[tempIndex].endofif=nodeList[nodeIndex].node;
 
     }
@@ -178,38 +184,65 @@ function getIfPath(nodeData,nodeList) {
     let yesPath=[];
     let noPath=[];
     let currentNode=nodeData;
-  
+    let DecisionOnPast=[];
     for(let i = 0; i<nodeList.length;i++){
-        if(currentNode.to){
-            if(!yesPath.includes(currentNode.to)){
+     
+        if(currentNode.to&&!yesPath.includes(currentNode.to)){
+          
+                if($(currentNode.to).hasClass("decision")&&!DecisionOnPast.includes(currentNode.to)){
+                    DecisionOnPast.push(currentNode.to);
+                }
                 yesPath.push(currentNode.to);
                 if(currentNode.to==nodeData.node){
+     
                     break;
                 }
-            }
+       
+                
       
-            currentNode=nodeList.find(s=>s.node == currentNode.to);
+        }else if(DecisionOnPast.length>0){
+            let temp =DecisionOnPast.shift();
+            let decide = nodeList.find(s=>s.node == temp);
+            currentNode=nodeList.find(s=>s.node == decide.to2);
+            yesPath.push(decide.to2);
+     
+            i--;
+            continue;
         }else{
             break;
         }
-        
+        currentNode=nodeList.find(s=>s.node == currentNode.to);
+
     }
     currentNode=nodeList.find(s=>s.node == nodeData.to2);
-    noPath.push(nodeData.to2)
-    for(let i = 0; i< nodeList.length;i++){
-        if(currentNode.to){
-            if(!noPath.includes(currentNode.to)){
+    noPath.push(nodeData.to2);
+    DecisionOnPast=[];
 
-            noPath.push(currentNode.to);
-            if(currentNode.to==nodeData.node){
-                break;
-            }
-        }
-            currentNode=nodeList.find(s=>s.node == currentNode.to);
-        }else{
+    for(let i = 0; i< nodeList.length;i++){
+       
+
+        if (currentNode.to&&!noPath.includes(currentNode.to)) {
+                if($(currentNode.to).hasClass("decision")&&!DecisionOnPast.includes(currentNode.to)){
+                    DecisionOnPast.push(currentNode.to);
+                }
+                noPath.push(currentNode.to);
+                if (currentNode.to == nodeData.node) {
+                    break;
+                }
+        }else if(DecisionOnPast.length>0){
+            let temp =DecisionOnPast.shift();
+            let decide = nodeList.find(s=>s.node == temp);
+            currentNode=nodeList.find(s=>s.node == decide.to2);
+            noPath.push(decide.to2);
+     
+            i--;
+            continue;
+        } else {
             break;
         }
         
+        currentNode = nodeList.find(s => s.node == currentNode.to);
+
     }
     return {yesPath,noPath};
 }
@@ -304,36 +337,49 @@ function generateCode(nodeList) {
     let countDecision=nodeList.filter(s=>$(s.node).hasClass('decision'));
   
     for (let i = 0; i < nodeList.length+countDecision.length; i++) {
-        // console.log(currentNode);
-        // console.log(addElse);
-        if(!pastWay.includes(currentNode.node)){
-            if($(currentNode.root).hasClass('decision')&&!pastTab.includes(currentNode.root)){        
-                   
-                tab+="&emsp;";
-                pastTab.push(currentNode.root);
-            }else if(currentNode.endofif){
-                tab=tab.replace(/&emsp;/,'');
-            
-            }
-            
-
-            code+=getpseudoCode(currentNode,addElse,tab,nodeList);
-            addElse=false;
-        }
-   
-        if(currentNode.to!=undefined){
+ 
+        if(!pastWay.includes(currentNode.node)||currentNode.node=='#end'){
          
+         
+            if(pastWay[pastWay.length-2]!='#end'&&pastWay[pastWay.length-1]!='#end'){
+             
+          
+                if(currentNode.node=='#end'){
+              
+                    pastWay.push(currentNode.node);
+                }
+                if($(currentNode.root).hasClass('decision')&&!pastTab.includes(currentNode.root)){        
+                       
+                    tab+="&emsp;";
+                    pastTab.push(currentNode.root);
+                }else if(currentNode.endofif){
+                    tab=tab.replace(/&emsp;/,'');
+                
+                }
+                code+=getpseudoCode(currentNode,addElse,tab,nodeList);
+                addElse=false;
+            }
+        
+           
+        }
+
+        if(currentNode.to!=undefined){
+          
+
 
             if(currentNode.endyesof){
+                let index =nodeList.findIndex(s=>s.node==currentNode.node); 
+                nodeList[index].status='pseudocode';
                 currentNode=nodeList.find(s=>s.node==currentNode.endyesof);
+                
+                i--;
                 continue;
             }
   
             pastWay.push(currentNode.node);
-            // console.log(currentNode);
-            // console.log(currentNode.status);
-            // console.log('---------------')
+         
             if($(currentNode.node).hasClass('decision')&&currentNode.status=='pseudocode'){
+          
                 addElse=true;
                 currentNode=nodeList.find(s=>s.node==currentNode.to2);
             }else{
@@ -343,6 +389,9 @@ function generateCode(nodeList) {
 
             }
 
+        }else if(nodeList.some(s=>s.status)){
+           currentNode=nodeList.filter(s=>s.status=='add')[0];
+           currentNode=nodeList.find(s=>s.node==currentNode.root);
         }
 
 
@@ -350,14 +399,11 @@ function generateCode(nodeList) {
 
 
     }
-
     pseudoCodePage(code);
-
-
 
 }
 function getpseudoCode(node,addElse,tab,nodeList){
-//    console.log(node);
+    
     let code=tab;
     let type = getNodeType(node.node);
     
@@ -371,18 +417,28 @@ function getpseudoCode(node,addElse,tab,nodeList){
            
             if(decisionNode&&decisionNode.decision){
                 if(node.node=='#end'){
-                    code =  '<br>}<br>'+tab;
+                    
+                    code =  '<br>}+1<br>'+tab;
   
                 }else{
-                    code =  '<br>'+tab.replace(/&emsp;/,'')+'}<br>'+tab.replace(/&emsp;/,'');
+                    code =  '<br>'+tab.replace(/&emsp;/,'')+'}+2<br>'+tab.replace(/&emsp;/,'');
 
                 }
             }else{
-                
-                code = '<br>'+tab.replace(/&emsp;/,'')+'}ELSE{<br>'+tab;
+    
+                if(($(node.to2).hasClass('decision')||$(node.root).hasClass('decision'))&&$(node.node).hasClass('decision')){
+
+               
+                    code = '<br>'+tab.replace(/&emsp;/,'')+'}<span class="textHighLight"> ELSE </span> ';
+
+                }else{
+                    code = '<br>'+tab.replace(/&emsp;/,'')+'}<span class="textHighLight"> ELSE </span>{<br>'+tab;
+
+                }
             }
         }catch(e){
-            code = '<br>'+tab.replace(/&emsp;/,'')+'}ELSE{<br>'+tab;
+        
+            code = '<br>'+tab.replace(/&emsp;/,'')+'}<span class="textHighLight"> ELSE </span>{<br>'+tab;
         }
     
 
@@ -408,50 +464,24 @@ function getpseudoCode(node,addElse,tab,nodeList){
             break;
     }
     if(node.endnoof){
-        
-        if(!nodeList.find(s=>s.node==node.endnoof).decision){
-       
-            code += '<br>'+tab.replace(/&emsp;/,'')+'}<br>';
+        // let nodeRoot=nodeList.find(s=>s.node==node.root);
+        // if(!$(nodeRoot.to2).hasClass('decision')&&!node.endyesof){
+            console.log(node);
+        // if(nodeList.find(s=>s.node==node.endnoof).decision){
+                code += '<br>'+tab.replace(/&emsp;/,'')+'}+3<br>';
 
-        }
+            // }
+        // }
       
     }
   
     return code+'<br>';
 }
 
-function generateCode2(node){
-    let type=getNodeType(node);
-    let text=$(node).find(".text").text();
-    let code;
-    switch (type){
-        case "start-end":
-            code="START";
-        break;
-        case "process":
-            code=text;
-        break;
-        case "input":
-            code="INPUT( "+text+")";
-        break;
-        case "decision":
-            if(decision=="yes"){
-                code="IF( "+text+") {";
-            }else{
-                code="ELSE( "+text+") }";
-            }
-        break;
-        case "display":
-            code="DISPLAY("+text+")";
-        break;
-    }
-    pseudoCode+=row+". "+code+"<br>";
 
-}
 function pseudoCodePage(pseudoCode){
     pseudoCode+="<span class='textHighLight'>END</span>";
-    console.log(pseudoCode)
-
+    pseudoCode=pseudoCode.replace(/(<br>){3}/gm,'<br>');
     let strWindowFeatures = "menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes,width=500,height=700,left=500";
     let myWindow = window.open('','',strWindowFeatures);
 
@@ -483,8 +513,7 @@ function  explorerPseudoCode() {
     let isNo=false;
   
     list.push({node:currentNode,root:prevNode,status:'add',to:$(connectorPointer).attr('data-to')});
-  
-    for(let i=0;i<=20;i++){
+    for(let i=0;i<=$(".shape").length*5;i++){
 
         if(currentNode!=undefined){
             prevNode=currentNode;
