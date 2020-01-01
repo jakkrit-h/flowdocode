@@ -5,18 +5,15 @@ var decision="yes";
 var tab='';
 function pseudocodeController(){
     let nodeList = explorerPseudoCode();
-    console.log(nodeList)
     let a = nodeList.map((s,i,arr)=>{
         if($(s.node).hasClass("decision")){
            let a=checkIsLoop(s,nodeList,s.node,undefined,i);  
-      
            if(a){
-               s.decision = true; //is LOOP
+               s.decision = checkIsDoWhile(s,arr,i) ; //is LOOP
            }else{
-               s.decision = false; // is IF
+               s.decision =checkIsElseIf(s,arr,i) ; // is IF
            }
            
-           getEndOfDecision(s,nodeList,s.node,i);
      
         }
        
@@ -28,7 +25,7 @@ function pseudocodeController(){
         }
        
     });
-  
+    console.log(nodeList);
   
     generateCode(nodeList);
    
@@ -61,6 +58,28 @@ function checkIsLoop(nodeData,nodeList,decisionTarget,prevNode,indexTarget) {
 
     }
    
+}
+function checkIsElseIf(node,nodeList,i) {
+    let nodeRoot= nodeList.find(s=>s.node==node.root);
+    if($(nodeRoot.node).hasClass("decision")&&nodeRoot.to2==node.node){
+        return "ELSEIF";
+    }else{
+        return "IF";
+    }
+}
+function checkIsDoWhile(node,nodeList,i) {
+    let nodeRoot= nodeList.find(s=>s.node==node.root);
+    let currentNode = nodeRoot;
+    let result = 'WHILE';
+    for(let i = 0; i<nodeList.length;i++){
+        if(currentNode.to!=nodeRoot.node){
+            currentNode=nodeList.find(s=>s.node==node.to);
+        }else{
+            result ='DOWHILE';
+        }
+    }
+
+    return result;
 }
 // function checkIsLoop(nodeData,nodeList,decisionTarget,indexTarget,prevNode,pastWay,n) {
 
@@ -96,7 +115,7 @@ function checkIsLoop(nodeData,nodeList,decisionTarget,prevNode,indexTarget) {
 function getEndOfDecision(nodeData,nodeList,decisionTarget,nodeIndex) {
     let currentNode;
     let index=0;
-    if(nodeData.decision){ // LOOP
+    if(nodeData.decision=='WHILE'||nodeData.decision=='DOWHILE'){ // LOOP
         currentNode=nodeList.find(s=>s.node == nodeData.to);
      
         for(let i=0;i<=nodeList.length;i++){
@@ -163,12 +182,28 @@ function getEndOfDecision(nodeData,nodeList,decisionTarget,nodeIndex) {
         nodeList[nodeIndex].endno=endOfNo;
 
         let tempIndex = nodeList.findIndex(s=>s.node == endOfYes);
-       
+        // let tempArr= [];
+        // if(nodeList[tempIndex].endyesof){
+            
+        //     nodeList[tempIndex].endyesof.map(s=>tempArr.push(s));
+        // }
+        // tempArr.push(nodeData.node);
         nodeList[tempIndex].endyesof=nodeData.node;
-      
+        // nodeList[tempIndex].endyesof=tempArr;
+        // nodeList[tempIndex].endyesofcounter=0;
+
         tempIndex = nodeList.findIndex(s=>s.node == endOfNo);
-      
-        nodeList[tempIndex].endnoof=nodeData.node;
+        // tempArr=[];
+        // if(nodeList[tempIndex].endnoof){
+            
+        //     nodeList[tempIndex].endnoof.map(s=>tempArr.push(s));
+          
+        // }
+        // tempArr.push(nodeData.node);
+        // nodeList[tempIndex].endnoof=tempArr;
+        // nodeList[tempIndex].endnoofcounter=0;
+        nodeList[tempIndex].endyesof=nodeData.node;
+
         tempIndex=nodeList.findIndex(s=>s.node==endOfDecide);
 
         nodeList[tempIndex].endofif=nodeList[nodeIndex].node;
@@ -335,19 +370,11 @@ function generateCode(nodeList) {
     let addElse=false;
     let tab ="";
     let countDecision=nodeList.filter(s=>$(s.node).hasClass('decision'));
-  
-    for (let i = 0; i < nodeList.length+countDecision.length; i++) {
- 
-        if(!pastWay.includes(currentNode.node)||currentNode.node=='#end'){
-         
-         
-            if(pastWay[pastWay.length-2]!='#end'&&pastWay[pastWay.length-1]!='#end'){
-             
+    for (let i = 0; i < nodeList.length+countDecision.length+1; i++) {
+        console.log(pastWay)
+        if(!pastWay.includes(currentNode.node)){
           
-                if(currentNode.node=='#end'){
-              
-                    pastWay.push(currentNode.node);
-                }
+
                 if($(currentNode.root).hasClass('decision')&&!pastTab.includes(currentNode.root)){        
                        
                     tab+="&emsp;";
@@ -356,27 +383,51 @@ function generateCode(nodeList) {
                     tab=tab.replace(/&emsp;/,'');
                 
                 }
+                pastWay.push(currentNode.node);
+                code+=getpseudoCode(currentNode,addElse,tab,nodeList);
+                addElse=false;
+         
+        
+           
+        }else if(currentNode.node=='#end'){
+            
+            if(pastWay[pastWay.length-2]!='#end'&&pastWay[pastWay.length-1]!='#end'){
                 code+=getpseudoCode(currentNode,addElse,tab,nodeList);
                 addElse=false;
             }
-        
-           
         }
 
         if(currentNode.to!=undefined){
-          
 
 
-            if(currentNode.endyesof){
-                let index =nodeList.findIndex(s=>s.node==currentNode.node); 
-                nodeList[index].status='pseudocode';
-                currentNode=nodeList.find(s=>s.node==currentNode.endyesof);
-                
+            if (currentNode.endyesof) {
+                let index = nodeList.findIndex(s => s.node == currentNode.node);
+                nodeList[index].status = 'pseudocode';
+                currentNode = nodeList.find(s => s.node == currentNode.endyesof);
+
+                // if (Array.isArray(currentNode.endyesof)
+                //     && currentNode.endyesof.length > 1
+                //     && currentNode.endyesofcounter < currentNode.endyesof.length - 1) {
+
+                //     let tempEndYesOf = currentNode.endyesof[currentNode.endyesofcounter];
+                //     currentNode.endyesofcounter++;
+                //     currentNode = nodeList.find(s => s.node == tempEndYesOf);
+                //     console.log(currentNode);
+                // } else if (!Array.isArray(currentNode.endyesof)) {
+
+                //     console.log(currentNode);
+                //     currentNode = nodeList.find(s => s.node == currentNode.endyesof[0]);
+                //     console.log(currentNode);
+                // }
+
+
+
+
                 i--;
                 continue;
             }
-  
-            pastWay.push(currentNode.node);
+
+
          
             if($(currentNode.node).hasClass('decision')&&currentNode.status=='pseudocode'){
           
@@ -389,7 +440,7 @@ function generateCode(nodeList) {
 
             }
 
-        }else if(nodeList.some(s=>s.status)){
+        }else if(nodeList.some(s=>s.status=='add')){
            currentNode=nodeList.filter(s=>s.status=='add')[0];
            currentNode=nodeList.find(s=>s.node==currentNode.root);
         }
@@ -400,49 +451,24 @@ function generateCode(nodeList) {
 
     }
     pseudoCodePage(code);
-
+    console.log('------------');
 }
 function getpseudoCode(node,addElse,tab,nodeList){
-    
+    // console.log(node)
     let code=tab;
     let type = getNodeType(node.node);
     
     let text = $(node.node).find(".text").text();
+    let closeBacket=false;
+    let root=nodeList.find(s=>s.node==node.root);
+    try{
+        code=getFrontCloseBackget(node,root);
+        closeBacket=true;
+    }catch(e){
+       
+    }
    
     
-    if (addElse) {
-     
-        let decisionNode=nodeList.find(s=>s.node==node.endnoof);
-        try{
-           
-            if(decisionNode&&decisionNode.decision){
-                if(node.node=='#end'){
-                    
-                    code =  '<br>}+1<br>'+tab;
-  
-                }else{
-                    code =  '<br>'+tab.replace(/&emsp;/,'')+'}+2<br>'+tab.replace(/&emsp;/,'');
-
-                }
-            }else{
-    
-                if(($(node.to2).hasClass('decision')||$(node.root).hasClass('decision'))&&$(node.node).hasClass('decision')){
-
-               
-                    code = '<br>'+tab.replace(/&emsp;/,'')+'}<span class="textHighLight"> ELSE </span> ';
-
-                }else{
-                    code = '<br>'+tab.replace(/&emsp;/,'')+'}<span class="textHighLight"> ELSE </span>{<br>'+tab;
-
-                }
-            }
-        }catch(e){
-        
-            code = '<br>'+tab.replace(/&emsp;/,'')+'}<span class="textHighLight"> ELSE </span>{<br>'+tab;
-        }
-    
-
-    }
    
 
     switch (type) {
@@ -453,7 +479,7 @@ function getpseudoCode(node,addElse,tab,nodeList){
             code += "<span class='textHighLight'> INPUT </span>( " + text + ")"+';';
             break;
         case "decision":
-            if (node.decision) {
+            if (node.decision=='WHILE'||node.decision=='DOWHILE') {
                 code += "<span class='textHighLight'> WHILE </span>(" + text + ") {";
             } else {
                 code += "<span class='textHighLight'> IF </span>(" + text + "){ ";
@@ -463,21 +489,86 @@ function getpseudoCode(node,addElse,tab,nodeList){
             code += "<span class='textHighLight'> DISPLAY </span>(" + text + ")"+';';
             break;
     }
-    if(node.endnoof){
-        // let nodeRoot=nodeList.find(s=>s.node==node.root);
-        // if(!$(nodeRoot.to2).hasClass('decision')&&!node.endyesof){
-            console.log(node);
-        // if(nodeList.find(s=>s.node==node.endnoof).decision){
-                code += '<br>'+tab.replace(/&emsp;/,'')+'}+3<br>';
+    code+=getBehideCloseBackget(node,closeBacket);
+    // if(node.endnoof&&!closeBacket){
+    //     let nodeRoot=nodeList.find(s=>s.node==node.root);
+    //     if(!$(nodeRoot.node).hasClass('decision')&&!$(nodeRoot.to2).hasClass('decision')){
+    //         code += '<br>'+tab.replace(/&emsp;/,'')+'}+3<br>';
 
-            // }
-        // }
+    //     }
+    //     // if(!$(nodeRoot.to2).hasClass('decision')&&!node.endyesof){
+         
+    //     // if(nodeList.find(s=>s.node==node.endnoof).decision){
+    //             // code += '<br>'+tab.replace(/&emsp;/,'')+'}+3<br>';
+
+    //         // }
+    //     // }
       
-    }
+    // }
   
     return code+'<br>';
 }
 
+function getFrontCloseBackget(node,root) { 
+    let code='';
+    if($(root.node).hasClass("decision")&&node.node==root.to2){
+        if(root.decision=='IF'){
+            if($(node.node).hasClass("decision")&&root.to2==node.node){
+                code='} <span class="textHighLight">ELSE</span>';
+            }else{
+                code='} <span class="textHighLight">ELSE </span>{<br>';
+
+            }
+        }else if(root.decision=='ELSEIF'){
+            if($(node.node).hasClass("decision")&&root.to2==node.node){
+                code='} <span class="textHighLight">ELSE</span>';
+            }else{
+                code='} <span class="textHighLight">ELSE </span>{<br>';
+
+            }
+          
+
+        }else{
+            code='}+1<br>';
+        }
+  
+    }else if(node.node=='#end'&&(node.endyesof||node.endnoof||node.endofif)){
+       
+        // if(Array.isArray(node.endyesof)){
+        //     for(let i = 0;i<node.endyesof.length;i++){
+        //         code +='}+end<br>';
+        //     }
+        // }else if(Array.isArray(node.endnoof)){
+        //     for(let i = 0;i<node.endnoof.length;i++){
+        //         code +='}+end<br>';
+        //     }
+        // }else {
+            code='}+end<br>';
+        // }
+   
+    }
+    return code;
+ }
+function getBehideCloseBackget(node,closeBacket) { 
+    let code='';
+ 
+    if (node.endnoof && !closeBacket) {
+        let nodeRoot = nodeList.find(s => s.node == node.root);
+        if (!$(nodeRoot.node).hasClass('decision') && !$(nodeRoot.to2).hasClass('decision')) {
+            code += '<br>' + tab.replace(/&emsp;/, '') + '}+3<br>';
+
+        }
+        // if(!$(nodeRoot.to2).hasClass('decision')&&!node.endyesof){
+
+        // if(nodeList.find(s=>s.node==node.endnoof).decision){
+        // code += '<br>'+tab.replace(/&emsp;/,'')+'}+3<br>';
+
+        // }
+        // }
+
+    }
+    return code;
+ }
 
 function pseudoCodePage(pseudoCode){
     pseudoCode+="<span class='textHighLight'>END</span>";

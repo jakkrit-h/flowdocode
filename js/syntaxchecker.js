@@ -84,7 +84,7 @@ function decisionChecker(text){
 }
 function displayChecker(text){
     let abstainWord=generateAbstainWordOfVar(text,'display');
-    let displaySyntax=new RegExp("^([\'][^\'\"]*[\']|[\"][^\'\"]*[\"]"+abstainWord+")*([+]([\'][^\'\"]*[\']|[\"][^\'\"]*[\"]"+abstainWord+"))*$");
+    let displaySyntax=new RegExp("^([\'][^\'\"]*[\']|[\"][^\'\"]*[\"]"+abstainWord+")([+]([\'][^\'\"]*[\']|[\"][^\'\"]*[\"]"+abstainWord+"))*$");
     console.log(displaySyntax);
     return displaySyntax.test(text);
 }
