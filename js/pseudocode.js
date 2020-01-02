@@ -368,24 +368,17 @@ function generateCode(nodeList) {
     let pastWay=[];
     let pastTab=[];
     let addElse=false;
-    let tab ="";
+    tab='';
     let countDecision=nodeList.filter(s=>$(s.node).hasClass('decision'));
     for (let i = 0; i < nodeList.length+countDecision.length; i++) {
         if(!pastWay.includes(currentNode.node)){
           
 
-                if($(currentNode.root).hasClass('decision')&&!pastTab.includes(currentNode.root)){        
-                       
-                    tab+="&emsp;";
-                    pastTab.push(currentNode.root);
-                }else if(currentNode.endofif){
-                    tab=tab.replace(/&emsp;/,'');
-                
-                }
+               
              
 
-             
-                code+=getpseudoCode(currentNode,addElse,tab,nodeList);
+                 code+= getpseudoCode(currentNode,addElse,nodeList);
+            
                 addElse=false;
          
         
@@ -393,7 +386,7 @@ function generateCode(nodeList) {
         }else if(currentNode.node=='#end'){
             
             if(pastWay[pastWay.length-2]!='#end'&&pastWay[pastWay.length-1]!='#end'){
-                code+=getpseudoCode(currentNode,addElse,tab,nodeList);
+                code+=getpseudoCode(currentNode,addElse,nodeList);
                 addElse=false;
             }
         }
@@ -454,70 +447,62 @@ function generateCode(nodeList) {
 
 
     }
-    console.log(pastWay);
     pseudoCodePage(code);
 }
-function getpseudoCode(node,addElse,tab,nodeList){
-    let code=tab;
+function getpseudoCode(node,addElse,nodeList){
+ 
+    let code='';
     let type = getNodeType(node.node);
     
     let text = $(node.node).find(".text").text();
     let closeBacket=false;
     let root=nodeList.find(s=>s.node==node.root);
     try{
-        code=getFrontCloseBackget(node,root);
+        code+=getFrontCloseBackget(node,nodeList,root);
         closeBacket=true;
     }catch(e){
        
     }
-   
-    
-   
+
+    code+=tab;
+
 
     switch (type) {
         case "process":
             code += text+';';
             break;
         case "input":
-            code += "<span class='textHighLight'> INPUT </span>( " + text + ")"+';';
+            code += "<span class='textHighLight'>INPUT </span>( " + text + ")"+';';
             break;
         case "decision":
-            if (node.decision=='WHILE'||node.decision=='DOWHILE') {
-                code += "<span class='textHighLight'> WHILE </span>(" + text + ") {";
+            if (node.decision=='WHILE') {
+                code += "<span class='textHighLight'>WHILE </span>(" + text + ") {";
+                tab+="&emsp;";
+            }else if(node.decision=='DOWHILE'){
+                code += "<span class='textHighLight'>DO </span> {";
+                tab+="&emsp;";
             } else {
-                code += "<span class='textHighLight'> IF </span>(" + text + "){ ";
+                code += "<span class='textHighLight'>IF </span>(" + text + "){ ";
+                tab+="&emsp;";
             }
             break;
         case "display":
-            code += "<span class='textHighLight'> DISPLAY </span>(" + text + ")"+';';
+            code += "<span class='textHighLight'>DISPLAY </span>(" + text + ")"+';';
             break;
     }
     code+=getBehideCloseBackget(node,nodeList,closeBacket);
-    // if(node.endnoof&&!closeBacket){
-    //     let nodeRoot=nodeList.find(s=>s.node==node.root);
-    //     if(!$(nodeRoot.node).hasClass('decision')&&!$(nodeRoot.to2).hasClass('decision')){
-    //         code += '<br>'+tab.replace(/&emsp;/,'')+'}+3<br>';
-
-    //     }
-    //     // if(!$(nodeRoot.to2).hasClass('decision')&&!node.endyesof){
-         
-    //     // if(nodeList.find(s=>s.node==node.endnoof).decision){
-    //             // code += '<br>'+tab.replace(/&emsp;/,'')+'}+3<br>';
-
-    //         // }
-    //     // }
-      
-    // }
+   
   
     return code+'<br>';
 }
 
-function getFrontCloseBackget(node,root) { 
+function getFrontCloseBackget(node,nodeList,root) { 
     let code='';
     if($(root.node).hasClass("decision")&&node.node==root.to2){
         if(root.decision=='IF'){
             if($(node.node).hasClass("decision")&&root.to2==node.node){
                 code='} <span class="textHighLight">ELSE</span>';
+                 
             }else{
                 code='} <span class="textHighLight">ELSE </span>{<br>';
 
@@ -531,37 +516,44 @@ function getFrontCloseBackget(node,root) {
             }
           
 
+        }else if(root.decision=='DOWHILE'){
+            let text = $(root.node).find(".text").text();
+            code='} <span class="textHighLight">WHILE</span> ('+text+');<br>';
         }else{
-            code='}+1<br>';
+            code='}<br>';
         }
-  
+        
+        tab=tab.replace(/&emsp;/,'');
     }else if(node.node=='#end'&&(node.endyesof||node.endnoof||node.endofif)){
-       
-        // if(Array.isArray(node.endyesof)){
-        //     for(let i = 0;i<node.endyesof.length;i++){
-        //         code +='}+end<br>';
-        //     }
-        // }else if(Array.isArray(node.endnoof)){
-        //     for(let i = 0;i<node.endnoof.length;i++){
-        //         code +='}+end<br>';
-        //     }
-        // }else {
-            code='}+end<br>';
-        // }
-   
+        let decide=undefined;
+        decide =(node.endyesof)?node.endyesof:(node.endnoof)?node.endnoof:node.endofif;
+        decide = nodeList.find(s=>s.node == decide);
+     
+            if(decide.to2!='#end'&&decide.decision!='IF'){
+                if(decide.decision=='DOWHILE'){
+                    let text = $(root.node).find(".text").text();
+                    code='} <span class="textHighLight">WHILE</span> ('+text+');<br>';
+                }else{
+                    code='}<br>';
+                }
+               
+            }
+    
+            tab=tab.replace(/&emsp;/,'');
     }
+   
     return code;
  }
 function getBehideCloseBackget(node,nodeList,closeBacket) { 
     let code='';
         let nodeRoot = nodeList.find(s => s.node == node.root);
     
-    if (node.endnoof&&(nodeRoot.decision!='WHILE'&&nodeRoot.decision!='ELSEIF')) {
-      
+    if (node.endnoof&&(nodeRoot.decision!='WHILE'&&nodeRoot.decision!='DOWHILE'&&nodeRoot.decision!='ELSEIF')) {
+   
 
         // if (!$(nodeRoot.node).hasClass('decision') && !$(nodeRoot.to2).hasClass('decision')) {
-            code += '<br>' + tab.replace(/&emsp;/, '') + '}+3<br>';
-
+            code += '<br>}+3<br>';
+            tab=tab.replace(/&emsp;/,'');
         // }
         // if(!$(nodeRoot.to2).hasClass('decision')&&!node.endyesof){
 
@@ -572,12 +564,14 @@ function getBehideCloseBackget(node,nodeList,closeBacket) {
         // }
 
     }
+
     return code;
  }
 
 function pseudoCodePage(pseudoCode){
     pseudoCode+="<span class='textHighLight'>END</span>";
-    pseudoCode=pseudoCode.replace(/(<br>){3}/gm,'<br>');
+    console.log(pseudoCode.replace(/(<br>)/gm,'\n'));
+    pseudoCode=pseudoCode.replace(/(<br>){2,3}/gm,'<br>');
     let strWindowFeatures = "menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes,width=500,height=700,left=500";
     let myWindow = window.open('','',strWindowFeatures);
 
