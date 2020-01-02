@@ -501,26 +501,26 @@ function getFrontCloseBackget(node,nodeList,root) {
     if($(root.node).hasClass("decision")&&node.node==root.to2){
         if(root.decision=='IF'){
             if($(node.node).hasClass("decision")&&root.to2==node.node){
-                code='} <span class="textHighLight">ELSE</span>';
+                code+='} <span class="textHighLight">ELSE</span>';
                  
             }else{
-                code='} <span class="textHighLight">ELSE </span>{<br>';
-
+                code+='} <span class="textHighLight">ELSE </span>{<br>';
+                tab+="&emsp;";
             }
         }else if(root.decision=='ELSEIF'){
             if($(node.node).hasClass("decision")&&root.to2==node.node){
-                code='} <span class="textHighLight">ELSE</span>';
+                code+='} <span class="textHighLight">ELSE</span>';
             }else{
-                code='} <span class="textHighLight">ELSE </span>{<br>';
-
+                code+='} <span class="textHighLight">ELSE </span>{<br>';
+                tab+="&emsp;";
             }
           
 
         }else if(root.decision=='DOWHILE'){
             let text = $(root.node).find(".text").text();
-            code='} <span class="textHighLight">WHILE</span> ('+text+');<br>';
+            code+='} <span class="textHighLight">WHILE</span> ('+text+');<br>';
         }else{
-            code='}<br>';
+            code+='}<br>';
         }
         
         tab=tab.replace(/&emsp;/,'');
@@ -552,7 +552,7 @@ function getBehideCloseBackget(node,nodeList,closeBacket) {
    
 
         // if (!$(nodeRoot.node).hasClass('decision') && !$(nodeRoot.to2).hasClass('decision')) {
-            code += '<br>}+3<br>';
+            code += '<br>}<br>';
             tab=tab.replace(/&emsp;/,'');
         // }
         // if(!$(nodeRoot.to2).hasClass('decision')&&!node.endyesof){
