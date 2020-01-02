@@ -45,14 +45,10 @@ function checkSyntax(){
 function processChecker(text){
 
     let abstainWord=generateAbstainWordOfVar(text,'process');
-    console.log(abstainWord);
     let processSyntax=new RegExp("^([A-Za-z$_][A-Za-z$_0-9]*([ ]*=[ ]*)[(]*((\-)?[0-9()]+|['][^\'\"]*[']|[\"][^\'\"]*[\"]"+abstainWord+")([\+\\-\*\/\%]((\\-)?[0-9()]+|"+abstainWord+")|[+][ ]*([()]*['][^\'\"]*['][()]*|[()]*[\"][^\'\"]*[\"][()]*"+abstainWord+"))*)?$");
     let backet = checkCountOfBacket(text);
     let result =false;
-    console.log('**************');
-    console.log(text);
-    console.log(processSyntax);
-    console.log('**************');
+ 
 
     if(processSyntax.test(text)&&backet&&!/(\)[a-zA-z0-9]*\()/.test(text)){
         
@@ -85,7 +81,6 @@ function decisionChecker(text){
 function displayChecker(text){
     let abstainWord=generateAbstainWordOfVar(text,'display');
     let displaySyntax=new RegExp("^([\'][^\'\"]*[\']|[\"][^\'\"]*[\"]"+abstainWord+")([+]([\'][^\'\"]*[\']|[\"][^\'\"]*[\"]"+abstainWord+"))*$");
-    console.log(displaySyntax);
     return displaySyntax.test(text);
 }
 function checkCountOfBacket(text){
@@ -114,11 +109,7 @@ function generateAbstainWordOfVar(text,type){
         
             }
             wordIsVariable= allWord.filter(s=>!wordIsString.includes(s)&&listOfVar.includes(s));
-            console.log('--------');
-            console.log(temp)
-            console.log(allWord);
-            console.log(wordIsVariable);
-            console.log('--------');
+     
 
             wordIsVariable.map(s=>abstainWord+='|[()]*'+s+'[()]*');
        
@@ -179,7 +170,6 @@ function listVariable(text){
         }
      
         listOfVar=[...new Set(listOfVar)];
-        console.log(listOfVar);
     //  }); 
     //  console.log(listOfVar);
 

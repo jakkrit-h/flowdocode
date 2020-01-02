@@ -203,6 +203,10 @@ nav {
   background: #24272c;
 }
 
+#con-debugger {
+  position: absolute;
+}
+
 #con-console {
   background: #fff;
   background: #24272c;
@@ -218,6 +222,10 @@ nav {
 }
 
 .table-dark {
+  border-color: #1b1e23 !important;
+}
+
+.debugger-header {
   border-color: #1b1e23 !important;
 }
 

@@ -1335,7 +1335,6 @@ function init(noRisize){
    
     // let conDesignHeight =$(document).outerHeight()-$("#con-console").outerHeight()-100;
     $("#con-design").css("height",$("#con-console").offset().top-100);
-    $("#design").prepend("<div id='design-containment'style='position:fixed;'></div>");
     $("#design-containment").offset($("#con-design").offset());
 
     $("#design-containment").css('width',$("#con-design").outerWidth());
@@ -1347,8 +1346,9 @@ function init(noRisize){
  
     $("#canvas").css("height","50000px" );
     $("#canvas").offset({ top: 0, left: 0 });
-    
+    let debuggerHeight=$(document).height()-$("#con-debugger").offset().top;
  
+    $("#con-debugger").height(debuggerHeight-50);
     hasEnd();
 
 }

@@ -222,6 +222,11 @@ nav{
   background: #24272c;
 
 }
+#con-debugger{
+  position: absolute;
+
+
+}
 #con-console{
   background: #fff;
 
@@ -241,11 +246,17 @@ nav{
 .table-dark{
   border-color: #1b1e23 !important;
 }
+.debugger-header{
+  
+  border-color: #1b1e23 !important;
+}
 table{
   color:#fff;
   position: absolute;
   overflow-y:scroll !important;
   table-layout: fixed;
+
+
   thead{
     border-color: #1b1e23 !important;
 

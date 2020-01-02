@@ -154,6 +154,7 @@
   <div class="offset-2 col-8 p-0 pb-5  mb-5 " id="con-design" style="position: fixed;overflow-y:scroll;">
 
     <div id="design" class=" col-12 p-0 con-design" ondragover="allowDrop(event)" ondrop="dropItem(event)">
+      <div id="design-containment" ></div>
       <svg id="canvas">
         <defs>
           <marker id="arrowhead" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
@@ -197,28 +198,27 @@
 
 
   </div>
-  <div class="offset-10  h-100 " id="con-right" style="overflow: hidden !important;">
+
+  <div class="offset-10 col-2 p-0 h-100 " id="con-right" >
     <p class="header py-1  m-0 col-12"> Debugger</p>
-    <div class="col-12 h-50 p-0 " id="con-debugger" style="overflow-y: scroll !important;">
+    <div class="col-12 p-0 m-0 row header" style="display: flex;"> 
+      <div class="col-4 debugger-header py-2" >Action</div>
+      <div class="col-4 debugger-header py-2">Variable</div>
+      <div class="col-4 debugger-header py-2">Value</div>
+
+    </div>
+    <div class="col-12  p-0 pb-5 " id="con-debugger" style="overflow-y: scroll !important;"> 
+      
       <table class="table table-dark table-striped m-0">
-        <thead class="text-center">
-          <tr>
-            <th>Action</th>
-
-            <th>Variable</th>
-            <th>Value</th>
-
-          </tr>
-
-        </thead>
-        <tbody id="debugger" class="text-center">
+     
+        <tbody id="debugger" class="text-center"style="overflow-y: scroll !important;">
 
 
         </tbody>
       </table>
     </div>
 
-    <div class="col-12 p-0  h-50 m-0  ">
+    <!-- <div class="col-12 p-0  h-50 m-0  ">
       <p class="header py-1 m-0 "> Properties</p>
       <div class="row p-0 con-property">
         <div class="col-6 pl-4 font-weight-bold">Name</div>
@@ -249,7 +249,8 @@
 
       </div>
 
-    </div>
+    </div> -->
+
   </div>
 
 
@@ -380,11 +381,23 @@
     onDropItemSuccess($(this).prop("id"),position.left+100,position.top+120);
   });
   $(document).on("mouseenter", "tr", function () {
+    let node = $(this).attr("data-node");
     if (!onDebug) {
-      let node = $(this).attr("data-node");
+      
       $(node).find("svg").css("stroke", "#f1c40f");
       $(node).addClass("font-weight-bold");
       $(this).addClass("font-weight-bold");
+     
+     
+    }
+    if($(node).offset().top>$(document).height()*70/100){
+        let height=$(node).offset().top-$(document).height()*50/100;
+      
+        $("#con-design").animate({scrollTop:height}, "fast");
+      }else if($(node).offset().top<$(document).height()*15/100){
+        let height=$(node).offset().top-$(document).height()*50/100;
+      
+        $("#con-design").animate({scrollTop:height}, "fast");
     }
 
   });
@@ -762,6 +775,7 @@
   </div>
 </template>
 <template id="newpage">
+  <div id="design-containment" style="position:fixed;"></div>
   <svg id="canvas">
     <defs>
       <marker id="arrowhead" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
