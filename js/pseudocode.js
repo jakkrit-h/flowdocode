@@ -499,9 +499,11 @@ function getpseudoCode(node,addElse,nodeList){
 function getFrontCloseBackget(node,nodeList,root) { 
     let code='';
     if($(root.node).hasClass("decision")&&node.node==root.to2){
+        tab=tab.replace(/&emsp;/,'');
+        code+=tab;
         if(root.decision=='IF'){
             if($(node.node).hasClass("decision")&&root.to2==node.node){
-                code+='} <span class="textHighLight">ELSE</span>';
+                code+='} <span class="textHighLight">ELSE </span>';
                  
             }else{
                 code+='} <span class="textHighLight">ELSE </span>{<br>';
@@ -509,7 +511,7 @@ function getFrontCloseBackget(node,nodeList,root) {
             }
         }else if(root.decision=='ELSEIF'){
             if($(node.node).hasClass("decision")&&root.to2==node.node){
-                code+='} <span class="textHighLight">ELSE</span>';
+                code+='} <span class="textHighLight">ELSE </span>';
             }else{
                 code+='} <span class="textHighLight">ELSE </span>{<br>';
                 tab+="&emsp;";
@@ -523,8 +525,10 @@ function getFrontCloseBackget(node,nodeList,root) {
             code+='}<br>';
         }
         
-        tab=tab.replace(/&emsp;/,'');
+       
     }else if(node.node=='#end'&&(node.endyesof||node.endnoof||node.endofif)){
+        tab=tab.replace(/&emsp;/,'');
+        code+=tab;
         let decide=undefined;
         decide =(node.endyesof)?node.endyesof:(node.endnoof)?node.endnoof:node.endofif;
         decide = nodeList.find(s=>s.node == decide);
@@ -539,7 +543,7 @@ function getFrontCloseBackget(node,nodeList,root) {
                
             }
     
-            tab=tab.replace(/&emsp;/,'');
+         
     }
    
     return code;
@@ -549,11 +553,13 @@ function getBehideCloseBackget(node,nodeList,closeBacket) {
         let nodeRoot = nodeList.find(s => s.node == node.root);
     
     if (node.endnoof&&(nodeRoot.decision!='WHILE'&&nodeRoot.decision!='DOWHILE'&&nodeRoot.decision!='ELSEIF')) {
-   
-
+        tab=tab.replace(/&emsp;/,'');
+        code+=tab;
+      
+       
         // if (!$(nodeRoot.node).hasClass('decision') && !$(nodeRoot.to2).hasClass('decision')) {
-            code += '<br>}<br>';
-            tab=tab.replace(/&emsp;/,'');
+            code += '<br>'+tab+'}<br>';
+          
         // }
         // if(!$(nodeRoot.to2).hasClass('decision')&&!node.endyesof){
 
