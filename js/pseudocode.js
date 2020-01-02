@@ -25,10 +25,10 @@ function pseudocodeController(){
         }
        
     });
-    console.log(nodeList);
+  
   
     generateCode(nodeList);
-   
+   console.log(nodeList);
 }
 function checkIsLoop(nodeData,nodeList,decisionTarget,prevNode,indexTarget) {
 
@@ -166,12 +166,12 @@ function getEndOfDecision(nodeData,nodeList,decisionTarget,nodeIndex) {
     }else{// IF
    
         let {yesPath,noPath}=getIfPath(nodeData,nodeList);
-   
         let endOfAll = yesPath.filter(value => noPath.includes(value))[0];
+     
 
         let endOfYes = yesPath.find((s,i,arr)=>{if(s==endOfAll)return (i-1<0)?arr[0]:arr[i-1]})
         let endOfNo=noPath.find((s,i,arr)=>{if(s==endOfAll)return (i-1<0)?arr[0]:arr[i-1]})
-        let endOfDecide =endOfYes;
+      
 
         let tempYesPathIndex=yesPath.findIndex(s=>s==endOfYes);
         endOfYes=yesPath[(tempYesPathIndex>0)?tempYesPathIndex-1:0 ];
@@ -202,12 +202,12 @@ function getEndOfDecision(nodeData,nodeList,decisionTarget,nodeIndex) {
         // tempArr.push(nodeData.node);
         // nodeList[tempIndex].endnoof=tempArr;
         // nodeList[tempIndex].endnoofcounter=0;
-        nodeList[tempIndex].endyesof=nodeData.node;
-
+        nodeList[tempIndex].endnoof=nodeData.node;
+        let endOfDecide =noPath[(tempNoPathIndex>0)?tempNoPathIndex:0 ];
         tempIndex=nodeList.findIndex(s=>s.node==endOfDecide);
 
         nodeList[tempIndex].endofif=nodeList[nodeIndex].node;
-
+      
     }
 
     return nodeList;
@@ -370,8 +370,7 @@ function generateCode(nodeList) {
     let addElse=false;
     let tab ="";
     let countDecision=nodeList.filter(s=>$(s.node).hasClass('decision'));
-    for (let i = 0; i < nodeList.length+countDecision.length+1; i++) {
-        console.log(pastWay)
+    for (let i = 0; i < nodeList.length+countDecision.length; i++) {
         if(!pastWay.includes(currentNode.node)){
           
 
@@ -383,7 +382,9 @@ function generateCode(nodeList) {
                     tab=tab.replace(/&emsp;/,'');
                 
                 }
-                pastWay.push(currentNode.node);
+             
+
+             
                 code+=getpseudoCode(currentNode,addElse,tab,nodeList);
                 addElse=false;
          
@@ -396,9 +397,10 @@ function generateCode(nodeList) {
                 addElse=false;
             }
         }
-
+        pastWay.push(currentNode.node);
+      
         if(currentNode.to!=undefined){
-
+           
 
             if (currentNode.endyesof) {
                 let index = nodeList.findIndex(s => s.node == currentNode.node);
@@ -441,8 +443,10 @@ function generateCode(nodeList) {
             }
 
         }else if(nodeList.some(s=>s.status=='add')){
-           currentNode=nodeList.filter(s=>s.status=='add')[0];
+           currentNode=nodeList.filter(s=>s.status=='add'&&s.node!='#start')[0];
+        //    console.log(currentNode);
            currentNode=nodeList.find(s=>s.node==currentNode.root);
+            // console.log(currentNode);
         }
 
 
@@ -450,11 +454,10 @@ function generateCode(nodeList) {
 
 
     }
+    console.log(pastWay);
     pseudoCodePage(code);
-    console.log('------------');
 }
 function getpseudoCode(node,addElse,tab,nodeList){
-    // console.log(node)
     let code=tab;
     let type = getNodeType(node.node);
     
@@ -489,7 +492,7 @@ function getpseudoCode(node,addElse,tab,nodeList){
             code += "<span class='textHighLight'> DISPLAY </span>(" + text + ")"+';';
             break;
     }
-    code+=getBehideCloseBackget(node,closeBacket);
+    code+=getBehideCloseBackget(node,nodeList,closeBacket);
     // if(node.endnoof&&!closeBacket){
     //     let nodeRoot=nodeList.find(s=>s.node==node.root);
     //     if(!$(nodeRoot.node).hasClass('decision')&&!$(nodeRoot.to2).hasClass('decision')){
@@ -549,15 +552,17 @@ function getFrontCloseBackget(node,root) {
     }
     return code;
  }
-function getBehideCloseBackget(node,closeBacket) { 
+function getBehideCloseBackget(node,nodeList,closeBacket) { 
     let code='';
- 
-    if (node.endnoof && !closeBacket) {
         let nodeRoot = nodeList.find(s => s.node == node.root);
-        if (!$(nodeRoot.node).hasClass('decision') && !$(nodeRoot.to2).hasClass('decision')) {
+    
+    if (node.endnoof&&(nodeRoot.decision!='WHILE'&&nodeRoot.decision!='ELSEIF')) {
+      
+
+        // if (!$(nodeRoot.node).hasClass('decision') && !$(nodeRoot.to2).hasClass('decision')) {
             code += '<br>' + tab.replace(/&emsp;/, '') + '}+3<br>';
 
-        }
+        // }
         // if(!$(nodeRoot.to2).hasClass('decision')&&!node.endyesof){
 
         // if(nodeList.find(s=>s.node==node.endnoof).decision){
