@@ -1339,7 +1339,7 @@ function init(noRisize){
   
 
     $("#design-containment").css('width',$("#con-design").outerWidth());
-
+    console.log('dwwdwd')
     $("#design-containment").css('height',$("#con-design").outerHeight());
     $("#design-containment").css('position','fixed');
     $("#design-containment").offset($("#con-design").offset());
