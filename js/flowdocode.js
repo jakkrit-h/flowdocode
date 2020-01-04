@@ -1335,12 +1335,15 @@ function init(noRisize){
    
     // let conDesignHeight =$(document).outerHeight()-$("#con-console").outerHeight()-100;
     $("#con-design").css("height",$("#con-console").offset().top-100);
+    console.log($("#con-design").offset())
     $("#design-containment").offset($("#con-design").offset());
+  
 
     $("#design-containment").css('width',$("#con-design").outerWidth());
 
     $("#design-containment").css('height',$("#con-design").outerHeight());
-   
+    $("#design-containment").css('position','fixed');
+
     $("#start").offset(p);
     $("#canvas").css("width",$(window).width());
  
