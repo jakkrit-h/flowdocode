@@ -1335,19 +1335,19 @@ function init(noRisize){
    
     // let conDesignHeight =$(document).outerHeight()-$("#con-console").outerHeight()-100;
     $("#con-design").css("height",$("#con-console").offset().top-100);
-    console.log($("#con-design").offset())
-    $("#design-containment").offset($("#con-design").offset());
+    
   
 
     $("#design-containment").css('width',$("#con-design").outerWidth());
 
     $("#design-containment").css('height',$("#con-design").outerHeight());
     $("#design-containment").css('position','fixed');
-
+    $("#design-containment").offset($("#con-design").offset());
     $("#start").offset(p);
     $("#canvas").css("width",$(window).width());
  
     $("#canvas").css("height","50000px" );
+    
     $("#canvas").offset({ top: 0, left: 0 });
     let debuggerHeight=$(document).height()-$("#con-debugger").offset().top;
  
