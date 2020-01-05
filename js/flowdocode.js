@@ -786,9 +786,8 @@ function conAnchorDraggableProperty(){// returnความสามารถข
         grid: [ 10, 10 ], drag: function () {//ตอนกำลังโดน Drag
           document.body.style.cursor = "";
           shapeUnSelectedStyle();
-          let parent="#"+$(this).parent().prop("id");// ให้ Anchorที่กำลังโดน Drag ถูกซ่อนเพื่อไม่ให้บังหัวลูกศร
-        
-           $(parent).find(".con_anchor").addClass("hide"); 
+          let parent="#"+$(this).parent().prop("id");
+          //  $(parent).find(".con_anchor").addClass("hide"); // ให้ Anchorที่กำลังโดน Drag ถูกซ่อนเพื่อไม่ให้บังหัวลูกศร
             if($(this).parents().prop("id")!="start"){
               $("#start").find(".con_anchor").addClass("hide");
               
@@ -824,7 +823,6 @@ function conAnchorDraggableProperty(){// returnความสามารถข
     
           }
           let p50= line50(jsonData,true);
-          console.log(p50);
           let lineProperty = {//เพิ่มตำแหน่งของ connector ว่าจากไหนไปไหน และ เพิ่ม Node ต้นทาง
             
             "points":p50,
@@ -1176,7 +1174,7 @@ function openFile() {
         reader.onload = function (event) {
           addToStorageCache(fileName,event.target.result);
           writeCodeToDesign(event.target.result);
-        
+          init(true);
 
         }
    
@@ -1339,7 +1337,6 @@ function init(noRisize){
   
 
     $("#design-containment").css('width',$("#con-design").outerWidth());
-    console.log('dwwdwd')
     $("#design-containment").css('height',$("#con-design").outerHeight());
     $("#design-containment").css('position','fixed');
     $("#design-containment").offset($("#con-design").offset());

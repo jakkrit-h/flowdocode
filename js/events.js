@@ -2,7 +2,7 @@
 $(document).on("click","#play",function(){
  
     clearOnDebug();
-    if(!checkSyntax()){
+    if(!checkSyntax()||!structureChecker()){
 
         return false;
     } 
@@ -17,9 +17,10 @@ $(document).on("click","#play",function(){
     controller($("#start").attr("data-connector"));
 });
 $(document).on("click","#debug",function(){
-    if (!checkSyntax()) {
+    if(!checkSyntax()||!structureChecker()){
+
         return false;
-    }
+    } 
     onButtonClick();
 
     onAction = "debug";
@@ -47,6 +48,7 @@ $(document).on("click","#next",function () {
         $("#skip").attr("disabled",true);
 
     }
+   
     unHightLight(nodePointer);
     $("tr").last().removeClass("font-weight-bold");
     controllerOnDebug();
@@ -80,4 +82,13 @@ $(document).on("click","#play-refresh",function(){
 $(document).on("click","#refresh",function(){
     stop();
     $("#debug").trigger("click");
+});
+$(document).on("click","#ee",function (){
+
+
+    if(!checkSyntax()||!structureChecker()){
+
+        return false;
+    }
+    pseudocodeController();
 });

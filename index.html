@@ -85,7 +85,7 @@
                   <i class="fas fa-fast-forward"></i>
                 </button>
                  
-                    <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="i">ee</button>
+                    <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="ee">ee</button>
 
 
             </li>
@@ -277,12 +277,7 @@
 
 
 <script>
-  $("#i").click(function () {
-    // /* listVariable();
-    // checkSyntax(); */
-    // checkProcessAssignVar();
-    pseudocodeController();
-  });
+
   $("#con-design").scroll(function () {
   });
   $(function () {
@@ -390,15 +385,15 @@
      
      
     }
-    if($(node).offset().top>$(document).height()*70/100){
-        let height=$(node).offset().top-$(document).height()*50/100;
+    // if($(node).offset().top>$(document).height()*70/100){
+    //     let height=$(node).offset().top-$(document).height()*50/100;
       
-        $("#con-design").animate({scrollTop:height}, "fast");
-      }else if($(node).offset().top<$(document).height()*15/100){
-        let height=$(node).offset().top-$(document).height()*50/100;
+    //     $("#con-design").animate({scrollTop:height}, "fast");
+    //   }else if($(node).offset().top<$(document).height()*15/100){
+    //     let height=$(node).offset().top-$(document).height()*50/100;
       
-        $("#con-design").animate({scrollTop:height}, "fast");
-    }
+    //     $("#con-design").animate({scrollTop:height}, "fast");
+    // }
 
   });
   $(document).on("mouseleave", "tr", function () {
@@ -643,7 +638,7 @@
     $("#debugger").empty();
   });
   $(document).on("click", "#addpage", function () {
-
+    $("#con-design").scrollTop(0);
     let width = $(window).width();
     let height = $(window).height();
     let text = { "design": $("#design").html(), "resolution": { "width": width, "height": height } };

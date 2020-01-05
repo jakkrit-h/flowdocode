@@ -392,8 +392,8 @@ function generateCode(nodeList) {
         }
         pastWay.push(currentNode.node);
       
-        if(currentNode.to!=undefined){
-           
+        if (currentNode.to != undefined) {
+
 
             if (currentNode.endyesof) {
                 let index = nodeList.findIndex(s => s.node == currentNode.node);
@@ -423,22 +423,25 @@ function generateCode(nodeList) {
             }
 
 
-         
-            if($(currentNode.node).hasClass('decision')&&currentNode.status=='pseudocode'){
-          
-                addElse=true;
-                currentNode=nodeList.find(s=>s.node==currentNode.to2);
-            }else{
-                let index =nodeList.findIndex(s=>s.node==currentNode.node); 
-                nodeList[index].status='pseudocode';
-                currentNode=nodeList.find(s=>s.node==currentNode.to);
+
+            if ($(currentNode.node).hasClass('decision') && currentNode.status == 'pseudocode') {
+
+                addElse = true;
+                currentNode = nodeList.find(s => s.node == currentNode.to2);
+            } else {
+                let index = nodeList.findIndex(s => s.node == currentNode.node);
+                nodeList[index].status = 'pseudocode';
+                currentNode = nodeList.find(s => s.node == currentNode.to);
 
             }
 
-        }else if(nodeList.some(s=>s.status=='add')){
-           currentNode=nodeList.filter(s=>s.status=='add'&&s.node!='#start')[0];
-        //    console.log(currentNode);
-           currentNode=nodeList.find(s=>s.node==currentNode.root);
+        } else if (nodeList.some(s => s.status == 'add')) {
+            currentNode = nodeList.filter(s => s.status == 'add' && s.node != '#start')[0];
+            //    console.log(currentNode);
+            try {
+                currentNode = nodeList.find(s => s.node == currentNode.root);
+
+            } catch (e) { }
             // console.log(currentNode);
         }
 
@@ -472,7 +475,7 @@ function getpseudoCode(node,addElse,nodeList){
             code += text+';';
             break;
         case "input":
-            code += "<span class='textHighLight'>INPUT </span>( " + text + ")"+';';
+            code += "<span class='textHighLight'>INPUT </span>(" + text + ")"+';';
             break;
         case "decision":
             if (node.decision=='WHILE') {
@@ -511,6 +514,8 @@ function getFrontCloseBackget(node,nodeList,root) {
             }
         }else if(root.decision=='ELSEIF'){
             if($(node.node).hasClass("decision")&&root.to2==node.node){
+               
+
                 code+='} <span class="textHighLight">ELSE </span>';
             }else{
                 code+='} <span class="textHighLight">ELSE </span>{<br>';
@@ -553,21 +558,20 @@ function getBehideCloseBackget(node,nodeList,closeBacket) {
         let nodeRoot = nodeList.find(s => s.node == node.root);
     
     if (node.endnoof&&(nodeRoot.decision!='WHILE'&&nodeRoot.decision!='DOWHILE'&&nodeRoot.decision!='ELSEIF')) {
-        tab=tab.replace(/&emsp;/,'');
-        code+=tab;
-      
-       
-        // if (!$(nodeRoot.node).hasClass('decision') && !$(nodeRoot.to2).hasClass('decision')) {
-            code += '<br>'+tab+'}<br>';
-          
-        // }
-        // if(!$(nodeRoot.to2).hasClass('decision')&&!node.endyesof){
+        tab = tab.replace(/&emsp;/, '');
+        code += tab;
+        let nodeRootDecision = nodeList.find(s => s.node == node.endnoof);
+        let nodeNextTo2OfRootDecision=nodeList.find(s => s.node == nodeRootDecision.to2);
+        try{
+            if(nodeNextTo2OfRootDecision.decision!='ELSEIF'){
+                code += '<br>' + tab + '}<br>';
+            }
+        }catch(e){
+            code += '<br>' + tab + '}<br>';
+        }
+        
 
-        // if(nodeList.find(s=>s.node==node.endnoof).decision){
-        // code += '<br>'+tab.replace(/&emsp;/,'')+'}+3<br>';
 
-        // }
-        // }
 
     }
 
@@ -576,8 +580,8 @@ function getBehideCloseBackget(node,nodeList,closeBacket) {
 
 function pseudoCodePage(pseudoCode){
     pseudoCode+="<span class='textHighLight'>END</span>";
-    console.log(pseudoCode.replace(/(<br>)/gm,'\n'));
     pseudoCode=pseudoCode.replace(/(<br>){2,3}/gm,'<br>');
+
     let strWindowFeatures = "menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes,width=500,height=700,left=500";
     let myWindow = window.open('','',strWindowFeatures);
 
@@ -658,4 +662,7 @@ function  explorerPseudoCode() {
     }
   
     return list;
+}
+function decoratePseudoCode(params) {
+    
 }
