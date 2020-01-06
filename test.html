@@ -1,10 +1,77 @@
+<!DOCTYPE html>
+
 <html>
+
 <head>
-    <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="css/pseudocode.css" />
+  <title>FlowdoCode | FLOWDOCODE</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="css/jquery-ui.min.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome-all.min.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
+  <!-- <link rel="stylesheet" type="text/css" media="screen" href="css/darktheme.css" /> -->
+
+
+
+  <script src="js/jquery.js"></script>
+  <script src="js/jquery-ui.min.js"></script>
+
+  <script src="js/popper.min.js"></script>
+
+  <script src="js/bootstrap.min.js"></script>
+
+
+  <script src="js/flowdocode.js"></script>
+  <script src="js/pseudocode.js"></script>
+  <script src="js/compiler.js"></script>
+  <script src="js/debugger.js"></script>
+  <script src="js/syntaxchecker.js"></script>
+  <script src="js/font-awesome-all.min.js"></script>
+  <script src="js/vue.js"></script>
+  <script src="js/events.js"></script>
+
+  <script src="js/jquery.md5.js"></script>
+
 
 </head>
+<style>
+    .con_anchor{
+        opacity: 1 !important;
+    }
+</style>
 <body>
-    <span class='textHighLight'>START</span><br><br>i=1<br><span class='textHighLight'> WHILE </span>(i<=12) {<br>&emsp;j=1<br>&emsp;<span class='textHighLight'> WHILE </span>(j<=12) {<br>&emsp;&emsp;k=i*j<br>&emsp;&emsp;<span class='textHighLight'> DISPLAY </span>(i+'*'+j+'='k)<br>&emsp;&emsp;j=j+1<br><br>&emsp;}<br>&emsp;i=i+1<br><br>}<br>&emsp;&emsp;<br><span class='textHighLight'>END</span>
+
+
+    <div class=" shape start-end " id="start">
+        <div class="con_anchor anchor_start anchor_top" data-point="top"></div>
+   
+        <svg>
+
+          <path d="M 25 1 C -5,1 -5,49 25,49 L 180 49 C 205,49 205,1 180,1 Z" />
+        </svg>
+        <div class="text text-center col-12  text-truncate mx-auto">
+          Start
+        </div>
+      </div>
+
+
+
+
+
+
+
+
 </body>
+
+<script>
+    $(function(){
+        $('.con_anchor').draggable()
+
+    });
+</script>
+
+
+
+
 </html>

@@ -26,6 +26,7 @@ var onHoverAnchor=undefined;
 var onClose=undefined;
 var currentPageName=undefined;
 var wallsArea=[];
+var onAnchorDrag =false;
 function updateSvgPathProcess(node){    //ปรับขนาดของ shape Process ตอน Resize
 
 
@@ -286,10 +287,11 @@ function linePlot25_75(x,y,po,distanceX,distanceY){
  
     distanceX=Math.abs(distanceX);
     distanceY=Math.abs(distanceY);
-  }else{
-
+    
   }
-  
+  distanceX=(distanceX>80||distanceX<=20)?80:distanceX;
+  distanceY=(distanceY>80||distanceY<=20)?80:distanceY;
+
 switch(po){
   case "top":
     return {x:parseInt(x),y:y-distanceY/2};
@@ -325,7 +327,6 @@ function line50(json,noswapAnchor){
         p2.x=p1.x;
         p2.y=json.p75.y;
        
-        // console.log(jsonToPoint(json.p0)+" "+jsonToPoint(json.p25)+" "+jsonToPoint(p1)+" "+jsonToPoint(p2)+" "+jsonToPoint(json.p75)+" "+jsonToPoint(json.p100))
       }else{
      
         if(json.p75.y<json.p25.y){
@@ -336,47 +337,163 @@ function line50(json,noswapAnchor){
         p1.y = json.p25.y;
         p2=p1;
       }
-     
+
       break;
     case "right":
-      if (json.p25.x > json.p75.x) {
-        p1.x = json.p25.x;
-        p1.y = json.p75.y;
-      } else {
+      if (json.p75.x <= json.p0.x) {
+        if((json.pointFrom=='right')&&json.p0.y==json.p100.y){
+          p1.x=json.p25.x;
+          p1.y=json.p25.y-40;
+
+          p2.x=json.p75.x;
+          p2.y=json.p75.y-40;
+
+        }else if(json.pointFrom=='bottom'){
+          p1.x = Math.floor(Math.abs(json.p25.x+json.p75.x)/2);
+          p1.y = json.p25.y; 
+  
+        }else if(json.pointFrom=='top'){
+          p1.x = Math.floor(Math.abs(json.p25.x+json.p75.x)/2);
+          p1.y = json.p25.y; 
+     
+        }else {
+          p1.x = json.p25.x;
+          p1.y =  Math.floor(Math.abs(json.p25.y+json.p75.y)/2);
+  
        
-        p1.x = json.p75.x;
-        p1.y = json.p25.y;
+        }
+        p2.x=json.p75.x;
+        p2.y=p1.y;
+     
+
+      } else {
+        if((json.pointFrom=='left'||json.pointFrom=='right')&&json.p0.y==json.p100.y){
+          p1.x=json.p25.x;
+          p1.y=json.p25.y-40;
+
+          p2.x=json.p75.x;
+          p2.y=json.p75.y-40;
+
+        }else if(json.pointFrom=='left'){
+            p1.x=json.p25.x;
+            p1.y= Math.floor(Math.abs(json.p25.y+json.p75.y)/2);
+
+            p2.x=json.p75.x;
+            p2.y=p1.y;
+
+            p1.x=json.p25.x;
+            p1.y= Math.floor(Math.abs(json.p25.y+json.p75.y)/2);
+
+            p2.x=json.p75.x;
+            p2.y=p1.y;
+      
+        }else{
+          p1.x = json.p75.x;
+          p1.y = json.p25.y;
+          p2=p1;
+        }
+     
       }
-      p2=p1;
+    
       break;
     case "left":
-      if (json.p25.x < json.p75.x) {
-        p1.x = json.p25.x;
-        p1.y = json.p75.y;
+      if (json.p75.x <= json.p0.x) {
+        if((json.pointFrom=='left'||json.pointFrom=='right')&&json.p0.y==json.p100.y){
+          p1.x=json.p25.x;
+          p1.y=json.p25.y-40;
+
+          p2.x=json.p75.x;
+          p2.y=json.p75.y-40;
+
+        }else if(json.pointFrom=='bottom'){
+          p1.x = Math.floor(Math.abs(json.p25.x+json.p75.x)/2);
+          p1.y = json.p25.y; 
+  
+        }else if(json.pointFrom=='top'){
+          p1.x = Math.floor(Math.abs(json.p25.x+json.p75.x)/2);
+          p1.y = json.p25.y; 
+     
+        }else{
+          p1.x = json.p25.x;
+          p1.y =  Math.floor(Math.abs(json.p25.y+json.p75.y)/2);
+  
+       
+        }
+        p2.x=json.p75.x;
+        p2.y=p1.y;
+     
+
       } else {
-        
-        p1.x = json.p75.x;
-        p1.y = json.p25.y;
+        if((json.pointFrom=='left')&&json.p0.y==json.p100.y){
+          p1.x=json.p25.x;
+          p1.y=json.p25.y-40;
+
+          p2.x=json.p75.x;
+          p2.y=json.p75.y-40;
+
+        }else if(json.pointFrom=='left'||json.pointFrom=='right'){
+            p1.x=json.p25.x;
+            p1.y= Math.floor(Math.abs(json.p25.y+json.p75.y)/2);
+
+            p2.x=json.p75.x;
+            p2.y=p1.y;
+
+            p1.x=json.p25.x;
+            p1.y= Math.floor(Math.abs(json.p25.y+json.p75.y)/2);
+
+            p2.x=json.p75.x;
+            p2.y=p1.y;
+      
+        }else{
+          p1.x = json.p75.x;
+          p1.y = json.p25.y;
+          p2=p1;
+        }
+     
       }
-      p2=p1;
+ 
       break;
     case "bottom":
-      if (json.p25.y > json.p75.y) {
-        json.p75.y = json.p25.y;
-        p1.x = json.p25.x;
-        p1.y = json.p25.y;
+      
+      if (json.p25.y >= json.p75.y) {
+        if(json.pointFrom=='left'&&json.p25.x<json.p75.x){
+          p1.x=json.p25.x;
+          p1.y=Math.floor( (json.p25.y+json.p75.y)/2  );
+          p2.x=json.p75.x;
+          p2.y=p1.y;
+        }else if(json.pointFrom=='right'&&json.p25.x>json.p75.x){
+          p1.x=json.p25.x;
+          p1.y=Math.floor( (json.p25.y+json.p75.y)/2  );
+
+          p2.x=json.p75.x;
+          p2.y=p1.y;
+        }else{
+          json.p75.y = json.p25.y;
+          p1.x = json.p25.x;
+          p1.y = json.p25.y;
+          p2=p1;
+        }
+      
       } else {
-        if (json.pointFrom == "top" || json.pointFrom == "bottom") {
+        if (json.pointFrom == "bottom") {
           json.p25.y = json.p75.y;
           p1.x = json.p75.x;
           p1.y = json.p25.y;
+          p2=p1;
+        }else if(json.pointFrom == "top"){
+          p1.x=Math.floor(  (json.p25.x+json.p75.x)/2  );
+          p1.y=json.p25.y;
+          
+          p2.x=p1.x;
+          p2.y=json.p75.y;
         } else {
           p1.x = json.p25.x;
           p1.y = json.p75.y;
+          p2=p1;
         }
 
       }
-      p2=p1;
+
       break;
 
   }
@@ -783,12 +900,16 @@ function conAnchorDraggableProperty(){// returnความสามารถข
     return{   
      
         snap: ".con_anchor",
-        grid: [ 10, 10 ], drag: function () {//ตอนกำลังโดน Drag
+        scroll: true,
+        snapTolerance: 20,
+        scrollSensitivity: 20,
+        scrollSpeed: 10,
+        drag: function () {//ตอนกำลังโดน Drag
+          onAnchorDrag=true;
           document.body.style.cursor = "";
           shapeUnSelectedStyle();
-          let parent="#"+$(this).parent().prop("id");// ให้ Anchorที่กำลังโดน Drag ถูกซ่อนเพื่อไม่ให้บังหัวลูกศร
-        
-           $(parent).find(".con_anchor").addClass("hide"); 
+          let parent="#"+$(this).parent().prop("id");
+           $(parent).find(".con_anchor").addClass("hide"); // ให้ Anchorที่กำลังโดน Drag ถูกซ่อนเพื่อไม่ให้บังหัวลูกศร
             if($(this).parents().prop("id")!="start"){
               $("#start").find(".con_anchor").addClass("hide");
               
@@ -824,7 +945,6 @@ function conAnchorDraggableProperty(){// returnความสามารถข
     
           }
           let p50= line50(jsonData,true);
-          console.log(p50);
           let lineProperty = {//เพิ่มตำแหน่งของ connector ว่าจากไหนไปไหน และ เพิ่ม Node ต้นทาง
             
             "points":p50,
@@ -841,7 +961,7 @@ function conAnchorDraggableProperty(){// returnความสามารถข
 
           $(g).html($(lineDraw));// เพิ่ม connector ลงไปใน g(container ของ line)
         }, stop: function () {//ตอนหยุด Drag จะทำงานหลังตอนโดน Drop
-
+          onAnchorDrag=false;
           if (successStatus) {// ถ้า connector ถูกลากให้ไปเชื่อมกับ Anchor สำเร็จ
 
             $(".con_anchor").css("opacity", "0");//ให้ Anchorมั้งหมด ถูกซ่อน
@@ -1176,7 +1296,7 @@ function openFile() {
         reader.onload = function (event) {
           addToStorageCache(fileName,event.target.result);
           writeCodeToDesign(event.target.result);
-        
+          init(true);
 
         }
    
@@ -1338,8 +1458,7 @@ function init(noRisize){
     
   
 
-    $("#design-containment").css('width',$("#con-design").outerWidth());
-    console.log('dwwdwd')
+    $("#design-containment").css('width',$("#con-design").outerWidth()-10);
     $("#design-containment").css('height',$("#con-design").outerHeight());
     $("#design-containment").css('position','fixed');
     $("#design-containment").offset($("#con-design").offset());

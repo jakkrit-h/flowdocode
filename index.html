@@ -540,8 +540,10 @@
 
     if ($(selectedEl).prop("id") != $(this).prop("id")) {
 
+      if(!onAnchorDrag){
+        updateAnchorPosition($(this));
 
-      updateAnchorPosition($(this));
+      }
       $(this).find(".con_anchor").css("opacity", "1");
 
       $(document).on("mousedown", function () {
