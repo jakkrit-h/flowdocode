@@ -42,11 +42,37 @@ function checkSyntax(){
     
     return result;
 }
+function structureChecker() {
+    let result=true;
+    $(".shape").fo
+    // console.log(nodeList.filter(s=>$(s).attr('id')=='#end'));
+    $(".shape").each(function(i){
+        let match = true;
+      
+        if($(this).attr("id")!='end'&&!$(this).hasClass('decision')&&!$(this).attr('data-connector')){
+            match=false;
+        }else if($(this).attr("id")!='end'&&$(this).hasClass('decision')){
+        
+            if(!$(this).attr('data-yes')||!$(this).attr('data-no')){
+                console.log(!$(this).attr('data-yes'))
+                console.log(!$(this).attr('data-no'))
+
+                match=false;
+            }
+        }
+        if(!match){
+            result=false;
+            $(this).addClass("invalid");
+        }else{
+            $(this).removeClass("invalid");
+        }
+    });
+    return result;
+}
 function processChecker(text){
 
     let abstainWord=generateAbstainWordOfVar(text,'process');
-    let processSyntax=new RegExp("^([A-Za-z$_][A-Za-z$_0-9]*([ ]*=[ ]*)[(]*((\-)?[0-9()]+|['][^\'\"]*[']|[\"][^\'\"]*[\"]"+abstainWord+")([\+\\-\*\/\%]((\\-)?[0-9()]+|"+abstainWord+")|[+][ ]*([()]*['][^\'\"]*['][()]*|[()]*[\"][^\'\"]*[\"][()]*"+abstainWord+"))*)?$");
-    let backet = checkCountOfBacket(text);
+    let processSyntax=new RegExp("^([A-Za-z$_][A-Za-z$_0-9]*([ ]*=[ ]*)[(]*((\-)?[0-9()]+(\.[0-9)]+)?|['][^\'\"]*[']|[\"][^\'\"]*[\"]"+abstainWord+")([\+\\-\*\/\%]((\\-)?[0-9()]+(\.[0-9)]+)?|"+abstainWord+")|[+][ ]*([()]*['][^\'\"]*['][()]*|[()]*[\"][^\'\"]*[\"][()]*"+abstainWord+"))*)?$");    let backet = checkCountOfBacket(text);
     let result =false;
  
 

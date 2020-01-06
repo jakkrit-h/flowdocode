@@ -436,9 +436,12 @@ function generateCode(nodeList) {
             }
 
         }else if(nodeList.some(s=>s.status=='add')){
+            
            currentNode=nodeList.filter(s=>s.status=='add'&&s.node!='#start')[0];
         //    console.log(currentNode);
+        try {
            currentNode=nodeList.find(s=>s.node==currentNode.root);
+        } catch (e) { }
             // console.log(currentNode);
         }
 
@@ -556,10 +559,17 @@ function getBehideCloseBackget(node,nodeList,closeBacket) {
         tab=tab.replace(/&emsp;/,'');
         code+=tab;
       
-       
-        // if (!$(nodeRoot.node).hasClass('decision') && !$(nodeRoot.to2).hasClass('decision')) {
-            code += '<br>'+tab+'}<br>';
-          
+        let nodeRootDecision = nodeList.find(s => s.node == node.endnoof);
+        let nodeNextTo2OfRootDecision=nodeList.find(s => s.node == nodeRootDecision.to2);
+        try {
+            if (nodeNextTo2OfRootDecision.decision != 'ELSEIF') {
+                code += '<br>' + tab + '}<br>';
+                // if (!$(nodeRoot.node).hasClass('decision') && !$(nodeRoot.to2).hasClass('decision')) {
+            }
+        } catch (e) {
+            code += '<br>' + tab + '}<br>';
+        }
+     
         // }
         // if(!$(nodeRoot.to2).hasClass('decision')&&!node.endyesof){
 

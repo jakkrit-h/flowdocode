@@ -112,17 +112,17 @@ function controllerOnDebug(){
         }
         connectorPointer=$(nodePointer).attr("data-connector");
       
-        if($(nodePointer).offset().top>=$("#design-containment").height()){
-            let height=$(nodePointer).offset().top-100;
-            $("#con-design").animate({scrollTop:height}, "fast");
-            console.log('w');
-          }else if($(nodePointer).offset().top<$(document).height()*15/100){
-            let height=$(nodePointer).offset().top+100;
+        // if($(nodePointer).offset().top>=$("#design-containment").height()){
+        //     let height=$(nodePointer).offset().top-100;
+        //     $("#con-design").animate({scrollTop:height}, "fast");
+        //     console.log('w');
+        //   }else if($(nodePointer).offset().top<$(document).height()*15/100){
+        //     let height=$(nodePointer).offset().top+100;
           
-            $("#con-design").animate({scrollTop:height}, "fast");
-            console.log('wd');
+        //     $("#con-design").animate({scrollTop:height}, "fast");
+        //     console.log('wd');
 
-        }
+        // }
         hightLight(nodePointer,"#27ae60");
         $("tr").last().addClass("font-weight-bold");
     }
@@ -192,13 +192,19 @@ function classify(node){
        
             result=compiler(text);
             inputSuccess=false;
+            if(onDebug){
+                $("tr").last().removeClass("font-weight-bold");
 
+            }
         }
        
     }
     
     Debugger(node,text,result);
+    if($(node).hasClass("input")&&onDebug){
+        $("tr").last().addClass("font-weight-bold");
 
+    }
     
 
 }
