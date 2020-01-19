@@ -60,11 +60,17 @@
             <label> <a class="dropdown-item" id="pseudoCode" ><label>PseudoCode</label></a></label>
           </div>
         </li>
-        <li class="nav-item">
-          <a class="nav-link " href="test.html" target="_blank">Edit</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link " href="#" data-toggle="dropdown">Theme</a>
+          <div class="dropdown-menu">
+            <label> <a class="dropdown-item" id="white-theme">White Theme</a></label>
+            <label><a class="dropdown-item" id="dark-theme">Dark Theme </a></label>
+
+           
+          </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link ">Help</a>
+          <a class="nav-link " href="#" data-toggle="modal" data-target="#guide">Help</a>
         </li>
         <div class="col-2 py-2 px-0 mx-auto">
           <ul class="navbar-nav  p-0 justify-content-center">
@@ -272,7 +278,29 @@
       </div>
     </div>
   </div>
+<!-- Button trigger modal -->
 
+
+
+<div class="modal fade" id="guide" tabindex="-1" role="dialog" aria-labelledby="guide" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 
 
@@ -370,11 +398,11 @@
    
     // readPage(presentPage, "switch");
   });
-  $(document).on("dblclick",".toolbox",function(){
-    let node =getLatestNode() ;
-    let position=$(node).offset();
-    onDropItemSuccess($(this).prop("id"),position.left+100,position.top+120);
-  });
+  // $(document).on("dblclick",".toolbox",function(){
+  //   let node =getLatestNode() ;
+  //   let position=$(node).offset();
+  //   onDropItemSuccess($(this).prop("id"),position.left+100,position.top+120);
+  // });
   $(document).on("mouseenter", "tr", function () {
     let node = $(this).attr("data-node");
     if (!onDebug) {
@@ -410,7 +438,7 @@
   $("div").on("click", ".shape", function () {
     // click select shape 
     actionOnSelectElement(this);
-
+    showNodeTool(this);
 
 
 
@@ -424,6 +452,8 @@
           checkConnectorOnNodeDelete(selectedEl);
 
           $(selectedEl).remove();
+          $('.container-node-tool').remove();
+
           hasEnd();
         } else {
           onConnectorDelete(selectedEl);
@@ -491,6 +521,7 @@
     if (event.target === this) {
 
       shapeUnSelectedStyle();
+      $('.container-node-tool').remove();
 
     }
 
@@ -529,17 +560,17 @@
 
 
   $(document).on("mouseenter", ".shape", function () {//event mouse hover on shape show anchor
-    if (onHoverAnchor == undefined)
-      document.body.style.cursor = "move";
 
 
     if ($(selectedEl).prop("id") != $(this).prop("id")) {
 
       if(!onAnchorDrag){
+        showNextNodeArrow(this);
         updateAnchorPosition($(this));
 
       }
       $(this).find(".con_anchor").css("opacity", "1");
+      $(".btn-next-node").css("opacity", "0.5");
 
       $(document).on("mousedown", function () {
 
@@ -559,13 +590,29 @@
     document.body.style.cursor = "";
     if (!mouseDown) {
       $(this).find(".con_anchor").css("opacity", "0");
+      nextNodeTimeOut();
+
+
     }
     $(document).on("mouseup", function () {
       mouseDown = false;
     });
   });
+  $(document).on("mouseenter",".btn-next-node",function(){
 
+    $(this).css("opacity", "1");
+    clearTimeout( setTimeoutArrow);
 
+  });
+  $(document).on("mouseleave",".btn-next-node",function(){
+
+    $(this).css("opacity", "0.5");
+    nextNodeTimeOut();
+  });
+  $(document).on("click",".btn-next-node",function(){
+    $(".btn-next-node").remove();
+
+  });
   $(document).on("mouseup", ".shape", function () {
     if (selectedEl == undefined) {
       selectedEl = $(this);
@@ -794,7 +841,55 @@
     </div>
   </div>
 </template>
-
+<template id="template-node-tool">
+  <div class="container-node-tool">
+    <button class="btn btn-flowdocode ">
+      <i class="fas fa-trash"></i>
+  
+    </button>
+    <button class="btn btn-flowdocode btn-node-tool node-tool-start">
+      <svg viewBox='25 -50 100 150' class='node-tool' >
+        <path d="M 25 1 C -5,1 -5,49 25,49 L 120 49 C 155,49 155,0 120,1 Z"></path>
+      </svg>
+    </button>
+    <button class="btn btn-flowdocode btn-node-tool node-tool-process">
+      <svg viewBox='25 -50 100 150' class='node-tool' >
+        <path d="M 1 1 L 149 1 L 149 49 L 1 49 Z"></path>
+      </svg>
+    </button>
+    <button class="btn btn-flowdocode btn-node-tool node-tool-input">
+      <svg viewBox='25 -50 100 150' class='node-tool'>
+        <path d="M 1 15 L 149 1 L 149 49 L 1 49 Z"></path>
+      </svg>
+    </button>
+    <button class="btn btn-flowdocode btn-node-tool node-tool-decision">
+      <svg viewBox='25 -50 100 150' class='node-tool'>
+        <path d="M 75 1 L 150 25 L 75 50 L 1 25 Z "></path>
+      </svg>
+    </button>
+    <button class="btn btn-flowdocode btn-node-tool node-tool-display">
+      <svg viewBox='25 -50 100 150' class='node-tool'>
+        <path d="M 1 25 L 15 49 H 120 C 155 49 ,155 1, 120 1 H 15 L 1,25  "></path>
+      </svg>
+    </button>
+  
+  
+   </div>
+</template>
+<template id="next-node">
+    <button class="btn btn-next-node next-up" >
+      <i class="fas fa-long-arrow-alt-up fa-2x"></i>
+    </button>
+    <button class="btn btn-next-node next-right">
+      <i class="fas fa-long-arrow-alt-right fa-2x"></i>
+    </button>
+    <button class="btn btn-next-node next-left">
+      <i class="fas fa-long-arrow-alt-left fa-2x"></i>
+    </button>
+    <button class="btn btn-next-node next-bottom">
+      <i class="fas fa-long-arrow-alt-down fa-2x"></i>
+    </button>
+</template>
 
 
 </html>

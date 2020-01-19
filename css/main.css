@@ -447,4 +447,66 @@ table td {
   font-weight: bold;
 }
 
+.btn-node-tool {
+  padding: 3px !important;
+}
+
+.btn-node-tool:hover svg {
+  fill: #fff;
+}
+
+.node-tool {
+  width: 30px;
+  height: 30px;
+  fill: #4f7df9;
+}
+
+.container-node-tool {
+  position: absolute;
+  width: auto;
+}
+
+.btn-next-node, .btn-next-node:focus, .btn-next-node:active {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  color: #4f7df9;
+}
+
+ul {
+  list-style-type: none;
+  border-right: 3px solid rgba(0, 0, 0, 0.08);
+}
+
+.modal-lg {
+  max-width: 80%;
+}
+
+.modal-dialog,
+.modal-content {
+  /* 80% of window height */
+  height: 90%;
+}
+
+.sidebar {
+  height: 100%;
+  overflow-y: scroll;
+}
+.sidebar li {
+  border-top: 2px solid rgba(0, 0, 0, 0.08);
+}
+.sidebar li:hover {
+  background: #292c32;
+}
+
+.modal-body {
+  overflow: hidden;
+}
+
+.guide-content {
+  height: 100%;
+  overflow-y: scroll;
+  background: #292d32;
+}
+
 /*# sourceMappingURL=main.css.map */

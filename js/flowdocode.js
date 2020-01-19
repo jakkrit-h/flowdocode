@@ -27,6 +27,7 @@ var onClose=undefined;
 var currentPageName=undefined;
 var wallsArea=[];
 var onAnchorDrag =false;
+var setTimeoutArrow=undefined;
 function updateSvgPathProcess(node){    //ปรับขนาดของ shape Process ตอน Resize
 
 
@@ -166,18 +167,27 @@ function updateAnchorTop(node) {    // เพื่อเปลี่ยนต�
         left: nodeProperty.left + (nodeProperty.width / 2) -5
     }
     $(anchor).offset(position);
+    let arrowPosition=position;
+    arrowPosition.left-=15;
+    arrowPosition.top-=46;
+    $('.next-up').offset(arrowPosition);
+
 }
 function updateAnchorRight(node) {    // เพื่อเปลี่ยนตำแหน่งของ Anchor Right Resize กับ Drag ให้ไปตาม Parent Node ของตัวเอง
 
 
     let anchor = $(node).find(".anchor_right");
+
     let nodeProperty = getPropertyNode(node);
     let position = {
         top: nodeProperty.top + (nodeProperty.height / 2) - 5,
         left: nodeProperty.left + nodeProperty.width - 5
     }
     $(anchor).offset(position);
-
+    let arrowPosition=position;
+    arrowPosition.left+=10;
+    arrowPosition.top-=17;
+    $('.next-right').offset(arrowPosition);
 }
 function updateAnchorBottom(node) {    // เพื่อเปลี่ยนตำแหน่งของ Anchor Bottom Resize กับ Drag ให้ไปตาม Parent Node ของตัวเอง
 
@@ -196,19 +206,26 @@ function updateAnchorBottom(node) {    // เพื่อเปลี่ยน�
     }
 
     $(anchor).offset(position);
-
+    let arrowPosition=position;
+    arrowPosition.left-=15;
+    arrowPosition.top+=10;
+    $(".next-bottom").offset(arrowPosition);
 }
 function updateAnchorLeft(node) {    // เพื่อเปลี่ยนตำแหน่งของ Anchor Left Resize กับ Drag ให้ไปตาม Parent Node ของตัวเอง
 
 
     let anchor = $(node).find(".anchor_left");
+
     let nodeProperty = getPropertyNode(node);
     let position = {
         top: nodeProperty.top + (nodeProperty.height / 2) - 5,
         left: nodeProperty.left - 4
     }
     $(anchor).offset(position);
-
+    let arrowPosition=position;
+    arrowPosition.left-=50;
+    arrowPosition.top-=17;
+    $(".next-left").offset(arrowPosition);
 }
 function updateConnectorPosition(connector,noswapAnchor) {    //ไว้ใช้เปลี่ยนตำแหน่งของ เส้น connector ตอน node มีการ drag และ resize โดยใช้ค่า from to เพื่อบอก ว่า จาก Node ไหนไป Node ไหน
   
@@ -815,6 +832,7 @@ function onDropItemSuccess(type,posX,posY) {    //เมื่อมีการ
       $(node).find(".con_anchor").droppable(conAnchorDroppableProperty());//ใส่ความสามารถ Resizableให้กับ Anchor ใน Node
       setTextboxPosition(node);
       updateAnchorPosition(node);
+      return node;
     }
 }
 function nodeDraggableProperty(node){// returnความสามารถของ Node ในการ Draggable
@@ -834,6 +852,7 @@ function nodeDraggableProperty(node){// returnความสามารถข�
         scrollSpeed: 20,
         start:function(){
           // createDistanceWalls(this);
+          $('.container-node-tool').remove();
           oldPos=$(this).offset();
         },
         drag: function (event,ui) {
@@ -877,8 +896,7 @@ function nodeDraggableProperty(node){// returnความสามารถข�
           position.left-=left;
       
           $(this).offset(position);
-          // $(".wall").remove();
-          wallsArea=[];
+          showNodeTool(this);
         }
       }
     
@@ -1665,4 +1683,57 @@ function explorer(distinct){
  
   return list;
 
+}
+function showNodeTool(node){
+    $('.container-node-tool').remove();
+    if($(node).hasClass('start-end')){
+      return false;
+    }
+      $('#design').append($('#template-node-tool').html());
+      if($(node).hasClass("start-end")){
+        $('.node-tool-start').remove();
+      }else if($(node).hasClass("process")){
+        $('.node-tool-process').remove();
+
+      }
+      else if($(node).hasClass("input")){
+        $('.node-tool-input').remove();
+
+      }
+      else if($(node).hasClass("decision")){
+        $('.node-tool-decision').remove();
+
+      }
+      else if($(node).hasClass("display")){
+        $('.node-tool-display').remove();
+
+      }
+     
+      let offset=$(node).offset();
+      
+      let width=$(node).outerWidth();
+      // let nodeToolOffset = $('.container-node-tool').offset();
+      let nodeToolWidth= $('.container-node-tool').outerWidth();
+      let designWidth=$('#design').offset().left+$('#design').outerWidth()-50;
+      offset.left+=width;
+      offset.top-=40;
+
+
+
+      if(offset.left+nodeToolWidth>=designWidth){
+
+        offset.left-=nodeToolWidth*2;
+
+      }
+
+      $('.container-node-tool').offset(offset);
+}
+function showNextNodeArrow(node){
+  $('.btn-next-node').remove();
+  $('#design').append($('#next-node').html());
+}
+function nextNodeTimeOut(){
+  setTimeoutArrow=setTimeout(function(){
+    $(".btn-next-node").remove();
+  },100);
 }
