@@ -13,6 +13,9 @@ nav {
   background: #2d3035;
   border-bottom: 3px solid rgba(0, 0, 0, 0.08);
 }
+nav li {
+  z-index: 5;
+}
 nav .dropdown-menu {
   color: #fff;
   background: #292c32;
@@ -430,18 +433,6 @@ table td {
   border-top: 3px solid #212429 !important;
 }
 
-.wall {
-  left: 500px;
-  top: 500px;
-  width: 100px;
-  height: 100px;
-  background-color: transparent;
-  border: 2px dashed #4f7df9;
-  z-index: 9;
-  position: absolute;
-  opacity: 1;
-}
-
 .textHighLight {
   color: #4f7df9;
   font-weight: bold;
@@ -475,7 +466,6 @@ table td {
 
 ul {
   list-style-type: none;
-  border-right: 3px solid rgba(0, 0, 0, 0.08);
 }
 
 .modal-lg {
@@ -483,8 +473,7 @@ ul {
 }
 
 .modal-dialog,
-.modal-content {
-  /* 80% of window height */
+.modal-content-guide {
   height: 90%;
 }
 
@@ -498,6 +487,10 @@ ul {
 .sidebar li:hover {
   background: #292c32;
 }
+.sidebar .active {
+  background: #4f7df9;
+  color: #fff;
+}
 
 .modal-body {
   overflow: hidden;
@@ -507,6 +500,24 @@ ul {
   height: 100%;
   overflow-y: scroll;
   background: #292d32;
+}
+
+.modal-close, .modal-close:hover {
+  color: #fff !important;
+}
+
+.btn-guide {
+  border-width: 2px;
+  border-radius: 500px;
+  border-color: #fff;
+  color: #fff;
+}
+
+.btn-guide:hover, .btn-guide:focus, .btn-guide:active {
+  color: #4f7df9;
+  border-color: #4f7df9;
+  box-shadow: none;
+  background: none;
 }
 
 /*# sourceMappingURL=main.css.map */

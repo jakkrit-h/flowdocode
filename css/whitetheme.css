@@ -1,0 +1,174 @@
+body {
+  background: #fff;
+  background-image: linear-gradient(0deg, transparent 9%, rgba(150, 150, 150, 0.6) 10%, rgba(150, 150, 150, 0.6) 12%, transparent 13%, transparent 29%, rgba(150, 150, 150, 0.1) 30%, rgba(150, 150, 150, 0.1) 31%, transparent 32%, transparent 49%, rgba(150, 150, 150, 0.1) 50%, rgba(150, 150, 150, 0.1) 51%, transparent 52%, transparent 69%, rgba(150, 150, 150, 0.1) 70%, rgba(150, 150, 150, 0.1) 71%, transparent 72%, transparent 89%, rgba(150, 150, 150, 0.1) 90%, rgba(150, 150, 150, 0.1) 91%, transparent 92%, transparent), linear-gradient(90deg, transparent 9%, rgba(150, 150, 150, 0.6) 10%, rgba(150, 150, 150, 0.6) 12%, transparent 13%, transparent 29%, rgba(150, 150, 150, 0.1) 30%, rgba(150, 150, 150, 0.1) 31%, transparent 32%, transparent 49%, rgba(150, 150, 150, 0.1) 50%, rgba(150, 150, 150, 0.1) 51%, transparent 52%, transparent 69%, rgba(150, 150, 150, 0.1) 70%, rgba(150, 150, 150, 0.1) 71%, transparent 72%, transparent 89%, rgba(150, 150, 150, 0.1) 90%, rgba(150, 150, 150, 0.1) 91%, transparent 92%, transparent);
+  background-size: 50px 50px;
+}
+
+nav {
+  background: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+nav li.nav-item:hover, nav li.nav-item:active, nav li.nav-item:focus {
+  background: #f2f2f2;
+}
+nav .dropdown-menu {
+  color: #000;
+  background: #fff;
+}
+nav .dropdown-menu label {
+  width: 100%;
+}
+nav .dropdown-menu .dropdown-item:hover {
+  background: #f2f2f2;
+}
+
+#design .connector-description, #design label {
+  color: #000;
+}
+
+.shape {
+  color: #000;
+}
+
+svg {
+  stroke: #4f7df9;
+  fill: #fff;
+}
+
+.con_anchor {
+  background-color: #fff;
+}
+
+.ui-resizable-handle {
+  background: #fff;
+}
+
+#con-toolbox {
+  background: #fff;
+}
+
+#con-right {
+  background: #fff;
+}
+
+#con-console {
+  background: #fff;
+}
+#con-console #console {
+  background: #fff;
+  color: #000;
+}
+
+table {
+  color: #000;
+}
+table thead {
+  border-color: #1b1e23 !important;
+}
+table thead tr {
+  border-color: #1b1e23 !important;
+}
+table thead td {
+  border-color: #1b1e23 !important;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(85, 85, 85, 0.7);
+  border-radius: 5000px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.header {
+  color: #000;
+  border-width: 1px;
+  background: #f2f2f2;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+#assignment {
+  background: #fff;
+  color: #000;
+  border: 1px solid #4f7df9;
+}
+
+#pagination {
+  background: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+#pagination div {
+  color: #4f7df9;
+  background: #fff;
+  border: 1px solid #4f7df9;
+}
+#pagination div:hover, #pagination div.active {
+  background: #4f7df9;
+}
+#pagination div:hover *, #pagination div.active * {
+  color: #fff !important;
+}
+#pagination .page-edit {
+  background: #fff !important;
+}
+#pagination .page-edit .page-text {
+  color: #1b1e23 !important;
+}
+
+.modal-content {
+  background: #fff;
+  color: #000;
+}
+.modal-content input, .modal-content input:active, .modal-content input:focus {
+  background: #fff;
+  color: #000;
+  border: 3px solid #e0e0e0;
+  box-shadow: none;
+}
+
+.modal-header {
+  border-bottom: 3px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+.modal-footer {
+  border-top: 3px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+.btn-node-tool:hover svg {
+  fill: #fff;
+}
+
+.sidebar li:hover {
+  background: #f2f2f2;
+}
+.sidebar .active {
+  background: #4f7df9;
+  color: #fff;
+}
+
+.guide-content {
+  background: #f2f2f2;
+}
+
+.modal-close, .modal-close:hover {
+  color: #000 !important;
+}
+
+.btn-guide {
+  border-color: #808080;
+  color: #808080;
+}
+
+.btn-guide:hover, .btn-guide:focus, .btn-guide:active {
+  color: #4f7df9;
+  border-color: #4f7df9;
+}
+
+/*# sourceMappingURL=whitetheme.css.map */

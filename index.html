@@ -10,8 +10,7 @@
   <link rel="stylesheet" type="text/css" media="screen" href="css/jquery-ui.min.css" />
   <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome-all.min.css" />
   <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
-  <!-- <link rel="stylesheet" type="text/css" media="screen" href="css/darktheme.css" /> -->
-
+  <link rel="stylesheet" type="text/css" media="screen" href="css/whitetheme.css"id="whitestyle" />
 
 
   <script src="js/jquery.js"></script>
@@ -40,13 +39,11 @@
 
   <nav class="navbar navbar-expand-lg   p-0">
     <div class="col-12 m-0 p-0">
-      <!-- flex-column -->
-      <!--         <input class="form-control col-4 mt-2" id="assignment" placeholder="Assignment" value="untitled">
- -->
-      <ul class="navbar-nav p-0">
+   
+      <ul class="navbar-nav py-1">
 
 
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown mx-1 ">
           <a class="nav-link " href="#" data-toggle="dropdown">File</a>
           <div class="dropdown-menu">
             <label> <a class="dropdown-item" id="save">Save</a></label>
@@ -60,7 +57,7 @@
             <label> <a class="dropdown-item" id="pseudoCode" ><label>PseudoCode</label></a></label>
           </div>
         </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown mx-1">
           <a class="nav-link " href="#" data-toggle="dropdown">Theme</a>
           <div class="dropdown-menu">
             <label> <a class="dropdown-item" id="white-theme">White Theme</a></label>
@@ -69,12 +66,12 @@
            
           </div>
         </li>
-        <li class="nav-item">
+        <li class="nav-item mx-1">
           <a class="nav-link " href="#" data-toggle="modal" data-target="#guide">Help</a>
         </li>
-        <div class="col-2 py-2 px-0 mx-auto">
-          <ul class="navbar-nav  p-0 justify-content-center">
-            <li class="nav-item ">
+        <div class="col-12  px-0 mx-auto" style="position:absolute">
+          <ul class="navbar-nav  p-0 justify-content-center" style="border:none">
+            <li class="">
               <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="play"><i class='fas fa-play'></i></button>
               <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="debug"><i class="fas fa-bug"></i></button>
               <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="stop"><i class='fas fa-stop'></i></button>
@@ -99,9 +96,7 @@
         </div>
       </ul>
 
-      <!--     <ul class="navbar-nav flex-row mb-2">
-        
-      </ul> -->
+
     </div>
 
 
@@ -206,7 +201,7 @@
   </div>
 
   <div class="offset-10 col-2 p-0 h-100 " id="con-right" >
-    <p class="header py-1  m-0 col-12"> Debugger</p>
+    <p class="header py-1 pt-1 m-0 col-12"> Debugger</p>
     <div class="col-12 p-0 m-0 row header" style="display: flex;"> 
       <div class="col-4 debugger-header py-2" >Action</div>
       <div class="col-4 debugger-header py-2">Variable</div>
@@ -215,7 +210,7 @@
     </div>
     <div class="col-12  p-0 pb-5 " id="con-debugger" style="overflow-y: scroll !important;"> 
       
-      <table class="table table-dark table-striped m-0">
+      <table class="table  table-striped m-0">
      
         <tbody id="debugger" class="text-center"style="overflow-y: scroll !important;">
 
@@ -282,21 +277,77 @@
 
 
 
-<div class="modal fade" id="guide" tabindex="-1" role="dialog" aria-labelledby="guide" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
+
+
+<div class="modal fade " id="guide"  data-backdrop="true"tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content modal-content-guide" >
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <h5 class="modal-title" id="exampleModalLongTitle">FLOWDOCODE GUIDE</h5>
+
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        ...
+      <div class="modal-body row py-0" >
+        <div class="col-2 p-0 sidebar list-group" id="guide-scrollspy">
+          <ul class="p-0 m-0" >
+            <li class="guide-side-bar  ">
+              <a class="nav-link active p-3" href="#test">Header 1</a>
+            </li>
+            <li class="guide-side-bar">
+              <a class="nav-link p-3" href="#test2www">Header 2</a>
+            
+            </li>
+            <li class="guide-side-bar">
+              <a class="nav-link p-3" href="#test3">Header 3</a>
+              
+            </li>
+         
+        
+          </ul>
+        </div>
+        <div class="col-10 guide-content container px-5" data-spy="scroll" data-target="#guide-scrollspy" data-offset="0">
+          <div id="test">
+            <img class=" my-5 img-fluid"src="images/Capture.PNG">
+            <p>
+              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
+              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
+              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
+              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
+              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
+  
+            </p>
+          </div>
+          <div id="test2www">
+            <img class=" my-5 img-fluid"src="images/Capture.PNG">
+            <p>
+              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
+              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
+              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
+              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
+              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
+  
+            </p>
+          </div>
+          <div id="test3">
+            <img class=" my-5 img-fluid"src="images/Capture.PNG">
+            <p>
+              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
+              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
+              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
+              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
+              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
+  
+            </p>
+          </div>
+        
+
+        </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-outline-primary btn-guide" ><i class="fas fa-chevron-left"></i></button>
+        <button type="button" class="btn btn-outline-primary btn-guide"><i class="fas fa-chevron-right"></i></button>
       </div>
     </div>
   </div>
@@ -742,7 +793,16 @@
    
 
   });
+  $(document).on("click","#white-theme",function(){
+    let white=' <link rel="stylesheet" type="text/css" media="screen" href="css/whitetheme.css" id ="whitestyle"/>'
+    $('head').append(white);
+    $('table').removeClass('table-dark');
+  });
+  $(document).on("click","#dark-theme",function(){
+    $('#whitestyle').remove();
+    $('table').addClass('table-dark');
 
+  });
  
 </script>
 

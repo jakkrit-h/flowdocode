@@ -26,6 +26,9 @@ nav{
   background: #2d3035;
   // box-shadow:0px 2px 1px rgba(0, 0, 0, 0.05);
   border-bottom: 3px solid $borderDark;
+  li{
+    z-index: 5;
+  }
   .dropdown-menu{
     label{
       width: 100%;
@@ -471,17 +474,7 @@ opacity: 0;
   border-top:3px solid #212429 !important;
 
 }
-.wall{
-  left:500px;
-  top:500px;
-  width: 100px;
-  height: 100px;
-  background-color: transparent;
-  border: 2px dashed $primaryColor;
-  z-index: 9;
-  position: absolute;
-  opacity: 1;
-}
+
 .textHighLight{
   color:#4f7df9;
  
@@ -514,18 +507,15 @@ opacity: 0;
 }
 ul {
   list-style-type: none;
-  border-right:3px solid $borderDark;
 }
-li.guide-side-bar{
-}
+
 .modal-lg {
   max-width: 80%;
 
 }
 
 .modal-dialog,
-.modal-content {
-    /* 80% of window height */
+.modal-content-guide {
     height: 90%;
 }
 .sidebar{
@@ -537,7 +527,12 @@ li.guide-side-bar{
   li:hover{
     background: #292c32;
   }
+  .active{
+    background: $primaryColor;
+    color:#fff;
+  }
 }
+
 .modal-body{
 
   overflow: hidden;
@@ -547,4 +542,19 @@ li.guide-side-bar{
     height: 100%;
     overflow-y: scroll;
     background: rgba(41,45,50,1);
+}
+.modal-close,.modal-close:hover{
+  color:#fff !important;
+}
+.btn-guide{
+  border-width: 2px;
+  border-radius: 500px;
+  border-color:#fff;
+  color:#fff;
+}
+.btn-guide:hover,.btn-guide:focus,.btn-guide:active{
+  color:$primaryColor;
+  border-color: $primaryColor;
+  box-shadow: none;
+  background: none;
 }
