@@ -1,8 +1,13 @@
+@font-face{
+  font-family: "LuckiestGuy-Regular";
+  src:url("../webfonts/LuckiestGuy-Regular.ttf");
+}
 $borderDark:rgba(0, 0, 0, 0.08);
 $primaryColor:#4f7df9;
 $inprogressColor:#f1c40f;
 $successColor:#27ae60;
 $invalidColor:#ff3d50;
+
 html,body{height: 100%;
 }body{
   overflow: hidden;
@@ -22,6 +27,77 @@ linear-gradient(90deg, transparent 9%,
   background-size:50px 50px;
 
 }
+.logo{
+  z-index: 5;
+  font-family: "LuckiestGuy-Regular" !important ;
+  font-size: 1.5em;
+  align-self: center;
+  color:$primaryColor;
+  span{
+    color:$primaryColor;
+  }
+  // span{
+
+  //   color:#fff;
+  // }
+}
+.logo:hover{
+  a{
+    color:$primaryColor;
+    text-decoration: none;
+  }
+  span{
+    color:#fff;
+    -webkit-animation: blink 2.0s infinite; 
+    animation: blink 2.0s infinite;
+  }
+
+}
+@keyframes blink {
+	0% {
+		color:#fff;
+  }
+  20%{
+    color:$primaryColor;;
+
+  }
+  30%{
+    color:#fff;
+
+  }
+  40%{
+    color:$primaryColor;;
+
+  }
+
+	100% {
+    color:$primaryColor;;
+	}	
+								
+}
+@-webkit-keyframes blink {
+	0% {
+		color:#fff;
+  }
+  20%{
+    color:$primaryColor;;
+
+  }
+  30%{
+    color:#fff;
+
+  }
+  40%{
+    color:$primaryColor;;
+
+  }
+
+	100% {
+    color:$primaryColor;;
+	}	
+								
+}
+
 nav{
   background: #2d3035;
   // box-shadow:0px 2px 1px rgba(0, 0, 0, 0.05);

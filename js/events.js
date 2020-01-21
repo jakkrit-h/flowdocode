@@ -91,3 +91,28 @@ $(document).on("click","#ee",function (){
     }
     pseudocodeController();
 });
+$(document).on("click","#delete-node",function(){
+    $(this).tooltip('dispose');
+
+    checkConnectorOnNodeDelete(selectedEl);
+
+    $(selectedEl).remove();
+    $('.container-node-tool').remove();
+
+    hasEnd();
+});
+// $(document).on("click","#change-node-start",function(){
+//     onChangeTypeNode(this,'process');
+
+// });
+$(document).on("click",".btn-node-tool",function(){
+    shapeUnSelectedStyle();
+    $(this).tooltip('dispose');
+    onChangeTypeNode(this,$(this).attr('data-change'));
+
+    
+
+});
+
+
+// $(document).on("click","id="change-node-start"")

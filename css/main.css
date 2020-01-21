@@ -1,3 +1,7 @@
+@font-face {
+  font-family: "LuckiestGuy-Regular";
+  src: url("../webfonts/LuckiestGuy-Regular.ttf");
+}
 html, body {
   height: 100%;
 }
@@ -9,6 +13,61 @@ body {
   background-size: 50px 50px;
 }
 
+.logo {
+  z-index: 5;
+  font-family: "LuckiestGuy-Regular" !important;
+  font-size: 1.5em;
+  align-self: center;
+  color: #4f7df9;
+}
+.logo span {
+  color: #4f7df9;
+}
+
+.logo:hover a {
+  color: #4f7df9;
+  text-decoration: none;
+}
+.logo:hover span {
+  color: #fff;
+  -webkit-animation: blink 2s infinite;
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0% {
+    color: #fff;
+  }
+  20% {
+    color: #4f7df9;
+  }
+  30% {
+    color: #fff;
+  }
+  40% {
+    color: #4f7df9;
+  }
+  100% {
+    color: #4f7df9;
+  }
+}
+@-webkit-keyframes blink {
+  0% {
+    color: #fff;
+  }
+  20% {
+    color: #4f7df9;
+  }
+  30% {
+    color: #fff;
+  }
+  40% {
+    color: #4f7df9;
+  }
+  100% {
+    color: #4f7df9;
+  }
+}
 nav {
   background: #2d3035;
   border-bottom: 3px solid rgba(0, 0, 0, 0.08);

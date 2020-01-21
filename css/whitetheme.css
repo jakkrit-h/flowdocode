@@ -4,8 +4,50 @@ body {
   background-size: 50px 50px;
 }
 
+.logo span {
+  color: #4f7df9;
+}
+
+.logo:hover span {
+  color: #000;
+}
+
+@keyframes blink {
+  0% {
+    color: #000;
+  }
+  20% {
+    color: #4f7df9;
+  }
+  30% {
+    color: #000;
+  }
+  40% {
+    color: #4f7df9;
+  }
+  100% {
+    color: #4f7df9;
+  }
+}
+@-webkit-keyframes blink {
+  0% {
+    color: #fff;
+  }
+  20% {
+    color: #4f7df9;
+  }
+  30% {
+    color: #fff;
+  }
+  40% {
+    color: #4f7df9;
+  }
+  100% {
+    color: #4f7df9;
+  }
+}
 nav {
-  background: #fff;
+  background: #FBFBFB;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 nav li.nav-item:hover, nav li.nav-item:active, nav li.nav-item:focus {
@@ -44,18 +86,21 @@ svg {
 }
 
 #con-toolbox {
-  background: #fff;
+  background: #f5f5f5;
+}
+#con-toolbox svg {
+  fill: #f5f5f5;
 }
 
 #con-right {
-  background: #fff;
+  background: #f5f5f5;
 }
 
 #con-console {
-  background: #fff;
+  background: #FBFBFB;
 }
 #con-console #console {
-  background: #fff;
+  background: #f5f5f5;
   color: #000;
 }
 
@@ -90,18 +135,18 @@ table thead td {
 .header {
   color: #000;
   border-width: 1px;
-  background: #f2f2f2;
+  background: #eeeeee;
   border-color: rgba(0, 0, 0, 0.08);
 }
 
 #assignment {
-  background: #fff;
+  background: #adedea;
   color: #000;
   border: 1px solid #4f7df9;
 }
 
 #pagination {
-  background: #fff;
+  background: #fbfbfb;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 #pagination div {
@@ -123,13 +168,13 @@ table thead td {
 }
 
 .modal-content {
-  background: #fff;
+  background: #f5f5f5;
   color: #000;
 }
 .modal-content input, .modal-content input:active, .modal-content input:focus {
-  background: #fff;
+  background: #f5f5f5;
   color: #000;
-  border: 3px solid #e0e0e0;
+  border: 3px solid #aaa;
   box-shadow: none;
 }
 
@@ -146,7 +191,7 @@ table thead td {
 }
 
 .sidebar li:hover {
-  background: #f2f2f2;
+  background: #fff;
 }
 .sidebar .active {
   background: #4f7df9;
@@ -154,7 +199,7 @@ table thead td {
 }
 
 .guide-content {
-  background: #f2f2f2;
+  background: #f5f5f5;
 }
 
 .modal-close, .modal-close:hover {

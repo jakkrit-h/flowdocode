@@ -39,8 +39,9 @@
 
   <nav class="navbar navbar-expand-lg   p-0">
     <div class="col-12 m-0 p-0">
-   
       <ul class="navbar-nav py-1">
+
+        <div class="logo px-2"><a href="index.html">FlowD<span>o</span>C<span>o</span>de</a></div>
 
 
         <li class="nav-item dropdown mx-1 ">
@@ -60,7 +61,7 @@
         <li class="nav-item dropdown mx-1">
           <a class="nav-link " href="#" data-toggle="dropdown">Theme</a>
           <div class="dropdown-menu">
-            <label> <a class="dropdown-item" id="white-theme">White Theme</a></label>
+            <label> <a class="dropdown-item" id="white-theme">Light Theme</a></label>
             <label><a class="dropdown-item" id="dark-theme">Dark Theme </a></label>
 
            
@@ -72,7 +73,7 @@
         <div class="col-12  px-0 mx-auto" style="position:absolute">
           <ul class="navbar-nav  p-0 justify-content-center" style="border:none">
             <li class="">
-              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="play"><i class='fas fa-play'></i></button>
+              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="play" ><i class='fas fa-play'></i></button>
               <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="debug"><i class="fas fa-bug"></i></button>
               <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="stop"><i class='fas fa-stop'></i></button>
               <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="play-refresh">
@@ -149,7 +150,7 @@
 
   </div>
   <div class="offset-2 col-8 p-0 btn-group " id="pagination">
-    <button class="btn btn-flowdocode" id="addpage"><i class="fas fa-plus-circle"></i></button>
+    <button class="btn btn-flowdocode" id="addpage" ><i class="fas fa-plus-circle"></i></button>
 
   </div>
   <div class="offset-2 col-8 p-0 pb-5  mb-5 " id="con-design" style="position: fixed;overflow-y:scroll;">
@@ -490,7 +491,7 @@
     // click select shape 
     actionOnSelectElement(this);
     showNodeTool(this);
-
+    $('.btn-next-node').remove();
 
 
 
@@ -531,6 +532,9 @@
 
       }
       $(selectedEl).find("div.text").prop("contenteditable", true);
+      $('.container-node-tool').remove();
+      $('.btn-next-node').remove();
+
       $(selectedEl).find("div.text").focus();
       /*       console.log($(selectedEl).find("div.text").text().trim());
             console.log(getNodeType(selectedEl)); */
@@ -661,8 +665,90 @@
     nextNodeTimeOut();
   });
   $(document).on("click",".btn-next-node",function(){
-    $(".btn-next-node").remove();
+    
+    let nodeParent = "#"+$(this).attr('data-nextnodeof');
 
+    if ($(nodeParent).attr("data-connector") != undefined) {//ถ้า Node นั้นเคยมีConnector เก่าให้ลบออก
+
+      let connector = $(nodeParent).attr("data-connector");
+      $(connector).parent().remove();
+
+    }
+    let way = $(this).attr('data-way');
+    let position =$(nodeParent).offset();
+    let toAnchor=undefined;
+    let designWidth=$('#design').offset().left+50+$('#design').outerWidth()-100;
+    let designTop=$('#design').offset().top+50;
+    switch(way){
+      case 'top':
+          if(position.top-100<=designTop+20){
+            position.top += 100;
+          } else {
+            position.top -= 100;
+          }
+          position.left += 100;
+
+          toAnchor='bottom';
+        break;
+      case 'right':
+   
+        if((position.left+400)>=(designWidth-20)){
+          position.top+=100;
+          position.left+=100;
+        }else{
+          position.left+=400;
+
+        }
+        toAnchor='left';
+
+        break;
+      case 'bottom':
+    
+
+      if (position.top + 100 >= designTop  + $('#design').outerHeight() - 100) {
+          position.top -= 100;
+        } else {
+          position.top += 100;
+        }
+        position.left+=100;
+        toAnchor='top';
+
+        break;
+      case 'left':
+      if((position.left-200)<=(designWidth+20)){
+          position.top+=100;
+          position.left+=100;
+        }else{
+          position.left-=200;
+        }
+  
+      toAnchor='right';
+
+        break;
+    }
+    
+    let newNode=onDropItemSuccess('process',position.left,position.top);
+
+    let gt = document.createElementNS("http://www.w3.org/2000/svg", "g");
+     gt = $(gt).attr("marker-end", "url(#arrowhead)");
+     gt = $(gt).attr("stroke-width", "2");
+
+    $("#canvas").append($(gt));
+
+ 
+    let lineDraw = document.createElementNS("http://www.w3.org/2000/svg", "polyline");// สร้าง connector
+    $(gt).html(lineDraw);
+    $(lineDraw).attr("id", "line_" +nodeParent.replace('#',''));//เพิ่ม id ให้ connector
+    $(lineDraw).addClass($(nodeParent).prop('id'));
+    $(lineDraw).addClass($(newNode).prop('id'));
+    $(lineDraw).attr('data-from','#'+$(nodeParent).prop('id'));
+    $(lineDraw).attr('data-to','#'+$(newNode).prop('id'));
+    $(lineDraw).attr('data-anchorfrom',way);
+    $(lineDraw).attr('data-anchorto',toAnchor);
+    updateConnectorPosition(lineDraw);
+    $(nodeParent).attr('data-connector','#'+$(lineDraw).prop('id'));
+
+    $(".btn-next-node").remove();
   });
   $(document).on("mouseup", ".shape", function () {
     if (selectedEl == undefined) {
@@ -676,11 +762,11 @@
   $(document).on("mousedown", ".con_anchor", function () {
 
     originalPosition = $(this).offset();
-    g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g = $(g).attr("marker-end", "url(#arrowhead)");
-    g = $(g).attr("stroke-width", "2");
+    gTag = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    gTag = $(gTag).attr("marker-end", "url(#arrowhead)");
+    gTag = $(gTag).attr("stroke-width", "2");
 
-    $("#canvas").append($(g));
+    $("#canvas").append($(gTag));
 
   });
 
@@ -903,31 +989,31 @@
 </template>
 <template id="template-node-tool">
   <div class="container-node-tool">
-    <button class="btn btn-flowdocode ">
+    <button class="btn btn-flowdocode " id="delete-node"  data-toggle="tooltip" data-placement="bottom" title="Delete">
       <i class="fas fa-trash"></i>
   
     </button>
-    <button class="btn btn-flowdocode btn-node-tool node-tool-start">
+    <!-- <button class="btn btn-flowdocode btn-node-tool node-tool-start"  id="change-node-start">
       <svg viewBox='25 -50 100 150' class='node-tool' >
         <path d="M 25 1 C -5,1 -5,49 25,49 L 120 49 C 155,49 155,0 120,1 Z"></path>
       </svg>
-    </button>
-    <button class="btn btn-flowdocode btn-node-tool node-tool-process">
+    </button> -->
+    <button class="btn btn-flowdocode btn-node-tool node-tool-process" id="change-node-process"  data-change ='process'data-toggle="tooltip" data-placement="bottom" title="Process">
       <svg viewBox='25 -50 100 150' class='node-tool' >
         <path d="M 1 1 L 149 1 L 149 49 L 1 49 Z"></path>
       </svg>
     </button>
-    <button class="btn btn-flowdocode btn-node-tool node-tool-input">
+    <button class="btn btn-flowdocode btn-node-tool node-tool-input"id="change-node-input" data-change ='input' data-toggle="tooltip" data-placement="bottom" title="Input">
       <svg viewBox='25 -50 100 150' class='node-tool'>
         <path d="M 1 15 L 149 1 L 149 49 L 1 49 Z"></path>
       </svg>
     </button>
-    <button class="btn btn-flowdocode btn-node-tool node-tool-decision">
+    <button class="btn btn-flowdocode btn-node-tool node-tool-decision"id="change-node-decision"data-change ='decision'  data-toggle="tooltip" data-placement="bottom" title="Decision">
       <svg viewBox='25 -50 100 150' class='node-tool'>
         <path d="M 75 1 L 150 25 L 75 50 L 1 25 Z "></path>
       </svg>
     </button>
-    <button class="btn btn-flowdocode btn-node-tool node-tool-display">
+    <button class="btn btn-flowdocode btn-node-tool node-tool-display"id="change-node-display" data-change ='display' data-toggle="tooltip" data-placement="bottom" title="Display">
       <svg viewBox='25 -50 100 150' class='node-tool'>
         <path d="M 1 25 L 15 49 H 120 C 155 49 ,155 1, 120 1 H 15 L 1,25  "></path>
       </svg>
@@ -937,16 +1023,16 @@
    </div>
 </template>
 <template id="next-node">
-    <button class="btn btn-next-node next-up" >
+    <button class="btn btn-next-node next-up" data-way="top" >
       <i class="fas fa-long-arrow-alt-up fa-2x"></i>
     </button>
-    <button class="btn btn-next-node next-right">
+    <button class="btn btn-next-node next-right" data-way="right" >
       <i class="fas fa-long-arrow-alt-right fa-2x"></i>
     </button>
-    <button class="btn btn-next-node next-left">
+    <button class="btn btn-next-node next-left" data-way="left" >
       <i class="fas fa-long-arrow-alt-left fa-2x"></i>
     </button>
-    <button class="btn btn-next-node next-bottom">
+    <button class="btn btn-next-node next-bottom" data-way="bottom" >
       <i class="fas fa-long-arrow-alt-down fa-2x"></i>
     </button>
 </template>

@@ -20,7 +20,7 @@ var selectedEl=undefined;// Node or Connector ที่กำลังถูก 
 var originalPosition = undefined;// ตำแหน่งของ Anchor ก่อนโดน Drag ไว้ใช้ตอนให้ Anchor กลับไปอยู่ที่เดิมหลัง Drag เสร็จ
 var lineDraw = undefined;// connector ตอนกำลังถูกสร้าง
 var successStatus = undefined;// สถานะเมื่อมีการ Drag เส้นไป หา Node ได้สำเร็จ
-var g = undefined;// container ของ connector
+var gTag = undefined;// container ของ connector
 var mouseDown=undefined;//สถานะว่ากำลัง mousedown อยู่จริง
 var onHoverAnchor=undefined;
 var onClose=undefined;
@@ -228,7 +228,6 @@ function updateAnchorLeft(node) {    // เพื่อเปลี่ยนต�
     $(".next-left").offset(arrowPosition);
 }
 function updateConnectorPosition(connector,noswapAnchor) {    //ไว้ใช้เปลี่ยนตำแหน่งของ เส้น connector ตอน node มีการ drag และ resize โดยใช้ค่า from to เพื่อบอก ว่า จาก Node ไหนไป Node ไหน
-  
     let fromNode = $(connector).attr("data-from");//เก็บ Id ของ Node ต้นทาง
     let toNode = $(connector).attr("data-to");//เก็บ Id ของ Node ปลายทาง
     let pointFrom = $(connector).attr("data-anchorfrom");//เก็บ ตำแหน่งที่ชี้ ของ Node ต้นทาง
@@ -257,19 +256,18 @@ function updateConnectorPosition(connector,noswapAnchor) {    //ไว้ใช�
     let jsonData={
         p0,p25,p75,p100,fromNode,toNode,pointFrom,pointTo,distanceX,distanceY,connector
     }
-  
+
     let linePosition={"points":line50(jsonData,noswapAnchor)};
-   
     // let linePosition = {
     //   "points":jsonToPoint(p0)+" "+jsonToPoint(p25)+" "+jsonToPoint(p50)+" "+jsonToPoint(p75)+" "+jsonToPoint(p100)
 
 
     // }
 
-    g = $(connector).parent("g");
+    gTag = $(connector).parent("g");
     connector = $(connector).attr(linePosition);
-    
-    $(g).html($(connector));
+
+    $(gTag).html($(connector));
 /*     console.log(linePosition);
  */
     updateTextLabelPosition(connector);
@@ -516,7 +514,7 @@ function line50(json,noswapAnchor){
   }
 
  
-
+  
   return jsonToPoint(json.p0)+" "+jsonToPoint(json.p25)+" "+jsonToPoint(p1)+" "+jsonToPoint(p2)+" "+jsonToPoint(json.p75)+" "+jsonToPoint(json.p100);
 }
 // function swapAnchor(json){
@@ -765,6 +763,16 @@ function checkConnectorOnNodeDelete(node){ /*ไว้เมื่อมี Node
         }
    });
 }
+function findConnectorIsRelateWithNode(node){
+  let result=[]
+  console.log($(node));
+  $("polyline").each(function(){
+    if($(this).hasClass($(node).prop("id"))){
+      result.push(this);
+    }
+  });
+  return result;
+}
 function onConnectorDelete(connector){
 
 
@@ -788,19 +796,9 @@ function onConnectorDelete(connector){
 function onDropItemSuccess(type,posX,posY) {    //เมื่อมีการลากวางNode จาก Toolbox ลงมาในส่วนของ Design
 
     if (type != null) {
-      
-
-      if ($("#design").find("." + type + "").last().index() == -1) {
-        var index = 0;
-      } else {
-        var str = $("#design").find("." + type + "").last().prop("id");
-        str = str.split("-");
-        var index = str[str.length - 1];
-        index++;
-      }//เพื่อกำหนด index ของ node ตามประเภทของ shape
 
       let attrObj = {
-        id: (type + "-" + index),// set id ของ node โดยใช้ ประเภทของ shape - index ที่ process มาจาก if
+        id: generateIdOfNode(type),// set id ของ node โดยใช้ ประเภทของ shape - index ที่ process มาจาก if
       }
       if(posX==undefined||posY==undefined){
         posX=event.clientX ;
@@ -835,6 +833,18 @@ function onDropItemSuccess(type,posX,posY) {    //เมื่อมีการ
       return node;
     }
 }
+function generateIdOfNode(type){
+   let index = 0;
+  if ($("#design").find("." + type + "").last().index() == -1) {
+     index = 0;
+  } else {
+    var str = $("#design").find("." + type + "").last().prop("id");
+    str = str.split("-");
+     index = str[str.length - 1];
+    index++;
+  }//เพื่อกำหนด index ของ node ตามประเภทของ shape
+  return (type + "-" + index);
+}
 function nodeDraggableProperty(node){// returnความสามารถของ Node ในการ Draggable
   let oldPos;
   return{
@@ -853,6 +863,7 @@ function nodeDraggableProperty(node){// returnความสามารถข�
         start:function(){
           // createDistanceWalls(this);
           $('.container-node-tool').remove();
+          $('.btn-next-node').remove();
           oldPos=$(this).offset();
         },
         drag: function (event,ui) {
@@ -882,21 +893,18 @@ function nodeDraggableProperty(node){// returnความสามารถข�
          
           shapeUnSelectedStyle();
           updateConnectorPositionOnAction(this);
-          updateAnchorPosition(this);
+          // updateAnchorPosition(this);
           $(".con_anchor").css("opacity","0");
           selectedEl = $(this);
 
         }
         , stop: function () {//ตอนหยุด Drag จะทำงานหลังตอนโดน Drop
-        
-          let position=$(this).offset();
-          let top=position.top%10;
-          let left=position.left%10;
-          position.top-=top;
-          position.left-=left;
+          rePositionAfterDrag(this);
       
-          $(this).offset(position);
-          showNodeTool(this);
+      
+     
+          shapeUnSelectedStyle();
+          $('.container-node-tool').remove();
         }
       }
     
@@ -914,6 +922,7 @@ function nodeResizableProperty(type){// returnความสามารถข�
         }
       }
 }
+
 function conAnchorDraggableProperty(){// returnความสามารถของ Anchor ในการ Draggable
     return{   
      
@@ -977,7 +986,7 @@ function conAnchorDraggableProperty(){// returnความสามารถข
           $(lineDraw).attr(lineProperty);
           //เพิ่ม attr position ให้ กับ line connector
 
-          $(g).html($(lineDraw));// เพิ่ม connector ลงไปใน g(container ของ line)
+          $(gTag).html($(lineDraw));// เพิ่ม connector ลงไปใน g(container ของ line)
         }, stop: function () {//ตอนหยุด Drag จะทำงานหลังตอนโดน Drop
           onAnchorDrag=false;
           if (successStatus) {// ถ้า connector ถูกลากให้ไปเชื่อมกับ Anchor สำเร็จ
@@ -1004,12 +1013,12 @@ function conAnchorDraggableProperty(){// returnความสามารถข
                 if($(this).parent().attr("data-yes")== undefined ){
                     $(lineDraw).prop("id",$(lineDraw).prop("id")+"-yes");
                     $(this).parent().attr("data-yes", "#" + $(lineDraw).prop("id"));
-                    addTextLabelForDecision(lineDraw,"YES");
+                    addTextLabelForDecision(lineDraw,"TRUE");
                 }else{
                   
                     $(lineDraw).prop("id",$(lineDraw).prop("id")+"-no");
                     $(this).parent().attr("data-no", "#" + $(lineDraw).prop("id"));
-                    addTextLabelForDecision(lineDraw,"NO");
+                    addTextLabelForDecision(lineDraw,"FALSE");
                 }
                 
             }else{
@@ -1028,7 +1037,7 @@ function conAnchorDraggableProperty(){// returnความสามารถข
             updateConnectorPosition(lineDraw);
             successStatus = undefined;
           }else {
-            $(g).remove();
+            $(gTag).remove();
             $(".con_anchor").css("opacity", "0");
           }
           $(".hide").droppable({
@@ -1708,7 +1717,7 @@ function showNodeTool(node){
         $('.node-tool-display').remove();
 
       }
-     
+      $(".btn-node-tool").attr("data-ofnode","#"+$(node).attr("id"));
       let offset=$(node).offset();
       
       let width=$(node).outerWidth();
@@ -1727,13 +1736,88 @@ function showNodeTool(node){
       }
 
       $('.container-node-tool').offset(offset);
+  $("#delete-node").tooltip('update');
+  $('.btn-node-tool').tooltip('update');
+
+
 }
 function showNextNodeArrow(node){
   $('.btn-next-node').remove();
   $('#design').append($('#next-node').html());
+  $('.btn-next-node').attr('data-nextnodeof',$(node).attr('id'));
 }
 function nextNodeTimeOut(){
   setTimeoutArrow=setTimeout(function(){
     $(".btn-next-node").remove();
   },100);
+}
+function onChangeTypeNode(objEvent,newType){
+  let oldId=$(objEvent).attr("data-ofnode");
+  let oldType=getNodeType(oldId);
+  let lines=findConnectorIsRelateWithNode(oldId)
+  let newId=generateIdOfNode(newType);
+  $(oldId).addClass(newType)
+  updateSvgPath(oldId,newType);
+  $(oldId).removeClass(oldType);
+  $(lines).each(function(){
+    if(oldType=='decision'){
+    
+      if($(oldId).attr('data-yes')=='#'+$(this).prop('id')){
+        let label='#'+$(this).attr('data-label');
+        $(this).removeAttr('data-label');
+        $(label).remove()
+        $(oldId).removeAttr('data-yes');
+      }else if($(oldId).attr('data-no')=='#'+$(this).prop('id')){
+        let label='#'+$(this).attr('data-label');
+        $(this).removeAttr('data-label');
+
+        $(label).remove()
+        $(this).parent().remove();
+        console.log('ddd');
+        $(oldId).removeAttr('data-no');
+      }
+    }
+      if($(this).attr('data-from')==oldId){
+    
+          $(this).prop('id','line_'+newId);
+          $(this).attr('data-from','#'+newId)
+          $(oldId).attr('data-connector','#line_'+newId);
+
+          if(newType=='decision'){
+            $(oldId).attr('data-yes','#line_'+newId+'-yes');
+            $(oldId).attr('data-connector','#line_'+newId+'-yes');
+
+            addTextLabelForDecision(this,'TRUE');
+           
+          } 
+
+    
+      }else{
+        $(this).attr('data-to','#'+newId)
+  
+      }
+    
+  
+    $(this).removeClass(oldId.replace('#',''));
+    $(this).addClass(newId);
+
+   
+  });
+
+  $(oldId).prop("id",newId);
+  updateAnchorPosition('#'+newId);
+  updateConnectorPositionOnAction('#'+newId);
+  $(".container-node-tool").remove();
+}
+function rePositionAfterDrag(node){
+  let position=$(node).offset();
+  let top=position.top%10;
+  let left=position.left%10;
+  position.top-=top;
+  position.left-=left;
+
+  $(node).offset(position);
+  updateConnectorPositionOnAction(node);
+  updateAnchorPosition(node);
+  
 }
