@@ -715,11 +715,11 @@
 
         break;
       case 'left':
-      if((position.left-200)<=(designWidth+20)){
-          position.top+=100;
-          position.left+=100;
-        }else{
-          position.left-=200;
+      if ((position.left - 200) <= ($('#design').offset().left+50 + 20)) {
+          position.top += 100;
+          position.left += 100;
+        } else {
+          position.left -= 200;
         }
   
       toAnchor='right';
@@ -746,7 +746,14 @@
     $(lineDraw).attr('data-anchorfrom',way);
     $(lineDraw).attr('data-anchorto',toAnchor);
     updateConnectorPosition(lineDraw);
-    $(nodeParent).attr('data-connector','#'+$(lineDraw).prop('id'));
+    if($(nodeParent).hasClass('decision')){
+      createConnectorOfDecision(nodeParent,lineDraw);
+    }else{
+      $(nodeParent).attr('data-connector','#'+$(lineDraw).prop('id'));
+
+    }
+  
+
 
     $(".btn-next-node").remove();
   });
@@ -993,6 +1000,10 @@
       <i class="fas fa-trash"></i>
   
     </button>
+    <button class="btn btn-flowdocode " id="switch-decision"  data-toggle="tooltip" data-placement="bottom" title="Switch T/F">
+      <i class="fas fa-sync"></i>
+  
+    </button>
     <!-- <button class="btn btn-flowdocode btn-node-tool node-tool-start"  id="change-node-start">
       <svg viewBox='25 -50 100 150' class='node-tool' >
         <path d="M 25 1 C -5,1 -5,49 25,49 L 120 49 C 155,49 155,0 120,1 Z"></path>
@@ -1003,6 +1014,7 @@
         <path d="M 1 1 L 149 1 L 149 49 L 1 49 Z"></path>
       </svg>
     </button>
+    
     <button class="btn btn-flowdocode btn-node-tool node-tool-input"id="change-node-input" data-change ='input' data-toggle="tooltip" data-placement="bottom" title="Input">
       <svg viewBox='25 -50 100 150' class='node-tool'>
         <path d="M 1 15 L 149 1 L 149 49 L 1 49 Z"></path>

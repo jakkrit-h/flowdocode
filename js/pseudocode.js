@@ -7,7 +7,7 @@ function pseudocodeController(){
     let nodeList = explorerPseudoCode();
     let a = nodeList.map((s,i,arr)=>{
         if($(s.node).hasClass("decision")){
-           let a=checkIsLoop(s,nodeList,s.node,undefined,i);  
+           let a=checkIsLoop(s,nodeList,s.node,undefined,i,[]);  
            if(a){
                s.decision = checkIsDoWhile(s,arr,i) ; //is LOOP
            }else{
@@ -25,15 +25,17 @@ function pseudocodeController(){
         }
        
     });
-  
+    console.log(nodeList);
+
   
     generateCode(nodeList);
-   console.log(nodeList);
+ 
 }
-function checkIsLoop(nodeData,nodeList,decisionTarget,prevNode,indexTarget) {
+function checkIsLoop(nodeData,nodeList,decisionTarget,prevNode,indexTarget,decisionPass) {
 
     if(nodeData.to){
    
+      
         let index = nodeList.findIndex(s=>s.node == nodeData.to);
         let resultFind =nodeList[index];
         if($(resultFind.node).hasClass("decision")&&resultFind!=prevNode&&indexTarget<index){
@@ -41,7 +43,13 @@ function checkIsLoop(nodeData,nodeList,decisionTarget,prevNode,indexTarget) {
             resultFind = nodeList.find(s=>s.node == resultFind.to2);
  
         }else if($(resultFind.node).hasClass("decision")&&resultFind!=prevNode&&indexTarget>index){
-            return false;
+            if(resultFind.decision=='IF'||resultFind.decision=='ELSEIF'){
+                return true;
+            }else{
+                return false
+
+            }
+
         }
 
         if(resultFind&&resultFind.node!= decisionTarget){
@@ -54,6 +62,7 @@ function checkIsLoop(nodeData,nodeList,decisionTarget,prevNode,indexTarget) {
            
 
         }
+
     }else{
 
     }
@@ -73,9 +82,13 @@ function checkIsDoWhile(node,nodeList,i) {
     let result = 'WHILE';
     for(let i = 0; i<nodeList.length;i++){
         if(currentNode.to!=nodeRoot.node){
-            currentNode=nodeList.find(s=>s.node==node.to);
+
+            currentNode=nodeList.find(s=>s.node==currentNode.to);
+      
+
         }else{
             result ='DOWHILE';
+            break;
         }
     }
 
@@ -117,52 +130,67 @@ function getEndOfDecision(nodeData,nodeList,decisionTarget,nodeIndex) {
     let index=0;
     if(nodeData.decision=='WHILE'||nodeData.decision=='DOWHILE'){ // LOOP
         currentNode=nodeList.find(s=>s.node == nodeData.to);
-     
-        for(let i=0;i<=nodeList.length;i++){
-            
-            if(currentNode.to){
-              
-                if(currentNode.to==nodeData.node){  
-                   
-            
-                    nodeList[index].endyesof=nodeData.node;
-                    let tempIndex = nodeList.findIndex(s=>s.node == nodeData.to2);
-                    nodeList[tempIndex].endnoof=nodeData.node;
+        index=nodeList.findIndex(s=>s.node == nodeData.to);
 
-                    nodeList[nodeIndex].endyes=currentNode.node;
-                    nodeList[nodeIndex].endno=nodeData.to2;
-             
-                    break;
-                }else{
-                    let tempIndx =nodeList.findIndex(s=>s.node == currentNode.node);
-                    let temp=nodeList[tempIndx];
-                    if($(currentNode.node).hasClass("decision")&&temp.decision&&tempIndx>nodeIndex){
-                       
-             
-                     
-                            index=nodeList.findIndex(s=>s.node == currentNode.to2);
-                           
-                            currentNode=nodeList.find(s=>s.node == currentNode.to2);
-                      
-                     
+        if(nodeData.decision=='DOWHILE'&&index< nodeIndex){
+            nodeList[index].startDo=true;
+            
+            
+            
+        }else if(nodeData.decision=='DOWHILE'&&index> nodeIndex) {
+            let tempI=nodeList.findIndex(s=>s.node ==  currentNode.to);
+            nodeList[tempI].startDo=true;
+
+            //ถ้า ตัว ถัดไป ของ currentNode ดัน เป็น decision ต้องเลือก to หรือ to 2 อาจจะเอา  index ของ ตัวใดตัวนึงมาเปรียบเทียบอะไรสักอย่างนึง จะน้อยกว่าหรือมากกว่าอะไรสักอย่าง
+        }
+            index=0;
+            for(let i=0;i<=nodeList.length;i++){
+            
+                if(currentNode.to){
                   
-                     
+                    if(currentNode.to==nodeData.node){  
                        
-                    }else{
-                      
-
-                        index=nodeList.findIndex(s=>s.node == currentNode.to);
-                 
                 
-                        currentNode=nodeList[index]
+                        nodeList[index].endyesof=nodeData.node;
+                        let tempIndex = nodeList.findIndex(s=>s.node == nodeData.to2);
+                        nodeList[tempIndex].endnoof=nodeData.node;
+    
+                        nodeList[nodeIndex].endyes=currentNode.node;
+                        nodeList[nodeIndex].endno=nodeData.to2;
+                 
+                        break;
+                    }else{
+                        let tempIndx =nodeList.findIndex(s=>s.node == currentNode.node);
+                        let temp=nodeList[tempIndx];
+                        if($(currentNode.node).hasClass("decision")&&temp.decision&&tempIndx>nodeIndex){
+                           
+                 
+                         
+                                index=nodeList.findIndex(s=>s.node == currentNode.to2);
+                               
+                                currentNode=nodeList.find(s=>s.node == currentNode.to2);
+                          
+                         
+                      
+                         
+                           
+                        }else{
+                          
+    
+                            index=nodeList.findIndex(s=>s.node == currentNode.to);
+                     
+                    
+                            currentNode=nodeList[index]
+                        
+                        }
                     
                     }
-                
+                }else{
+                  
                 }
-            }else{
-              
             }
-        }
+       
+       
     }else{// IF
    
         let {yesPath,noPath}=getIfPath(nodeData,nodeList);
@@ -448,12 +476,11 @@ function generateCode(nodeList) {
 
 
 
-
     }
     pseudoCodePage(code);
 }
 function getpseudoCode(node,addElse,nodeList){
- 
+
     let code='';
     let type = getNodeType(node.node);
     
@@ -469,22 +496,31 @@ function getpseudoCode(node,addElse,nodeList){
 
     code+=tab;
 
+    if(node.startDo){
+        tab+="&emsp;";
+
+        code += "<span class='textHighLight'>DO </span> { <br>"+tab;
+    }
+    console.log(code);
 
     switch (type) {
         case "process":
             code += text+';';
             break;
         case "input":
-            code += "<span class='textHighLight'>INPUT </span>( " + text + ")"+';';
+            code += "<span class='textHighLight'>INPUT </span>(" + text + ")"+';';
             break;
         case "decision":
             if (node.decision=='WHILE') {
                 code += "<span class='textHighLight'>WHILE </span>(" + text + ") {";
                 tab+="&emsp;";
             }else if(node.decision=='DOWHILE'){
-                code += "<span class='textHighLight'>DO </span> {";
-                tab+="&emsp;";
-            } else {
+                // code += "<span class='textHighLight'>DO </span> {";
+                // tab+="&emsp;";
+
+               code= code.replace('&emsp;','');
+            } 
+            else  { 
                 code += "<span class='textHighLight'>IF </span>(" + text + "){ ";
                 tab+="&emsp;";
             }
@@ -493,8 +529,9 @@ function getpseudoCode(node,addElse,nodeList){
             code += "<span class='textHighLight'>DISPLAY </span>(" + text + ")"+';';
             break;
     }
+
     code+=getBehideCloseBackget(node,nodeList,closeBacket);
-   
+
   
     return code+'<br>';
 }
@@ -586,8 +623,8 @@ function getBehideCloseBackget(node,nodeList,closeBacket) {
 
 function pseudoCodePage(pseudoCode){
     pseudoCode+="<span class='textHighLight'>END</span>";
-    console.log(pseudoCode.replace(/(<br>)/gm,'\n'));
-    pseudoCode=pseudoCode.replace(/(<br>){2,3}/gm,'<br>');
+    // console.log(pseudoCode.replace(/(<br>)/gm,'\n'));
+        pseudoCode=pseudoCode.replace(/(<br>){2,3}/gm,'<br>');
     let strWindowFeatures = "menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes,width=500,height=700,left=500";
     let myWindow = window.open('','',strWindowFeatures);
 

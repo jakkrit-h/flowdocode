@@ -97,7 +97,7 @@ svg {
 }
 
 #con-console {
-  background: #FBFBFB;
+  background: #f5f5f5;
 }
 #con-console #console {
   background: #f5f5f5;
@@ -118,7 +118,7 @@ table thead td {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #e5e5e5;
 }
 
 /* Handle */

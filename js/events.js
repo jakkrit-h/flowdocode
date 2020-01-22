@@ -101,6 +101,14 @@ $(document).on("click","#delete-node",function(){
 
     hasEnd();
 });
+$(document).on("click","#switch-decision",function(){
+    $(this).tooltip('dispose');
+
+
+    $('.container-node-tool').remove();
+    shapeUnSelectedStyle();
+
+});
 // $(document).on("click","#change-node-start",function(){
 //     onChangeTypeNode(this,'process');
 

@@ -995,31 +995,7 @@ function conAnchorDraggableProperty(){// returnความสามารถข
                        
 
             if($(this).parent().hasClass("decision")){
-                if($(this).parent().attr("data-yes")!= undefined && $(this).parent().attr("data-no")!= undefined){
-                    let connector= $(this).parent().attr("data-yes");
-                    let label="#"+$(connector).attr("data-label");
-                    $(label).remove();
-                    $(connector).parent().remove();
-    
-                    connector= $(this).parent().attr("data-no");
-                    label="#"+$(connector).attr("data-label");
-                    $(label).remove();
-                    $(connector).parent().remove();
-    
-                    $(this).parent().removeAttr("data-yes");
-                    $(this).parent().removeAttr("data-no");
-                }
-
-                if($(this).parent().attr("data-yes")== undefined ){
-                    $(lineDraw).prop("id",$(lineDraw).prop("id")+"-yes");
-                    $(this).parent().attr("data-yes", "#" + $(lineDraw).prop("id"));
-                    addTextLabelForDecision(lineDraw,"TRUE");
-                }else{
-                  
-                    $(lineDraw).prop("id",$(lineDraw).prop("id")+"-no");
-                    $(this).parent().attr("data-no", "#" + $(lineDraw).prop("id"));
-                    addTextLabelForDecision(lineDraw,"FALSE");
-                }
+              createConnectorOfDecision($(this).parent(),lineDraw);
                 
             }else{
                 if ($(this).parent().attr("data-connector") != undefined) {//ถ้า Node นั้นเคยมีConnector เก่าให้ลบออก
@@ -1049,6 +1025,33 @@ function conAnchorDraggableProperty(){// returnความสามารถข
       
         }
     }
+}
+function createConnectorOfDecision(node,lineDraw){
+  if ($(node).attr("data-yes") != undefined && $(node).attr("data-no") != undefined) {
+    let connector = $(node).attr("data-yes");
+    let label = "#" + $(connector).attr("data-label");
+    $(label).remove();
+    $(connector).parent().remove();
+
+    connector = $(node).attr("data-no");
+    label = "#" + $(connector).attr("data-label");
+    $(label).remove();
+    $(connector).parent().remove();
+
+    $(node).removeAttr("data-yes");
+    $(node).removeAttr("data-no");
+  }
+
+  if ($(node).attr("data-yes") == undefined) {
+    $(lineDraw).prop("id", $(lineDraw).prop("id") + "-yes");
+    $(node).attr("data-yes", "#" + $(lineDraw).prop("id"));
+    addTextLabelForDecision(lineDraw, "TRUE");
+  } else {
+
+    $(lineDraw).prop("id", $(lineDraw).prop("id") + "-no");
+    $(node).attr("data-no", "#" + $(lineDraw).prop("id"));
+    addTextLabelForDecision(lineDraw, "FALSE");
+  }
 }
 function createDistanceWalls(node){
   wallsArea=[]
@@ -1717,6 +1720,9 @@ function showNodeTool(node){
         $('.node-tool-display').remove();
 
       }
+      if(!$(node).hasClass("decision")){
+        $("#switch-decision").remove();
+      }
       $(".btn-node-tool").attr("data-ofnode","#"+$(node).attr("id"));
       let offset=$(node).offset();
       
@@ -1737,6 +1743,8 @@ function showNodeTool(node){
 
       $('.container-node-tool').offset(offset);
   $("#delete-node").tooltip('update');
+  $("#switch-decision").tooltip('update');
+
   $('.btn-node-tool').tooltip('update');
 
 
