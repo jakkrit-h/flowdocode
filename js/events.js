@@ -82,7 +82,7 @@ $(document).on("click","#refresh",function(){
     stop();
     $("#debug").trigger("click");
 });
-$(document).on("click","#ee",function (){
+$(document).on("click","#pseudocode",function (){
 
 
     if(!checkSyntax()||!structureChecker()){

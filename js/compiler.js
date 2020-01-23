@@ -13,6 +13,8 @@ function stop(){
     $("#play-refresh").hide();
     $("#play").show();
     $("#debug").show();
+    $("#pseudocode").show();
+
     $(".shape").each(function(){
     
         unHightLight(this);
@@ -31,6 +33,7 @@ function onButtonClick(){
     unHightLight($(".shape"));
     $("#play").hide();
     $("#debug").hide();
+    $("#pseudocode").hide();
     $("#stop").show();
     inputSuccess=false;
     onAction=undefined;

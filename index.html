@@ -55,7 +55,7 @@
                 <input type="file" id="openfile" accept="text/*,.fdc">
 
               </a></label>
-            <label> <a class="dropdown-item" id="pseudoCode" ><label>PseudoCode</label></a></label>
+            <!-- <label> <a class="dropdown-item" id="pseudoCode" ><label>PseudoCode</label></a></label> -->
           </div>
         </li>
         <li class="nav-item dropdown mx-1">
@@ -68,28 +68,32 @@
           </div>
         </li>
         <li class="nav-item mx-1">
+          <a class="nav-link " href="#" data-toggle="modal" data-target="#credit">Credit</a>
+        </li>
+        <li class="nav-item mx-1">
           <a class="nav-link " href="#" data-toggle="modal" data-target="#guide">Help</a>
         </li>
         <div class="col-12  px-0 mx-auto" style="position:absolute">
           <ul class="navbar-nav  p-0 justify-content-center" style="border:none">
             <li class="">
-              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="play" ><i class='fas fa-play'></i></button>
-              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="debug"><i class="fas fa-bug"></i></button>
-              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="stop"><i class='fas fa-stop'></i></button>
-              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="play-refresh">
+              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="play" data-toggle="tooltip" data-placement="bottom" title="Run"><i class='fas fa-play'></i></button>
+              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="debug" data-toggle="tooltip" data-placement="bottom" title="Debug"><i class="fas fa-bug"></i></button>
+              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="pseudocode" data-toggle="tooltip" data-placement="bottom" title="PseudoCode"><i class="fas fa-code"></i></button>
+
+              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="stop" data-toggle="tooltip" data-placement="bottom" title="Stop"><i class='fas fa-stop' ></i></button>
+              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="play-refresh" data-toggle="tooltip" data-placement="bottom" title="Refresh">
                 <i class="fas fa-redo-alt"></i>
               </button>
-              <button class="btn btn-sm btn-flowdocode px-2 ondebug mt-1" id="refresh">
+              <button class="btn btn-sm btn-flowdocode px-2 ondebug mt-1" id="refresh" data-toggle="tooltip" data-placement="bottom" title="Refresh">
                   <i class="fas fa-redo-alt"></i>
                 </button>
-              <button class="btn btn-sm btn-flowdocode px-2 ondebug mt-1" id="next">
+              <button class="btn btn-sm btn-flowdocode px-2 ondebug mt-1" id="next" data-toggle="tooltip" data-placement="bottom" title="Next ">
                 <i class="fas fa-step-forward"></i>
               </button>
-                <button class="btn btn-sm btn-flowdocode px-2 ondebug mt-1"id="skip">
+                <button class="btn btn-sm btn-flowdocode px-2 ondebug mt-1"id="skip" data-toggle="tooltip" data-placement="bottom" title="Skip">
                   <i class="fas fa-fast-forward"></i>
                 </button>
                  
-                    <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="ee">ee</button>
 
 
             </li>
@@ -126,27 +130,27 @@
 
     </div>
     <div class="my-5  toolbox input" id="input" draggable="true" ondragstart="drag(event)" data-toggle="tooltip"
-      data-placement="bottom" title="input">
+      data-placement="bottom" title="Input">
       <svg>
         <path d="M 1 15 L 149 1 L 149 49 L 1 49 Z" />
       </svg>
 
     </div>
     <div class="my-5  toolbox decision" id="decision" draggable="true" ondragstart="drag(event)" data-toggle="tooltip"
-      data-placement="bottom" title="decision">
+      data-placement="bottom" title="Decision">
       <svg>
         <path d="M 75 1 L 150 25 L 75 50 L 1 25 Z " />
       </svg>
 
     </div>
     <div class="my-5 toolbox display" id="display" draggable="true" ondragstart="drag(event)" data-toggle="tooltip"
-      data-placement="bottom" title="display">
+      data-placement="bottom" title="Display">
       <svg>
         <path d="M 1 25 L 15 49 H 120 C 155 49 ,155 1, 120 1 H 15 L 1,25  " />
       </svg>
 
     </div>
-<div id="version"style="color:#fff">v.1.0.0.8</div>
+<!-- <div id="version"style="color:#fff">v.1.0.0.8</div> -->
 
   </div>
   <div class="offset-2 col-8 p-0 btn-group " id="pagination">
