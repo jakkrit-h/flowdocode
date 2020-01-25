@@ -125,7 +125,7 @@ function checkIsDoWhile(node,nodeList,i) {
 //     }
    
 // }
-function getEndOfDecision(nodeData,nodeList,decisionTarget,nodeIndex) {
+function getEndOfDecision(nodeData,nodeList,nodeIndex) {
     let currentNode;
     let index=0;
     if(nodeData.decision=='WHILE'||nodeData.decision=='DOWHILE'){ // LOOP
@@ -399,20 +399,13 @@ function generateCode(nodeList) {
     tab='';
     let countDecision=nodeList.filter(s=>$(s.node).hasClass('decision'));
     for (let i = 0; i < nodeList.length+countDecision.length; i++) {
+
         if(!pastWay.includes(currentNode.node)){
-          
-
-               
-             
-
-                 code+= getpseudoCode(currentNode,addElse,nodeList);
-            
+                 code+= getpseudoCode(currentNode,addElse,nodeList);       
                 addElse=false;
-         
-        
-           
         }else if(currentNode.node=='#end'){
-            
+       
+
             if(pastWay[pastWay.length-2]!='#end'&&pastWay[pastWay.length-1]!='#end'){
                 code+=getpseudoCode(currentNode,addElse,nodeList);
                 addElse=false;
@@ -453,9 +446,10 @@ function generateCode(nodeList) {
 
          
             if($(currentNode.node).hasClass('decision')&&currentNode.status=='pseudocode'){
-          
+
                 addElse=true;
                 currentNode=nodeList.find(s=>s.node==currentNode.to2);
+
             }else{
                 let index =nodeList.findIndex(s=>s.node==currentNode.node); 
                 nodeList[index].status='pseudocode';
@@ -480,10 +474,9 @@ function generateCode(nodeList) {
     pseudoCodePage(code);
 }
 function getpseudoCode(node,addElse,nodeList){
-
+    console.log(node);
     let code='';
     let type = getNodeType(node.node);
-    
     let text = $(node.node).find(".text").text();
     let closeBacket=false;
     let root=nodeList.find(s=>s.node==node.root);
@@ -501,7 +494,6 @@ function getpseudoCode(node,addElse,nodeList){
 
         code += "<span class='textHighLight'>DO </span> { <br>"+tab;
     }
-    console.log(code);
 
     switch (type) {
         case "process":
@@ -560,6 +552,12 @@ function getFrontCloseBackget(node,nodeList,root) {
 
         }else if(root.decision=='DOWHILE'){
             let text = $(root.node).find(".text").text();
+            console.log('--------------------')
+
+            console.log(node)
+            console.log('DOWHILE')
+            console.log('--------------------')
+
             code+='} <span class="textHighLight">WHILE</span> ('+text+');<br>';
         }else{
             code+='}<br>';

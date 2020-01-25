@@ -101,7 +101,6 @@ function updateSvgPathDisplay(node){    //ปรับขนาดของ shap
 }
 function updateSvgPath(node,name){    //ปรับขนาดของ shape ตอน Resize โดย คัดจาก class แล้วเรียกไปที่ function เฉพาะของ shape นั้นๆ
 
-
     switch (name){
         case 'start-end':
             updateSvgPathStartEnd(node);
@@ -814,7 +813,7 @@ function onDropItemSuccess(type,posX,posY) {    //เมื่อมีการ
       let node = $("template#" + type).html();//สร้าง node โดยอิงจาก template Id ประเภทของ shape
       node=$(node).css("position","absolute");
       node = $(node).draggable(nodeDraggableProperty(node));//ใส่ความสามารถ Draggableให้กับ Node
-      node = $(node).resizable(nodeResizableProperty(type));//ใส่ความสามารถ Resizable Node
+      node = $(node).resizable(nodeResizableProperty(node));//ใส่ความสามารถ Resizable Node
      
       $("#design").append($(node));//เพิ่ม node ที่สร้างลงในส่วน Design 
       $(node).offset(mousePoint);//set ตำแหน่งให้ Node โดยใช้ตำแหน่งของ mouse
@@ -909,12 +908,13 @@ function nodeDraggableProperty(node){// returnความสามารถข�
       }
     
 }
-function nodeResizableProperty(type){// returnความสามารถของ Node ในการ Resizable
+function nodeResizableProperty(node){// returnความสามารถของ Node ในการ Resizable
     return{
         disabled:"true",
         handles: "w,e", 
         grid: [ 10, 10 ],
         resize: function () {
+          let type=getNodeType(node);
           updateSvgPath(this, type);
           updateConnectorPositionOnAction(this);
           updateAnchorPosition(this);
@@ -931,6 +931,13 @@ function conAnchorDraggableProperty(){// returnความสามารถข
         snapTolerance: 20,
         scrollSensitivity: 20,
         scrollSpeed: 10,
+        start:function(){
+          let scroll=$("#con-design").scrollTop();
+
+          originalPosition = $(this).offset();
+          originalPosition.top+=scroll;
+
+        },
         drag: function () {//ตอนกำลังโดน Drag
           onAnchorDrag=true;
           document.body.style.cursor = "";
@@ -950,11 +957,9 @@ function conAnchorDraggableProperty(){// returnความสามารถข
           $(lineDraw).attr("id", "line_" + $(this).parent().prop("id"));//เพิ่ม id ให้ connector
           let scroll=$("#con-design").scrollTop();
           let p0;
-          if($(this).parent().offset().top<=0){
+      
             p0={x:originalPosition.left + 4,y:originalPosition.top + 3};
-          }else{
-            p0={x:originalPosition.left + 4,y:originalPosition.top + 3+scroll};
-          }
+      
 
           let p100={x:currentPosition.left + 5 ,y:currentPosition.top+scroll};
 
@@ -1370,7 +1375,7 @@ function writeCodeToDesign(text) {
     setTextboxPosition(this);
     $(this).find(".con_anchor").draggable(conAnchorDraggableProperty());
     $(this).find(".con_anchor").droppable(conAnchorDroppableProperty());
-    $(this).resizable(nodeResizableProperty(getNodeType(this)));
+    $(this).resizable(nodeResizableProperty(this));
     if($(this).find(".ui-resizable-w").get(1)!=undefined){
      
       $(this).find(".ui-resizable-w").get(1).remove();
@@ -1457,7 +1462,7 @@ function init(noRisize){
 
     let design = $("#design").html();
     addNewPage(design);
-    $("#start").resizable(nodeResizableProperty("start-end"));
+    $("#start").resizable(nodeResizableProperty("#start"));
     
   }
 
@@ -1811,8 +1816,10 @@ function onChangeTypeNode(objEvent,newType){
 
    
   });
+  $(oldId).find(".text").text(newType.substr(0,1).toUpperCase()+newType.substr(1));
 
   $(oldId).prop("id",newId);
+
   updateAnchorPosition('#'+newId);
   updateConnectorPositionOnAction('#'+newId);
   $(".container-node-tool").remove();
