@@ -20,14 +20,12 @@ function pseudocodeController(){
     });
     nodeList.map((s,i,arr)=>{
         if($(s.node).hasClass("decision")){            
-           getEndOfDecision(s,nodeList,s.node,i);
+           getEndOfDecision(s,nodeList,i);
      
         }
        
     });
-    console.log(nodeList);
 
-  
     generateCode(nodeList);
  
 }
@@ -94,37 +92,7 @@ function checkIsDoWhile(node,nodeList,i) {
 
     return result;
 }
-// function checkIsLoop(nodeData,nodeList,decisionTarget,indexTarget,prevNode,pastWay,n) {
 
-//     if(nodeData.to&&n<=20){
-//         n++;
-       
-      
-//         let resultFind = nodeList.find(s=>s.node == nodeData.to);
-
-//         //&&resultFind!=prevNode ใส่กัน stack overflow แต่คำตอบก็ยังผิด
-//         // console.log(decisionTarget);
-//         // console.log(resultFind.node);
-//         // console.log(pastWay);
-
-//         // console.log('-----------');
-
-//         if(resultFind&&resultFind.node!= decisionTarget&&resultFind!=prevNode){
-//            pastWay.push(resultFind)
-//           return checkIsLoop(resultFind,nodeList,decisionTarget,indexTarget,resultFind,pastWay,n);
-           
-//         }else{
-//             // console.log('------ELSE--------');
-
-//             return true;
-           
-
-//         }
-//     }else{
-//         // console.log('------UNDEFINED--------');
-//     }
-   
-// }
 function getEndOfDecision(nodeData,nodeList,nodeIndex) {
     let currentNode;
     let index=0;
@@ -149,14 +117,21 @@ function getEndOfDecision(nodeData,nodeList,nodeIndex) {
                 if(currentNode.to){
                   
                     if(currentNode.to==nodeData.node){  
-                       
-                
-                        nodeList[index].endyesof=nodeData.node;
                         let tempIndex = nodeList.findIndex(s=>s.node == nodeData.to2);
-                        nodeList[tempIndex].endnoof=nodeData.node;
+
+                        if(nodeList[index].endyesof==undefined){
+                            nodeList[index].endyesof=[];
+                        }
+                        nodeList[index].endyesof.push({node:nodeData.node,status:'add' });
+                        
+                        if(nodeList[tempIndex].endnoof==undefined){
+                            nodeList[tempIndex].endnoof=[];
+                        }
+                        nodeList[tempIndex].endnoof.push({node:nodeData.node,status:'add' });
+
     
-                        nodeList[nodeIndex].endyes=currentNode.node;
-                        nodeList[nodeIndex].endno=nodeData.to2;
+                        nodeList[nodeIndex].endyes={node:currentNode.node,status:'add'};
+                        nodeList[nodeIndex].endno={node:nodeData.to2,status:'add'};
                  
                         break;
                     }else{
@@ -192,10 +167,13 @@ function getEndOfDecision(nodeData,nodeList,nodeIndex) {
        
        
     }else{// IF
-   
         let {yesPath,noPath}=getIfPath(nodeData,nodeList);
-        let endOfAll = yesPath.filter(value => noPath.includes(value))[0];
      
+      
+
+
+        let endOfAll = yesPath.filter(value => noPath.includes(value))[0];
+ 
 
         let endOfYes = yesPath.find((s,i,arr)=>{if(s==endOfAll)return (i-1<0)?arr[0]:arr[i-1]})
         let endOfNo=noPath.find((s,i,arr)=>{if(s==endOfAll)return (i-1<0)?arr[0]:arr[i-1]})
@@ -206,35 +184,34 @@ function getEndOfDecision(nodeData,nodeList,nodeIndex) {
  
         let tempNoPathIndex=noPath.findIndex(s=>s==endOfNo);
         endOfNo=noPath[(tempNoPathIndex>0)?tempNoPathIndex-1:0 ];
-        nodeList[nodeIndex].endyes=endOfYes;
-        nodeList[nodeIndex].endno=endOfNo;
+
+
+        nodeList[nodeIndex].endyes={node:endOfYes,status:'add'};
+        nodeList[nodeIndex].endno={node:endOfNo,status:'add'};
 
         let tempIndex = nodeList.findIndex(s=>s.node == endOfYes);
-        // let tempArr= [];
-        // if(nodeList[tempIndex].endyesof){
-            
-        //     nodeList[tempIndex].endyesof.map(s=>tempArr.push(s));
-        // }
-        // tempArr.push(nodeData.node);
-        nodeList[tempIndex].endyesof=nodeData.node;
-        // nodeList[tempIndex].endyesof=tempArr;
-        // nodeList[tempIndex].endyesofcounter=0;
+        if(nodeList[tempIndex].endyesof==undefined){
+            nodeList[tempIndex].endyesof=[];
+        }
+       
+     
+        
+        nodeList[tempIndex].endyesof.push({node:nodeData.node,status:'add' });
+     
 
         tempIndex = nodeList.findIndex(s=>s.node == endOfNo);
-        // tempArr=[];
-        // if(nodeList[tempIndex].endnoof){
-            
-        //     nodeList[tempIndex].endnoof.map(s=>tempArr.push(s));
-          
-        // }
-        // tempArr.push(nodeData.node);
-        // nodeList[tempIndex].endnoof=tempArr;
-        // nodeList[tempIndex].endnoofcounter=0;
-        nodeList[tempIndex].endnoof=nodeData.node;
-        let endOfDecide =noPath[(tempNoPathIndex>0)?tempNoPathIndex:0 ];
-        tempIndex=nodeList.findIndex(s=>s.node==endOfDecide);
+        if(nodeList[tempIndex].endnoof==undefined){
+            nodeList[tempIndex].endnoof=[];
+        }
+        nodeList[tempIndex].endnoof.push({node:nodeData.node,status:'add' });
 
-        nodeList[tempIndex].endofif=nodeList[nodeIndex].node;
+        let endOfDecide =noPath[(tempNoPathIndex>0)?tempNoPathIndex:0 ];
+
+        tempIndex=nodeList.findIndex(s=>s.node==endOfDecide);
+        if(nodeList[tempIndex].endofif==undefined){
+            nodeList[tempIndex].endofif=[];
+        }
+        nodeList[tempIndex].endofif.push({node:nodeList[nodeIndex].node,status:'add' });
       
     }
 
@@ -242,10 +219,13 @@ function getEndOfDecision(nodeData,nodeList,nodeIndex) {
     
 
 }
+
 function getIfPath(nodeData,nodeList) {
   
     let yesPath=[];
     let noPath=[];
+    
+
     let currentNode=nodeData;
     let DecisionOnPast=[];
     for(let i = 0; i<nodeList.length;i++){
@@ -255,19 +235,28 @@ function getIfPath(nodeData,nodeList) {
                 if($(currentNode.to).hasClass("decision")&&!DecisionOnPast.includes(currentNode.to)){
                     DecisionOnPast.push(currentNode.to);
                 }
-                yesPath.push(currentNode.to);
-                if(currentNode.to==nodeData.node){
-     
+                if (currentNode.to != nodeData.node) {
+                    yesPath.push(currentNode.to);
+                }else{
                     break;
                 }
+        
        
                 
       
         }else if(DecisionOnPast.length>0){
+            if(currentNode.to==nodeData.node){
+     
+                break;
+            }
             let temp =DecisionOnPast.shift();
             let decide = nodeList.find(s=>s.node == temp);
             currentNode=nodeList.find(s=>s.node == decide.to2);
-            yesPath.push(decide.to2);
+            if (decide.to2 != nodeData.node) {
+                yesPath.push(decide.to2);
+            }else{
+                break;
+            }
      
             i--;
             continue;
@@ -288,15 +277,21 @@ function getIfPath(nodeData,nodeList) {
                 if($(currentNode.to).hasClass("decision")&&!DecisionOnPast.includes(currentNode.to)){
                     DecisionOnPast.push(currentNode.to);
                 }
-                noPath.push(currentNode.to);
-                if (currentNode.to == nodeData.node) {
+                if (currentNode.to != nodeData.node) {
+                    noPath.push(currentNode.to);
+                }else{
                     break;
                 }
         }else if(DecisionOnPast.length>0){
             let temp =DecisionOnPast.shift();
             let decide = nodeList.find(s=>s.node == temp);
             currentNode=nodeList.find(s=>s.node == decide.to2);
-            noPath.push(decide.to2);
+     
+            if (decide.to2 != nodeData.node) {
+                noPath.push(decide.to2);
+            }else{
+                break;
+            }
      
             i--;
             continue;
@@ -307,88 +302,12 @@ function getIfPath(nodeData,nodeList) {
         currentNode = nodeList.find(s => s.node == currentNode.to);
 
     }
+   
     return {yesPath,noPath};
 }
-// function endOfDecision(nodeList) {
-//     let value = nodeList.map(s=>s.to);
- 
-//     let result=nodeList.filter((s,i,arr)=>
-//     value.filter(e=>{     
-//         return (e==s.to)
-//     }).length>1);
-//     console.log(result);
-//     return result;
-// }
-// function pseudocodeController2(){
-//   pseudoCode="";
-//   row=1;
-//     let node ="#start";
-//     let connector=$("#start").attr("data-connector");
-   
-//     while($(connector).attr("data-to")!=undefined){
-//         generateCode(node);
-//         node=$(connector).attr("data-to");
-//         if($(node).hasClass("decision")){
-//             if(decision=="yes"){
-//                 connector=$(node).attr("data-yes");
-//                 discision="no";
-//             }else{
-//                 connector=$(node).attr("data-no");
-//                 discision="yes";
-//             }
-//         }else{
-//             connector=$(node).attr("data-connector");
 
-//         }
-//         row++;
-//         // console.log(connector);
-
-//     }
-//     pseudoCodePage(pseudoCode);
-// }
-// function ArrangeNode(nodeList){
-//     let decisionNode={node:undefined,status:false};
-//     let currentNode = nodeList[0];
-
-//      let i =0;
-//      while( i<=nodeList.length*2){
- 
-//             if(currentNode==undefined){
-//                 if(nodeList.some(s=>s.status!='arrange')){
-                    
-//                     currentNode=nodeList.filter(s=>$(s.node).hasClass('decision')&&s.status!='arrange')[0];
-
-//                 }else{
-//                     break;
-//                 }
-//             }
-//         //  if(currentNode.status!='pseudoCode'){
-//         //     // &&!endOfBacket.map(s=>s.to).includes(currentNode.node)
-//         //     gg(currentNode);
-          
-//          /*}else*/ if(currentNode.status=='arrange'&&$(currentNode.node).hasClass('decision')){
-//             decisionNode.node =currentNode;
-//             decisionNode.status = 'yesIswent';
-//             currentNode=nodeList.find(s=>s.node==currentNode.to2);
-            
-//             tab+='\t';
-//             continue;
-//          }
-//             currentNode.status='pseudoCode';
-      
-//             currentNode=nodeList.find(s=>s.node==currentNode.to);
-
-      
-       
-//         i++;
-//      }
-//      console.log(nodeList);
-//      generateCode(nodeList);
-
-   
-// }
 function generateCode(nodeList) {
-
+    path=[]
     let code = "<span class='textHighLight'>START</span><br>";
     let endOfIf = [];
     let decisionNode = { node: undefined, status: false };
@@ -399,13 +318,11 @@ function generateCode(nodeList) {
     tab='';
     let countDecision=nodeList.filter(s=>$(s.node).hasClass('decision'));
     for (let i = 0; i < nodeList.length+countDecision.length; i++) {
-
         if(!pastWay.includes(currentNode.node)){
                  code+= getpseudoCode(currentNode,addElse,nodeList);       
                 addElse=false;
         }else if(currentNode.node=='#end'){
        
-
             if(pastWay[pastWay.length-2]!='#end'&&pastWay[pastWay.length-1]!='#end'){
                 code+=getpseudoCode(currentNode,addElse,nodeList);
                 addElse=false;
@@ -417,54 +334,46 @@ function generateCode(nodeList) {
            
 
             if (currentNode.endyesof) {
-                let index = nodeList.findIndex(s => s.node == currentNode.node);
-                nodeList[index].status = 'pseudocode';
-                currentNode = nodeList.find(s => s.node == currentNode.endyesof);
+                if(currentNode.endyesof.filter(s=>s.status=='write'||s.status=='add').length>0){
+                    let index = nodeList.findIndex(s => s.node == currentNode.node);
 
-                // if (Array.isArray(currentNode.endyesof)
-                //     && currentNode.endyesof.length > 1
-                //     && currentNode.endyesofcounter < currentNode.endyesof.length - 1) {
+                    nodeList[index].status = 'pseudocode';
+                 
 
-                //     let tempEndYesOf = currentNode.endyesof[currentNode.endyesofcounter];
-                //     currentNode.endyesofcounter++;
-                //     currentNode = nodeList.find(s => s.node == tempEndYesOf);
-                //     console.log(currentNode);
-                // } else if (!Array.isArray(currentNode.endyesof)) {
-
-                //     console.log(currentNode);
-                //     currentNode = nodeList.find(s => s.node == currentNode.endyesof[0]);
-                //     console.log(currentNode);
-                // }
-
-
-
-
-                i--;
-                continue;
+                    currentNode = nodeList.find(s => s.node == currentNode.endyesof.find(s=>s.status=='write'||s.status=='add').node);
+                   
+    
+    
+    
+    
+                    i--;
+                    continue;
+                }
+                
             }
-
-
          
-            if($(currentNode.node).hasClass('decision')&&currentNode.status=='pseudocode'){
+         
+         
 
+            if($(currentNode.node).hasClass('decision')&&currentNode.status=='pseudocode'||$(currentNode.node).hasClass('decision')&&currentNode.decision=="DOWHILE"){
+                if(currentNode.decision=="DOWHILE"){
+                    currentNode.status='pseudocode';
+                }
                 addElse=true;
                 currentNode=nodeList.find(s=>s.node==currentNode.to2);
-
             }else{
                 let index =nodeList.findIndex(s=>s.node==currentNode.node); 
                 nodeList[index].status='pseudocode';
                 currentNode=nodeList.find(s=>s.node==currentNode.to);
-
+               
             }
 
         }else if(nodeList.some(s=>s.status=='add')){
             
            currentNode=nodeList.filter(s=>s.status=='add'&&s.node!='#start')[0];
-        //    console.log(currentNode);
         try {
            currentNode=nodeList.find(s=>s.node==currentNode.root);
         } catch (e) { }
-            // console.log(currentNode);
         }
 
 
@@ -474,154 +383,206 @@ function generateCode(nodeList) {
     pseudoCodePage(code);
 }
 function getpseudoCode(node,addElse,nodeList){
-    console.log(node);
+ 
     let code='';
     let type = getNodeType(node.node);
     let text = $(node.node).find(".text").text();
     let closeBacket=false;
     let root=nodeList.find(s=>s.node==node.root);
+    let nodeIndex=nodeList.findIndex(s=>s==node);
+    
     try{
-        code+=getFrontCloseBackget(node,nodeList,root);
-        closeBacket=true;
+        let temp=getFrontCloseBackget(node,nodeList,root);
+        if(temp.length>0){
+            code+=temp
+            closeBacket=true;
+        }
+   
     }catch(e){
        
     }
-
+   
+   
     code+=tab;
 
     if(node.startDo){
+
+        code += '<br>'+tab+"<span class='textHighLight'>DO </span> { <br>"+tab;
         tab+="&emsp;";
 
-        code += "<span class='textHighLight'>DO </span> { <br>"+tab;
     }
 
     switch (type) {
         case "process":
-            code += text+';';
+            code += '<br>'+tab+text+';';
             break;
         case "input":
-            code += "<span class='textHighLight'>INPUT </span>(" + text + ")"+';';
+            code += "<br>"+tab+"<span class='textHighLight'>INPUT </span>(" + text + ")"+';';
             break;
         case "decision":
             if (node.decision=='WHILE') {
-                code += "<span class='textHighLight'>WHILE </span>(" + text + ") {";
+                code += "<br>"+tab+"<span class='textHighLight'>WHILE </span>(" + text + ") {";
                 tab+="&emsp;";
             }else if(node.decision=='DOWHILE'){
-                // code += "<span class='textHighLight'>DO </span> {";
-                // tab+="&emsp;";
+            
+                tab=tab.replace(/&emsp;/,'');
 
-               code= code.replace('&emsp;','');
-            } 
-            else  { 
-                code += "<span class='textHighLight'>IF </span>(" + text + "){ ";
+            }else if(node.decision=='ELSEIF'){
+                code = "<br>"+tab+"<span class='textHighLight'>ELSE IF </span>(" + text + "){";
+                tab+="&emsp;";
+            }else  { 
+                code += "<br>"+tab+"<span class='textHighLight'>IF </span>(" + text + "){";
                 tab+="&emsp;";
             }
             break;
         case "display":
-            code += "<span class='textHighLight'>DISPLAY </span>(" + text + ")"+';';
+            code += "<br>"+tab+"<span class='textHighLight'>DISPLAY </span>(" + text + ")"+';';
             break;
     }
 
-    code+=getBehideCloseBackget(node,nodeList,closeBacket);
+    try{
+        if(node.endyesof.filter(s=>s.status=='add').length>0){
+            node.endyesof.reverse().map((s,i)=>{
+                if(s.status=='add'){
 
-  
-    return code+'<br>';
+                    let endyes= node.endyesof[i];
+                    let decisionIndex=nodeList.findIndex(s=>s.node == endyes.node);
+                    let decisionNode = nodeList[decisionIndex];
+                    nodeList[nodeIndex].endyesof[i].status='write';
+
+                    if(decisionNode.decision!='DOWHILE'&&decisionNode.endyes.status=='add'){
+
+                        tab=tab.replace(/&emsp;/,'');
+                        if(decisionNode.decision=='WHILE'){
+                            code+='<br>'+tab+'}';
+                 
+
+                        }else{
+
+                            code+='<br>'+tab+'}';
+
+                        }
+                        nodeList[decisionIndex].endyes.status='write';
+                    }
+                }
+               
+            });
+           
+        }
+   
+
+    }catch(e){
+
+    }
+
+    try{
+        if(node.endnoof.filter(s=>s.status=='add').length>0){
+            node.endnoof.reverse().map((s,i)=>{
+                if(s.status=='add'){
+                    let endno= node.endnoof[i];
+
+                    let decisionIndex=nodeList.findIndex(s=>s.node == endno.node);
+                    let decisionNode = nodeList[decisionIndex];
+        
+                    nodeList[nodeIndex].endnoof[i].status='write';
+                    if(node.node=='#end'&&node.node==decisionNode.to2){
+        
+                    }else{
+                        if(decisionNode.decision=='IF'||decisionNode.decision=='ELSEIF'){
+                            let to2OfdecisionNode=nodeList.find(s=>s.node==decisionNode.to2);
+                            let haveElse=true;
+                            try{
+                                if(to2OfdecisionNode.endofif.length>0){
+                                    to2OfdecisionNode.endofif.map(m=>{
+                                        if(m.node==s.node){
+                                            haveElse=false;
+                                        }
+                                    });
+                                }
+
+                            }catch(e){}
+                            if(to2OfdecisionNode.decision!='ELSEIF'&&decisionNode.endno.status=='add'&&haveElse){
+                                            tab=tab.replace(/&emsp;/,'');
+
+                                code+='<br>'+tab+'}';
+                                tab=tab.replace(/&emsp;/,'');
+
+                                nodeList[decisionIndex].endno.status='write';
+                            }
+                   
+                        }
+                    }
+                }
+            });
+           
+         
+        }
+
+    }catch(e){
+
+    }
+    return code;
 }
 
 function getFrontCloseBackget(node,nodeList,root) { 
-    let code='';
+ 
+        let code='';
     if($(root.node).hasClass("decision")&&node.node==root.to2){
         tab=tab.replace(/&emsp;/,'');
         code+=tab;
         if(root.decision=='IF'){
             if($(node.node).hasClass("decision")&&root.to2==node.node){
-                code+='} <span class="textHighLight">ELSE </span>';
+                code+='<br>'+tab+'<span class="textHighLight">ELSE </span>';
                  
             }else{
-                code+='} <span class="textHighLight">ELSE </span>{<br>';
+
+                code+='<span class="textHighLight">ELSE </span>{<br>';
                 tab+="&emsp;";
+
             }
         }else if(root.decision=='ELSEIF'){
             if($(node.node).hasClass("decision")&&root.to2==node.node){
-                code+='} <span class="textHighLight">ELSE </span>';
+                code+='<br>'+tab+'<span class="textHighLight">ELSE </span>';
             }else{
-                code+='} <span class="textHighLight">ELSE </span>{<br>';
+
+                code+='<span class="textHighLight">ELSE </span>{<br>';
                 tab+="&emsp;";
+
             }
           
 
         }else if(root.decision=='DOWHILE'){
             let text = $(root.node).find(".text").text();
-            console.log('--------------------')
+      
 
-            console.log(node)
-            console.log('DOWHILE')
-            console.log('--------------------')
-
-            code+='} <span class="textHighLight">WHILE</span> ('+text+');<br>';
+            code+='<br>'+tab+'} <span class="textHighLight">WHILE</span> ('+text+');';
         }else{
-            code+='}<br>';
+            if(node.endnoof.filter(s=>s.status=='add').length>0){
+              
+                let endnoofIndex = node.endnoof.reverse().findIndex(s=>s.status=='add');
+                let index = nodeList.findIndex(s=>s.node == node.node);
+                let decisionIndex = nodeList.findIndex(s=>s.node==root.node);
+                if(node.endnoof[endnoofIndex].status=='add'&&root.endno.status=='add'){
+                    nodeList[index].endnoof[endnoofIndex].reverse().status='write';
+                    nodeList[decisionIndex].endno.status='write';
+                    code+='<br>'+tab+'}';
+
+                }
+                node.endnoof[endnoofIndex]
+            }
         }
         
        
-    }else if(node.node=='#end'&&(node.endyesof||node.endnoof||node.endofif)){
-        tab=tab.replace(/&emsp;/,'');
-        code+=tab;
-        let decide=undefined;
-        decide =(node.endyesof)?node.endyesof:(node.endnoof)?node.endnoof:node.endofif;
-        decide = nodeList.find(s=>s.node == decide);
-     
-            if(decide.to2!='#end'&&decide.decision!='IF'){
-                if(decide.decision=='DOWHILE'){
-                    let text = $(root.node).find(".text").text();
-                    code='} <span class="textHighLight">WHILE</span> ('+text+');<br>';
-                }else{
-                    code='}<br>';
-                }
-               
-            }
-    
-         
     }
+   
    
     return code;
  }
-function getBehideCloseBackget(node,nodeList,closeBacket) { 
-    let code='';
-        let nodeRoot = nodeList.find(s => s.node == node.root);
-    
-    if (node.endnoof&&(nodeRoot.decision!='WHILE'&&nodeRoot.decision!='DOWHILE'&&nodeRoot.decision!='ELSEIF')) {
-        tab=tab.replace(/&emsp;/,'');
-        code+=tab;
-      
-        let nodeRootDecision = nodeList.find(s => s.node == node.endnoof);
-        let nodeNextTo2OfRootDecision=nodeList.find(s => s.node == nodeRootDecision.to2);
-        try {
-            if (nodeNextTo2OfRootDecision.decision != 'ELSEIF') {
-                code += '<br>' + tab + '}<br>';
-                // if (!$(nodeRoot.node).hasClass('decision') && !$(nodeRoot.to2).hasClass('decision')) {
-            }
-        } catch (e) {
-            code += '<br>' + tab + '}<br>';
-        }
-     
-        // }
-        // if(!$(nodeRoot.to2).hasClass('decision')&&!node.endyesof){
 
-        // if(nodeList.find(s=>s.node==node.endnoof).decision){
-        // code += '<br>'+tab.replace(/&emsp;/,'')+'}+3<br>';
-
-        // }
-        // }
-
-    }
-
-    return code;
- }
 
 function pseudoCodePage(pseudoCode){
-    pseudoCode+="<span class='textHighLight'>END</span>";
-    // console.log(pseudoCode.replace(/(<br>)/gm,'\n'));
+    pseudoCode+="<br><span class='textHighLight'>END</span>";
+    // console.log(pseudoCode.replace(/(<br>)/gm,'\n+nl'));
         pseudoCode=pseudoCode.replace(/(<br>){2,3}/gm,'<br>');
     let strWindowFeatures = "menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes,width=500,height=700,left=500";
     let myWindow = window.open('','',strWindowFeatures);
@@ -681,7 +642,6 @@ function  explorerPseudoCode() {
             }
       
             if(!list.map(s=>s.node).includes(currentNode)&&currentNode){
-                      // ||currentNode=='#end')&&currentNode
                 if($(currentNode).hasClass("decision")){
                     let lineYes =$(currentNode).attr('data-yes')
                     let lineNo =$(currentNode).attr('data-no')
