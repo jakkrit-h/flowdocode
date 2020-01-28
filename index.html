@@ -298,14 +298,14 @@
         <div class="col-2 p-0 sidebar list-group" id="guide-scrollspy">
           <ul class="p-0 m-0" >
             <li class="guide-side-bar  ">
-              <a class="nav-link active p-3" href="#test">Header 1</a>
+              <a class="nav-link active p-3" href="#component">Component</a>
             </li>
             <li class="guide-side-bar">
-              <a class="nav-link p-3" href="#test2www">Header 2</a>
-            
+              <a class="nav-link p-3" href="#event">Event</a>
+             
             </li>
             <li class="guide-side-bar">
-              <a class="nav-link p-3" href="#test3">Header 3</a>
+              <a class="nav-link p-3" href="#writing">Writing </a>
               
             </li>
          
@@ -313,37 +313,147 @@
           </ul>
         </div>
         <div class="col-10 guide-content container px-5" data-spy="scroll" data-target="#guide-scrollspy" data-offset="0">
-          <div id="test">
-            <img class=" my-5 img-fluid"src="images/คลิกลูกศรก่อนหน้า.jpg">
-            <p>
-              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
-              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
-              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
-              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
-              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
-  
+          <div id="component">
+            <img class=" my-5 img-fluid"src="images/all.png">
+            <p> ส่วนประกอบของโปรแกรมแบ่งได้ 5 ส่วนดังนี้     <br> 
+              1. Header เป็นส่วนจัดการงานและปุ่มการทำงานต่าง ๆ ดังนี้ <br>
+             
+              <img class=" my-5 img-fluid"src="images/h-file.jpg"> <br>   
+              File สำหรับจัดการไฟล์งาน ประกอบด้วย<br>   
+                - Save สำหรับบันทึกงานหน้าปัจจุบันที่เปิดอยู่<br>   
+                - Save All สำหรับบันทึกงานทุกหน้าที่มีทั้งหมด<br>   
+                - Open สำหรับเปิดไฟล์งานที่ได้ออกแบบไว้แล้ว นามสกุล .fdc<br>   
+              
+              <img class=" my-5 img-fluid"src="images/h-theme.jpg"><br> 
+              Theme สามารถเลือกธีมสีของโปรแกรมได้<br> 
+
+              <img class=" my-5 img-fluid"src="images/h-run.jpg">
+              <img class=" my-5 img-fluid"src="images/h-debug.jpg">
+              <img class=" my-5 img-fluid"src="images/h-pseudocode.jpg">  <br>
+              ปุ่มการทำงานหลักประกอบด้วย   <br>
+              - ปุ่ม Run สำหรับคอมไพล์โปรแกรมเมื่อออกแบบผังงานเสร็จแล้ว (หากจะคอมไพล์เบื้องต้นผ่านจำเป็นต้องมี Start และ End)<br>
+              - ปุ่ม Debug เมื่อคอมไพล์ผ่านแล้ว สามารถเลือกปุ่มนี้ สำหรับแสดงขั้นตอนการทำงานของผังงานได้ <br>
+              - ปุ่ม Pseudocode สำหรับดูรหัสเทียมของผังงานที่ออกแบบไว้ <br>
+              และเมื่อกดปุ่ม Debug จะมีปุ่มสำหรับการทำงานของ Debug ดังนี้ <br>
+              <img class=" my-5 img-fluid"src="images/h-stop.jpg">
+              <img class=" my-5 img-fluid"src="images/h-refresh.jpg">
+              <img class=" my-5 img-fluid"src="images/h-next.jpg">
+              <img class=" my-5 img-fluid"src="images/h-skip.jpg">  <br>
+              - ปุ่ม Stop สำหรับหยุดแสดงขั้นตอนการทำงาน<br>
+              - ปุ่ม Next  สำหรับไปขั้นตอนการทำงานถัดไป โดยจะแสดงในส่วน Debugger ทีละบรรทัด <br>
+              - ปุ่ม Refresh สำหรับเริ่มต้นการตรวจสอบหรือแสดงขั้นตอนการทำงานใหม่ตั้งแต่ Start<br>
+              - ปุ่ม Skip สำหรับกดข้ามหรือต้องการออกเมื่อกำลังอยู่ในขั้นตอนการทำงานแบบทำซ้ำ<br>
+              <br>
+          
+              
+              2. Grid เป็นพื้นที่สำหรับออกแบบผังงาน สำหรับวางสัญลักษณ์และเชื่อมสัญลักษณ์ โดยมีส่วนหัวมีชื่องานหน้าปัจจุบันที่เปิดอยู่ หรือมีหน้าอื่น ๆ โดยสามารถแก้ไขชื่องาน หรือเพิ่มหน้าได้ จากการกดไอคอนบวกหรือเพิ่ม
+              <br>
+              <img class=" my-5 img-fluid"src="images/grid.jpg">  <br>
+              3. Toolbox สำหรับแสดงสัญลักษณ์ผังงาน  <br>
+              <img class=" my-5 img-fluid"src="images/toolbox.jpg">  <br>
+              ประกอบด้วย<br>
+              - End สัญลักษณ์จุดจบของโปรแกรม โดยสัญลักษณ์จุดเริ่มต้นของโปรแกรม (Start) จะแสดงเป็นค่าเริ่มต้น<br>
+              - Process สัญลักษณ์การประมวลผล<br>
+              - Input สัญลักษณ์การรับข้อมูลผ่านแป้นพิมพ์<br>
+              - Discion สัญลักษณ์แสดงการตัดสินใจ<br>
+              - Display สัญลักษณ์แสดงผลทางจอภาพ<br>
+
+             
+              4. Output สำหรับแสดงผลลัพธ์สุดท้าย <br>
+              <img class=" my-5 img-fluid"src="images/output-ex.jpg">  <br>
+              5. Debugger <br>
+              <img class=" my-5 img-fluid"src="images/debugger-ex.jpg">  <br>
+              เมื่อกดปุ่ม Debug จะแสดงผลขั้นตอนการทำงานในส่วน Debugger โดยจะแสดงทีละบรรทัดดังนี้
+              - Action จะแสดงประเภทของสัญลักษณ์ผังงาน
+              - Variable จะแสดงชื่อตัวแปรที่ประกาศไว้
+              - Value จะแสดงค่าของตัวแปรที่ประกาศไว้ ณ ขณะนั้น
+
             </p>
+
+            
           </div>
-          <div id="test2www">
-            <img class=" my-5 img-fluid"src="images/คลิกลูกศรก่อนหน้าแล้ว.jpg">
+          <div id="event">
+                
             <p>
-              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
-              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
-              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
-              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
-              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
+              <span>การเพิ่มสัญลักษณ์</span><br>  
+             สามารถเพิ่มสัญลักษณ์ได้ 2 วิธีดังนี้<br>
+             1. ลาก-วาง โดยเลือกสัญลักษณ์จาก Toolbox ลากมาวางในตำแหน่งที่ต้องการ  <br>
+             <img class=" my-5 img-fluid"src="images/add1.png"><br>
+              2. เพิ่มจากลูกศรสัญลักษณ์ก่อนหน้า โดยกำหนดสัญลักษณ์เริ่มต้นคือสัญลักษณ์ประมวลผล (Process)  <br>
+             <img class=" my-5 img-fluid"src="images/add2.png"><br>   
+
+             <span>การเพิ่มข้อความในสัญลักษณ์</span><br>  
+             ดับเบิ้ลคลิกสัญลักษณ์ที่ต้องการ จากนั้นใส่ข้อความ (เส้นขอบสัญลักษณ์จะเปลี่ยนเป็นเส้นประ)<br>   
+             <img class=" my-5 img-fluid"src="images/addtext.png"><br>   
   
+             <span>การย่อ-ขยายสัญลักษณ์</span><br>  
+             คลิกเลือกสัญลักษณ์ที่ต้องการ และชี้เมาส์ไปที่จุดสำหรับย่อขยายด้านซ้ายและด้านขวา  <br>   
+             <img class=" my-5 img-fluid"src="images/resize.png"><br>   
+
+             <span>การเปลี่ยนสัญลักษณ์</span><br>  
+             คลิกเลือกสัญลักษณ์ที่ต้องการ จะมีไอคอนสัญลักษณ์อื่น ๆ ให้คลิกเลือกเพื่อเปลี่ยนสัญลักษณ์ได้ <br>   
+             <img class=" my-5 img-fluid"src="images/change.png"><br>   
+
+             <span>การเชื่อมเส้นระหว่างสัญลักษณ์ </span><br>  
+             ชี้เมาส์ไปที่สัญลักษณ์ต้นทางจะมีจุดเชื่อมแสดงแต่ละด้าน ให้คลิกลากจากจุดที่ต้องการไปที่จุดเชื่อมสัญลักษณ์ปลายทาง 
+             (หากต้องการเปลี่ยนทิศทางเส้นหรือลากไปในจุดที่ไม่ต้องการ สามารถลากใหม่ได้ โดยไม่ต้องลบเส้นเก่าออก)  <br>   
+             <img class=" my-5 img-fluid"src="images/addline.png"><br>   
+
+             <span>การเชื่อมเส้นของสัญลักษณ์ตัดสินใจ </span><br>  
+              หากลากเส้นเชื่อมระหว่างสัญลักษณ์ของสัญลักษณ์ตัดสินใจ เส้นแรกจะเป็น True เสมอ และเส้นที่สองจะเป็น False  <br>   
+             <img class=" my-5 img-fluid"src="images/linedecision.png"><br>   
+
+             <span>การสลับเส้นเชื่อมของสัญลักษณ์ตัดสินใจ </span><br>  
+             คลิกเลือกสัญลักษณ์ตันสินใจ ให้เกิดเส้นประแล้วคลิกที่ไอคอนสลับ จากนั้นเส้นระหว่าง True กับ False จะสลับฝั่งกัน  <br>   
+             <img class=" my-5 img-fluid"src="images/switchdecision.png"><br>   
+
+             <span>การลบสัญลักษณ์ </span><br>  
+              เลือกสัญลักษณ์ที่ต้องการลบ ให้เกิดเส้นประ โดยสามารถลบจากการคลิกที่ไอคอนถังขยะ หรือลบจากการกดปุ่ม Delete ที่คีย์บอร์ด 
+              (เมื่อสัญลักษณ์ที่ต้องการลบมีเส้นเชื่อมระหว่างสัญลักษณ์ เส้นที่เชื่อมจะถูกลบด้วย) <br>   
+             <img class=" my-5 img-fluid"src="images/deletetool.png"><br>   
+
+             <span>การลบเส้น</span><br>  
+              เลือกเส้นที่ต้องการลบ ให้เกิดเส้นประ จากนั้นทำการลบโดยกดปุ่ม Delete ที่คีย์บอร์ด <br>   
+             <img class=" my-5 img-fluid"src="images/deleteline.png"><br>   
+
+           
             </p>
+
           </div>
-          <div id="test3">
-            <img class=" my-5 img-fluid"src="images/Capture.PNG">
-            <p>
-              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
-              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
-              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
-              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
-              1. sadsadsadsadsadadsasadsadwfwwfwfwadwadawsfhrhhrgr <br>
-  
+          <div id="writing">  
+            <p> <span>สัญลักษณ์การประมวลผล</span><br>
+            ใช้ใน 2 กรณีดังนี้ <br>
+            1. สำหรับกำหนดตัวแปร<br>
+            operand = ตัวอักษรและตัวเลข เช่น i , num , 10 เป็นต้น<br>
+            operator = เครื่องหมายต่าง ๆ เช่น + ,-, *, / , () เป็นต้น<br>
+            โดยรูปแบบ <br>
+              operand + operator + operand <br>
+            มีหลักเกณฑ์การตั้งชื่อคือ ขึ้นต้นด้วย a-z A-Z $ _ ตามด้วย a-z A-Z $ _ 0-9<br>
+            ประกาศได้ 3 ชนิดได้แก่<br>
+            ตัวเลข Int<br>
+            ตัวเลข Double<br>
+            ตัวอักษร String จะใส่ “” หรือ ‘’ ก็ได้<br>
+            <img class=" my-5 img-fluid"src="images/p-varall.png"><br>
+
+            2. สำหรับประมวลผล<br>
+            โดยรูปแบบ <br>
+            	operand + operator + operand + ... +operand<br>
+            <img class=" my-5 img-fluid"src="images/process.png"><br>
+            <span>สัญลักษณ์การรับข้อมูลผ่านแป้นพิมพ์</span><br>
+            โดยสามารถใส่ชื่อตัวแปรในสัญลักษณ์ เมื่อกดปุ่ม run จะแสดงกล่องใส่ค่าของตัวแปรที่ประกาศไว้ สำหรับแสดงขั้นตอนการทำงานของผังงาน<br>
+            <img class=" my-5 img-fluid"src="images/inputnum.png"><br>
+            <img class=" my-5 img-fluid"src="images/inputstring.png"><br>
+
+            <span>สัญลักษณ์แสดงการตัดสินใจ</span><br>
+            โดยมีรูปแบบดังนี้<br>
+            operand + operator + operator + operand + ... + operand<br>
+            <img class=" my-5 img-fluid"src="images/decision.png"><br>
+          
+
+            <span>สัญลักษณ์แสดงผลทางจอภาพ</span><br>
+            สามารถใส่ชื่อตัวแปรในสัญลักษณ์ หรืือเมื่อมีข้อความที่ต้องการแสดงที่ไม่ใช่ตัวแปรจะมีต้องอยู่ภายในเครื่องหมาย "" และหากต้องการแสดงค่าของตัวแปรต่อท้ายจะใช้เครื่องหมาย + และตามตัวชื่อตัวแปร <br>
+            <img class=" my-5 img-fluid"src="images/display1.png"><br>
+            <img class=" my-5 img-fluid"src="images/display2.png"><br>
             </p>
           </div>
         
