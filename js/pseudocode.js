@@ -428,7 +428,7 @@ function getpseudoCode(node,addElse,nodeList){
                 tab=tab.replace(/&emsp;/,'');
 
             }else if(node.decision=='ELSEIF'){
-                code = "<br>"+tab+"<span class='textHighLight'>ELSE IF </span>(" + text + "){";
+                code = " <span class='textHighLight'>ELSE IF </span>(" + text + "){";
                 tab+="&emsp;";
             }else  { 
                 code += "<br>"+tab+"<span class='textHighLight'>IF </span>(" + text + "){";
@@ -439,7 +439,6 @@ function getpseudoCode(node,addElse,nodeList){
             code += "<br>"+tab+"<span class='textHighLight'>DISPLAY </span>(" + text + ")"+';';
             break;
     }
-
     try{
         if(node.endyesof.filter(s=>s.status=='add').length>0){
             node.endyesof.reverse().map((s,i)=>{
@@ -521,6 +520,7 @@ function getpseudoCode(node,addElse,nodeList){
     }catch(e){
 
     }
+ 
     return code;
 }
 
@@ -578,6 +578,7 @@ function getFrontCloseBackget(node,nodeList,root) {
    
     return code;
  }
+
 
 
 function pseudoCodePage(pseudoCode){

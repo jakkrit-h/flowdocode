@@ -1,0 +1,45 @@
+@font-face {
+  font-family: "LuckiestGuy-Regular";
+  src: url("../webfonts/LuckiestGuy-Regular.ttf");
+}
+body {
+  background: #24272C;
+  color: #fff;
+  font-family: "LuckiestGuy-Regular" !important;
+  font-size: 1em;
+  font-weight: lighter;
+}
+
+.logo {
+  font-size: 2.5em;
+  letter-spacing: 5px;
+}
+
+nav {
+  background: #2D3035;
+}
+
+.credit {
+  border-radius: 500px;
+  width: 150px;
+  height: 150px;
+}
+
+.container {
+  height: 100%;
+  top: 0;
+  position: fixed;
+  align-items: center;
+}
+
+div {
+  letter-spacing: 5px;
+}
+
+p {
+  font-size: 1.3em;
+  letter-spacing: 3px;
+  color: #4f7df9;
+}
+
+/*# sourceMappingURL=credit.css.map */

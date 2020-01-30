@@ -32,7 +32,10 @@ linear-gradient(90deg, transparent 9%,
   font-family: "LuckiestGuy-Regular" !important ;
   font-size: 1.5em;
   align-self: center;
-  color:$primaryColor;
+  letter-spacing: 3px;
+  a{
+    color:$primaryColor;
+  }
   span{
     color:$primaryColor;
   }
@@ -46,6 +49,12 @@ linear-gradient(90deg, transparent 9%,
     color:$primaryColor;
     text-decoration: none;
   }
+  #c{
+    transform: rotateZ(90deg);
+
+    animation: eee 0.5s ;
+  }
+
   span{
     color:#fff;
     -webkit-animation: blink 2.0s infinite; 
@@ -53,6 +62,19 @@ linear-gradient(90deg, transparent 9%,
   }
 
 }
+@keyframes eee {
+  from{
+    transform: rotateZ(0deg);
+
+  }to{
+    transform: rotateZ(90deg);
+
+  }
+
+
+								
+}
+
 @keyframes blink {
 	0% {
 		color:#fff;
@@ -618,6 +640,10 @@ ul {
     height: 100%;
     overflow-y: scroll;
     background: rgba(41,45,50,1);
+    
+}
+.con-img{
+  text-align: center;
 }
 .modal-close,.modal-close:hover{
   color:#fff !important;
@@ -633,4 +659,11 @@ ul {
   border-color: $primaryColor;
   box-shadow: none;
   background: none;
+}
+.guide-header{
+  font-weight: bold;
+  font-size: 1.3em;
+}
+img{
+  align-self: center;
 }
