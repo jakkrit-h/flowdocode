@@ -124,12 +124,12 @@ function setTextboxPosition(node){//ทำให้ textbox อยู่ใน s
 
     let position=$(node).offset();
     let textbox=$(node).find(".text").outerHeight(); 
-     p={
+     position={
         top:position.top+(($(node).outerHeight()/2)-(textbox/2))-($(node).hasClass("decision")?5:0),
         left:position.left
     }   
     
-    $(node).find(".text").offset(p);
+    $(node).find(".text").offset(position);
 
 }
 function updateAnchorPosition(node) {    // เพื่อเรียก function เปลี่ยนที่อยู่ของ Anchor ตอน Resize กับ Drag ให้ไปตาม Parent Node ของตัวเอง
@@ -1283,23 +1283,21 @@ function save(fileName){
     let width =$(window).width();
     let height=$(window).height();
     let design = $("#design").html();
-    let text ={"design":design,"resolution":{"width":width,"height":height}};
+    let hash=$(".active").attr("data-page");
+    let name =$(".active").text();
+    let text ={"design":design,"resolution":{"width":width,"height":height},hash:hash,name:name};
    
+
 
     createDownloadFile(fileName,text);
    
 }
 function saveAll(){
   
+  let temp =JSON.parse(sessionStorage.getItem("page"));
+  temp.map(s=>  createDownloadFile(s.name,s) );
 
 
-  for(let i =0;i<sessionStorage.length;i++){
-    let name=sessionStorage.key(i);
-
-      text =JSON.parse(sessionStorage.getItem(name));
-
-    createDownloadFile(name,text); 
-  }
 }
 function createDownloadFile(fileName,text){
   var element = document.createElement('a');
@@ -1323,15 +1321,20 @@ function openFile() {
       var file = document.querySelector('input[type=file]').files[0];
       let fileName=file.name.split(".");
       fileName=fileName[0];
-      fileName=this.checkSamePageNameAndChangeName(fileName);
-      $("#assignment").val(fileName);
+      // fileName=this.checkSamePageNameAndChangeName(fileName);
       $("title").html(fileName+" | FLOWDOCODE");
       var reader = new FileReader();
 
-        reader.onload = function (event) {
-          addToStorageCache(fileName,event.target.result);
-          writeCodeToDesign(event.target.result);
-          init(true);
+        reader.onload = function (event) {  
+          let result= JSON.parse(event.target.result)
+        
+          $("#start").resizable(nodeResizableProperty("#start"));
+          if(result.name==undefined){
+            result.name=fileName
+          }
+          writeCodeToDesign(result)
+          init();
+          addToSession(result.name,$("#design").html(),result.hash);
 
         }
    
@@ -1342,7 +1345,6 @@ function openFile() {
   }
 
 function writeCodeToDesign(text) { 
-  text=JSON.parse(text);
   $("#design").html(text.design);
   let width=$(window).width();
   let height=$(window).height();
@@ -1354,69 +1356,118 @@ function writeCodeToDesign(text) {
   $("#con-design").scrollTop("0");
   $("#canvas").offset({ top: 0, left: 0 });
 
-
   $(".shape").each(function(){
     let position=$(this).offset();
- 
-    if(oldResolution.width!=width&&oldResolution.height!=height){              
-     let topRatio=position.top*100/oldResolution.height;
-      let leftRatio=position.left*100/oldResolution.width;
-      position.top=(height*topRatio/100)-((height*topRatio/100)%10);
-      position.left=(width*leftRatio/100)-((width*leftRatio/100)%10);
-      $(this).offset(position);
-      updateConnectorPositionOnAction(this,true);
+    
+
+    if(oldResolution.width<width){
+      position.left+=$(this).outerWidth();
+      position.top+=$(this).outerHeight()-50;
+
+    }else if(oldResolution.width>width){
+      position.left-=$(this).outerWidth();
+      position.top+=$(this).outerHeight()-50;
+   
+  
 
     }
+    $(this).offset(position);
+    updateConnectorPositionOnAction(this,true);
+
     $(this).find("svg").css( "stroke-dasharray","0,0");
     $(this).removeClass("ui-draggable ui-draggable-handle ui-resizable ui-resizable-disabled");
     $(this).find(".con_anchor").removeClass("ui-draggable ui-draggable-handle ui-droppable ui-draggable-disabled");
     $(this).find("ui-resizable-handle").remove();
     $(this).draggable(nodeDraggableProperty(this));
     setTextboxPosition(this);
-    $(this).find(".con_anchor").draggable(conAnchorDraggableProperty());
-    $(this).find(".con_anchor").droppable(conAnchorDroppableProperty());
+    if($(this).attr("id")!="end"){
+      $(this).find(".con_anchor").draggable(conAnchorDraggableProperty());
+      $(this).find(".con_anchor").droppable(conAnchorDroppableProperty());
+    }
+   
     $(this).resizable(nodeResizableProperty(this));
     if($(this).find(".ui-resizable-w").get(1)!=undefined){
      
       $(this).find(".ui-resizable-w").get(1).remove();
       $(this).find(".ui-resizable-e").get(1).remove();
     }else{
-      init(true);
+      // init(true);
     }
 
   });
   hasEnd();
  }
-function addToStorageCache(name,text){
+ function addToSession(name,text,hash){
+   let temp =[];
+   let width =$(window).width();
+   let height=$(window).height();
+   try{
+    if(JSON.parse(sessionStorage.getItem("page")).length>0){
+      temp = JSON.parse(sessionStorage.getItem("page"));
+    }else{
+      temp=[];
+    }
+   }catch(e){
+     temp=[];
+   }
+  //  if(!hash){
+     hash=$.md5(name+new Date())
 
+  //  }
+  
+
+   let save ={"design":text,"resolution":{"width":width,"height":height},hash:hash,name:name};
+   temp.push(save);
+   sessionStorage.setItem("page",JSON.stringify(temp));
+   addPagination(name,hash);
+ }
+
+ function updateSession(hash){
+  let temp = JSON.parse(sessionStorage.getItem("page"));
+  let width =$(window).width();
+  let height=$(window).height();
+  let text ;
+  let index = temp.findIndex(s=>s.hash==hash);
+  temp[index].design=$("#design").html();
+  temp[index].resolution={width: width, height: height}
+  temp[index].design=$("#design").html();
+  sessionStorage.setItem("page",JSON.stringify(temp))
+ }
+ function addNewPage(){
+   let templateNewPage=$("template#newpage").html();
+
+   $("#design").html(templateNewPage);
+       $("#start").resizable(nodeResizableProperty("#start"));
+
+   init(true);
+   addToSession(checkSamePageNameAndChangeName("untitled"),$("#design").html());
+ 
+ }
+ function addPagination(name,hash){
   let label=document.createElement("div");
   $(".active").removeClass("active");
-
-
   $(label).addClass("btn  page active row  pr-0");
-  // if(name=="untitled"){
- 
 
-  //   if($(".page[data-untitled]").last().attr("data-untitled")!=undefined){
-  //     let num=parseInt($(".page[data-untitled]").last().attr("data-untitled"))+1;
-  //     $(label).attr("data-untitled",num);
-  //     name+=num;
-
-  //   }else{
-  //     $(label).attr("data-untitled",0);
-  
-  //   }
-  // }
   $(label).html("<div class='page-text'>"+name+"</div><div class='close p-0'><i class='far mx-2 py-auto  fa-times-circle'></i></div>");
-  $(label).prop("id",name.replace(/\(|\)| /gm,'---'));
-  $(label).attr("data-page",name);
+  $(label).prop("id",hash.replace(/\(|\)| /gm,'---'));
+  $(label).attr("data-page",hash);
 
 
   $("#pagination").append($(label));
-  sessionStorage.setItem(name,text);
-  $("title").html(name+" | FLOWDOCODE");
 
-}
+ }
+ function initPagination(){
+   
+  let sessionPage =JSON.parse(sessionStorage.getItem("page"));
+  sessionPage.map((s,i,arr)=>{
+    addPagination(s.name,s.hash);
+    if(i==arr.length-1){
+      writeCodeToDesign(s)
+    }
+   
+  });
+ }
+
 function getNodeType(node){
     if($(node).hasClass("start-end")){         
         return "start-end";
@@ -1444,27 +1495,11 @@ function getAnchorType(anchor){
 function jsonToPoint(json){
   return json.x+","+json.y+" ";
 }
-function addNewPage(design){
-  let width =$(window).width();
-  let height=$(window).height();
-  if(design==undefined){
-    design=$("#newpage").html();
 
-
-  }
-  let text ={"design":design,"resolution":{"width":width,"height":height}};
-  addToStorageCache(checkSamePageNameAndChangeName("untitled-1"),JSON.stringify(text));
-}
-function init(noRisize){
+function init(newpage){
   $("#stop").hide();
   $("#play-refresh").hide();
-  if(!noRisize){
-
-    let design = $("#design").html();
-    addNewPage(design);
-    $("#start").resizable(nodeResizableProperty("#start"));
-    
-  }
+ 
 
     $(".ondebug").hide();
     $("#con-right").css("top",$("nav").outerHeight());
@@ -1482,11 +1517,7 @@ function init(noRisize){
     updateAnchorPosition($("#start"));
     setTextboxPosition($("#start"));
     let modX=($(document).width()/2)%10;
-    let p = {
-      top: 160,
-      left: ($(document).width() / 2-modX) - 100
 
-    }
    
     // let conDesignHeight =$(document).outerHeight()-$("#con-console").outerHeight()-100;
     $("#con-design").css("height",$("#con-console").offset().top-100);
@@ -1497,7 +1528,12 @@ function init(noRisize){
     $("#design-containment").css('height',$("#con-design").outerHeight());
     $("#design-containment").css('position','fixed');
     $("#design-containment").offset($("#con-design").offset());
-    $("#start").offset(p);
+    if(newpage){
+      let position= {top:$("#design").offset().top+60,left:$("#design").offset().left+$("#design").outerWidth()/2-100}
+      $("#start").offset(position);
+
+    }
+
     $("#canvas").css("width",$(window).width());
  
     $("#canvas").css("height","50000px" );
@@ -1515,22 +1551,25 @@ function readPage(page,action){
   let width = $(window).width();
   let height = $(window).height();
 
-  let text = { "design":  $("#design").html(), "resolution": { "width": width, "height": height } };
 
   let presentPage=$(".active").attr("data-page");
-  sessionStorage.setItem(presentPage,JSON.stringify(text));
+  updateSession(presentPage);
+
   if(action=="switch"){
     $(".active").removeClass("active");
 
   }
   let a="";
-
-
   $(page).addClass("active");
-  text = sessionStorage.getItem($(page).attr("data-page"));
-  $("title").html($(page).attr("data-page")+" | FLOWDOCODE");
+  let temp = JSON.parse(sessionStorage.getItem("page"));
 
-  writeCodeToDesign(text); 
+  let index = temp.findIndex(s=>s.hash==$(page).attr("data-page"));
+
+
+
+  $("title").html($(page).text()+" | FLOWDOCODE");
+
+  writeCodeToDesign(temp[index]); 
 }
 function hasEnd(){
   

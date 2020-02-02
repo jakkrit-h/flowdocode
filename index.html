@@ -78,7 +78,7 @@
               <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="play" data-toggle="tooltip" data-placement="bottom" title="Run"><i class='fas fa-play'></i></button>
               <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="debug" data-toggle="tooltip" data-placement="bottom" title="Debug"><i class="fas fa-bug"></i></button>
               <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="pseudocode" data-toggle="tooltip" data-placement="bottom" title="PseudoCode"><i class="fas fa-code"></i></button>
-
+        
               <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="stop" data-toggle="tooltip" data-placement="bottom" title="Stop"><i class='fas fa-stop' ></i></button>
               <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="play-refresh" data-toggle="tooltip" data-placement="bottom" title="Refresh">
                 <i class="fas fa-redo-alt"></i>
@@ -92,6 +92,7 @@
                 <button class="btn btn-sm btn-flowdocode px-2 ondebug mt-1"id="skip" data-toggle="tooltip" data-placement="bottom" title="Skip">
                   <i class="fas fa-fast-forward"></i>
                 </button>
+             
                  
 
 
@@ -177,7 +178,7 @@
           <path d="M 25 1 C -5,1 -5,49 25,49 L 180 49 C 205,49 205,1 180,1 Z" />
         </svg>
         <div class="text text-center col-12  text-truncate mx-auto">
-          Start
+          Startss
         </div>
       </div>
 
@@ -561,57 +562,26 @@
   
   });
   $(function () {
-
-    // let w = new Worker("js/worker.js");
-    // w.postMessage('d');
-    // w.onmessage=function(e){
-      
-    //   console.log(e);
-    // }
-    let list=[];
-    for(let i =0;i<sessionStorage.length;i++){
-      list.push(sessionStorage.key(i));
-    }
-    list.sort();
-    list.sort((a,b)=>{    
-    return compare(a,b);
-  });
-      for(let i =0;i<list.length;i++){
-      let sessionKey = list[i];
-      let sessionVal=sessionStorage.getItem(sessionKey);
-      let size=3 + ((sessionVal.length*16)/(8*1024)) + ' KB'
-      console.log(size);
-      try{
-        sessionVal=JSON.parse(sessionVal);
-
-      }catch(e){
-        console.log('can\'t Convert Json');
-        console.log(e);
-        continue;
-      }
-      if(sessionVal.design==undefined||sessionVal.resolution==undefined){
-        console.log(sessionKey+'   Data Incomplete');
-        continue;
-
-      }
+    let sessionPage = sessionStorage.getItem("page");
+    try {
+      if (sessionPage.length > 0) {
     
+        initPagination();
+      } else {
+        let temp = [];
+        addNewPage()
 
-      addToStorageCache(sessionKey,sessionStorage.getItem(sessionKey));
-      writeCodeToDesign(sessionStorage.getItem(sessionKey));
+
+      }
+    } catch (e) {
+      let temp = [];
+      addNewPage();
+  
     }
-    if(sessionStorage.length<=1){
-      init();
-    }else{
-      init(true);
-    }
-    // sessionStorage.clear();
-
-    //ปรับ resolution ตามขนาดจอที่เปิด อันนี้เอาค่าจากเครื่องต้นทาง
-    //     console.log(window.screen.availHeight,
-    // window.screen.availWidth);
-    // $( "#content" ).selectable();    
-
+    init();
+ 
    
+
 
   });
   function allowDrop(event) {
@@ -643,17 +613,7 @@
 
 
   }
-  $(document).on("DOMSubtreeModified","#design",function(){
-    // let presentPage=$(".active").attr("data-page");
-    // sessionStorage.setItem(presentPage,$("#design").html())
-   
-    // readPage(presentPage, "switch");
-  });
-  // $(document).on("dblclick",".toolbox",function(){
-  //   let node =getLatestNode() ;
-  //   let position=$(node).offset();
-  //   onDropItemSuccess($(this).prop("id"),position.left+100,position.top+120);
-  // });
+
   $(document).on("mouseenter", "tr", function () {
     let node = $(this).attr("data-node");
     if (!onDebug) {
@@ -721,7 +681,8 @@
     }
   });
 
-
+  
+ 
 
   $("div").on("dblclick", ".text", function () {
     if (!$(selectedEl).hasClass("start-end")) {
@@ -819,7 +780,10 @@
     if ($(selectedEl).prop("id") != $(this).prop("id")) {
 
       if(!onAnchorDrag){
-        showNextNodeArrow(this);
+        if($(this).attr("id")!="end"){
+          showNextNodeArrow(this);
+
+        }
         updateAnchorPosition($(this));
 
       }
@@ -1009,7 +973,7 @@
 
   });
   $(document).on("click", "#save", function () {
-    let fileName = $(".active").attr("data-page");
+    let fileName = $(".active").text();
 
     save(fileName);
 
@@ -1029,13 +993,7 @@
   });
   $(document).on("click", "#addpage", function () {
     $("#con-design").scrollTop(0);
-    let width = $(window).width();
-    let height = $(window).height();
-    let text = { "design": $("#design").html(), "resolution": { "width": width, "height": height } };
-    let page = $(".active").attr("data-page");
-    sessionStorage.setItem(page, JSON.stringify(text));
-    $("#design").html($("#newpage").html());
-    init();
+    addNewPage();
 
   });
   $(document).on("click", ".close", function () {
@@ -1054,11 +1012,14 @@
 
     }
 
+    let temp =JSON.parse(sessionStorage.getItem("page"));
     if ($(this).parent(".page").hasClass("active")) {
-      console.log(typeof nextPage);
-      readPage(nextPage);
+      readPage(nextPage)
     }
-    sessionStorage.removeItem($(this).parent(".page").attr("data-page"));
+
+
+    temp =temp.filter(s=>s.hash!=$(this).parent(".page").attr("data-page"));
+    sessionStorage.setItem("page",JSON.stringify(temp));
     $(this).parent(".page").remove();
   });
   $(document).on("dblclick", ".page", function () {
