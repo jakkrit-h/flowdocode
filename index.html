@@ -70,7 +70,7 @@
           <a class="nav-link " href="credit.html" >Credit</a>
         </li>
         <li class="nav-item mx-1">
-          <a class="nav-link " href="#" data-toggle="modal" data-target="#guide">Help</a>
+          <a class="nav-link " id="help"href="#" data-toggle="modal" data-target="#guide">Help</a>
         </li>
         <div class="col-12  px-0 mx-auto" style="position:absolute">
           <ul class="navbar-nav  p-0 justify-content-center" style="border:none">
@@ -271,7 +271,7 @@
           <div class="form-group">
             <label id="inputtitle"></label>
             <input type="text" class="form-control" id="inputBox" autofocus>
-            <small id="emailHelp" class="form-text text-muted">If value is string you must assign in " " Or ' '</small>
+            <small  class="form-text text-muted">If value is string you must assign in " " Or ' '</small>
           </div>
         </div>
      
@@ -315,30 +315,30 @@
         <div class="col-10 guide-content container px-5" data-spy="scroll" data-target="#guide-scrollspy" data-offset="0">
           <div id="component">
             <div class="col-12 con-img">
-              <img class=" my-5 img-fluid col-12" src="images/all.png">
+              <img class=" my-5 img-fluid col-12" data-lazy-image="images/all.png">
             </div>
             <p> ส่วนประกอบของโปรแกรมแบ่งได้ 5 ส่วนดังนี้     <br> 
               1. Header เป็นส่วนจัดการงานและปุ่มการทำงานต่าง ๆ ดังนี้ <br>
               <div class="col-12 con-img">
-                <img class=" my-5 img-fluid"src="images/h-file.JPG"> <br>   
+                <img class=" my-5 img-fluid"data-lazy-image="images/h-file.JPG"> <br>   
               </div>
               File สำหรับจัดการไฟล์งาน ประกอบด้วย<br>   
                 - Save สำหรับบันทึกงานหน้าปัจจุบันที่เปิดอยู่<br>   
                 - Save All สำหรับบันทึกงานทุกหน้าที่มีทั้งหมด<br>   
                 - Open สำหรับเปิดไฟล์งานที่ได้ออกแบบไว้แล้ว นามสกุล .fdc<br>   
             <div class="col-12 con-img">
-              <img class=" my-5 img-fluid" src="images/h-theme.JPG"><br>
+              <img class=" my-5 img-fluid" data-lazy-image="images/h-theme.JPG"><br>
             </div>
             Theme สามารถเลือกธีมสีของโปรแกรมได้<br>
             <div class="col-12 con-img">
-              <img class=" my-5 img-fluid" src="images/h-run.JPG">
+              <img class=" my-5 img-fluid" data-lazy-image="images/h-run.JPG">
             </div>
             <div class="col-12 con-img">
-              <img class=" my-5 img-fluid" src="images/h-debug.JPG">
+              <img class=" my-5 img-fluid" data-lazy-image="images/h-debug.JPG">
             </div>
             
             <div class="col-12 con-img">
-              <img class=" my-5 img-fluid" src="images/h-pseudocode.JPG">
+              <img class=" my-5 img-fluid" data-lazy-image="images/h-pseudocode.JPG">
             
             </div>
               ปุ่มการทำงานหลักประกอบด้วย   <br>
@@ -348,22 +348,22 @@
               และเมื่อกดปุ่ม Debug จะมีปุ่มสำหรับการทำงานของ Debug ดังนี้ <br>
               <div class="col-12 con-img">
               
-                <img class=" my-5 img-fluid" src="images/h-stop.JPG">
+                <img class=" my-5 img-fluid" data-lazy-image="images/h-stop.JPG">
               </div>
               
               <div class="col-12 con-img">
               
-                <img class=" my-5 img-fluid" src="images/h-refresh.JPG">
+                <img class=" my-5 img-fluid" data-lazy-image="images/h-refresh.JPG">
               </div>
               
               <div class="col-12 con-img">
               
-                <img class=" my-5 img-fluid" src="images/h-next.JPG">
+                <img class=" my-5 img-fluid" data-lazy-image="images/h-next.JPG">
               </div>
               
               <div class="col-12 con-img">
               
-                <img class=" my-5 img-fluid" src="images/h-skip.JPG">
+                <img class=" my-5 img-fluid" data-lazy-image="images/h-skip.JPG">
               </div>
 
               - ปุ่ม Stop สำหรับหยุดแสดงขั้นตอนการทำงาน<br>
@@ -377,14 +377,14 @@
               <br>
               <div class="col-12 con-img">
               
-                <img class=" my-5 img-fluid" src="images/grid.JPG"> <br>
+                <img class=" my-5 img-fluid" data-lazy-image="images/grid.JPG"> <br>
               </div>
               
               
               3. Toolbox สำหรับแสดงสัญลักษณ์ผังงาน <br>
               <div class="col-12 con-img">
               
-                <img class=" my-5 img-fluid" src="images/Toolbox.JPG"> <br>
+                <img class=" my-5 img-fluid" data-lazy-image="images/Toolbox.JPG"> <br>
               </div>
 
               ประกอบด้วย<br>
@@ -397,11 +397,11 @@
              
               4. Output สำหรับแสดงผลลัพธ์สุดท้าย <br>
               <div class="col-12 con-img">
-                <img class=" my-5 img-fluid" src="images/output-ex.JPG">
+                <img class=" my-5 img-fluid" data-lazy-image="images/output-ex.JPG">
               </div>
               5. Debugger <br>
               <div class="col-12 con-img">
-                <img class=" my-5 img-fluid" src="images/debugger-ex.JPG">
+                <img class=" my-5 img-fluid" data-lazy-image="images/debugger-ex.JPG">
               </div>
               เมื่อกดปุ่ม Debug จะแสดงผลขั้นตอนการทำงานในส่วน Debugger โดยจะแสดงทีละบรรทัดดังนี้
               - Action จะแสดงประเภทของสัญลักษณ์ผังงาน
@@ -419,32 +419,32 @@
              สามารถเพิ่มสัญลักษณ์ได้ 2 วิธีดังนี้<br>
              1. ลาก-วาง โดยเลือกสัญลักษณ์จาก Toolbox ลากมาวางในตำแหน่งที่ต้องการ  <br>
              <div class="col-12 con-img">
-              <img class=" my-5 img-fluid  "src="images/add1.png">
+              <img class=" my-5 img-fluid  "data-lazy-image="images/add1.png">
              </div>
               2. เพิ่มจากลูกศรสัญลักษณ์ก่อนหน้า โดยกำหนดสัญลักษณ์เริ่มต้นคือสัญลักษณ์ประมวลผล (Process)  <br>
               <div class="col-12 con-img">
-                <img class=" my-5 img-fluid"src="images/add2.png">  
+                <img class=" my-5 img-fluid"data-lazy-image="images/add2.png">  
 
               </div>
 
              <span>การเพิ่มข้อความในสัญลักษณ์</span><br>  
              ดับเบิ้ลคลิกสัญลักษณ์ที่ต้องการ จากนั้นใส่ข้อความ (เส้นขอบสัญลักษณ์จะเปลี่ยนเป็นเส้นประ)<br>   
              <div class="col-12 con-img">
-              <img class=" my-5 img-fluid"src="images/addtext.png">
+              <img class=" my-5 img-fluid"data-lazy-image="images/addtext.png">
 
              </div>
   
              <span>การย่อ-ขยายสัญลักษณ์</span><br>  
              คลิกเลือกสัญลักษณ์ที่ต้องการ และชี้เมาส์ไปที่จุดสำหรับย่อขยายด้านซ้ายและด้านขวา  <br>   
              <div class="col-12 con-img">
-              <img class=" my-5 img-fluid"src="images/resize.png">
+              <img class=" my-5 img-fluid"data-lazy-image="images/resize.png">
 
              </div>
 
              <span>การเปลี่ยนสัญลักษณ์</span><br>  
              คลิกเลือกสัญลักษณ์ที่ต้องการ จะมีไอคอนสัญลักษณ์อื่น ๆ ให้คลิกเลือกเพื่อเปลี่ยนสัญลักษณ์ได้ <br>   
              <div class="col-12 con-img">
-              <img class=" my-5 img-fluid"src="images/change.png">  
+              <img class=" my-5 img-fluid"data-lazy-image="images/change.png">  
 
              </div>
 
@@ -452,34 +452,34 @@
              ชี้เมาส์ไปที่สัญลักษณ์ต้นทางจะมีจุดเชื่อมแสดงแต่ละด้าน ให้คลิกลากจากจุดที่ต้องการไปที่จุดเชื่อมสัญลักษณ์ปลายทาง 
              (หากต้องการเปลี่ยนทิศทางเส้นหรือลากไปในจุดที่ไม่ต้องการ สามารถลากใหม่ได้ โดยไม่ต้องลบเส้นเก่าออก)  <br>   
              <div class="col-12 con-img">
-              <img class=" my-5 img-fluid"src="images/addline.png">
+              <img class=" my-5 img-fluid"data-lazy-image="images/addline.png">
 
              </div>
 
              <span>การเชื่อมเส้นของสัญลักษณ์ตัดสินใจ </span><br>  
               หากลากเส้นเชื่อมระหว่างสัญลักษณ์ของสัญลักษณ์ตัดสินใจ เส้นแรกจะเป็น True เสมอ และเส้นที่สองจะเป็น False  <br>   
               <div class="col-12 con-img">
-                <img class=" my-5 img-fluid"src="images/linedecision.png">
+                <img class=" my-5 img-fluid"data-lazy-image="images/linedecision.png">
 
               </div>
 
              <span>การสลับเส้นเชื่อมของสัญลักษณ์ตัดสินใจ </span><br>  
              คลิกเลือกสัญลักษณ์ตันสินใจ ให้เกิดเส้นประแล้วคลิกที่ไอคอนสลับ จากนั้นเส้นระหว่าง True กับ False จะสลับฝั่งกัน  <br>   
              <div class="col-12 con-img">
-              <img class=" my-5 img-fluid"src="images/switchdecision.png">
+              <img class=" my-5 img-fluid"data-lazy-image="images/switchdecision.png">
              </div>
 
              <span>การลบสัญลักษณ์ </span><br>  
               เลือกสัญลักษณ์ที่ต้องการลบ ให้เกิดเส้นประ โดยสามารถลบจากการคลิกที่ไอคอนถังขยะ หรือลบจากการกดปุ่ม Delete ที่คีย์บอร์ด 
               (เมื่อสัญลักษณ์ที่ต้องการลบมีเส้นเชื่อมระหว่างสัญลักษณ์ เส้นที่เชื่อมจะถูกลบด้วย) <br>   
               <div class="col-12 con-img">
-                <img class=" my-5 img-fluid"src="images/deletetool.png">
+                <img class=" my-5 img-fluid"data-lazy-image="images/deletetool.png">
               </div>
 
              <span>การลบเส้น</span><br>  
               เลือกเส้นที่ต้องการลบ ให้เกิดเส้นประ จากนั้นทำการลบโดยกดปุ่ม Delete ที่คีย์บอร์ด <br>   
               <div class="col-12 con-img">
-                <img class=" my-5 img-fluid"src="images/deleteline.png"> 
+                <img class=" my-5 img-fluid"data-lazy-image="images/deleteline.png"> 
 
               </div>
 
@@ -501,7 +501,7 @@
             ตัวเลข Double<br>
             ตัวอักษร String จะใส่ “” หรือ ‘’ ก็ได้<br>
             <div class="col-12 con-img">
-              <img class=" my-5 img-fluid"src="images/p-varall.png">
+              <img class=" my-5 img-fluid"data-lazy-image="images/p-varall.png">
 
             </div>
 
@@ -509,17 +509,17 @@
             โดยรูปแบบ <br>
               operand + operator + operand + ... +operand<br>
               <div class="col-12 con-img">
-                <img class=" my-5 img-fluid"src="images/process.png">
+                <img class=" my-5 img-fluid"data-lazy-image="images/process.png">
 
               </div>
             <span>สัญลักษณ์การรับข้อมูลผ่านแป้นพิมพ์</span><br>
             โดยสามารถใส่ชื่อตัวแปรในสัญลักษณ์ เมื่อกดปุ่ม run จะแสดงกล่องใส่ค่าของตัวแปรที่ประกาศไว้ สำหรับแสดงขั้นตอนการทำงานของผังงาน<br>
             <div class="col-12 con-img">
-              <img class=" my-5 img-fluid"src="images/inputnum.png">
+              <img class=" my-5 img-fluid"data-lazy-image="images/inputnum.png">
 
             </div>
             <div class="col-12 con-img">
-              <img class=" my-5 img-fluid"src="images/inputstring.png">
+              <img class=" my-5 img-fluid"data-lazy-image="images/inputstring.png">
 
             </div>
 
@@ -527,7 +527,7 @@
             โดยมีรูปแบบดังนี้<br>
             operand + operator + operator + operand + ... + operand<br>
             <div class="col-12 con-img">
-              <img class=" my-5 img-fluid"src="images/decision.png">
+              <img class=" my-5 img-fluid"data-lazy-image="images/decision.png">
 
             </div>
           
@@ -535,10 +535,10 @@
             <span>สัญลักษณ์แสดงผลทางจอภาพ</span><br>
             สามารถใส่ชื่อตัวแปรในสัญลักษณ์ หรืือเมื่อมีข้อความที่ต้องการแสดงที่ไม่ใช่ตัวแปรจะมีต้องอยู่ภายในเครื่องหมาย "" และหากต้องการแสดงค่าของตัวแปรต่อท้ายจะใช้เครื่องหมาย + และตามตัวชื่อตัวแปร <br>
             <div class="col-12 con-img">
-            <img class=" my-5 img-fluid"src="images/display1.png">
+            <img class=" my-5 img-fluid"data-lazy-image="images/display1.png">
             </div>
             <div class="col-12 con-img">
-              <img class=" my-5 img-fluid"src="images/display2.png">
+              <img class=" my-5 img-fluid"data-lazy-image="images/display2.png">
             </div>
             </p>
           </div>
@@ -1054,7 +1054,14 @@
     $('table').addClass('table-dark');
 
   });
- 
+  $(document).on("click","#help",function(){
+      $("img").each(function(){
+        if(!$(this).attr("src")){
+          $(this).attr("src",$(this).attr("data-lazy-image"));
+
+        }
+      });
+  });
 </script>
 
 
