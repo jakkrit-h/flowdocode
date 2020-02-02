@@ -1371,13 +1371,17 @@ function writeCodeToDesign(text) {
   
 
     }
+    position.left+=10-position.left%10;
+    position.top+=10-position.top%10;
+
     $(this).offset(position);
     updateConnectorPositionOnAction(this,true);
 
     $(this).find("svg").css( "stroke-dasharray","0,0");
     $(this).removeClass("ui-draggable ui-draggable-handle ui-resizable ui-resizable-disabled");
     $(this).find(".con_anchor").removeClass("ui-draggable ui-draggable-handle ui-droppable ui-draggable-disabled");
-    $(this).find("ui-resizable-handle").remove();
+  
+    $(this).find(".ui-resizable-handle").remove();
     $(this).draggable(nodeDraggableProperty(this));
     setTextboxPosition(this);
     if($(this).attr("id")!="end"){
