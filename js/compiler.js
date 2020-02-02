@@ -20,6 +20,7 @@ function stop(){
         unHightLight(this);
     });
     clearInterval(interval);
+    onDebug=false;
 }
 
 function clearOnDebug(){

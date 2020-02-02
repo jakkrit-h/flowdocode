@@ -793,7 +793,9 @@ function onConnectorDelete(connector){
 
 
 function onDropItemSuccess(type,posX,posY) {    //เมื่อมีการลากวางNode จาก Toolbox ลงมาในส่วนของ Design
-
+  if(onDebug){
+    return false;
+  }
     if (type != null) {
 
       let attrObj = {
@@ -859,12 +861,16 @@ function nodeDraggableProperty(node){// returnความสามารถข�
         stack: ".shape",
         scrollSensitivity: 20,
         scrollSpeed: 20,
-        start:function(){
-          // createDistanceWalls(this);
-          $('.container-node-tool').remove();
-          $('.btn-next-node').remove();
-          oldPos=$(this).offset();
-        },
+        start: function () {
+          if (onDebug) {
+            $(this).css("opacity", "1");
+            return false;
+          }
+              // createDistanceWalls(this);
+              $('.container-node-tool').remove();
+              $('.btn-next-node').remove();
+              oldPos=$(this).offset();
+            },
         drag: function (event,ui) {
       
           // let result=calculateObstacle(this);
@@ -898,6 +904,7 @@ function nodeDraggableProperty(node){// returnความสามารถข�
 
         }
         , stop: function () {//ตอนหยุด Drag จะทำงานหลังตอนโดน Drop
+     
           rePositionAfterDrag(this);
       
       
@@ -913,6 +920,11 @@ function nodeResizableProperty(node){// returnความสามารถข�
         disabled:"true",
         handles: "w,e", 
         grid: [ 10, 10 ],
+        start:function(){
+          if(onDebug){
+            $(this).resizable( "disable" );
+          }
+        },
         resize: function () {
           let type=getNodeType(node);
           updateSvgPath(this, type);
@@ -932,6 +944,9 @@ function conAnchorDraggableProperty(){// returnความสามารถข
         scrollSensitivity: 20,
         scrollSpeed: 10,
         start:function(){
+          if(onDebug){
+            return false;
+          }
           let scroll=$("#con-design").scrollTop();
 
           originalPosition = $(this).offset();

@@ -621,6 +621,9 @@
 
 
   $("div").on("click", ".shape", function () {
+    if(onDebug){
+      return false;
+    }
     // click select shape 
     actionOnSelectElement(this);
     showNodeTool(this);
@@ -632,6 +635,9 @@
   $(document).keydown(function (event) {
 
     if ((event.keyCode == 8 || event.keyCode == 46) && $(selectedEl).find("div.text").prop("contenteditable") != "true") {
+      if(onDebug){
+      return false;
+    }
       if ($(selectedEl).prop("id") != "start") {
         if ($(selectedEl).hasClass("shape")) {
           checkConnectorOnNodeDelete(selectedEl);
@@ -659,6 +665,9 @@
  
 
   $("div").on("dblclick", ".text", function () {
+    if(onDebug){
+      return false;
+    }
     if (!$(selectedEl).hasClass("start-end")) {
       document.body.style.cursor = "";
       if (getNodeType(selectedEl) == $(selectedEl).find("div.text").text().trim().toLowerCase()) {
@@ -693,6 +702,7 @@
 
   });
   function actionOnSelectElement(el) {
+  
     if ($(selectedEl).prop("id") != $(el).prop("id")) {
       shapeUnSelectedStyle();
     }
@@ -752,9 +762,12 @@
 
 
     if ($(selectedEl).prop("id") != $(this).prop("id")) {
-
+      if (onDebug) {
+            return false;
+          }
       if(!onAnchorDrag){
         if($(this).attr("id")!="end"){
+         
           showNextNodeArrow(this);
 
         }
@@ -958,6 +971,9 @@
     openFile();
   });
   $(document).on("click", ".page", function () {
+    if(onDebug){
+      return false;
+    }
     if (!$(this).hasClass("active") && onClose != true) {
       readPage($(this), "switch");
     }
@@ -966,12 +982,17 @@
     $("#debugger").empty();
   });
   $(document).on("click", "#addpage", function () {
+    if(onDebug){
+      return false;
+    }
     $("#con-design").scrollTop(0);
     addNewPage();
 
   });
   $(document).on("click", ".close", function () {
-
+    if(onDebug){
+      return false;
+    }
     onClose = true;
     if ($(".page").length == 1 || $(this).parent(".page").hasClass("page-edit")) {
       return false;
@@ -997,6 +1018,9 @@
     $(this).parent(".page").remove();
   });
   $(document).on("dblclick", ".page", function () {
+    if(onDebug){
+      return false;
+    }
     currentPageName = $(this).find('.page-text').text();
     $(this).attr("contenteditable", "true");
 
