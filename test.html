@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <title>FlowdoCode | FLOWDOCODE</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="css/jquery-ui.min.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome-all.min.css" />
+
+
+  <script src="js/jquery.js"></script>
+  <script src="js/jquery-ui.min.js"></script>
+
+  <script src="js/popper.min.js"></script>
+
+  <script src="js/bootstrap.min.js"></script>
+
+
+  <script src="js/flowdocode.js"></script>
+  <script src="js/pseudocode.js"></script>
+  <script src="js/compiler.js"></script>
+  <script src="js/debugger.js"></script>
+  <script src="js/syntaxchecker.js"></script>
+  <script src="js/font-awesome-all.min.js"></script>
+  <script src="js/events.js"></script>
+
+  <script src="js/jquery.md5.js"></script>
+
+
+</head>
+<style>
+
+</style>
+<body>
+   
+  <!-- <nav class="navbar navbar-expand-lg   p-0">
+    <div class="col-12 m-0 p-0">
+      <ul class="navbar-nav py-1">
+
+        <div class="logo px-2"><a href="index.html">FlowD<span>o</span><label class='p-0'id="c">C</label><span>o</span>de</a></div>
+
+
+        <li class="nav-item dropdown mx-1 ">
+          <a class="nav-link " href="#" data-toggle="dropdown">File</a>
+          <div class="dropdown-menu">
+            <label> <a class="dropdown-item" id="save">Save</a></label>
+            <label><a class="dropdown-item" id="saveall">Save All</a></label>
+
+            <label><a class="dropdown-item" id="open">
+                Open
+                <input type="file" id="openfile" accept="text/*,.fdc">
+
+              </a></label>
+            <label> <a class="dropdown-item" id="pseudoCode" ><label>PseudoCode</label></a></label> 
+          </div>
+        </li>
+        <li class="nav-item dropdown mx-1">
+          <a class="nav-link " href="#" data-toggle="dropdown">Theme</a>
+          <div class="dropdown-menu">
+            <label> <a class="dropdown-item" id="white-theme">Light Theme</a></label>
+            <label><a class="dropdown-item" id="dark-theme">Dark Theme </a></label>
+
+           
+          </div>
+        </li>
+        <li class="nav-item mx-1">
+          <a class="nav-link " href="credit.html" >Credit</a>
+        </li>
+        <li class="nav-item mx-1">
+          <a class="nav-link " id="help"href="#" data-toggle="modal" data-target="#guide">Help</a>
+        </li>
+        <div class="col-12  px-0 mx-auto" style="position:absolute">
+          <ul class="navbar-nav  p-0 justify-content-center" style="border:none">
+            <li class="">
+              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="play" data-toggle="tooltip" data-placement="bottom" title="Run"><i class='fas fa-play'></i></button>
+              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="debug" data-toggle="tooltip" data-placement="bottom" title="Debug"><i class="fas fa-bug"></i></button>
+              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="pseudocode" data-toggle="tooltip" data-placement="bottom" title="PseudoCode"><i class="fas fa-code"></i></button>
+        
+              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="stop" data-toggle="tooltip" data-placement="bottom" title="Stop"><i class='fas fa-stop' ></i></button>
+              <button class="btn btn-sm btn-flowdocode px-2 mt-1" id="play-refresh" data-toggle="tooltip" data-placement="bottom" title="Refresh">
+                <i class="fas fa-redo-alt"></i>
+              </button>
+              <button class="btn btn-sm btn-flowdocode px-2 ondebug mt-1" id="refresh" data-toggle="tooltip" data-placement="bottom" title="Refresh">
+                  <i class="fas fa-redo-alt"></i>
+                </button>
+              <button class="btn btn-sm btn-flowdocode px-2 ondebug mt-1" id="next" data-toggle="tooltip" data-placement="bottom" title="Next ">
+                <i class="fas fa-step-forward"></i>
+              </button>
+                <button class="btn btn-sm btn-flowdocode px-2 ondebug mt-1"id="skip" data-toggle="tooltip" data-placement="bottom" title="Skip">
+                  <i class="fas fa-fast-forward"></i>
+                </button>
+             
+                 
+
+
+            </li>
+          </ul>
+        </div>
+      </ul>
+
+
+    </div>
+
+
+
+
+
+
+
+  </nav>
+
+
+  <div class="col-2 con-fixed h-100 pb-5 p-0" id="con-toolbox">
+    <p class="header py-1 m-0 col-12">Toolbox</p>
+    <div class="my-5  toolbox start-end " id="start-end" draggable="true" ondragstart="drag(event)"
+      data-toggle="tooltip" data-placement="bottom" title="End">
+      <svg>
+        <path d="M 25 1 C -5,1 -5,49 25,49 L 120 49 C 155,49 155,0 120,1 Z" />
+      </svg>
+
+    </div>
+    <div class="my-5 toolbox process" id="process" draggable="true" ondragstart="drag(event)" data-toggle="tooltip"
+      data-placement="bottom" title="Process">
+      <svg>
+        <path d="M 1 1 L 149 1 L 149 49 L 1 49 Z" />
+      </svg>
+
+    </div>
+    <div class="my-5  toolbox input" id="input" draggable="true" ondragstart="drag(event)" data-toggle="tooltip"
+      data-placement="bottom" title="Input">
+      <svg>
+        <path d="M 1 15 L 149 1 L 149 49 L 1 49 Z" />
+      </svg>
+
+    </div>
+    <div class="my-5  toolbox decision" id="decision" draggable="true" ondragstart="drag(event)" data-toggle="tooltip"
+      data-placement="bottom" title="Decision">
+      <svg>
+        <path d="M 75 1 L 150 25 L 75 50 L 1 25 Z " />
+      </svg>
+
+    </div>
+    <div class="my-5 toolbox display" id="display" draggable="true" ondragstart="drag(event)" data-toggle="tooltip"
+      data-placement="bottom" title="Display">
+      <svg>
+        <path d="M 1 25 L 15 49 H 120 C 155 49 ,155 1, 120 1 H 15 L 1,25  " />
+      </svg>
+
+    </div>
+
+  </div>
+
+  <div class="offset-2 col-8 p-0 pb-5  mb-5 " id="con-design" style="position: fixed;overflow-y:scroll;">
+    <svg id="grid"></svg>
+    <div id="design" class=" col-12 p-0 con-design" ondragover="allowDrop(event)" ondrop="dropItem(event)">
+      <div id="design-containment" ></div>
+      <svg id="canvas">
+        <defs>
+          <marker id="arrowhead" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" />
+          </marker>
+        </defs>
+      </svg>
+     
+
+
+
+
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+  <div class="col-8  h-25 p-0 offset-2 fixed-bottom  " id="con-console">
+    <p class="header py-1 m-0 "> Output</p>
+    <div class="my-2 mb-5 m-0 px-4 " id="console">
+
+    </div>
+
+
+
+  </div>
+
+  <div class="offset-10 col-2 p-0 h-100 " id="con-right" >
+    <p class="header py-1 pt-1 m-0 col-12"> Debugger</p>
+    <div class="col-12 p-0 m-0 row header" style="display: flex;"> 
+      <div class="col-4 debugger-header py-2" >Action</div>
+      <div class="col-4 debugger-header py-2">Variable</div>
+      <div class="col-4 debugger-header py-2">Value</div>
+
+    </div>
+    <div class="col-12  p-0 pb-5 " id="con-debugger" style="overflow-y: scroll !important;"> 
+      
+      <table class="table  table-striped m-0">
+     
+        <tbody id="debugger" class="text-center"style="overflow-y: scroll !important;">
+
+
+        </tbody>
+      </table>
+    </div>
+
+   
+
+  </div> -->
+
+
+</body>
+
+<script>
+$(function(){
+ 
+});
+</script>
+
+
+
+
+</html>

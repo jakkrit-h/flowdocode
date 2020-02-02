@@ -6,19 +6,25 @@ $successColor:#27ae60;
 $invalidColor:#ff3d50;
 body{
     background: #fff;
-    background-image:linear-gradient(0deg, transparent 9%, 
-  rgba(150, 150, 150, .6) 10%, rgba(150, 150, 150, .6) 12%, transparent 13%, transparent 29%, 
-  rgba(150, 150, 150, .1) 30%, rgba(150, 150, 150, .1) 31%, transparent 32%, transparent 49%, 
-  rgba(150, 150, 150, .1) 50%, rgba(150, 150, 150, .1) 51%, transparent 52%, transparent 69%, 
-  rgba(150, 150, 150, .1) 70%, rgba(150, 150, 150, .1) 71%, transparent 72%, transparent 89%,
-  rgba(150, 150, 150, .1) 90%, rgba(150, 150, 150, .1) 91%, transparent 92%, transparent),
-linear-gradient(90deg, transparent 9%, 
-  rgba(150, 150, 150, .6) 10%, rgba(150, 150, 150, .6) 12%, transparent 13%, transparent 29%, 
-  rgba(150, 150, 150, .1) 30%, rgba(150, 150, 150, .1) 31%, transparent 32%, transparent 49%, 
-  rgba(150, 150, 150, .1) 50%, rgba(150, 150, 150, .1) 51%, transparent 52%, transparent 69%, 
-  rgba(150, 150, 150, .1) 70%, rgba(150, 150, 150, .1) 71%, transparent 72%, transparent 89%,
-  rgba(150, 150, 150, .1) 90%, rgba(150, 150, 150, .1) 91%, transparent 92%, transparent);
-  background-size:50px 50px;
+  
+}
+#grid{
+  #g-grid{
+    polyline{
+  
+      stroke: rgba(119, 133, 135, .5);
+      stroke-width: 0.4px;
+      }
+  }
+}
+#grid{
+  #g-grid{
+    .grid-main{
+      stroke: rgb(119, 133, 135, 1);
+  
+      stroke-width: 0.5px;
+      }
+  }
 }
 .logo{
   // span{

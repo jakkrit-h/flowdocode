@@ -33,10 +33,15 @@
 
 
 </head>
-
+  
 <body>
-
-  <nav class="navbar navbar-expand-lg   p-0">
+  <div id="con-grid">
+    <svg id="grid">
+      <g id='g-grid' transform="translate(0.5,0.5)"></g>
+    </svg>
+  </div>
+ 
+  <nav class="navbar navbar-expand-lg   p-0" >
     <div class="col-12 m-0 p-0">
       <ul class="navbar-nav py-1">
 
@@ -158,7 +163,7 @@
 
   </div>
   <div class="offset-2 col-8 p-0 pb-5  mb-5 " id="con-design" style="position: fixed;overflow-y:scroll;">
-
+    
     <div id="design" class=" col-12 p-0 con-design" ondragover="allowDrop(event)" ondrop="dropItem(event)">
       <div id="design-containment" ></div>
       <svg id="canvas">
@@ -187,6 +192,7 @@
 
 
     </div>
+ 
   </div>
 
 
@@ -224,38 +230,7 @@
       </table>
     </div>
 
-    <!-- <div class="col-12 p-0  h-50 m-0  ">
-      <p class="header py-1 m-0 "> Properties</p>
-      <div class="row p-0 con-property">
-        <div class="col-6 pl-4 font-weight-bold">Name</div>
-        <input class="col-6" id="name" v-model="name" readonly>
-
-        <div class="col-6 pl-4 font-weight-bold">Type</div>
-        <select class="col-6" id="type" v-model="name">
-          <option value="process">Process</option>
-          <option value="input">Input</option>
-          <option value="decision">Decision</option>
-          <option value="display">Display</option>
-
-        </select>
-
-        <div class="col-6 pl-4 font-weight-bold">Code</div>
-        <input class="col-6" id="code" value="aaad" readonly>
-
-        <div class="col-6 pl-4 font-weight-bold">Width</div>
-        <input class="col-6" id="width" value="aaad" readonly>
-
-        <div class="col-6 pl-4 font-weight-bold">Height</div>
-        <input class="col-6" id="Height" value="aaad" readonly>
-
-        <div class="col-6 pl-4 font-weight-bold">Location</div>
-        <input class="col-6" id="location" value="aaad" readonly>
-
-
-
-      </div>
-
-    </div> -->
+   
 
   </div>
 
@@ -278,7 +253,6 @@
       </div>
     </div>
   </div>
-<!-- Button trigger modal -->
 
 
 
@@ -580,7 +554,7 @@
     }
     init();
  
-   
+    initGrid()
 
 
   });
@@ -1062,6 +1036,7 @@
         }
       });
   });
+ 
 </script>
 
 

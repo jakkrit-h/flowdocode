@@ -1463,6 +1463,8 @@ function writeCodeToDesign(text) {
     addPagination(s.name,s.hash);
     if(i==arr.length-1){
       writeCodeToDesign(s)
+      $("title").html(s.name+" | FLOWDOCODE");
+
     }
    
   });
@@ -1516,7 +1518,6 @@ function init(newpage){
   
     updateAnchorPosition($("#start"));
     setTextboxPosition($("#start"));
-    let modX=($(document).width()/2)%10;
 
    
     // let conDesignHeight =$(document).outerHeight()-$("#con-console").outerHeight()-100;
@@ -1530,6 +1531,10 @@ function init(newpage){
     $("#design-containment").offset($("#con-design").offset());
     if(newpage){
       let position= {top:$("#design").offset().top+60,left:$("#design").offset().left+$("#design").outerWidth()/2-100}
+      position.left=position.left+(10-position.left%10)
+      position.top=position.top+(10-position.top%10)
+
+
       $("#start").offset(position);
 
     }
@@ -1874,4 +1879,28 @@ function rePositionAfterDrag(node){
   updateConnectorPositionOnAction(node);
   updateAnchorPosition(node);
   
+}
+function initGrid() {
+  let width = $("#grid").outerWidth();
+  let height = $("#grid").outerHeight();
+  for (let i = 0; i <= width; i += 10) {
+    let line = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+    $(line).attr("points", i + "," + 0 + " " + i + "," + height);
+    if (i % 50 == 0) {
+      $(line).addClass('grid-main')
+
+    }
+    $("#g-grid").append(line);
+
+  }
+  for (let i = 0; i <= height; i += 10) {
+    let line = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+    $(line).attr("points", 0 + "," + i + " " + width + "," + i);
+    if (i % 50 == 0) {
+      $(line).addClass('grid-main')
+
+    }
+    $("#g-grid").append(line);
+
+  }
 }
