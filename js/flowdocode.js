@@ -726,7 +726,8 @@ function shapeUnSelectedStyle(){    // ไว้ยกเลิก Node ที�
     }finally{
       disContentEdit();
       selectedEl=undefined;
-  
+      updateSession($(".page.active").attr("data-page"));
+
     }
     
   
@@ -831,6 +832,8 @@ function onDropItemSuccess(type,posX,posY) {    //เมื่อมีการ
       $(node).find(".con_anchor").droppable(conAnchorDroppableProperty());//ใส่ความสามารถ Resizableให้กับ Anchor ใน Node
       setTextboxPosition(node);
       updateAnchorPosition(node);
+      updateSession($(".page.active").attr("data-page"));
+
       return node;
     }
 }
@@ -911,6 +914,8 @@ function nodeDraggableProperty(node){// returnความสามารถข�
      
           shapeUnSelectedStyle();
           $('.container-node-tool').remove();
+          updateSession($(".page.active").attr("data-page"));
+
         }
       }
     
@@ -930,6 +935,10 @@ function nodeResizableProperty(node){// returnความสามารถข�
           updateSvgPath(this, type);
           updateConnectorPositionOnAction(this);
           updateAnchorPosition(this);
+
+        },
+        stop:function(){
+          updateSession($(".page.active").attr("data-page"));
 
         }
       }
@@ -1042,7 +1051,8 @@ function conAnchorDraggableProperty(){// returnความสามารถข
           $(".hide").removeClass("hide");// ลบ class hide ออกให้เป็น Anchor ปกติ
         
           $(this).offset(originalPosition);//ให้ Anchor กลับไปอยู่ที่เดิมของตัวเองก่อนถูก Drag
-      
+          updateSession($(".page.active").attr("data-page"));
+
         }
     }
 }
@@ -1347,6 +1357,8 @@ function openFile() {
           if(result.name==undefined){
             result.name=fileName
           }
+          updateSession($(".page.active").attr("data-page"));
+
           writeCodeToDesign(result)
           init();
           addToSession(result.name,$("#design").html(),result.hash);
@@ -1373,21 +1385,17 @@ function writeCodeToDesign(text) {
 
   $(".shape").each(function(){
     let position=$(this).offset();
-    
-
-    if(oldResolution.width<width){
+    if(oldResolution.width+300<width){
       position.left+=$(this).outerWidth();
       position.top+=$(this).outerHeight()-50;
-
+    
     }else if(oldResolution.width>width){
       position.left-=$(this).outerWidth();
       position.top+=$(this).outerHeight()-50;
-   
-  
 
     }
-    position.left+=10-position.left%10;
-    position.top+=10-position.top%10;
+    position.left-=position.left%10;
+    position.top-=position.top%10;
 
     $(this).offset(position);
     updateConnectorPositionOnAction(this,true);
@@ -1409,11 +1417,13 @@ function writeCodeToDesign(text) {
      
       $(this).find(".ui-resizable-w").get(1).remove();
       $(this).find(".ui-resizable-e").get(1).remove();
+      
     }else{
       // init(true);
     }
 
   });
+  $(".container-node-tool").remove()
   hasEnd();
  }
  function addToSession(name,text,hash){
@@ -1453,6 +1463,7 @@ function writeCodeToDesign(text) {
   sessionStorage.setItem("page",JSON.stringify(temp))
  }
  function addNewPage(){
+   updateSession($(".page.active").attr("data-page"));
    let templateNewPage=$("template#newpage").html();
 
    $("#design").html(templateNewPage);
@@ -1550,8 +1561,8 @@ function init(newpage){
     $("#design-containment").offset($("#con-design").offset());
     if(newpage){
       let position= {top:$("#design").offset().top+60,left:$("#design").offset().left+$("#design").outerWidth()/2-100}
-      position.left=position.left+(10-position.left%10)
-      position.top=position.top+(10-position.top%10)
+      position.left=position.left-position.left%10
+      position.top=position.top-position.top%10
 
 
       $("#start").offset(position);
@@ -1671,15 +1682,14 @@ function changePageName(page) {
   }
   $(page).attr("contenteditable", "false");
   $(page).removeClass("page-edit");
-  let storage = sessionStorage.getItem($(page).attr("data-page"));
+  let temp =JSON.parse( sessionStorage.getItem("page"));
  
-  sessionStorage.removeItem($(page).attr("data-page"));
-  sessionStorage.setItem($(page).text(), storage);
- 
-  $(page).attr("data-page", $(page).text());
-  $(page).attr("id", $(page).text());
-  $("title").html($(page).attr("data-page")+" | FLOWDOCODE");
 
+  let index=temp.findIndex(s=>s.hash==$(page).attr("data-page"));
+  temp[index].name=$(page_text).text();
+  
+  $("title").html(temp[index].name+" | FLOWDOCODE");
+sessionStorage.setItem("page",JSON.stringify(temp))
   if ($(page).text() != "untitled") {
     $(page).removeAttr("data-untitled");
   }
@@ -1790,7 +1800,12 @@ function showNodeTool(node){
       }
       if(!$(node).hasClass("decision")){
         $("#switch-decision").remove();
+      }else if($(node).hasClass("decision")&&(!$(node).attr("data-yes")||!$(node).attr("data-no"))){
+        $("#switch-decision").remove();
+
+
       }
+    
       $(".btn-node-tool").attr("data-ofnode","#"+$(node).attr("id"));
       let offset=$(node).offset();
       
@@ -1922,4 +1937,37 @@ function initGrid() {
     $("#g-grid").append(line);
 
   }
+}
+function switchTrueFalse(node){
+  let yesLineId = $(node).attr("data-yes");
+  let noLineId = $(node).attr("data-no");
+  let yesLineTemp = {
+    data_to: $(yesLineId).attr("data-to"),
+    data_anchorfrom: $(yesLineId).attr("data-anchorfrom"),
+    data_anchorto: $(yesLineId).attr("data-anchorto"),
+    points: $(yesLineId).attr("points"),
+  };
+  let noLineTemp = {
+    data_to: $(noLineId).attr("data-to"),
+    data_anchorfrom: $(noLineId).attr("data-anchorfrom"),
+    data_anchorto: $(noLineId).attr("data-anchorto"),
+    points: $(noLineId).attr("points"),
+  };
+  $(yesLineId).removeClass(yesLineTemp.data_to.replace("#",''));
+  $(noLineId).removeClass(noLineTemp.data_to.replace("#",''));
+  
+  $(yesLineId).attr("data-to",noLineTemp.data_to);
+  $(yesLineId).attr("data-anchorfrom",noLineTemp.data_anchorfrom);
+  $(yesLineId).attr("data-anchorto",noLineTemp.data_anchorto);
+  $(yesLineId).attr("points",noLineTemp.points);
+
+  $(noLineId).attr("data-to",yesLineTemp.data_to);
+  $(noLineId).attr("data-anchorfrom",yesLineTemp.data_anchorfrom);
+  $(noLineId).attr("data-anchorto",yesLineTemp.data_anchorto);
+  $(noLineId).attr("points",yesLineTemp.points);
+  $(yesLineId).addClass($(yesLineId).attr("data-to").replace("#",''))
+  $(noLineId).addClass($(noLineId).attr("data-to").replace("#",''))
+  updateTextLabelPosition(yesLineId)
+  updateTextLabelPosition(noLineId)
+
 }

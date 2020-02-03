@@ -100,13 +100,16 @@ $(document).on("click","#delete-node",function(){
     $('.container-node-tool').remove();
 
     hasEnd();
+    updateSession($(".page.active").attr("data-page"));
+
 });
 $(document).on("click","#switch-decision",function(){
     $(this).tooltip('dispose');
 
-
+    switchTrueFalse(selectedEl);
     $('.container-node-tool').remove();
     shapeUnSelectedStyle();
+    updateSession($(".page.active").attr("data-page"));
 
 });
 // $(document).on("click","#change-node-start",function(){
@@ -117,6 +120,7 @@ $(document).on("click",".btn-node-tool",function(){
     shapeUnSelectedStyle();
     $(this).tooltip('dispose');
     onChangeTypeNode(this,$(this).attr('data-change'));
+    updateSession($(".page.active").attr("data-page"));
 
     
 

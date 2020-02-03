@@ -40,6 +40,8 @@ function checkSyntax(){
     });
     if(result){
         assignVariable();
+    }else{
+        alert("ไวยกรณ์ไม่ถูกต้อง")
     }
     return result;
 }

@@ -905,6 +905,8 @@
 
 
     $(".btn-next-node").remove();
+    updateSession($(".page.active").attr("data-page"));
+
   });
   $(document).on("mouseup", ".shape", function () {
     if (selectedEl == undefined) {
@@ -976,10 +978,11 @@
     }
     if (!$(this).hasClass("active") && onClose != true) {
       readPage($(this), "switch");
+      $("#console").empty();
+    $("#debugger").empty();
     }
     onClose = false;
-    $("#console").empty();
-    $("#debugger").empty();
+   
   });
   $(document).on("click", "#addpage", function () {
     if(onDebug){
