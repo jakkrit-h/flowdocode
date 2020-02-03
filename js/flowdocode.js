@@ -1463,7 +1463,11 @@ function writeCodeToDesign(text) {
   sessionStorage.setItem("page",JSON.stringify(temp))
  }
  function addNewPage(){
-   updateSession($(".page.active").attr("data-page"));
+
+   if($(".page.active").length>0){
+    updateSession($(".page.active").attr("data-page"));
+
+   }
    let templateNewPage=$("template#newpage").html();
 
    $("#design").html(templateNewPage);
