@@ -3,6 +3,7 @@ var nodePointer=undefined;
 var connectorPointer=undefined;
 var inputSuccess=false;
 var onDebug=false;
+var onInput=false;
 var onAction=undefined;
 var onSkip=false;
 var nodeOnSkip =false;
@@ -180,6 +181,7 @@ function classify(node){
         // debugger;
         if(!inputSuccess){
             $("#InputDialog").modal("show");
+            onInput=true;
            
             $("#inputtitle").html("Assign Value Variable <strong>"+$(node).find(".text").text()+"</strong>");
             $('#InputDialog').on('shown.bs.modal', function (e) {
@@ -196,6 +198,8 @@ function classify(node){
        
             result=compiler(text);
             inputSuccess=false;
+            onInput=false;
+
             if(onDebug){
                 $("tr").last().removeClass("font-weight-bold");
 

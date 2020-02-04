@@ -635,11 +635,12 @@
   $(document).keydown(function (event) {
 
     if ((event.keyCode == 8 || event.keyCode == 46) && $(selectedEl).find("div.text").prop("contenteditable") != "true") {
-      if(onDebug){
-      return false;
-    }
+   
       if ($(selectedEl).prop("id") != "start") {
         if ($(selectedEl).hasClass("shape")) {
+          if (onDebug&&!oninput) {
+            return false;
+          }
           checkConnectorOnNodeDelete(selectedEl);
 
           $(selectedEl).remove();
@@ -865,6 +866,7 @@
 
         break;
       case 'left':
+
       if ((position.left - 200) <= ($('#design').offset().left+50 + 20)) {
           position.top += 100;
           position.left += 100;

@@ -1372,6 +1372,8 @@ function openFile() {
   }
 
 function writeCodeToDesign(text) { 
+  $("#console").empty();
+  $("#debugger").empty();
   $("#design").html(text.design);
   let width=$(window).width();
   let height=$(window).height();
@@ -1468,6 +1470,8 @@ function writeCodeToDesign(text) {
     updateSession($(".page.active").attr("data-page"));
 
    }
+   $("#console").empty();
+   $("#debugger").empty();
    let templateNewPage=$("template#newpage").html();
 
    $("#design").html(templateNewPage);
@@ -1848,15 +1852,16 @@ function nextNodeTimeOut(){
 }
 function onChangeTypeNode(objEvent,newType){
   let oldId=$(objEvent).attr("data-ofnode");
+  
   let oldType=getNodeType(oldId);
   let lines=findConnectorIsRelateWithNode(oldId)
   let newId=generateIdOfNode(newType);
+  if(newType=="decision")
   $(oldId).addClass(newType)
   updateSvgPath(oldId,newType);
   $(oldId).removeClass(oldType);
   $(lines).each(function(){
     if(oldType=='decision'){
-    
       if($(oldId).attr('data-yes')=='#'+$(this).prop('id')){
         let label='#'+$(this).attr('data-label');
         $(this).removeAttr('data-label');
@@ -1868,19 +1873,18 @@ function onChangeTypeNode(objEvent,newType){
 
         $(label).remove()
         $(this).parent().remove();
-        console.log('ddd');
         $(oldId).removeAttr('data-no');
       }
     }
       if($(this).attr('data-from')==oldId){
     
-          $(this).prop('id','line_'+newId);
+          $(this).prop('id','line_'+newId+'-yes');
           $(this).attr('data-from','#'+newId)
           $(oldId).attr('data-connector','#line_'+newId);
 
           if(newType=='decision'){
             $(oldId).attr('data-yes','#line_'+newId+'-yes');
-            $(oldId).attr('data-connector','#line_'+newId+'-yes');
+            $(oldId).removeAttr('data-connector');
 
             addTextLabelForDecision(this,'TRUE');
            
