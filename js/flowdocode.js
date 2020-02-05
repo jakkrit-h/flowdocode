@@ -765,7 +765,6 @@ function checkConnectorOnNodeDelete(node){ /*ไว้เมื่อมี Node
 }
 function findConnectorIsRelateWithNode(node){
   let result=[]
-  console.log($(node));
   $("polyline").each(function(){
     if($(this).hasClass($(node).prop("id"))){
       result.push(this);
@@ -862,7 +861,7 @@ function nodeDraggableProperty(node){// returnความสามารถข�
         snapMode: "inner",
         scroll: true,
         stack: ".shape",
-        scrollSensitivity: 20,
+        scrollSensitivity: 50,
         scrollSpeed: 20,
         start: function () {
           if (onDebug) {
@@ -950,7 +949,7 @@ function conAnchorDraggableProperty(){// returnความสามารถข
         snap: ".con_anchor",
         scroll: true,
         snapTolerance: 20,
-        scrollSensitivity: 20,
+        scrollSensitivity: 50,
         scrollSpeed: 10,
         start:function(){
           if(onDebug){
@@ -1856,7 +1855,6 @@ function onChangeTypeNode(objEvent,newType){
   let oldType=getNodeType(oldId);
   let lines=findConnectorIsRelateWithNode(oldId)
   let newId=generateIdOfNode(newType);
-  if(newType=="decision")
   $(oldId).addClass(newType)
   updateSvgPath(oldId,newType);
   $(oldId).removeClass(oldType);

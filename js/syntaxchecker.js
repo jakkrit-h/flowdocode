@@ -41,7 +41,8 @@ function checkSyntax(){
     if(result){
         assignVariable();
     }else{
-        alert("ไวยกรณ์ไม่ถูกต้อง")
+        $("#console").html('  <div class="alert alert-danger py-0  my-0" role="alert"> ผังงานไม่ถูกต้อง </div>')
+
     }
     return result;
 }
@@ -76,13 +77,18 @@ function structureChecker() {
             $(this).removeClass("invalid");
         }
     });
+    if(!result){
+        $("#console").html('  <div class="alert alert-danger py-0 my-0" role="alert"> ผังงานไม่ถูกต้อง </div>')
+
+    }
     return result;
 }
 function processChecker(text){
     text=text.trim();
 
     let abstainWord=generateAbstainWordOfVar(text,'process');
-    let processSyntax=new RegExp("^([A-Za-z$_][A-Za-z$_0-9]*([ ]*=[ ]*)[(]*((\-)?[0-9()]+(\.[0-9)]+)?|['][^\'\"]*[']|[\"][^\'\"]*[\"]"+abstainWord+")([\+\\-\*\/\%]((\\-)?[0-9()]+(\.[0-9)]+)?|"+abstainWord+")|[+][ ]*([()]*['][^\'\"]*['][()]*|[()]*[\"][^\'\"]*[\"][()]*"+abstainWord+"))*)?$");    let backet = checkCountOfBacket(text);
+    let processSyntax=new RegExp("^([A-Za-z$_][A-Za-z$_0-9]*([\\s]*=[\\s]*)([(]*[\\s]*)*(([(]*[\\s]*[)]*)*(\\-)?[0-9]+(\.[0-9]+)?([(]*[\\s]*[)]*)*|['][\\s]*[^\'\"]*[\\s]*[']|[\"][\\s]*[^\'\"]*[\\s]*[\"]"+abstainWord+")([\\s]*[\+\\-\*\/\%][\\s]*(([(]*[\\s]*[)]*)*(\\-)?[0-9]+(\.[0-9]+)?([\\s]*[)]*)*|"+abstainWord+")|[\\s]*[+][\\s]*(([(]*[\\s]*[)]*)*['][\\s]*[^\'\"]*[\\s]*[']([(]*[\\s]*[)]*)*|([(]*[\\s]*[)]*)*[\"][\\s]*[^\'\"]*[\\s]*[\"]([(]*[\\s]*[)]*)*"+abstainWord+"))*)?$");
+    let backet = checkCountOfBacket(text);
     let result =false;
  
 
@@ -104,9 +110,9 @@ function decisionChecker(text){
    
       let result = false;
      
-      const decisionSyntax=new RegExp("^([\\s]*([0-9(\-]+|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9(\\s]+[\"]"+abstainWord+")[\\s]*(>|<|>=|<=|==|===|!=|!==)[\\s]*(([0-9()\-]+|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9()\\s]+[\"]"+abstainWord+"))+)[\\s]*(((\&\&)|(\\|\\|))[\\s]*(([0-9()\-]+|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9()\\s]+[\"]"+abstainWord+")[\\s]*(>|<|>=|<=|==|===|!=|!==)[\\s]*(([a-zA-Z0-9()\\s]+|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9()\-]+[\"]"+abstainWord+"))+)[\\s]*)*$");
+      const decisionSyntax=new RegExp("^([\\s]*([(]*[\\s]*(\\-)?[0-9]+(\.[0-9]+)?[\\s]*|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9(\\s]+[\"][\\s]*"+abstainWord+"[\\s]*)[\\s]*(>|<|>=|<=|==|===|!=|!==)[\\s]*[()]*[\\s]*(\-)?[0-9]+(\.[0-9]+)?[\\s]*[()]*[\\s]*|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9()\\s]+[\"][\\s]*"+abstainWord+"[\\s]*)[\\s]*(((\&\&)|(\\|\\|))[\\s]*(([\\s]*[()]*[\\s]*(\-)?[0-9]+(\.[0-9]+)?[\\s]*[()]*[\\s]*|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9()\\s]+[\"][\\s]*"+abstainWord+"[\\s]*)[\\s]*(>|<|>=|<=|==|===|!=|!==)[\\s]*(([\\s]*[()]*[\\s]*(\-)?[0-9]+(\.[0-9]+)?[\\s]*[()]*[\\s]*|[a-zA-Z0-9()\\s]+|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9()\-]+[\"][\\s]*"+abstainWord+"[\\s]*))+)[\\s]*)*$");
     let backet = checkCountOfBacket(text);
-
+        console.log(decisionSyntax)
       if(decisionSyntax.test(text)&&backet&&!/(\)[a-z0-9\>\<\=\!]*\()/.test(text)){
         
 
@@ -119,7 +125,7 @@ function decisionChecker(text){
 function displayChecker(text){
     text=text.trim();
     let abstainWord=generateAbstainWordOfVar(text,'display');
-    let displaySyntax=new RegExp("^([\'][^\'\"]*[\']|[\"][^\'\"]*[\"]"+abstainWord+")([+]([\'][^\'\"]*[\']|[\"][^\'\"]*[\"]"+abstainWord+"))*$");
+    let displaySyntax=new RegExp("^[\\s]*([\'][\\s]*[^\'\"]*[\\s]*[\']|[\"][\\s]*[^\'\"]*[\\s]*[\"]"+abstainWord+")[\\s]*([\\s]*[+][\\s]*([\'][\\s]*[^\'\"]*[\\s]*[\']|[\"][\\s]*[^\'\"]*[\\s]*[\"]"+abstainWord+"))*$");
   
 
     return displaySyntax.test(text);
@@ -152,7 +158,7 @@ function generateAbstainWordOfVar(text,type){
             wordIsVariable= allWord.filter(s=>!wordIsString.includes(s)&&listOfVar.includes(s));
      
 
-            wordIsVariable.map(s=>abstainWord+='|[()]*'+s+'[()]*');
+            wordIsVariable.map(s=>abstainWord+='|[()]*[\\s]'+s+'[\\s][()]*');
        
 
 
@@ -196,12 +202,11 @@ function generateAbstainWordOfVar(text,type){
 // }
 function listVariable(text){
      let listVar;
-   
     //  $(".process").each(function(){ 
         
         //  let text= $(this).find(".text").text(); 
       
-        const syntax=/([A-Za-z$_][A-Za-z$_0-9]*( )*(?=\=)|(?<=,)[A-Za-z$_][A-Za-z$_0-9]*)/gm;
+        const syntax=/([\s]*[A-Za-z$_][A-Za-z$_0-9]*[\s]*(?=\=)|(?<=,)[\s]*[A-Za-z$_][A-Za-z$_0-9]*)[\s]*/gm;
         
         while((listVar=syntax.exec(text) )!== null){
             
@@ -209,8 +214,8 @@ function listVariable(text){
    
             
         }
-     
         listOfVar=[...new Set(listOfVar)];
+
     //  }); 
     //  console.log(listOfVar);
 

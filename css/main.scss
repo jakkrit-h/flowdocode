@@ -164,12 +164,13 @@ div.con-fixed {
 }
 #design-containment{
   padding: 50px;
+  padding-bottom: 10px;
 }
 .con-design{
   
   height:100%;
   left:0px;
-  padding: 50px 60px 50px 50px !important;
+  padding: 50px 60px 0px 50px !important;
   
   overflow: scroll;
   z-index: 0;
