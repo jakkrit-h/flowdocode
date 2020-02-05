@@ -623,4 +623,18 @@ img {
   align-self: center;
 }
 
+.nosupport {
+  position: fixed;
+  top: 0;
+  z-index: 999999999;
+  background: #fff;
+  text-align: center;
+  justify-items: center;
+  padding: 20%;
+  font-size: 3em;
+  width: 100%;
+  height: 100%;
+  font-weight: bold;
+}
+
 /*# sourceMappingURL=main.css.map */

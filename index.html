@@ -20,6 +20,7 @@
 
   <script src="js/bootstrap.min.js"></script>
 
+  <script src="js/events.js"></script>
 
   <script src="js/flowdocode.js"></script>
   <script src="js/pseudocode.js"></script>
@@ -27,7 +28,6 @@
   <script src="js/debugger.js"></script>
   <script src="js/syntaxchecker.js"></script>
   <script src="js/font-awesome-all.min.js"></script>
-  <script src="js/events.js"></script>
 
   <script src="js/jquery.md5.js"></script>
 
@@ -162,7 +162,7 @@
     <button class="btn btn-flowdocode" id="addpage" ><i class="fas fa-plus-circle"></i></button>
 
   </div>
-  <div class="offset-2 col-8 p-0 pb-5  mb-5 " id="con-design" style="position: fixed;overflow-y:scroll;">
+  <div class="offset-2 col-8 p-0 pb-1  mb-5 " id="con-design" style="position: fixed;overflow-y:scroll;">
     
     <div id="design" class=" col-12 p-0 con-design" ondragover="allowDrop(event)" ondrop="dropItem(event)">
       <div id="design-containment" ></div>
@@ -535,7 +535,17 @@
   $("#con-design").scroll(function () {
   
   });
+  
+  
   $(function () {
+    let chrome=!!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+    if(!chrome){
+      let FDCV_msgDiv=document.createElement("div");
+      $(FDCV_msgDiv).addClass("nosupport");
+      $(FDCV_msgDiv).text("Support Google Chrome Only");
+
+      $("body").append(FDCV_msgDiv);
+    }
     let sessionPage = sessionStorage.getItem("page");
     try {
       if (sessionPage.length > 0) {
@@ -625,7 +635,10 @@
     }
     // click select shape 
     actionOnSelectElement(this);
-    showNodeTool(this);
+    if ($(this).find(".text").attr("contenteditable") == "false") {
+      showNodeTool(this);
+
+    }
     $('.btn-next-node').remove();
 
 
@@ -675,6 +688,7 @@
 
       }
       $(selectedEl).find("div.text").prop("contenteditable", true);
+      selectText($(selectedEl).find("div.text"))
       $('.container-node-tool').remove();
       $('.btn-next-node').remove();
 
@@ -689,7 +703,16 @@
     }
 
   });
-  $("div").on("blur", ".text", function () {
+  function selectText(node) {
+   let range =document.createRange();
+    range.selectNodeContents($(node)[0]);
+    let selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+   
+}
+     $("div").on("blur", ".text", function () {
     if ($(selectedEl).find("div.text").text().trim().toLowerCase() == "") {
       $(selectedEl).find("div.text").text(getNodeType(selectedEl));
 
@@ -915,7 +938,14 @@
     }
 
     shapeSelectedStyle();
-    document.body.style.cursor = "grab";
+
+    if ($(this).find(".text").attr("contenteditable") == "false") {
+      document.body.style.cursor = "grab";
+
+    }
+
+
+    
   });
 
   $(document).on("mousedown", ".con_anchor", function () {

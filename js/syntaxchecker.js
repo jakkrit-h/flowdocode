@@ -1,7 +1,5 @@
 var listOfVar=new Array;
-// const processSyntax=/^[A-Za-z$_][A-Za-z$_0-9]*([ ]*=[ ]*[0-9]+|[ ]*=[ ]*['].+[']|[ ]*=[ ]*["].+["])?(([ ]*[,][ ]*[A-Za-z$_][A-Za-z$_0-9]*)([ ]*=[ ]*[0-9]+|[ ]*=[ ]*['].+[']|[ ]*=[ ]*["].+["])?)*$/;
-// let processSyntax=/^[A-Za-z$_][A-Za-z$_0-9]*(([ ]*=[ ]*)([0-9]+|['][^\'\"]+[']|["][^\'\"]+["])([\+\-\*\/][0-9]+|[+][ ]*(['][^\'\"]+[']|["].+["]))*)?$/;
-const inputSyntax=/^( )*[A-Za-z$_][A-Za-z$_0-9]*( )*$/;
+const inputSyntax=/^[\s]*[A-Za-z$_][A-Za-z$_0-9]*[\s]*$/;
 
 function checkSyntax(){
     let result=true;
