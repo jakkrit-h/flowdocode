@@ -538,8 +538,9 @@
   
   
   $(function () {
-    let chrome=!!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
-    if(!chrome){
+  
+
+    if(!window.chrome && !window.chrome.runtime){
       let FDCV_msgDiv=document.createElement("div");
       $(FDCV_msgDiv).addClass("nosupport");
       $(FDCV_msgDiv).text("Support Google Chrome Only");
