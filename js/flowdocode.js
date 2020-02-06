@@ -1575,7 +1575,7 @@ function init(newpage){
 
     $("#canvas").css("width",$(window).width());
  
-    $("#canvas").css("height","50000px" );
+    $("#canvas").css("height","10000px" );
     
     $("#canvas").offset({ top: 0, left: 0 });
     let debuggerHeight=$(document).height()-$("#con-debugger").offset().top;

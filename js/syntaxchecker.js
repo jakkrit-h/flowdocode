@@ -36,6 +36,7 @@ function checkSyntax(){
             $(this).removeClass("invalid");
         }
     });
+
     if(FDCVL_result){
         assignVariable();
     }else{
@@ -83,11 +84,12 @@ function processChecker(FDCVL_text){
     FDCVL_text=FDCVL_text.trim();
 
     let FDCVL_abstainWord=generateAbstainWordOfVar(FDCVL_text,'process');
-    let FDCVL_processSyntax=new RegExp("^([A-Za-z$_][A-Za-z$_0-9]*([\\s]*=[\\s]*)([(]*[\\s]*)*(([(]*[\\s]*[)]*)*(\\-)?[0-9]+(\.[0-9]+)?([(]*[\\s]*[)]*)*|['][\\s]*[^\'\"]*[\\s]*[']|[\"][\\s]*[^\'\"]*[\\s]*[\"]"+FDCVL_abstainWord+")([\\s]*[\+\\-\*\/\%][\\s]*(([(]*[\\s]*[)]*)*(\\-)?[0-9]+(\.[0-9]+)?([\\s]*[)]*)*|"+FDCVL_abstainWord+")|[\\s]*[+][\\s]*(([(]*[\\s]*[)]*)*['][\\s]*[^\'\"]*[\\s]*[']([(]*[\\s]*[)]*)*|([(]*[\\s]*[)]*)*[\"][\\s]*[^\'\"]*[\\s]*[\"]([(]*[\\s]*[)]*)*"+FDCVL_abstainWord+"))*)?$");
+    console.log(FDCVL_abstainWord)
+
+    let FDCVL_processSyntax=new RegExp("^([A-Za-z$_][A-Za-z$_0-9]*([\\s]*=[\\s]*)([(]*[\\s]*)*(([(]*[\\s]*[)]*)*(\\-)?[0-9]+(\.[0-9]+)?([(]*[\\s]*[)]*)*|['][\\s]*[^\'\"]*[\\s]*[']|[\"][\\s]*[^\'\"]*[\\s]*[\"]"+FDCVL_abstainWord+")([\\s]*[\+\\-\*\/\%][\\s]*(([(]*[\\s]*[)]*)*(\\-)?[0-9]+(\.[0-9]+)?([\\s]*[)]*)*"+FDCVL_abstainWord+")|[\\s]*[+][\\s]*(([(]*[\\s]*[)]*)*['][\\s]*[^\'\"]*[\\s]*[']([(]*[\\s]*[)]*)*|([(]*[\\s]*[)]*)*[\"][\\s]*[^\'\"]*[\\s]*[\"]([(]*[\\s]*[)]*)*"+FDCVL_abstainWord+"))*)?$");
     let FDCVL_backet = checkCountOfBacket(FDCVL_text);
     let FDCVL_result =false;
- 
-
+  
     if(FDCVL_processSyntax.test(FDCVL_text)&&FDCVL_backet&&!/(\)[a-zA-z0-9]*\()/.test(FDCVL_text)){
         
 
@@ -144,16 +146,19 @@ function generateAbstainWordOfVar(FDCVL_text,FDCVL_type){
     try{
         if(FDCVL_type=="process"){
             let FDCVL_temp=FDCVL_text.match(/(?<=\=).*/)[0];
-           
+            
             FDCVL_allWord=FDCVL_temp.match(/[^\+\-\*\/\(\)%]*|'[^\(\)]*'|"[^\(\)]*"/gm).filter(FDCVL_s=>FDCVL_s.length>0);
+            FDCVL_allWord=FDCVL_allWord.map(FDCVL_s=>FDCVL_s.trim())
+
             if(FDCVL_temp.match(/'[^\(\)]*'|"[^\(\)]*"/gm)){
                 FDCVL_wordIsString=FDCVL_temp.match(/'[^\(\)]*'|"[^\(\)]*"/gm).filter(FDCVL_s=>FDCVL_s.length>0);
         
             }
-            FDCVL_wordIsVariable= FDCVL_allWord.filter(FDCVL_s=>!FDCVL_wordIsString.includes(FDCVL_s)&&FDCV_listOfVar.includes(FDCVL_s));
-     
+            FDCVL_wordIsVariable= FDCVL_allWord.filter(FDCVL_s=>!FDCVL_wordIsString.includes(FDCVL_s.trim())&&FDCV_listOfVar.includes(FDCVL_s.trim()));
+        
 
-            FDCVL_wordIsVariable.map(FDCVL_s=>FDCVL_abstainWord+='|[()]*[\\s]'+FDCVL_s+'[\\s][()]*');
+
+            FDCVL_wordIsVariable.map(FDCVL_s=>FDCVL_abstainWord+='|[()]*[\\s]*'+FDCVL_s+'[\\s]*[()]*');
        
 
 
@@ -161,14 +166,14 @@ function generateAbstainWordOfVar(FDCVL_text,FDCVL_type){
     
         }else{
             FDCVL_allWord=FDCVL_text.match(/[a-zA-Z0-9]*/gm).filter(FDCVL_s=>FDCVL_s.length>0);
-            // console.log(allWord);
-            
+            // FDCVL_allWord=FDCVL_allWord.map(FDCVL_s=>FDCVL_s.trim())
+
             if(FDCVL_text.match(/'[^\(\)]*'|"[^\(\)]*"/gm)){
                 FDCVL_wordIsString=FDCVL_text.match(/'[^\(\)]*'|"[^\(\)]*"/gm).filter(FDCVL_s=>FDCVL_s.length>0).map(FDCVL_s=>FDCVL_s.replace(/[\'\"]/gm,""));
         
             }
             FDCVL_wordIsVariable= FDCVL_allWord.filter(FDCVL_s=>!FDCVL_wordIsString.includes(FDCVL_s)&&FDCV_listOfVar.includes(FDCVL_s));
-            FDCVL_wordIsVariable.map(FDCVL_s=>FDCVL_abstainWord+='|([()]*'+FDCVL_s+'[()]*)');
+            FDCVL_wordIsVariable.map(FDCVL_s=>FDCVL_abstainWord+='|([()]*[\\s]*'+FDCVL_s+'[\\s]*[()]*)');
 
         }
 
