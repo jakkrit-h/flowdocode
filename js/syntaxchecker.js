@@ -1,177 +1,174 @@
-var listOfVar=new Array;
-const inputSyntax=/^[\s]*[A-Za-z$_][A-Za-z$_0-9]*[\s]*$/;
+var FDCV_listOfVar=new Array;
+const FDCV_inputSyntax=/^[\s]*[A-Za-z$_][A-Za-z$_0-9]*[\s]*$/;
 
 function checkSyntax(){
-    let result=true;
-      listOfVar=[];
-    let nodeList=explorer(true).map(s=>$(s.node));
-    $(nodeList).each(function(i){
-        let text=$(this).find(".text").text();
-        let type=getNodeType(this);
-        let match=true;
+    let FDCVL_result=true;
+      FDCV_listOfVar=[];
+    let FDCVL_nodeList=explorer(true).map(FDCVL_s=>$(FDCVL_s.node));
+    $(FDCVL_nodeList).each(function(FDCVL_i){
+        let FDCVL_text=$(this).find(".text").text();
+        let FDCVL_type=getNodeType(this);
+        let FDCVL_match=true;
       
-        switch(type){
+        switch(FDCVL_type){
             case "process":
-                    listVariable(text);
-                match=processChecker(text);
+                    listVariable(FDCVL_text);
+                    FDCVL_match=processChecker(FDCVL_text);
                  
 
               
             break;
             case "decision":
-                match=decisionChecker(text);
+                FDCVL_match=decisionChecker(FDCVL_text);
             break;
             case "input":
        
-                match=(listOfVar.includes(text.replace(/\s/gm,''))&&inputSyntax.test(text.replace(/\s/gm,'')))?true:false; 
+                FDCVL_match=(FDCV_listOfVar.includes(FDCVL_text.replace(/\s/gm,''))&&FDCV_inputSyntax.test(FDCVL_text.replace(/\s/gm,'')))?true:false; 
             break;
             case "display":
-                    match=   displayChecker(text);
+                FDCVL_match=   displayChecker(FDCVL_text);
             break;
         }
-        if(!match){
-            result=false;
+        if(!FDCVL_match){
+            FDCVL_result=false;
             $(this).addClass("invalid");
         }else{
             $(this).removeClass("invalid");
         }
     });
-    if(result){
+    if(FDCVL_result){
         assignVariable();
     }else{
         $("#console").html('  <div class="alert alert-danger py-0  my-0" role="alert"> ผังงานไม่ถูกต้อง </div>')
 
     }
-    return result;
+    return FDCVL_result;
 }
 function assignVariable(){
-    listOfVar.map(s=>{
-        let text = s+"=''";
-        compiler(text);
+    FDCV_listOfVar.map(FDCVL_s=>{
+        let FDCVL_text = FDCVL_s+"=''";
+        compiler(FDCVL_text);
     });
 }
 function structureChecker() {
-    let result=true;
-    $(".shape").fo
+    let FDCVL_result=true;
     // console.log(nodeList.filter(s=>$(s).attr('id')=='#end'));
-    $(".shape").each(function(i){
-        let match = true;
+    $(".shape").each(function(FDCVL_i){
+        let FDCVL_match = true;
       
         if($(this).attr("id")!='end'&&!$(this).hasClass('decision')&&!$(this).attr('data-connector')){
-            match=false;
+            FDCVL_match=false;
         }else if($(this).attr("id")!='end'&&$(this).hasClass('decision')){
         
             if(!$(this).attr('data-yes')||!$(this).attr('data-no')){
-                console.log(!$(this).attr('data-yes'))
-                console.log(!$(this).attr('data-no'))
+               
 
-                match=false;
+                FDCVL_match=false;
             }
         }
-        if(!match){
-            result=false;
+        if(!FDCVL_match){
+            FDCVL_result=false;
             $(this).addClass("invalid");
         }else{
             $(this).removeClass("invalid");
         }
     });
-    if(!result){
+    if(!FDCVL_result){
         $("#console").html('  <div class="alert alert-danger py-0 my-0" role="alert"> ผังงานไม่ถูกต้อง </div>')
 
     }
-    return result;
+    return FDCVL_result;
 }
-function processChecker(text){
-    text=text.trim();
+function processChecker(FDCVL_text){
+    FDCVL_text=FDCVL_text.trim();
 
-    let abstainWord=generateAbstainWordOfVar(text,'process');
-    let processSyntax=new RegExp("^([A-Za-z$_][A-Za-z$_0-9]*([\\s]*=[\\s]*)([(]*[\\s]*)*(([(]*[\\s]*[)]*)*(\\-)?[0-9]+(\.[0-9]+)?([(]*[\\s]*[)]*)*|['][\\s]*[^\'\"]*[\\s]*[']|[\"][\\s]*[^\'\"]*[\\s]*[\"]"+abstainWord+")([\\s]*[\+\\-\*\/\%][\\s]*(([(]*[\\s]*[)]*)*(\\-)?[0-9]+(\.[0-9]+)?([\\s]*[)]*)*|"+abstainWord+")|[\\s]*[+][\\s]*(([(]*[\\s]*[)]*)*['][\\s]*[^\'\"]*[\\s]*[']([(]*[\\s]*[)]*)*|([(]*[\\s]*[)]*)*[\"][\\s]*[^\'\"]*[\\s]*[\"]([(]*[\\s]*[)]*)*"+abstainWord+"))*)?$");
-    let backet = checkCountOfBacket(text);
-    let result =false;
+    let FDCVL_abstainWord=generateAbstainWordOfVar(FDCVL_text,'process');
+    let FDCVL_processSyntax=new RegExp("^([A-Za-z$_][A-Za-z$_0-9]*([\\s]*=[\\s]*)([(]*[\\s]*)*(([(]*[\\s]*[)]*)*(\\-)?[0-9]+(\.[0-9]+)?([(]*[\\s]*[)]*)*|['][\\s]*[^\'\"]*[\\s]*[']|[\"][\\s]*[^\'\"]*[\\s]*[\"]"+FDCVL_abstainWord+")([\\s]*[\+\\-\*\/\%][\\s]*(([(]*[\\s]*[)]*)*(\\-)?[0-9]+(\.[0-9]+)?([\\s]*[)]*)*|"+FDCVL_abstainWord+")|[\\s]*[+][\\s]*(([(]*[\\s]*[)]*)*['][\\s]*[^\'\"]*[\\s]*[']([(]*[\\s]*[)]*)*|([(]*[\\s]*[)]*)*[\"][\\s]*[^\'\"]*[\\s]*[\"]([(]*[\\s]*[)]*)*"+FDCVL_abstainWord+"))*)?$");
+    let FDCVL_backet = checkCountOfBacket(FDCVL_text);
+    let FDCVL_result =false;
  
 
-    if(processSyntax.test(text)&&backet&&!/(\)[a-zA-z0-9]*\()/.test(text)){
+    if(FDCVL_processSyntax.test(FDCVL_text)&&FDCVL_backet&&!/(\)[a-zA-z0-9]*\()/.test(FDCVL_text)){
         
 
-        result=true;
+        FDCVL_result=true;
     }
 
-    return result;
+    return FDCVL_result;
 
 }
-function decisionChecker(text){
-    text=text.trim();
+function decisionChecker(FDCVL_text){
+    FDCVL_text=FDCVL_text.trim();
 
-      let abstainWord=generateAbstainWordOfVar(text,'decision');
+      let FDCVL_abstainWord=generateAbstainWordOfVar(FDCVL_text,'decision');
        
      
    
-      let result = false;
+      let FDCVL_result = false;
      
-      const decisionSyntax=new RegExp("^([\\s]*([(]*[\\s]*(\\-)?[0-9]+(\.[0-9]+)?[\\s]*|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9(\\s]+[\"][\\s]*"+abstainWord+"[\\s]*)[\\s]*(>|<|>=|<=|==|===|!=|!==)[\\s]*[()]*[\\s]*(\-)?[0-9]+(\.[0-9]+)?[\\s]*[()]*[\\s]*|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9()\\s]+[\"][\\s]*"+abstainWord+"[\\s]*)[\\s]*(((\&\&)|(\\|\\|))[\\s]*(([\\s]*[()]*[\\s]*(\-)?[0-9]+(\.[0-9]+)?[\\s]*[()]*[\\s]*|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9()\\s]+[\"][\\s]*"+abstainWord+"[\\s]*)[\\s]*(>|<|>=|<=|==|===|!=|!==)[\\s]*(([\\s]*[()]*[\\s]*(\-)?[0-9]+(\.[0-9]+)?[\\s]*[()]*[\\s]*|[a-zA-Z0-9()\\s]+|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9()\-]+[\"][\\s]*"+abstainWord+"[\\s]*))+)[\\s]*)*$");
-    let backet = checkCountOfBacket(text);
-        console.log(decisionSyntax)
-      if(decisionSyntax.test(text)&&backet&&!/(\)[a-z0-9\>\<\=\!]*\()/.test(text)){
+      const FDCVL_decisionSyntax=new RegExp("^([\\s]*([(]*[\\s]*(\\-)?[0-9]+(\.[0-9]+)?[\\s]*|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9(\\s]+[\"][\\s]*"+FDCVL_abstainWord+"[\\s]*)[\\s]*(>|<|>=|<=|==|===|!=|!==)[\\s]*[()]*[\\s]*(\-)?[0-9]+(\.[0-9]+)?[\\s]*[()]*[\\s]*|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9()\\s]+[\"][\\s]*"+FDCVL_abstainWord+"[\\s]*)[\\s]*(((\&\&)|(\\|\\|))[\\s]*(([\\s]*[()]*[\\s]*(\-)?[0-9]+(\.[0-9]+)?[\\s]*[()]*[\\s]*|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9()\\s]+[\"][\\s]*"+FDCVL_abstainWord+"[\\s]*)[\\s]*(>|<|>=|<=|==|===|!=|!==)[\\s]*(([\\s]*[()]*[\\s]*(\-)?[0-9]+(\.[0-9]+)?[\\s]*[()]*[\\s]*|[a-zA-Z0-9()\\s]+|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9()\-]+[\"][\\s]*"+FDCVL_abstainWord+"[\\s]*))+)[\\s]*)*$");
+    let FDCVL_backet = checkCountOfBacket(FDCVL_text);
+      if(FDCVL_decisionSyntax.test(FDCVL_text)&&FDCVL_backet&&!/(\)[a-z0-9\>\<\=\!]*\()/.test(FDCVL_text)){
         
 
-          result=true;
+        FDCVL_result=true;
       }
  
-    return result ;
+    return FDCVL_result ;
 
 }
-function displayChecker(text){
-    text=text.trim();
-    let abstainWord=generateAbstainWordOfVar(text,'display');
-    let displaySyntax=new RegExp("^[\\s]*([\'][\\s]*[^\'\"]*[\\s]*[\']|[\"][\\s]*[^\'\"]*[\\s]*[\"]"+abstainWord+")[\\s]*([\\s]*[+][\\s]*([\'][\\s]*[^\'\"]*[\\s]*[\']|[\"][\\s]*[^\'\"]*[\\s]*[\"]"+abstainWord+"))*$");
+function displayChecker(FDCVL_text){
+    FDCVL_text=FDCVL_text.trim();
+    let FDCVL_abstainWord=generateAbstainWordOfVar(FDCVL_text,'display');
+    let FDCVL_displaySyntax=new RegExp("^[\\s]*([\'][\\s]*[^\'\"]*[\\s]*[\']|[\"][\\s]*[^\'\"]*[\\s]*[\"]"+FDCVL_abstainWord+")[\\s]*([\\s]*[+][\\s]*([\'][\\s]*[^\'\"]*[\\s]*[\']|[\"][\\s]*[^\'\"]*[\\s]*[\"]"+FDCVL_abstainWord+"))*$");
   
 
-    return displaySyntax.test(text);
+    return FDCVL_displaySyntax.test(FDCVL_text);
 }
-function checkCountOfBacket(text){
-    let openBacket=0,closeBacket=0;
-    let result = false;
+function checkCountOfBacket(FDCVL_text){
+    let FDCVL_openBacket=0,FDCVL_closeBacket=0;
+    let FDCVL_result = false;
     try{      
   
-        openBacket=text.match(/\(/gm).length;
-        closeBacket=text.match(/\)/gm).length;
+        FDCVL_openBacket=FDCVL_text.match(/\(/gm).length;
+        FDCVL_closeBacket=FDCVL_text.match(/\)/gm).length;
       }catch(e){
       }finally{
-        result =(openBacket==closeBacket)?true:false;
+        FDCVL_result =(FDCVL_openBacket==FDCVL_closeBacket)?true:false;
 
-          return result;
+          return FDCVL_result;
       }
 }
-function generateAbstainWordOfVar(text,type){
-    let allWord=[],wordIsString=[],wordIsVariable=[],abstainWord="";
+function generateAbstainWordOfVar(FDCVL_text,FDCVL_type){
+    let FDCVL_allWord=[],FDCVL_wordIsString=[],FDCVL_wordIsVariable=[],FDCVL_abstainWord="";
     try{
-        if(type=="process"){
-            let temp=text.match(/(?<=\=).*/)[0];
+        if(FDCVL_type=="process"){
+            let FDCVL_temp=FDCVL_text.match(/(?<=\=).*/)[0];
            
-            allWord=temp.match(/[^\+\-\*\/\(\)%]*|'[^\(\)]*'|"[^\(\)]*"/gm).filter(s=>s.length>0);
-            if(temp.match(/'[^\(\)]*'|"[^\(\)]*"/gm)){
-                wordIsString=temp.match(/'[^\(\)]*'|"[^\(\)]*"/gm).filter(s=>s.length>0);
+            FDCVL_allWord=FDCVL_temp.match(/[^\+\-\*\/\(\)%]*|'[^\(\)]*'|"[^\(\)]*"/gm).filter(FDCVL_s=>FDCVL_s.length>0);
+            if(FDCVL_temp.match(/'[^\(\)]*'|"[^\(\)]*"/gm)){
+                FDCVL_wordIsString=FDCVL_temp.match(/'[^\(\)]*'|"[^\(\)]*"/gm).filter(FDCVL_s=>FDCVL_s.length>0);
         
             }
-            wordIsVariable= allWord.filter(s=>!wordIsString.includes(s)&&listOfVar.includes(s));
+            FDCVL_wordIsVariable= FDCVL_allWord.filter(FDCVL_s=>!FDCVL_wordIsString.includes(FDCVL_s)&&FDCV_listOfVar.includes(FDCVL_s));
      
 
-            wordIsVariable.map(s=>abstainWord+='|[()]*[\\s]'+s+'[\\s][()]*');
+            FDCVL_wordIsVariable.map(FDCVL_s=>FDCVL_abstainWord+='|[()]*[\\s]'+FDCVL_s+'[\\s][()]*');
        
 
 
          
     
         }else{
-            allWord=text.match(/[a-zA-Z0-9]*/gm).filter(s=>s.length>0);
+            FDCVL_allWord=FDCVL_text.match(/[a-zA-Z0-9]*/gm).filter(FDCVL_s=>FDCVL_s.length>0);
             // console.log(allWord);
             
-            if(text.match(/'[^\(\)]*'|"[^\(\)]*"/gm)){
-                wordIsString=text.match(/'[^\(\)]*'|"[^\(\)]*"/gm).filter(s=>s.length>0).map(s=>s.replace(/[\'\"]/gm,""));
+            if(FDCVL_text.match(/'[^\(\)]*'|"[^\(\)]*"/gm)){
+                FDCVL_wordIsString=FDCVL_text.match(/'[^\(\)]*'|"[^\(\)]*"/gm).filter(FDCVL_s=>FDCVL_s.length>0).map(FDCVL_s=>FDCVL_s.replace(/[\'\"]/gm,""));
         
             }
-            wordIsVariable= allWord.filter(s=>!wordIsString.includes(s)&&listOfVar.includes(s));
-            wordIsVariable.map(s=>abstainWord+='|([()]*'+s+'[()]*)');
+            FDCVL_wordIsVariable= FDCVL_allWord.filter(FDCVL_s=>!FDCVL_wordIsString.includes(FDCVL_s)&&FDCV_listOfVar.includes(FDCVL_s));
+            FDCVL_wordIsVariable.map(FDCVL_s=>FDCVL_abstainWord+='|([()]*'+FDCVL_s+'[()]*)');
 
         }
 
@@ -179,7 +176,7 @@ function generateAbstainWordOfVar(text,type){
     }catch(e){
         // console.log(e);
     }finally{
-        return abstainWord;
+        return FDCVL_abstainWord;
 
     }
    
@@ -195,27 +192,27 @@ function generateAbstainWordOfVar(text,type){
         
 //     }
     
-//     console.log(list.some(r=>listOfVar.indexOf(r) >= 0));
-//     return  list.some(r=>listOfVar.indexOf(r) >= 0);
+//     console.log(list.some(r=>FDCV_listOfVar.indexOf(r) >= 0));
+//     return  list.some(r=>FDCV_listOfVar.indexOf(r) >= 0);
 // }
-function listVariable(text){
-     let listVar;
+function listVariable(FDCVL_text){
+     let FDCVL_listVar;
     //  $(".process").each(function(){ 
         
         //  let text= $(this).find(".text").text(); 
       
-        const syntax=/([\s]*[A-Za-z$_][A-Za-z$_0-9]*[\s]*(?=\=)|(?<=,)[\s]*[A-Za-z$_][A-Za-z$_0-9]*)[\s]*/gm;
+        const FDCVL_syntax=/([\s]*[A-Za-z$_][A-Za-z$_0-9]*[\s]*(?=\=)|(?<=,)[\s]*[A-Za-z$_][A-Za-z$_0-9]*)[\s]*/gm;
         
-        while((listVar=syntax.exec(text) )!== null){
+        while((FDCVL_listVar=FDCVL_syntax.exec(FDCVL_text) )!== null){
             
-            listOfVar.push(listVar[0].replace(/\s/gm,''));
+            FDCV_listOfVar.push(FDCVL_listVar[0].replace(/\s/gm,''));
    
             
         }
-        listOfVar=[...new Set(listOfVar)];
+        FDCV_listOfVar=[...new Set(FDCV_listOfVar)];
 
     //  }); 
-    //  console.log(listOfVar);
+    //  console.log(FDCV_listOfVar);
 
     
 }

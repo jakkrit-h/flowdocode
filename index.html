@@ -594,7 +594,7 @@
 
   $(document).on("mouseenter", "tr", function () {
     let node = $(this).attr("data-node");
-    if (!onDebug) {
+    if (!FDCV_onDebug) {
       
       $(node).find("svg").css("stroke", "#f1c40f");
       $(node).addClass("font-weight-bold");
@@ -614,7 +614,7 @@
 
   });
   $(document).on("mouseleave", "tr", function () {
-    if (!onDebug) {
+    if (!FDCV_onDebug) {
 
       let node = $(this).attr("data-node");
       $(node).find("svg").css("stroke", "#4f7df9");
@@ -625,7 +625,7 @@
 
 
   $("div").on("click", ".shape", function () {
-    if(onDebug){
+    if(FDCV_onDebug){
       return false;
     }
     // click select shape 
@@ -641,22 +641,22 @@
   });
   $(document).keydown(function (event) {
 
-    if ((event.keyCode == 8 || event.keyCode == 46) && $(selectedEl).find("div.text").prop("contenteditable") != "true") {
+    if ((event.keyCode == 8 || event.keyCode == 46) && $(FDCV_selectedEl).find("div.text").prop("contenteditable") != "true") {
    
-      if ($(selectedEl).prop("id") != "start") {
-        if ($(selectedEl).hasClass("shape")) {
-          if (onDebug&&!oninput) {
+      if ($(FDCV_selectedEl).prop("id") != "start") {
+        if ($(FDCV_selectedEl).hasClass("shape")) {
+          if (FDCV_onDebug&&!FDCV_oninput) {
             return false;
           }
-          checkConnectorOnNodeDelete(selectedEl);
+          checkConnectorOnNodeDelete(FDCV_selectedEl);
 
-          $(selectedEl).remove();
+          $(FDCV_selectedEl).remove();
           $('.container-node-tool').remove();
 
           hasEnd();
         } else {
-          onConnectorDelete(selectedEl);
-          $(selectedEl).parent("g").remove();
+          onConnectorDelete(FDCV_selectedEl);
+          $(FDCV_selectedEl).parent("g").remove();
 
         }
 
@@ -673,27 +673,27 @@
  
 
   $("div").on("dblclick", ".text", function () {
-    if(onDebug){
+    if(FDCV_onDebug){
       return false;
     }
-    if (!$(selectedEl).hasClass("start-end")) {
+    if (!$(FDCV_selectedEl).hasClass("start-end")) {
       document.body.style.cursor = "";
-      if (getNodeType(selectedEl) == $(selectedEl).find("div.text").text().trim().toLowerCase()) {
-        $(selectedEl).find("div.text").empty();
+      if (getNodeType(FDCV_selectedEl) == $(FDCV_selectedEl).find("div.text").text().trim().toLowerCase()) {
+        $(FDCV_selectedEl).find("div.text").empty();
 
       }
-      $(selectedEl).find("div.text").prop("contenteditable", true);
-      selectText($(selectedEl).find("div.text"))
+      $(FDCV_selectedEl).find("div.text").prop("contenteditable", true);
+      selectText($(FDCV_selectedEl).find("div.text"))
       $('.container-node-tool').remove();
       $('.btn-next-node').remove();
 
-      $(selectedEl).find("div.text").focus();
-      /*       console.log($(selectedEl).find("div.text").text().trim());
-            console.log(getNodeType(selectedEl)); */
+      $(FDCV_selectedEl).find("div.text").focus();
+      /*       console.log($(FDCV_selectedEl).find("div.text").text().trim());
+            console.log(getNodeType(FDCV_selectedEl)); */
 
 
 
-      $(selectedEl).draggable({ disabled: true });
+      $(FDCV_selectedEl).draggable({ disabled: true });
 
     }
 
@@ -708,10 +708,10 @@
    
 }
      $("div").on("blur", ".text", function () {
-    if ($(selectedEl).find("div.text").text().trim().toLowerCase() == "") {
-      $(selectedEl).find("div.text").text(getNodeType(selectedEl));
+    if ($(FDCV_selectedEl).find("div.text").text().trim().toLowerCase() == "") {
+      $(FDCV_selectedEl).find("div.text").text(getNodeType(FDCV_selectedEl));
 
-    } else if ($(selectedEl).hasClass("process")) {
+    } else if ($(FDCV_selectedEl).hasClass("process")) {
 
     }
 
@@ -721,10 +721,10 @@
   });
   function actionOnSelectElement(el) {
   
-    if ($(selectedEl).prop("id") != $(el).prop("id")) {
+    if ($(FDCV_selectedEl).prop("id") != $(el).prop("id")) {
       shapeUnSelectedStyle();
     }
-    selectedEl = $(el);
+    FDCV_selectedEl = $(el);
 
     shapeSelectedStyle();
   }
@@ -758,11 +758,11 @@
   $(document).on("mouseenter", ".con_anchor", function () {
     document.body.style.cursor = "grab";
 
-    onHoverAnchor = true;
+    FDCV_onHoverAnchor = true;
   });
   $(document).on("mouseleave", ".con_anchor", function () {
     document.body.style.cursor = "move";
-    onHoverAnchor = undefined;
+    FDCV_onHoverAnchor = undefined;
   });
   $(document).on("mousemove", ".text", function () {
     if ($(this).prop("contenteditable") == true) {
@@ -779,11 +779,11 @@
   $(document).on("mouseenter", ".shape", function () {//event mouse hover on shape show anchor
 
 
-    if ($(selectedEl).prop("id") != $(this).prop("id")) {
-      if (onDebug) {
+    if ($(FDCV_selectedEl).prop("id") != $(this).prop("id")) {
+      if (FDCV_onDebug) {
             return false;
           }
-      if(!onAnchorDrag){
+      if(!FDCV_onAnchorDrag){
         if($(this).attr("id")!="end"){
          
           showNextNodeArrow(this);
@@ -797,13 +797,13 @@
 
       $(document).on("mousedown", function () {
 
-        mouseDown = true;
+        FDCV_mouseDown = true;
 
 
       });
     }
-    if (selectedEl == undefined) {
-      mouseDown = false;
+    if (FDCV_selectedEl == undefined) {
+      FDCV_mouseDown = false;
     }
   });
 
@@ -811,20 +811,20 @@
   $(document).on("mouseleave", ".shape", function () {  //event mouse leave on shape hide anchor
 
     document.body.style.cursor = "";
-    if (!mouseDown) {
+    if (!FDCV_mouseDown) {
       $(this).find(".con_anchor").css("opacity", "0");
       nextNodeTimeOut();
 
 
     }
     $(document).on("mouseup", function () {
-      mouseDown = false;
+      FDCV_mouseDown = false;
     });
   });
   $(document).on("mouseenter",".btn-next-node",function(){
 
     $(this).css("opacity", "1");
-    clearTimeout( setTimeoutArrow);
+    clearTimeout( FDCV_setTimeoutArrow);
 
   });
   $(document).on("mouseleave",".btn-next-node",function(){
@@ -905,20 +905,20 @@
     $("#canvas").append($(gt));
 
  
-    let lineDraw = document.createElementNS("http://www.w3.org/2000/svg", "polyline");// สร้าง connector
-    $(gt).html(lineDraw);
-    $(lineDraw).attr("id", "line_" +nodeParent.replace('#',''));//เพิ่ม id ให้ connector
-    $(lineDraw).addClass($(nodeParent).prop('id'));
-    $(lineDraw).addClass($(newNode).prop('id'));
-    $(lineDraw).attr('data-from','#'+$(nodeParent).prop('id'));
-    $(lineDraw).attr('data-to','#'+$(newNode).prop('id'));
-    $(lineDraw).attr('data-anchorfrom',way);
-    $(lineDraw).attr('data-anchorto',toAnchor);
-    updateConnectorPosition(lineDraw);
+    let FDCV_lineDraw = document.createElementNS("http://www.w3.org/2000/svg", "polyline");// สร้าง connector
+    $(gt).html(FDCV_lineDraw);
+    $(FDCV_lineDraw).attr("id", "line_" +nodeParent.replace('#',''));//เพิ่ม id ให้ connector
+    $(FDCV_lineDraw).addClass($(nodeParent).prop('id'));
+    $(FDCV_lineDraw).addClass($(newNode).prop('id'));
+    $(FDCV_lineDraw).attr('data-from','#'+$(nodeParent).prop('id'));
+    $(FDCV_lineDraw).attr('data-to','#'+$(newNode).prop('id'));
+    $(FDCV_lineDraw).attr('data-anchorfrom',way);
+    $(FDCV_lineDraw).attr('data-anchorto',toAnchor);
+    updateConnectorPosition(FDCV_lineDraw);
     if($(nodeParent).hasClass('decision')){
-      createConnectorOfDecision(nodeParent,lineDraw);
+      createConnectorOfDecision(nodeParent,FDCV_lineDraw);
     }else{
-      $(nodeParent).attr('data-connector','#'+$(lineDraw).prop('id'));
+      $(nodeParent).attr('data-connector','#'+$(FDCV_lineDraw).prop('id'));
 
     }
 
@@ -928,8 +928,8 @@
 
   });
   $(document).on("mouseup", ".shape", function () {
-    if (selectedEl == undefined) {
-      selectedEl = $(this);
+    if (FDCV_selectedEl == undefined) {
+      FDCV_selectedEl = $(this);
     }
 
     shapeSelectedStyle();
@@ -945,11 +945,11 @@
 
   $(document).on("mousedown", ".con_anchor", function () {
 
-    gTag = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    gTag = $(gTag).attr("marker-end", "url(#arrowhead)");
-    gTag = $(gTag).attr("stroke-width", "2");
+    FDCV_gTag = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    FDCV_gTag = $(FDCV_gTag).attr("marker-end", "url(#arrowhead)");
+    FDCV_gTag = $(FDCV_gTag).attr("stroke-width", "2");
 
-    $("#canvas").append($(gTag));
+    $("#canvas").append($(FDCV_gTag));
 
   });
 
@@ -960,7 +960,7 @@
       if (event.keyCode == 13 ) {
 
 
-        inputSuccess = true;
+        FDCV_inputSuccess = true;
         $("#InputDialog").modal("hide");
        
 
@@ -999,19 +999,19 @@
     openFile();
   });
   $(document).on("click", ".page", function () {
-    if(onDebug){
+    if(FDCV_onDebug){
       return false;
     }
-    if (!$(this).hasClass("active") && onClose != true) {
+    if (!$(this).hasClass("active") && FDCV_onClose != true) {
       readPage($(this), "switch");
       $("#console").empty();
     $("#debugger").empty();
     }
-    onClose = false;
+    FDCV_onClose = false;
    
   });
   $(document).on("click", "#addpage", function () {
-    if(onDebug){
+    if(FDCV_onDebug){
       return false;
     }
     $("#con-design").scrollTop(0);
@@ -1019,10 +1019,10 @@
 
   });
   $(document).on("click", ".close", function () {
-    if(onDebug){
+    if(FDCV_onDebug){
       return false;
     }
-    onClose = true;
+    FDCV_onClose = true;
     if ($(".page").length == 1 || $(this).parent(".page").hasClass("page-edit")) {
       return false;
     }
@@ -1047,10 +1047,10 @@
     $(this).parent(".page").remove();
   });
   $(document).on("dblclick", ".page", function () {
-    if(onDebug){
+    if(FDCV_onDebug){
       return false;
     }
-    currentPageName = $(this).find('.page-text').text();
+    FDCV_currentPageName = $(this).find('.page-text').text();
     $(this).attr("contenteditable", "true");
 
     $(this).addClass("page-edit");

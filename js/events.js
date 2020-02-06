@@ -12,7 +12,7 @@ $(document).on("click","#play",function(){
    
     $("#play").hide();
     onButtonClick();
-    onAction="compile";
+    FDCV_onAction="compile";
 
     controller($("#start").attr("data-connector"));
 });
@@ -23,10 +23,10 @@ $(document).on("click","#debug",function(){
     } 
     onButtonClick();
 
-    onAction = "debug";
-    nodePointer = $("#start");
-    connectorPointer = $("#start").attr("data-connector");
-    onDebug = true;
+    FDCV_onAction = "debug";
+    FDCV_nodePointer = $("#start");
+    FDCV_connectorPointer = $("#start").attr("data-connector");
+    FDCV_onDebug = true;
     // controllerOnDebug();
     $(".ondebug").show();
     $("#skip").show();
@@ -40,15 +40,15 @@ $(document).on("click","#debug",function(){
 });
 $(document).on("click","#stop",function (){stop()});
 $(document).on("click","#next",function () { 
-     nodeOnSkip =$(connectorPointer).attr('data-to');
-    if($(nodeOnSkip).hasClass("decision")){
+     FDCV_nodeOnSkip =$(FDCV_connectorPointer).attr('data-to');
+    if($(FDCV_nodeOnSkip).hasClass("decision")){
         $("#skip").attr("disabled",false);
       
     }else{
         $("#skip").attr("disabled",true);
 
     }
-    unHightLight(nodePointer);
+    unHightLight(FDCV_nodePointer);
     $("tr").last().removeClass("font-weight-bold");
     controllerOnDebug();
 
@@ -57,11 +57,11 @@ $(document).on("click","#next",function () {
     obj.scrollTop(height);
 });
 $(document).on("click","#skip",function(){
-    connectorPointer=$(nodeOnSkip).attr("data-no");
-    let node=nodeOnSkip;
-    nodeOnSkip =$(connectorPointer).attr('data-to');
+    FDCV_connectorPointer=$(FDCV_nodeOnSkip).attr("data-no");
+    let node=FDCV_nodeOnSkip;
+    FDCV_nodeOnSkip =$(FDCV_connectorPointer).attr('data-to');
 
-    if($(nodeOnSkip).hasClass("decision")){
+    if($(FDCV_nodeOnSkip).hasClass("decision")){
         $("#skip").attr("disabled",false);
       
     }else{
@@ -71,7 +71,7 @@ $(document).on("click","#skip",function(){
     let  text=$(node).find(".text").text();
     $("tr").last().removeClass("font-weight-bold");
     Debugger(node,text,'false <br><span style="color:red;">(By Skip)</spn>')
-    unHightLight(nodePointer);
+    unHightLight(FDCV_nodePointer);
     controllerOnDebug();
 });
 $(document).on("click","#play-refresh",function(){
@@ -94,9 +94,9 @@ $(document).on("click","#pseudocode",function (){
 $(document).on("click","#delete-node",function(){
     $(this).tooltip('dispose');
 
-    checkConnectorOnNodeDelete(selectedEl);
+    checkConnectorOnNodeDelete(FDCV_selectedEl);
 
-    $(selectedEl).remove();
+    $(FDCV_selectedEl).remove();
     $('.container-node-tool').remove();
 
     hasEnd();
@@ -106,7 +106,7 @@ $(document).on("click","#delete-node",function(){
 $(document).on("click","#switch-decision",function(){
     $(this).tooltip('dispose');
 
-    switchTrueFalse(selectedEl);
+    switchTrueFalse(FDCV_selectedEl);
     $('.container-node-tool').remove();
     shapeUnSelectedStyle();
     updateSession($(".page.active").attr("data-page"));

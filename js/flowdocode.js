@@ -16,18 +16,17 @@
     */
   
 
-var selectedEl=undefined;// Node or Connector ที่กำลังถูก select อยู่
-var originalPosition = undefined;// ตำแหน่งของ Anchor ก่อนโดน Drag ไว้ใช้ตอนให้ Anchor กลับไปอยู่ที่เดิมหลัง Drag เสร็จ
-var lineDraw = undefined;// connector ตอนกำลังถูกสร้าง
-var successStatus = undefined;// สถานะเมื่อมีการ Drag เส้นไป หา Node ได้สำเร็จ
-var gTag = undefined;// container ของ connector
-var mouseDown=undefined;//สถานะว่ากำลัง mousedown อยู่จริง
-var onHoverAnchor=undefined;
-var onClose=undefined;
-var currentPageName=undefined;
-var wallsArea=[];
-var onAnchorDrag =false;
-var setTimeoutArrow=undefined;
+var FDCV_selectedEl=undefined;// Node or Connector ที่กำลังถูก select อยู่
+var FDCV_originalPosition = undefined;// ตำแหน่งของ Anchor ก่อนโดน Drag ไว้ใช้ตอนให้ Anchor กลับไปอยู่ที่เดิมหลัง Drag เสร็จ
+var FDCV_lineDraw = undefined;// connector ตอนกำลังถูกสร้าง
+var FDCV_successStatus = undefined;// สถานะเมื่อมีการ Drag เส้นไป หา Node ได้สำเร็จ
+var FDCV_gTag = undefined;// container ของ connector
+var FDCV_mouseDown=undefined;//สถานะว่ากำลัง FDCV_mousedown อยู่จริง
+var FDCV_onHoverAnchor=undefined;
+var FDCV_onClose=undefined;
+var FDCV_currentPageName=undefined;
+var FDCV_onAnchorDrag =false;
+var FDCV_setTimeoutArrow=undefined;
 function updateSvgPathProcess(node){    //ปรับขนาดของ shape Process ตอน Resize
 
 
@@ -263,10 +262,10 @@ function updateConnectorPosition(connector,noswapAnchor) {    //ไว้ใช�
 
     // }
 
-    gTag = $(connector).parent("g");
+    FDCV_gTag = $(connector).parent("g");
     connector = $(connector).attr(linePosition);
 
-    $(gTag).html($(connector));
+    $(FDCV_gTag).html($(connector));
 /*     console.log(linePosition);
  */
     updateTextLabelPosition(connector);
@@ -679,16 +678,16 @@ function updateConnectorPositionOnAction(node,noswapAnchor){    //เอาไ�
 function shapeSelectedStyle(){    // ไว้กำหนด ว่า Node นั้นกำลังถูกเลือก ให้เกิด effect และเปลี่ยน function บางอย่าง
 
     try {
-      if(selectedEl.hasClass("shape")){
-        selectedEl.find("svg").css({
+      if(FDCV_selectedEl.hasClass("shape")){
+        FDCV_selectedEl.find("svg").css({
           "stroke-dasharray":"5,5"
         });
-        $(selectedEl).resizable({disabled:false});// resize ตอนโดนเลือก
+        $(FDCV_selectedEl).resizable({disabled:false});// resize ตอนโดนเลือก
   
          
-        $(selectedEl).find(".con_anchor").addClass("hide");//ซ่อน Anchor ตอนโดนเลือก
+        $(FDCV_selectedEl).find(".con_anchor").addClass("hide");//ซ่อน Anchor ตอนโดนเลือก
       }else{
-        selectedEl.css({"stroke-dasharray":"5,5"});
+        FDCV_selectedEl.css({"stroke-dasharray":"5,5"});
       }
 
       
@@ -705,19 +704,19 @@ function shapeUnSelectedStyle(){    // ไว้ยกเลิก Node ที�
 
 
     try {
-      if(selectedEl.hasClass("shape")){
+      if(FDCV_selectedEl.hasClass("shape")){
 
-      selectedEl.find("svg").css({
+      FDCV_selectedEl.find("svg").css({
         "stroke-dasharray":"0,0"
       });
 
-        $(selectedEl).resizable({disabled:true});
+        $(FDCV_selectedEl).resizable({disabled:true});
         // resize ตอนโดนเลือก
 
      
-      $(selectedEl).find(".con_anchor").removeClass("hide");
+      $(FDCV_selectedEl).find(".con_anchor").removeClass("hide");
       }else{   
-         selectedEl.css({"stroke-dasharray":"0,0"});
+         FDCV_selectedEl.css({"stroke-dasharray":"0,0"});
       }
 
     } catch (error) {
@@ -725,7 +724,7 @@ function shapeUnSelectedStyle(){    // ไว้ยกเลิก Node ที�
   
     }finally{
       disContentEdit();
-      selectedEl=undefined;
+      FDCV_selectedEl=undefined;
       updateSession($(".page.active").attr("data-page"));
 
     }
@@ -736,9 +735,9 @@ function shapeUnSelectedStyle(){    // ไว้ยกเลิก Node ที�
   }
 function disContentEdit(){  //ไว้ปิดไม่ให้ textbox แก้ไขได้กรณีไม่ได้ถูกเลือก ถ้าถูกเลือกจะเปิดให้แก้ไขโค๊ดได้
 
-  $(selectedEl).find(".text").prop("contenteditable","false");
+  $(FDCV_selectedEl).find(".text").prop("contenteditable","false");
 
-    $(selectedEl).draggable({ disabled: false });
+    $(FDCV_selectedEl).draggable({ disabled: false });
 
   
   document.body.style.cursor="";
@@ -793,7 +792,7 @@ function onConnectorDelete(connector){
 
 
 function onDropItemSuccess(type,posX,posY) {    //เมื่อมีการลากวางNode จาก Toolbox ลงมาในส่วนของ Design
-  if(onDebug){
+  if(FDCV_onDebug){
     return false;
   }
     if (type != null) {
@@ -861,10 +860,10 @@ function nodeDraggableProperty(node){// returnความสามารถข�
         snapMode: "inner",
         scroll: true,
         stack: ".shape",
-        scrollSensitivity: 50,
+        scrollSensitivity: 20,
         scrollSpeed: 20,
         start: function () {
-          if (onDebug) {
+          if (FDCV_onDebug) {
             $(this).css("opacity", "1");
             return false;
           }
@@ -902,7 +901,7 @@ function nodeDraggableProperty(node){// returnความสามารถข�
           updateConnectorPositionOnAction(this);
           // updateAnchorPosition(this);
           $(".con_anchor").css("opacity","0");
-          selectedEl = $(this);
+          FDCV_selectedEl = $(this);
 
         }
         , stop: function () {//ตอนหยุด Drag จะทำงานหลังตอนโดน Drop
@@ -925,7 +924,7 @@ function nodeResizableProperty(node){// returnความสามารถข�
         handles: "w,e", 
         grid: [ 10, 10 ],
         start:function(){
-          if(onDebug){
+          if(FDCV_onDebug){
             $(this).resizable( "disable" );
           }
         },
@@ -948,21 +947,21 @@ function conAnchorDraggableProperty(){// returnความสามารถข
      
         snap: ".con_anchor",
         scroll: true,
-        snapTolerance: 20,
-        scrollSensitivity: 50,
+    
+        scrollSensitivity: 20,
         scrollSpeed: 10,
         start:function(){
-          if(onDebug){
+          if(FDCV_onDebug){
             return false;
           }
           let scroll=$("#con-design").scrollTop();
 
-          originalPosition = $(this).offset();
-          originalPosition.top+=scroll;
+          FDCV_originalPosition = $(this).offset();
+          FDCV_originalPosition.top+=scroll;
 
         },
         drag: function () {//ตอนกำลังโดน Drag
-          onAnchorDrag=true;
+          FDCV_onAnchorDrag=true;
           document.body.style.cursor = "";
           shapeUnSelectedStyle();
           let parent="#"+$(this).parent().prop("id");
@@ -976,12 +975,12 @@ function conAnchorDraggableProperty(){// returnความสามารถข
 
           
           let currentPosition = $(this).offset();// get ตำแหน่งปัจจุบันตอน Anchor โดน Drag
-          lineDraw = document.createElementNS("http://www.w3.org/2000/svg", "polyline");// สร้าง connector
-          $(lineDraw).attr("id", "line_" + $(this).parent().prop("id"));//เพิ่ม id ให้ connector
+          FDCV_lineDraw = document.createElementNS("http://www.w3.org/2000/svg", "polyline");// สร้าง connector
+          $(FDCV_lineDraw).attr("id", "line_" + $(this).parent().prop("id"));//เพิ่ม id ให้ connector
           let scroll=$("#con-design").scrollTop();
           let p0;
       
-            p0={x:originalPosition.left + 4,y:originalPosition.top + 3};
+            p0={x:FDCV_originalPosition.left + 4,y:FDCV_originalPosition.top + 3};
       
 
           let p100={x:currentPosition.left + 5 ,y:currentPosition.top+scroll};
@@ -989,7 +988,7 @@ function conAnchorDraggableProperty(){// returnความสามารถข
           let distanceX = p100.x-p0.x;
 
           let distanceY = p100.y-p0.y;
-          let pointTo=getTypePosition(originalPosition,$(this).attr("data-point"));
+          let pointTo=getTypePosition(FDCV_originalPosition,$(this).attr("data-point"));
           
           let p25=linePlot25_75(p0.x,p0.y,$(this).attr("data-point"),distanceX,distanceY);
           
@@ -1008,22 +1007,22 @@ function conAnchorDraggableProperty(){// returnความสามารถข
 
           }
 
-          $(lineDraw).addClass($(this).parent().prop("id"));
+          $(FDCV_lineDraw).addClass($(this).parent().prop("id"));
           //เพิ่ม class เพื่อบอก ว่า connector นี้ มีส่วนเชื่อมยังกับ Node(ต้นทาง) ใช้ check ตอน Node เกิดการเปลี่ยนแปลง
 
-          $(lineDraw).attr(lineProperty);
+          $(FDCV_lineDraw).attr(lineProperty);
           //เพิ่ม attr position ให้ กับ line connector
 
-          $(gTag).html($(lineDraw));// เพิ่ม connector ลงไปใน g(container ของ line)
+          $(FDCV_gTag).html($(FDCV_lineDraw));// เพิ่ม connector ลงไปใน g(container ของ line)
         }, stop: function () {//ตอนหยุด Drag จะทำงานหลังตอนโดน Drop
-          onAnchorDrag=false;
-          if (successStatus) {// ถ้า connector ถูกลากให้ไปเชื่อมกับ Anchor สำเร็จ
+          FDCV_onAnchorDrag=false;
+          if (FDCV_successStatus) {// ถ้า connector ถูกลากให้ไปเชื่อมกับ Anchor สำเร็จ
 
             $(".con_anchor").css("opacity", "0");//ให้ Anchorมั้งหมด ถูกซ่อน
                        
 
             if($(this).parent().hasClass("decision")){
-              createConnectorOfDecision($(this).parent(),lineDraw);
+              createConnectorOfDecision($(this).parent(),FDCV_lineDraw);
                 
             }else{
                 if ($(this).parent().attr("data-connector") != undefined) {//ถ้า Node นั้นเคยมีConnector เก่าให้ลบออก
@@ -1033,15 +1032,15 @@ function conAnchorDraggableProperty(){// returnความสามารถข
                     $(connector).parent().remove();
       
                   }
-                $(this).parent().attr("data-connector", "#" + $(lineDraw).prop("id"));
+                $(this).parent().attr("data-connector", "#" + $(FDCV_lineDraw).prop("id"));
                 //เพิ่ม connector ลงไปใน Node เพื่อให้รู้ว่า Node นี้มี Connector เป็นของตัวเอง
             }
 
 
-            updateConnectorPosition(lineDraw);
-            successStatus = undefined;
+            updateConnectorPosition(FDCV_lineDraw);
+            FDCV_successStatus = undefined;
           }else {
-            $(gTag).remove();
+            $(FDCV_gTag).remove();
             $(".con_anchor").css("opacity", "0");
           }
           $(".hide").droppable({
@@ -1049,13 +1048,13 @@ function conAnchorDraggableProperty(){// returnความสามารถข
           })
           $(".hide").removeClass("hide");// ลบ class hide ออกให้เป็น Anchor ปกติ
         
-          $(this).offset(originalPosition);//ให้ Anchor กลับไปอยู่ที่เดิมของตัวเองก่อนถูก Drag
+          $(this).offset(FDCV_originalPosition);//ให้ Anchor กลับไปอยู่ที่เดิมของตัวเองก่อนถูก Drag
           updateSession($(".page.active").attr("data-page"));
 
         }
     }
 }
-function createConnectorOfDecision(node,lineDraw){
+function createConnectorOfDecision(node,FDCV_lineDraw){
   if ($(node).attr("data-yes") != undefined && $(node).attr("data-no") != undefined) {
     let connector = $(node).attr("data-yes");
     let label = "#" + $(connector).attr("data-label");
@@ -1072,14 +1071,14 @@ function createConnectorOfDecision(node,lineDraw){
   }
 
   if ($(node).attr("data-yes") == undefined) {
-    $(lineDraw).prop("id", $(lineDraw).prop("id") + "-yes");
-    $(node).attr("data-yes", "#" + $(lineDraw).prop("id"));
-    addTextLabelForDecision(lineDraw, "TRUE");
+    $(FDCV_lineDraw).prop("id", $(FDCV_lineDraw).prop("id") + "-yes");
+    $(node).attr("data-yes", "#" + $(FDCV_lineDraw).prop("id"));
+    addTextLabelForDecision(FDCV_lineDraw, "TRUE");
   } else {
 
-    $(lineDraw).prop("id", $(lineDraw).prop("id") + "-no");
-    $(node).attr("data-no", "#" + $(lineDraw).prop("id"));
-    addTextLabelForDecision(lineDraw, "FALSE");
+    $(FDCV_lineDraw).prop("id", $(FDCV_lineDraw).prop("id") + "-no");
+    $(node).attr("data-no", "#" + $(FDCV_lineDraw).prop("id"));
+    addTextLabelForDecision(FDCV_lineDraw, "FALSE");
   }
 }
 function createDistanceWalls(node){
@@ -1242,17 +1241,17 @@ function conAnchorDroppableProperty(){// returnความสามารถข
           "ui-droppable-hover": "anchor-accept"
         },
         drop: function () {// เมื่อ  Anchor โดน Drop 
-          successStatus = true;// set ว่าได้ถูกเชื่อมเรียบร้อยแล้ว
+          FDCV_successStatus = true;// set ว่าได้ถูกเชื่อมเรียบร้อยแล้ว
 
           lineAttr = {// set 
             "data-to": "#" + $(this).parent().prop("id"),//ใช้บอกว่ามาจาก Node ไหน โดยใช้ id ของ Node(ปลายทาง)
             "data-anchorto": $(this).attr("data-point")//ใช้บอกว่ามาจาก หมุด ตำแหน่งไหนของ Node ปลายทาง
 
           }
-          $(lineDraw).addClass($(this).parent().prop("id"));//
+          $(FDCV_lineDraw).addClass($(this).parent().prop("id"));//
             //เพิ่ม class เพื่อบอก ว่า connector นี้ มีส่วนเชื่อมยังกับ Node(ปลายทาง) ใช้ check ตอน Node เกิดการเปลี่ยนแปลง
 
-          $(lineDraw).attr(lineAttr);
+          $(FDCV_lineDraw).attr(lineAttr);
 
         }
       }
@@ -1408,10 +1407,8 @@ function writeCodeToDesign(text) {
     $(this).find(".ui-resizable-handle").remove();
     $(this).draggable(nodeDraggableProperty(this));
     setTextboxPosition(this);
-    if($(this).attr("id")!="end"){
       $(this).find(".con_anchor").draggable(conAnchorDraggableProperty());
       $(this).find(".con_anchor").droppable(conAnchorDroppableProperty());
-    }
    
     $(this).resizable(nodeResizableProperty(this));
     if($(this).find(".ui-resizable-w").get(1)!=undefined){
@@ -1683,7 +1680,7 @@ function changePageName(page) {
   let page_text = $(page).find('.page-text');
   let text = $(page_text).text();
   if (text == '') {
-    $(page_text).text(currentPageName);
+    $(page_text).text(FDCV_currentPageName);
   }else if(page_text.text()!=$(page).prop('id')){
     $(page_text).text(checkSamePageNameAndChangeName(text));
   }
@@ -1707,7 +1704,7 @@ function explorer(distinct){
   // console.log(distinct);
   let prevNode =undefined;
   let currentNode="#start";
-  let connectorPointer=$(currentNode).attr("data-connector");
+  let FDCV_connectorPointer=$(currentNode).attr("data-connector");
   let list =[];
   let indx=0;
   list.push({node:currentNode,root:prevNode,status:'add'});
@@ -1732,7 +1729,7 @@ function explorer(distinct){
 
       }else{
 
-        list[indx].to=$(connectorPointer).attr("data-to");
+        list[indx].to=$(FDCV_connectorPointer).attr("data-to");
         
       }
 
@@ -1753,8 +1750,8 @@ function explorer(distinct){
     
         }else{
   
-          connectorPointer=$(currentNode).attr("data-connector");
-          temp=$(connectorPointer).attr("data-to");
+          FDCV_connectorPointer=$(currentNode).attr("data-connector");
+          temp=$(FDCV_connectorPointer).attr("data-to");
           // if(temp&&!list.map(s=>s.node).includes(temp)){
             list.push({node:temp,root:currentNode,to:temp,status:'add'});
 
@@ -1845,7 +1842,7 @@ function showNextNodeArrow(node){
   $('.btn-next-node').attr('data-nextnodeof',$(node).attr('id'));
 }
 function nextNodeTimeOut(){
-  setTimeoutArrow=setTimeout(function(){
+  FDCV_setTimeoutArrow=setTimeout(function(){
     $(".btn-next-node").remove();
   },100);
 }

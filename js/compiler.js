@@ -1,13 +1,13 @@
 
-var nodePointer=undefined;
-var connectorPointer=undefined;
-var inputSuccess=false;
-var onDebug=false;
-var onInput=false;
-var onAction=undefined;
-var onSkip=false;
-var nodeOnSkip =false;
-var interval=undefined;
+var FDCV_nodePointer=undefined;
+var FDCV_connectorPointer=undefined;
+var FDCV_inputSuccess=false;
+var FDCV_onDebug=false;
+var FDCV_onInput=false;
+var FDCV_onAction=undefined;
+var FDCV_onSkip=false;
+var FDCV_nodeOnSkip =false;
+var FDCV_interval=undefined;
 function stop(){
     $(".ondebug").hide();
     $("#stop").hide();
@@ -20,14 +20,14 @@ function stop(){
     
         unHightLight(this);
     });
-    clearInterval(interval);
-    onDebug=false;
+    clearInterval(FDCV_interval);
+    FDCV_onDebug=false;
 }
 
 function clearOnDebug(){
     $("#debug").html("<i class='fas fa-bug'></i>");
     $(".ondebug").hide();
-    onDebug=false;
+    FDCV_onDebug=false;
 }
 function onButtonClick(){
     $("tbody").empty();
@@ -37,57 +37,35 @@ function onButtonClick(){
     $("#debug").hide();
     $("#pseudocode").hide();
     $("#stop").show();
-    inputSuccess=false;
-    onAction=undefined;
+    FDCV_inputSuccess=false;
+    FDCV_onAction=undefined;
 
 
 }
-// function collectPath(){
-//     var nodePointer=$("#start").attr("data-next");
-//     var continues=true;
-//     var obj="";
-//     objArr=$("#"+nodePointer).text();
-//      while(continues){
-         
-//         // console.log($("#"+node).text());
-//         obj=$("#"+nodePointer);
-   
-//         node=obj.attr("data-next");      
-//         if(node=="end"){
-//             break;
-//         }else{
-//             objArr+=$("#"+nodePointer).text();
-//         }
-       
-       
 
-//     }
-
-
-// }
 function controller(starterConnector){
-     connectorPointer=starterConnector;  
-      interval=setInterval(function(){
-        if($(connectorPointer).attr("data-to")==undefined||$(connectorPointer).attr("data-to")=="#end" ){
+     FDCV_connectorPointer=starterConnector;  
+     FDCV_interval=setInterval(function(){
+        if($(FDCV_connectorPointer).attr("data-to")==undefined||$(FDCV_connectorPointer).attr("data-to")=="#end" ){
             
 
             $("#play").html("<i class='fas fa-play'></i>");
             stop();
-            if($(connectorPointer).attr("data-to")=="#end"){
+            if($(FDCV_connectorPointer).attr("data-to")=="#end"){
                 Debugger('#end','END','END');
             }
             // break;
         }else{
-            nodePointer=$(connectorPointer).attr("data-to");
-            let result=classify(nodePointer);
+            FDCV_nodePointer=$(FDCV_connectorPointer).attr("data-to");
+            let FDCVL_result=classify(FDCV_nodePointer);
            
-            if (result) {
-                clearInterval(interval);
+            if (FDCVL_result) {
+                clearInterval(FDCV_interval);
                 stop();
 
                 // break;        
             }else{
-                connectorPointer=$(nodePointer).attr("data-connector");
+                FDCV_connectorPointer=$(FDCV_nodePointer).attr("data-connector");
             }
             
 
@@ -106,84 +84,74 @@ function controller(starterConnector){
 }
 function controllerOnDebug(){
     
-    if($(connectorPointer).attr("data-to")==undefined||connectorPointer==undefined){
+    if($(FDCV_connectorPointer).attr("data-to")==undefined||FDCV_connectorPointer==undefined){
         clearOnDebug();
         stop();
-        onDebug=false;
+        FDCV_onDebug=false;
     }else{
-        nodePointer=$(connectorPointer).attr("data-to");
-        if(nodePointer!="#end"){
-            let result=classify(nodePointer);
+        FDCV_nodePointer=$(FDCV_connectorPointer).attr("data-to");
+        if(FDCV_nodePointer!="#end"){
+            let FDCVL_result=classify(FDCV_nodePointer);
         }
-        connectorPointer=$(nodePointer).attr("data-connector");
+        FDCV_connectorPointer=$(FDCV_nodePointer).attr("data-connector");
       
-        // if($(nodePointer).offset().top>=$("#design-containment").height()){
-        //     let height=$(nodePointer).offset().top-100;
-        //     $("#con-design").animate({scrollTop:height}, "fast");
-        //     console.log('w');
-        //   }else if($(nodePointer).offset().top<$(document).height()*15/100){
-        //     let height=$(nodePointer).offset().top+100;
-          
-        //     $("#con-design").animate({scrollTop:height}, "fast");
-        //     console.log('wd');
 
-        // }
-        hightLight(nodePointer,"#27ae60");
+        hightLight(FDCV_nodePointer,"#27ae60");
         $("tr").last().addClass("font-weight-bold");
     }
 }
-function compiler(str){
+function compiler(FDCVL_str){
     // console.log(Function('"use strict";return (' + str + ')')());
-    if(str.trim().match(/^[A-Za-z$_][A-Za-z$_0-9]*(\+\+|\-\-)$/)){
-        let temp =str.split("++");
-        str="++"+temp[0];
-    }else if(str.trim().match(/^[A-Za-z$_][A-Za-z$_0-9]*(\+\+|\-\-)$/)){
-        let temp =str.split("--");
-        str="--"+temp[0];
+    if(FDCVL_str.trim().match(/^[A-Za-z$_][A-Za-z$_0-9]*(\+\+|\-\-)$/)){
+        let FDCVL_temp =FDCVL_str.split("++");
+        FDCVL_str="++"+FDCVL_temp[0];
+    }else if(FDCVL_str.trim().match(/^[A-Za-z$_][A-Za-z$_0-9]*(\+\+|\-\-)$/)){
+        let FDCVL_temp =FDCVL_str.split("--");
+        FDCVL_str="--"+FDCVL_temp[0];
     }
 
-    return eval(str);
+    return eval(FDCVL_str);
 }
 
-function classify(node){
-    let result;
-    let text;
-    if(!$(node).hasClass("input")){
-         text=$(node).find(".text").text();
-        if($(node).hasClass("process")){
-            text = text.split(",");
-            text.forEach(element => {
-                result=compiler(element);
-                Debugger(node,element,result);
+function classify(FDCVL_node){
+    let FDCVL_result;
+    let FDCVL_text;
+    if(!$(FDCVL_node).hasClass("input")){
+        FDCVL_text=$(FDCVL_node).find(".text").text();
+        if($(FDCVL_node).hasClass("process")){
+            FDCVL_text = FDCVL_text.split(",");
+            FDCVL_text.forEach(FDCVL_element => {
+                FDCVL_result=compiler(FDCVL_element);
+                Debugger(FDCVL_node,FDCVL_element,FDCVL_result);
             });
             return null;
         }else{
             
-            result=compiler(text);
+            FDCVL_result=compiler(FDCVL_text);
         }
 
        
     
     }
   
-    if($(node).hasClass("display")){
-         displayConsole(result);
+    if($(FDCVL_node).hasClass("display")){
+         displayConsole(FDCVL_result);
     }
-    if($(node).hasClass("decision")){
-        if(result){
-            $(node).attr("data-connector",$(node).attr("data-yes"));
+    if($(FDCVL_node).hasClass("decision")){
+        if(FDCVL_result){
+            $(FDCVL_node).attr("data-connector",$(FDCVL_node).attr("data-yes"));
         }else{
-            $(node).attr("data-connector",$(node).attr("data-no"));
+            $(FDCVL_node).attr("data-connector",$(FDCVL_node).attr("data-no"));
 
         }
     }
-    if($(node).hasClass("input")){
+    if($(FDCVL_node).hasClass("input")){
         // debugger;
-        if(!inputSuccess){
+        if(!FDCV_inputSuccess){
             $("#InputDialog").modal("show");
-            onInput=true;
+            FDCV_onInput=true;
            
-            $("#inputtitle").html("Assign Value Variable <strong>"+$(node).find(".text").text()+"</strong>");
+            $("#inputtitle").html("Assign Value Variable <strong>"+$(FDCVL_node).find(".text").text()+"</strong>");
             $('#InputDialog').on('shown.bs.modal', function (e) {
                 $("#inputBox").val("");
                     $("#inputBox").focus();
@@ -194,13 +162,13 @@ function classify(node){
             return true;
         }else{
 
-             text=$(node).find(".text").text()+"="+$("#inputBox").val()+"";
+            FDCVL_text=$(FDCVL_node).find(".text").text()+"="+$("#inputBox").val()+"";
        
-            result=compiler(text);
-            inputSuccess=false;
-            onInput=false;
+            FDCVL_result=compiler(FDCVL_text);
+            FDCV_inputSuccess=false;
+            FDCV_onInput=false;
 
-            if(onDebug){
+            if(FDCV_onDebug){
                 $("tr").last().removeClass("font-weight-bold");
 
             }
@@ -208,8 +176,8 @@ function classify(node){
        
     }
     
-    Debugger(node,text,result);
-    if($(node).hasClass("input")&&onDebug){
+    Debugger(FDCVL_node,FDCVL_text,FDCVL_result);
+    if($(FDCVL_node).hasClass("input")&&FDCV_onDebug){
         $("tr").last().addClass("font-weight-bold");
 
     }
@@ -217,11 +185,11 @@ function classify(node){
 
 }
 function compileContinue(){
-    if(onAction=="compile"){
-        controller(connectorPointer);
+    if(FDCV_onAction=="compile"){
+        controller(FDCV_connectorPointer);
 
       }else{
-        classify(nodePointer);
+        classify(FDCV_nodePointer);
       }
 
 
@@ -240,9 +208,9 @@ function compileContinue(){
 //     console.log(str);
 // }
 
-function displayConsole(rsCompile){
+function displayConsole(FDCVL_rsCompile){
  
-    $("#console").append(rsCompile+"<br>");
+    $("#console").append(FDCVL_rsCompile+"<br>");
     $("#console").scrollTop($("#console").prop('scrollHeight'));
 }
 // function start(){

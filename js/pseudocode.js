@@ -1,17 +1,14 @@
-var pseudoCode='';
-var row;
-var endOfBacket;
-var decision="yes";
-var tab='';
+var FDCV_pseudoCode='';
+var FDCV_tab='';
 function pseudocodeController(){
     let nodeList = explorerPseudoCode();
     let a = nodeList.map((s,i,arr)=>{
         if($(s.node).hasClass("decision")){
            let a=checkIsLoop(s,nodeList,s.node,undefined,i,[]);  
            if(a){
-               s.decision = checkIsDoWhile(s,arr,i) ; //is LOOP
+            s.decision = checkIsDoWhile(s,arr,i) ; //is LOOP
            }else{
-               s.decision =checkIsElseIf(s,arr,i) ; // is IF
+            s.decision =checkIsElseIf(s,arr,i) ; // is IF
            }
            
      
@@ -111,7 +108,7 @@ function getEndOfDecision(nodeData,nodeList,nodeIndex) {
 
             //ถ้า ตัว ถัดไป ของ currentNode ดัน เป็น decision ต้องเลือก to หรือ to 2 อาจจะเอา  index ของ ตัวใดตัวนึงมาเปรียบเทียบอะไรสักอย่างนึง จะน้อยกว่าหรือมากกว่าอะไรสักอย่าง
         }
-            index=0;
+        index=0;
             for(let i=0;i<=nodeList.length;i++){
             
                 if(currentNode.to){
@@ -141,9 +138,9 @@ function getEndOfDecision(nodeData,nodeList,nodeIndex) {
                            
                  
                          
-                                index=nodeList.findIndex(s=>s.node == currentNode.to2);
+                            index=nodeList.findIndex(s=>s.node == currentNode.to2);
                                
-                                currentNode=nodeList.find(s=>s.node == currentNode.to2);
+                            currentNode=nodeList.find(s=>s.node == currentNode.to2);
                           
                          
                       
@@ -315,7 +312,7 @@ function generateCode(nodeList) {
     let pastWay=[];
     let pastTab=[];
     let addElse=false;
-    tab='';
+    FDCV_tab='';
     let countDecision=nodeList.filter(s=>$(s.node).hasClass('decision'));
     for (let i = 0; i < nodeList.length+countDecision.length; i++) {
         if(!pastWay.includes(currentNode.node)){
@@ -403,40 +400,40 @@ function getpseudoCode(node,addElse,nodeList){
     }
    
    
-    code+=tab;
+    code+=FDCV_tab;
 
     if(node.startDo){
 
-        code += '<br>'+tab+"<span class='textHighLight'>DO </span> { <br>"+tab;
-        tab+="&emsp;";
+        code += '<br>'+FDCV_tab+"<span class='textHighLight'>DO </span> { <br>"+tab;
+        FDCV_tab+="&emsp;";
 
     }
 
     switch (type) {
         case "process":
-            code += '<br>'+tab+text+';';
+            code += '<br>'+FDCV_tab+text+';';
             break;
         case "input":
-            code += "<br>"+tab+"<span class='textHighLight'>INPUT </span>(" + text + ")"+';';
+            code += "<br>"+FDCV_tab+"<span class='textHighLight'>INPUT </span>(" + text + ")"+';';
             break;
         case "decision":
             if (node.decision=='WHILE') {
-                code += "<br>"+tab+"<span class='textHighLight'>WHILE </span>(" + text + ") {";
-                tab+="&emsp;";
+                code += "<br>"+FDCV_tab+"<span class='textHighLight'>WHILE </span>(" + text + ") {";
+                FDCV_tab+="&emsp;";
             }else if(node.decision=='DOWHILE'){
             
-                tab=tab.replace(/&emsp;/,'');
+                FDCV_tab=FDCV_tab.replace(/&emsp;/,'');
 
             }else if(node.decision=='ELSEIF'){
                 code = " <span class='textHighLight'>ELSE IF </span>(" + text + "){";
-                tab+="&emsp;";
+                FDCV_tab+="&emsp;";
             }else  { 
-                code += "<br>"+tab+"<span class='textHighLight'>IF </span>(" + text + "){";
-                tab+="&emsp;";
+                code += "<br>"+FDCV_tab+"<span class='textHighLight'>IF </span>(" + text + "){";
+                FDCV_tab+="&emsp;";
             }
             break;
         case "display":
-            code += "<br>"+tab+"<span class='textHighLight'>DISPLAY </span>(" + text + ")"+';';
+            code += "<br>"+FDCV_tab+"<span class='textHighLight'>DISPLAY </span>(" + text + ")"+';';
             break;
     }
     try{
@@ -451,14 +448,14 @@ function getpseudoCode(node,addElse,nodeList){
 
                     if(decisionNode.decision!='DOWHILE'&&decisionNode.endyes.status=='add'){
 
-                        tab=tab.replace(/&emsp;/,'');
+                        FDCV_tab=FDCV_tab.replace(/&emsp;/,'');
                         if(decisionNode.decision=='WHILE'){
-                            code+='<br>'+tab+'}';
+                            code+='<br>'+FDCV_tab+'}';
                  
 
                         }else{
 
-                            code+='<br>'+tab+'}';
+                            code+='<br>'+FDCV_tab+'}';
 
                         }
                         nodeList[decisionIndex].endyes.status='write';
@@ -501,10 +498,10 @@ function getpseudoCode(node,addElse,nodeList){
 
                             }catch(e){}
                             if(to2OfdecisionNode.decision!='ELSEIF'&&decisionNode.endno.status=='add'&&haveElse){
-                                            tab=tab.replace(/&emsp;/,'');
+                                FDCV_tab=FDCV_tab.replace(/&emsp;/,'');
 
-                                code+='<br>'+tab+'}';
-                                tab=tab.replace(/&emsp;/,'');
+                                code+='<br>'+FDCV_tab+'}';
+                                FDCV_tab=FDCV_tab.replace(/&emsp;/,'');
 
                                 nodeList[decisionIndex].endno.status='write';
                             }
@@ -528,25 +525,25 @@ function getFrontCloseBackget(node,nodeList,root) {
  
         let code='';
     if($(root.node).hasClass("decision")&&node.node==root.to2){
-        tab=tab.replace(/&emsp;/,'');
-        code+=tab;
+        FDCV_tab=FDCV_tab.replace(/&emsp;/,'');
+        code+=FDCV_tab;
         if(root.decision=='IF'){
             if($(node.node).hasClass("decision")&&root.to2==node.node){
-                code+='<br>'+tab+'<span class="textHighLight">ELSE </span>';
+                code+='<br>'+FDCV_tab+'<span class="textHighLight">ELSE </span>';
                  
             }else{
 
                 code+='<span class="textHighLight">ELSE </span>{<br>';
-                tab+="&emsp;";
+                FDCV_tab+="&emsp;";
 
             }
         }else if(root.decision=='ELSEIF'){
             if($(node.node).hasClass("decision")&&root.to2==node.node){
-                code+='<br>'+tab+'<span class="textHighLight">ELSE </span>';
+                code+='<br>'+FDCV_tab+'<span class="textHighLight">ELSE </span>';
             }else{
 
                 code+='<span class="textHighLight">ELSE </span>{<br>';
-                tab+="&emsp;";
+                FDCV_tab+="&emsp;";
 
             }
           
@@ -555,7 +552,7 @@ function getFrontCloseBackget(node,nodeList,root) {
             let text = $(root.node).find(".text").text();
       
 
-            code+='<br>'+tab+'} <span class="textHighLight">WHILE</span> ('+text+');';
+            code+='<br>'+FDCV_tab+'} <span class="textHighLight">WHILE</span> ('+text+');';
         }else{
             if(node.endnoof.filter(s=>s.status=='add').length>0){
               
@@ -565,7 +562,7 @@ function getFrontCloseBackget(node,nodeList,root) {
                 if(node.endnoof[endnoofIndex].status=='add'&&root.endno.status=='add'){
                     nodeList[index].endnoof[endnoofIndex].reverse().status='write';
                     nodeList[decisionIndex].endno.status='write';
-                    code+='<br>'+tab+'}';
+                    code+='<br>'+FDCV_tab+'}';
 
                 }
                 node.endnoof[endnoofIndex]
