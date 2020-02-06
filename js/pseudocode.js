@@ -404,7 +404,7 @@ function getpseudoCode(node,addElse,nodeList){
 
     if(node.startDo){
 
-        code += '<br>'+FDCV_tab+"<span class='textHighLight'>DO </span> { <br>"+tab;
+        code += '<br>'+FDCV_tab+"<span class='textHighLight'>DO </span> { <br>"+FDCV_tab;
         FDCV_tab+="&emsp;";
 
     }
