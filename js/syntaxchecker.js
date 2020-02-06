@@ -1,9 +1,202 @@
 var FDCV_listOfVar=new Array;
+var FDCV_reservWFilterList=new Array;
 const FDCV_inputSyntax=/^[\s]*[A-Za-z$_][A-Za-z$_0-9]*[\s]*$/;
-
+var FDCV_reservedWord = [
+    "abstract",
+    "break",
+    "char",
+    "debugger",
+    "double",
+    "export",
+    "finally",
+    "goto",
+    "in",
+    "let",
+    "null",
+    "public",
+    "super",
+    "throw",
+    "try",
+    "volatile",
+    "arguments",
+    "byte",
+    "class",
+    "default",
+    "else",
+    "extends",
+    "float",
+    "if",
+    "instanceof",
+    "long",
+    "package",
+    "return",
+    "switch",
+    "throws",
+    "typeof",
+    "while",
+    "await",
+    "case",
+    "const",
+    "delete",
+    "enum",
+    "false",
+    "for",
+    "implements",
+    "int",
+    "native",
+    "private",
+    "short",
+    "synchronized",
+    "transient",
+    "var",
+    "with",
+    "boolean",
+    "catch",
+    "continue",
+    "do",
+    "eval",
+    "final",
+    "function",
+    "import",
+    "interface",
+    "new",
+    "protected",
+    "static",
+    "this",
+    "true",
+    "void",
+    "yield",
+    "Array",
+    "hasOwnProperty",
+    "isPrototypeOf",
+    "name",
+    "String",
+    "Date",
+    "Infinity",
+    "length",
+    "Number",
+    "toString",
+    "eval",
+    "isFinite",
+    "Math",
+    "Object",
+    "undefined",
+    "function",
+    "isNaN",
+    "NaN",
+    "prototype",
+    "valueOf",
+    "getClass",
+    "JavaObject",
+    "java",
+    "JavaPackage",
+    "JavaArray",
+    "javaClass",
+    "alert",
+    "area",
+    "checkbox",
+    "close",
+    "crypto",
+    "document",
+    "embeds",
+    "event",
+    "forms",
+    "layer",
+    "mimeTypes",
+    "frameRate",
+    "images",
+    "option",
+    "pageXOffset",
+    "parseInt",
+    "prompt",
+    "screenX",
+    "select",
+    "status",
+    "textarea",
+    "window",
+    "all",
+    "assign",
+    "clearInterval",
+    "closed",
+    "decodeURI",
+    "element",
+    "encodeURI",
+    "fileUpload",
+    "frame",
+    "layers",
+    "navigate",
+    "hidden",
+    "offscreenBuffering",
+    "outerHeight",
+    "pageYOffset",
+    "password",
+    "propertyIsEnum",
+    "screenY",
+    "self",
+    "submit",
+    "top",
+    "anchor",
+    "blur",
+    "clearTimeout",
+    "confirm",
+    "decodeURIComponent",
+    "elements",
+    "encodeURIComponent",
+    "focus",
+    "innerHeight",
+    "link",
+    "navigator",
+    "history",
+    "open",
+    "outerWidth",
+    "parent",
+    "pkcs11",
+    "radio",
+    "scroll",
+    "setInterval",
+    "taint",
+    "unescape",
+    "anchors",
+    "button",
+    "clientInformation",
+    "constructor",
+    "defaultStatus",
+    "embed",
+    "escape",
+    "form",
+    "innerWidth",
+    "location",
+    "frames",
+    "image",
+    "opener",
+    "packages",
+    "parseFloat",
+    "plugin",
+    "reset",
+    "secure",
+    "setTimeout",
+    "text",
+    "untaint",
+    "onblur",
+    "onkeydown",
+    "onload",
+    "onclick",
+    "onkeypress",
+    "onmouseup",
+    "onerror",
+    "onkeyup",
+    "onmousedown",
+    "onfocus",
+    "onmouseover",
+    "onsubmit",
+    "extends"
+ 
+  ];
+ 
 function checkSyntax(){
     let FDCVL_result=true;
       FDCV_listOfVar=[];
+      FDCV_reservWFilterList=[];
     let FDCVL_nodeList=explorer(true).map(FDCVL_s=>$(FDCVL_s.node));
     $(FDCVL_nodeList).each(function(FDCVL_i){
         let FDCVL_text=$(this).find(".text").text();
@@ -29,19 +222,36 @@ function checkSyntax(){
                 FDCVL_match=   displayChecker(FDCVL_text);
             break;
         }
-        if(!FDCVL_match){
+    
+        let FDCVL_reservWRs=FDCV_listOfVar.some(FDCVL_s=> FDCV_reservedWord.includes(FDCVL_s))
+        if(!FDCVL_match || FDCVL_reservWRs || FDCV_listOfVar.some(FDCVL_s=>/FDCV*/.test(FDCVL_s))){
+            if(FDCVL_reservWRs){
+                FDCV_listOfVar.filter(FDCVL_s=>FDCV_reservedWord.includes(FDCVL_s)).map(FDCVL_s=>FDCV_reservWFilterList.push(FDCVL_s))
+                
+
+            }if(FDCV_listOfVar.some(FDCVL_s=>/FDCV_*|FDCVL_*/.test(FDCVL_s))){
+                $("#console").append('  <div class="alert alert-danger py-0  my-1" role="alert"> ห้ามใช้ตัวแปรที่ขึ้นต้นด้วย <strong>FDCV_ </strong>หรือ <strong>FDCVL_ </strong></div>')
+
+            }
             FDCVL_result=false;
             $(this).addClass("invalid");
         }else{
             $(this).removeClass("invalid");
         }
     });
+    // console.log(FDCVL_result)
 
     if(FDCVL_result){
         assignVariable();
     }else{
-        $("#console").html('  <div class="alert alert-danger py-0  my-0" role="alert"> ผังงานไม่ถูกต้อง </div>')
+        FDCV_reservWFilterList=[...new Set(FDCV_reservWFilterList)];
 
+        $("#console").append('  <div class="alert alert-danger py-0  my-1" role="alert"> ผังงานไม่ถูกต้อง </div>')
+        FDCV_reservWFilterList.map(FDCVL_s=>{
+
+            $("#console").append('  <div class="alert alert-danger py-0  my-1" role="alert">พบ <strong> '+FDCVL_s+' </strong> เป็นคำต้องห้าม</div>')
+
+        });
     }
     return FDCVL_result;
 }
@@ -84,7 +294,6 @@ function processChecker(FDCVL_text){
     FDCVL_text=FDCVL_text.trim();
 
     let FDCVL_abstainWord=generateAbstainWordOfVar(FDCVL_text,'process');
-    console.log(FDCVL_abstainWord)
 
     let FDCVL_processSyntax=new RegExp("^([A-Za-z$_][A-Za-z$_0-9]*([\\s]*=[\\s]*)([(]*[\\s]*)*(([(]*[\\s]*[)]*)*(\\-)?[0-9]+(\.[0-9]+)?([(]*[\\s]*[)]*)*|['][\\s]*[^\'\"]*[\\s]*[']|[\"][\\s]*[^\'\"]*[\\s]*[\"]"+FDCVL_abstainWord+")([\\s]*[\+\\-\*\/\%][\\s]*(([(]*[\\s]*[)]*)*(\\-)?[0-9]+(\.[0-9]+)?([\\s]*[)]*)*"+FDCVL_abstainWord+")|[\\s]*[+][\\s]*(([(]*[\\s]*[)]*)*['][\\s]*[^\'\"]*[\\s]*[']([(]*[\\s]*[)]*)*|([(]*[\\s]*[)]*)*[\"][\\s]*[^\'\"]*[\\s]*[\"]([(]*[\\s]*[)]*)*"+FDCVL_abstainWord+"))*)?$");
     let FDCVL_backet = checkCountOfBacket(FDCVL_text);
@@ -108,14 +317,16 @@ function decisionChecker(FDCVL_text){
    
       let FDCVL_result = false;
      
-      const FDCVL_decisionSyntax=new RegExp("^([\\s]*([(]*[\\s]*(\\-)?[0-9]+(\.[0-9]+)?[\\s]*|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9(\\s]+[\"][\\s]*"+FDCVL_abstainWord+"[\\s]*)[\\s]*(>|<|>=|<=|==|===|!=|!==)[\\s]*[()]*[\\s]*(\-)?[0-9]+(\.[0-9]+)?[\\s]*[()]*[\\s]*|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9()\\s]+[\"][\\s]*"+FDCVL_abstainWord+"[\\s]*)[\\s]*(((\&\&)|(\\|\\|))[\\s]*(([\\s]*[()]*[\\s]*(\-)?[0-9]+(\.[0-9]+)?[\\s]*[()]*[\\s]*|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9()\\s]+[\"][\\s]*"+FDCVL_abstainWord+"[\\s]*)[\\s]*(>|<|>=|<=|==|===|!=|!==)[\\s]*(([\\s]*[()]*[\\s]*(\-)?[0-9]+(\.[0-9]+)?[\\s]*[()]*[\\s]*|[a-zA-Z0-9()\\s]+|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9()\-]+[\"][\\s]*"+FDCVL_abstainWord+"[\\s]*))+)[\\s]*)*$");
+      const FDCVL_decisionSyntax=new RegExp("^([\\s]*([(]*[\\s]*(\\-)?[0-9]+(\.[0-9]+)?[\\s]*|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9(\\s]+[\"][\\s]*"+FDCVL_abstainWord+"[\\s]*)[\\s]*(>|<|>=|<=|==|===|!=|!==)[\\s]*[()]*[\\s]*((\-)?[0-9]+(\.[0-9]+)?[\\s]*[()]*[\\s]*|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9()\\s]+[\"][\\s]*"+FDCVL_abstainWord+"[\\s]*))[\\s]*(((\&\&)|(\\|\\|))[\\s]*(([\\s]*[()]*[\\s]*(\-)?[0-9]+(\.[0-9]+)?[\\s]*[()]*[\\s]*|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9()\\s]+[\"][\\s]*"+FDCVL_abstainWord+"[\\s]*)[\\s]*(>|<|>=|<=|==|===|!=|!==)[\\s]*(([\\s]*[()]*[\\s]*(\-)?[0-9]+(\.[0-9]+)?[\\s]*[()]*[\\s]*|['][a-zA-Z0-9()\\s]+[']|[\"][a-zA-Z0-9()\-]+[\"][\\s]*"+FDCVL_abstainWord+"[\\s]*))+)[\\s]*)*$");
     let FDCVL_backet = checkCountOfBacket(FDCVL_text);
       if(FDCVL_decisionSyntax.test(FDCVL_text)&&FDCVL_backet&&!/(\)[a-z0-9\>\<\=\!]*\()/.test(FDCVL_text)){
         
 
         FDCVL_result=true;
       }
- 
+      console.log(FDCVL_decisionSyntax)
+
+      console.log(FDCVL_result)
     return FDCVL_result ;
 
 }
@@ -166,7 +377,7 @@ function generateAbstainWordOfVar(FDCVL_text,FDCVL_type){
     
         }else{
             FDCVL_allWord=FDCVL_text.match(/[a-zA-Z0-9]*/gm).filter(FDCVL_s=>FDCVL_s.length>0);
-            // FDCVL_allWord=FDCVL_allWord.map(FDCVL_s=>FDCVL_s.trim())
+            FDCVL_allWord=FDCVL_allWord.map(FDCVL_s=>FDCVL_s.trim())
 
             if(FDCVL_text.match(/'[^\(\)]*'|"[^\(\)]*"/gm)){
                 FDCVL_wordIsString=FDCVL_text.match(/'[^\(\)]*'|"[^\(\)]*"/gm).filter(FDCVL_s=>FDCVL_s.length>0).map(FDCVL_s=>FDCVL_s.replace(/[\'\"]/gm,""));

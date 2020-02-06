@@ -205,7 +205,7 @@ div.con-fixed {
     width: 200px;
     height: 50px;
     min-width: 200px;
-    max-width: 400px;
+    max-width: 600px;
     z-index: 1;
     position: absolute;
     border:0px solid ;
@@ -284,21 +284,15 @@ polyline{
 .hide{
   opacity: 0 !important;
 }
-.decision{
-  .text{
-    height: 30px;    
-    padding-top:0px; 
 
-  }
-}
 .text,.text:focus{
     position: absolute;
     z-index:2;
     height: 30px;
     padding-top:5px; 
     outline: none;
-
-
+    display: inline-block;
+    
 }
 
 .connect{

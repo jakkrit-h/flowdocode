@@ -116,8 +116,10 @@ function compiler(FDCVL_str){
 function classify(FDCVL_node){
     let FDCVL_result;
     let FDCVL_text;
+
     if(!$(FDCVL_node).hasClass("input")){
         FDCVL_text=$(FDCVL_node).find(".text").text();
+
         if($(FDCVL_node).hasClass("process")){
             FDCVL_text = FDCVL_text.split(",");
             FDCVL_text.forEach(FDCVL_element => {

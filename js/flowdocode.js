@@ -82,17 +82,9 @@ function updateSvgPathDisplay(node){    //ปรับขนาดของ shap
 
     // <path d="M 1 25 L 15 49 H 180 C 205 49 ,205 1, 180 1 H 15 L 1,25  "/>
     let path=$(node).find("path");
-    let originalWidth=$(node).outerWidth()-1;
-    let width=0;
-    if(originalWidth>200){
-        width=originalWidth*93/100;
-        d= "M 1 25 L 15 49 H "+width+" C "+(originalWidth+9)+" 49 ,"+(originalWidth+9)+" 1, "+width+" 1 H 15 L 1,25";
-
-    }else{
-        width=originalWidth*90/100;
-        d= "M 1 25 L 15 49 H "+width+" C "+(originalWidth+5)+" 49 ,"+(originalWidth+5)+" 1, "+width+" 1 H 15 L 1,25";
-
-    }
+    let width=$(node).outerWidth();
+   
+    d= "M 1 25 L 15 49 H "+(width-25)+" C "+(width+5)+" 49 ,"+(width+5)+" 1, "+(width-25)+" 1 H 15 L 1,25";
 
     $(path).attr("d",d);
 
@@ -1386,11 +1378,11 @@ function writeCodeToDesign(text) {
   $(".shape").each(function(){
     let position=$(this).offset();
     if(oldResolution.width+300<width){
-      position.left+=$(this).outerWidth();
+      position.left+=200;
       position.top+=$(this).outerHeight()-50;
     
     }else if(oldResolution.width>width){
-      position.left-=$(this).outerWidth();
+      position.left-=200;
       position.top+=$(this).outerHeight()-50;
 
     }
@@ -1780,12 +1772,17 @@ function explorer(distinct){
 }
 function showNodeTool(node){
     $('.container-node-tool').remove();
-    if($(node).hasClass('start-end')){
+    if($(node).attr("id")=="start"){
       return false;
     }
       $('#design').append($('#template-node-tool').html());
       if($(node).hasClass("start-end")){
         $('.node-tool-start').remove();
+        $('.node-tool-process').remove();
+        $('.node-tool-decision').remove();
+        $('.node-tool-display').remove();
+        $('.node-tool-input').remove();
+
       }else if($(node).hasClass("process")){
         $('.node-tool-process').remove();
 

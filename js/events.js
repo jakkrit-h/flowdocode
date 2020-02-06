@@ -1,9 +1,10 @@
 
 $(document).on("click","#play",function(){
- 
+    onButtonClick();
+
     clearOnDebug();
     if(!checkSyntax()||!structureChecker()){
-
+        stop()
         return false;
     } 
     $("#stop").show();
@@ -11,17 +12,17 @@ $(document).on("click","#play",function(){
 
    
     $("#play").hide();
-    onButtonClick();
     FDCV_onAction="compile";
 
     controller($("#start").attr("data-connector"));
 });
 $(document).on("click","#debug",function(){
-    if(!checkSyntax()||!structureChecker()){
+    onButtonClick();
 
+    if(!checkSyntax()||!structureChecker()){
+        stop()
         return false;
     } 
-    onButtonClick();
 
     FDCV_onAction = "debug";
     FDCV_nodePointer = $("#start");

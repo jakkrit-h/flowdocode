@@ -854,17 +854,18 @@
           } else {
             position.top -= 100;
           }
-          position.left += 100;
+          position.left += $(nodeParent).outerWidth()/2-(($(nodeParent).outerWidth()/2)%10);
 
           toAnchor='bottom';
         break;
       case 'right':
-   
-        if((position.left+400)>=(designWidth-20)){
+     
+
+        if((position.left+$(nodeParent).outerWidth()+400)>=(designWidth-20)){
           position.top+=100;
-          position.left+=100;
+          position.left+=$(nodeParent).outerWidth()/2-(($(nodeParent).outerWidth()/2)%10);
         }else{
-          position.left+=400;
+          position.left+=$(nodeParent).outerWidth()+200;
 
         }
         toAnchor='left';
@@ -878,15 +879,15 @@
         } else {
           position.top += 100;
         }
-        position.left+=100;
+        position.left+=$(nodeParent).outerWidth()/2-(($(nodeParent).outerWidth()/2)%10);
         toAnchor='top';
 
         break;
       case 'left':
 
-      if ((position.left - 200) <= ($('#design').offset().left+50 + 20)) {
+      if ((position.left - 200) <= ($('#design').offset().left+50 + 40)) {
           position.top += 100;
-          position.left += 100;
+          position.left += $(nodeParent).outerWidth()/2;
         } else {
           position.left -= 200;
         }
