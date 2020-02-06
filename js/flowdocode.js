@@ -1346,7 +1346,6 @@ function openFile() {
       let fileName=file.name.split(".");
       fileName=fileName[0];
       // fileName=this.checkSamePageNameAndChangeName(fileName);
-      $("title").html(fileName+" | FLOWDOCODE");
       var reader = new FileReader();
 
         reader.onload = function (event) {  
@@ -1361,6 +1360,7 @@ function openFile() {
           writeCodeToDesign(result)
           init();
           addToSession(result.name,$("#design").html(),result.hash);
+          $("title").html(result.name+" | FLOWDOCODE");
 
         }
    

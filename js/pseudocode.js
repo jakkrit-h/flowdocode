@@ -584,14 +584,16 @@ function getFrontCloseBackget(node,nodeList,root) {
 function pseudoCodePage(pseudoCode){
     pseudoCode+="<br><span class='textHighLight'>END</span>";
     // console.log(pseudoCode.replace(/(<br>)/gm,'\n+nl'));
-        pseudoCode=pseudoCode.replace(/(<br>){2,3}/gm,'<br>');
+    pseudoCode=pseudoCode.replace(/(<br>){2,3}/gm,'<br>');
     let strWindowFeatures = "menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes,width=500,height=700,left=500";
     let myWindow = window.open('','',strWindowFeatures);
-
     myWindow.document.write(pseudoCode);
-    let bootstrap=myWindow.document.createElement('link');
-    let head=myWindow.document.getElementsByTagName('head')[0];
 
+    let bootstrap=myWindow.document.createElement('link');
+    let title= myWindow.document.createElement("title");
+    title.text=$(".page.active").text()+" | PSEUDOCODE"
+    let head=myWindow.document.getElementsByTagName('head')[0];
+    head.appendChild(title)
     bootstrap.rel  = 'stylesheet';
     bootstrap.type = 'text/css';
     bootstrap.href = 'css/bootstrap.min.css';
