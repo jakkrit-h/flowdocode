@@ -12,7 +12,7 @@ body{
   #g-grid{
     polyline{
   
-      stroke: rgba(119, 133, 135, .5);
+      stroke: rgba(119, 133, 135, .2);
       stroke-width: 0.4px;
       }
   }
@@ -20,7 +20,7 @@ body{
 #grid{
   #g-grid{
     .grid-main{
-      stroke: rgb(119, 133, 135, 1);
+      stroke: rgb(119, 133, 135, .5);
   
       stroke-width: 0.5px;
       }

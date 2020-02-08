@@ -56,6 +56,8 @@ $(document).on("click","#next",function () {
     let obj    = $('#con-debugger');
     let height = obj[0].scrollHeight;
     obj.scrollTop(height);
+    $(this).tooltip('hide');
+
 });
 $(document).on("click","#skip",function(){
     FDCV_connectorPointer=$(FDCV_nodeOnSkip).attr("data-no");
@@ -74,6 +76,8 @@ $(document).on("click","#skip",function(){
     Debugger(node,text,'false <br><span style="color:red;">(By Skip)</spn>')
     unHightLight(FDCV_nodePointer);
     controllerOnDebug();
+    $(this).tooltip('hide');
+
 });
 $(document).on("click","#play-refresh",function(){
     stop();
@@ -91,6 +95,8 @@ $(document).on("click","#pseudocode",function (){
         return false;
     }
     pseudocodeController();
+    $(this).tooltip('hide');
+
 });
 $(document).on("click","#delete-node",function(){
     $(this).tooltip('dispose');

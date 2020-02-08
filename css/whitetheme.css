@@ -3,12 +3,12 @@ body {
 }
 
 #grid #g-grid polyline {
-  stroke: rgba(119, 133, 135, 0.5);
+  stroke: rgba(119, 133, 135, 0.2);
   stroke-width: 0.4px;
 }
 
 #grid #g-grid .grid-main {
-  stroke: #778587;
+  stroke: rgba(119, 133, 135, 0.5);
   stroke-width: 0.5px;
 }
 

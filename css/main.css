@@ -160,6 +160,10 @@ div.con-fixed {
   min-width: 150px;
   background: none;
 }
+.toolbox strong {
+  position: relative;
+  top: -35px;
+}
 
 .shape {
   width: 200px;

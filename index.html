@@ -120,39 +120,43 @@
 
   <div class="col-2 con-fixed h-100 pb-5 p-0" id="con-toolbox">
     <p class="header py-1 m-0 col-12">Toolbox</p>
-    <div class="my-5  toolbox start-end " id="start-end" draggable="true" ondragstart="drag(event)"
+    <div class="my-5  toolbox start-end  text-center" id="start-end" draggable="true" ondragstart="drag(event)"
       data-toggle="tooltip" data-placement="bottom" title="End">
       <svg>
         <path d="M 25 1 C -5,1 -5,49 25,49 L 120 49 C 155,49 155,0 120,1 Z" />
       </svg>
-
+      <strong>End</strong>
     </div>
-    <div class="my-5 toolbox process" id="process" draggable="true" ondragstart="drag(event)" data-toggle="tooltip"
+    <div class="my-5 toolbox process text-center" id="process" draggable="true" ondragstart="drag(event)" data-toggle="tooltip"
       data-placement="bottom" title="Process">
       <svg>
         <path d="M 1 1 L 149 1 L 149 49 L 1 49 Z" />
       </svg>
+      <strong>Process</strong>
 
     </div>
-    <div class="my-5  toolbox input" id="input" draggable="true" ondragstart="drag(event)" data-toggle="tooltip"
+    <div class="my-5  toolbox input text-center" id="input" draggable="true" ondragstart="drag(event)" data-toggle="tooltip"
       data-placement="bottom" title="Input">
       <svg>
         <path d="M 1 15 L 149 1 L 149 49 L 1 49 Z" />
       </svg>
+      <strong>Input</strong>
 
     </div>
-    <div class="my-5  toolbox decision" id="decision" draggable="true" ondragstart="drag(event)" data-toggle="tooltip"
+    <div class="my-5  toolbox decision text-center" id="decision" draggable="true" ondragstart="drag(event)" data-toggle="tooltip"
       data-placement="bottom" title="Decision">
       <svg>
         <path d="M 75 1 L 150 25 L 75 50 L 1 25 Z " />
       </svg>
+      <strong>Decision</strong>
 
     </div>
-    <div class="my-5 toolbox display" id="display" draggable="true" ondragstart="drag(event)" data-toggle="tooltip"
+    <div class="my-5 toolbox display text-center" id="display" draggable="true" ondragstart="drag(event)" data-toggle="tooltip"
       data-placement="bottom" title="Display">
       <svg>
         <path d="M 1 25 L 15 49 H 120 C 155 49 ,155 1, 120 1 H 15 L 1,25  " />
       </svg>
+      <strong>Display</strong>
 
     </div>
 <!-- <div id="version"style="color:#fff">v.1.0.0.8</div> -->
@@ -669,6 +673,9 @@
       disContentEdit();
 
       shapeUnSelectedStyle();
+    }
+    if(event.ctrlKey && event.keyCode == 80){
+        return false;
     }
   });
 
