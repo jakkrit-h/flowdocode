@@ -936,7 +936,8 @@ function nodeResizableProperty(node){// returnความสามารถข�
 
 function conAnchorDraggableProperty(){// returnความสามารถของ Anchor ในการ Draggable
     return{   
-     
+      containment:"#design-containment",
+
         snap: ".con_anchor",
         scroll: true,
     
@@ -998,7 +999,6 @@ function conAnchorDraggableProperty(){// returnความสามารถข
             "data-anchorfrom": $(this).attr("data-point")//ใช้บอกว่ามาจาก หมุด ตำแหน่งไหนของ Node ต้นทาง
 
           }
-
           $(FDCV_lineDraw).addClass($(this).parent().prop("id"));
           //เพิ่ม class เพื่อบอก ว่า connector นี้ มีส่วนเชื่อมยังกับ Node(ต้นทาง) ใช้ check ตอน Node เกิดการเปลี่ยนแปลง
 
@@ -1021,13 +1021,15 @@ function conAnchorDraggableProperty(){// returnความสามารถข
                     // data-connector คือ Node นั้นมี line ของตัวเองมั้ยแล้วชื่ออะไร
       
                     let connector = $(this).parent().attr("data-connector");
+                    console.log(connector)
                     $(connector).parent().remove();
-      
+                  
                   }
                 $(this).parent().attr("data-connector", "#" + $(FDCV_lineDraw).prop("id"));
                 //เพิ่ม connector ลงไปใน Node เพื่อให้รู้ว่า Node นี้มี Connector เป็นของตัวเอง
             }
 
+         
 
             updateConnectorPosition(FDCV_lineDraw);
             FDCV_successStatus = undefined;
@@ -1233,6 +1235,7 @@ function conAnchorDroppableProperty(){// returnความสามารถข
           "ui-droppable-hover": "anchor-accept"
         },
         drop: function () {// เมื่อ  Anchor โดน Drop 
+
           FDCV_successStatus = true;// set ว่าได้ถูกเชื่อมเรียบร้อยแล้ว
 
           lineAttr = {// set 
@@ -1240,6 +1243,7 @@ function conAnchorDroppableProperty(){// returnความสามารถข
             "data-anchorto": $(this).attr("data-point")//ใช้บอกว่ามาจาก หมุด ตำแหน่งไหนของ Node ปลายทาง
 
           }
+
           $(FDCV_lineDraw).addClass($(this).parent().prop("id"));//
             //เพิ่ม class เพื่อบอก ว่า connector นี้ มีส่วนเชื่อมยังกับ Node(ปลายทาง) ใช้ check ตอน Node เกิดการเปลี่ยนแปลง
 
@@ -1870,12 +1874,14 @@ function onChangeTypeNode(objEvent,newType){
     }
       if($(this).attr('data-from')==oldId){
     
-          $(this).prop('id','line_'+newId+'-yes');
+          $(this).prop('id','line_'+newId);
           $(this).attr('data-from','#'+newId)
           $(oldId).attr('data-connector','#line_'+newId);
 
           if(newType=='decision'){
             $(oldId).attr('data-yes','#line_'+newId+'-yes');
+            $(this).prop('id','line_'+newId+'-yes');
+
             $(oldId).removeAttr('data-connector');
 
             addTextLabelForDecision(this,'TRUE');

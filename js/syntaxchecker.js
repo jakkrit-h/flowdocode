@@ -239,7 +239,6 @@ function checkSyntax(){
             $(this).removeClass("invalid");
         }
     });
-    // console.log(FDCVL_result)
 
     if(FDCVL_result){
         assignVariable();
@@ -263,7 +262,6 @@ function assignVariable(){
 }
 function structureChecker() {
     let FDCVL_result=true;
-    // console.log(nodeList.filter(s=>$(s).attr('id')=='#end'));
     $(".shape").each(function(FDCVL_i){
         let FDCVL_match = true;
       
@@ -304,7 +302,6 @@ function processChecker(FDCVL_text){
 
         FDCVL_result=true;
     }
-
     return FDCVL_result;
 
 }
@@ -324,9 +321,7 @@ function decisionChecker(FDCVL_text){
 
         FDCVL_result=true;
       }
-      console.log(FDCVL_decisionSyntax)
 
-      console.log(FDCVL_result)
     return FDCVL_result ;
 
 }
@@ -390,32 +385,16 @@ function generateAbstainWordOfVar(FDCVL_text,FDCVL_type){
 
 
     }catch(e){
-        // console.log(e);
     }finally{
         return FDCVL_abstainWord;
 
     }
    
 }
-// function checkIsVar(text){
-//     const syntax=/([A-Za-z$_][A-Za-z$_0-9]*(?=,)|(?<=\=)[A-Za-z$_][A-Za-z$_0-9]*)/gm;
-    
-   
-//     let list=new Array;
-//     while((listVar=syntax.exec(text) )!== null){
-//         list.push(listVar[0]);
-//         console.log(listVar[0])
-        
-//     }
-    
-//     console.log(list.some(r=>FDCV_listOfVar.indexOf(r) >= 0));
-//     return  list.some(r=>FDCV_listOfVar.indexOf(r) >= 0);
-// }
+
 function listVariable(FDCVL_text){
      let FDCVL_listVar;
-    //  $(".process").each(function(){ 
-        
-        //  let text= $(this).find(".text").text(); 
+
       
         const FDCVL_syntax=/([\s]*[A-Za-z$_][A-Za-z$_0-9]*[\s]*(?=\=)|(?<=,)[\s]*[A-Za-z$_][A-Za-z$_0-9]*)[\s]*/gm;
         
@@ -427,13 +406,7 @@ function listVariable(FDCVL_text){
         }
         FDCV_listOfVar=[...new Set(FDCV_listOfVar)];
 
-    //  }); 
-    //  console.log(FDCV_listOfVar);
+   
 
     
 }
-// function findVariable(str){
-//     let regex=/[A-Za-z$_][A-Za-z$_0-9]*/;
-//     let array=
-//     while(())
-// }
