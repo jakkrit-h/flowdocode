@@ -1021,7 +1021,6 @@ function conAnchorDraggableProperty(){// returnความสามารถข
                     // data-connector คือ Node นั้นมี line ของตัวเองมั้ยแล้วชื่ออะไร
       
                     let connector = $(this).parent().attr("data-connector");
-                    console.log(connector)
                     $(connector).parent().remove();
                   
                   }
