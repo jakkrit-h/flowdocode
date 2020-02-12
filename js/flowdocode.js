@@ -1453,6 +1453,7 @@ function writeCodeToDesign(text) {
   temp[index].design=$("#design").html();
   temp[index].resolution={width: width, height: height}
   temp[index].design=$("#design").html();
+  temp[index].name=$(".page.active").text()
   sessionStorage.setItem("page",JSON.stringify(temp))
  }
  function addNewPage(){
@@ -1481,6 +1482,7 @@ function writeCodeToDesign(text) {
   $(label).prop("id",hash.replace(/\(|\)| /gm,'---'));
   $(label).attr("data-page",hash);
 
+  $(label).attr("data-name",name);
 
   $("#pagination").append($(label));
 
@@ -1686,7 +1688,6 @@ function changePageName(page) {
 
   let index=temp.findIndex(s=>s.hash==$(page).attr("data-page"));
   temp[index].name=$(page_text).text();
-  
   $("title").html(temp[index].name+" | FLOWDOCODE");
 sessionStorage.setItem("page",JSON.stringify(temp))
   if ($(page).text() != "untitled") {

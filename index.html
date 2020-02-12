@@ -1078,7 +1078,13 @@
   });
   $(document).on("blur", ".page", function () {
       changePageName(this);
-
+      if($(this).find(".page-text").length==0){
+        $(this).append("<div class='page-text'>"+$(this).attr("data-name")+"</div>");
+        updateSession($(this).attr("data-page"))
+      }
+      if($(this).find(".close").length==0){
+        $(this).append("<div class='close p-0'><i class='far mx-2 py-auto  fa-times-circle'></i></div>");
+      }
    
 
   });
